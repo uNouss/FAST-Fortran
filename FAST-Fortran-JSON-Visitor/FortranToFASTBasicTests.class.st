@@ -1,0 +1,104 @@
+Class {
+	#name : #FortranToFASTBasicTests,
+	#superclass : #FortranToFASTTestSetUp,
+	#category : #'FAST-Fortran-JSON-Visitor-Tests'
+}
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testBlockData [
+
+
+	| bd |
+	
+	result := self
+		        parse: '      block data myblck
+      common /mycom/ i
+      end
+ '.
+	bd := result first first. "unpacking"
+	self assert: bd class equals: FASTFortranBlockData.
+	self assert: bd name equals: 'myblck'.  
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testCallSubroutine [
+
+	| mainProgram subroutine |
+	
+	result := self parse: '
+      PROGRAM call_sub
+       CHARACTER *25 TEXT
+       TEXT = ''Some kind of text string'' 
+       CALL OOPS ( TEXT )
+      END
+      SUBROUTINE OOPS ( S )
+       CHARACTER S*(*) 
+       WRITE (*,*) S 
+      END
+ '.
+
+	mainProgram := result first first.
+	subroutine := result first last.
+	
+	self assert: mainProgram name equals: 'call_sub'.
+	self assert: mainProgram class equals: FASTFortranProgramMain.
+	self assert: subroutine name equals: 'oops'.
+	self assert: subroutine class equals: FASTFortranSubroutine.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testHelloWorld [
+
+	| mainProgram |
+	result := self parse: '      
+      program hello
+      ! This is a comment line; it is ignored by the compiler
+      print *, ''Hello, World!''
+      end program hello
+ '.
+
+	self assert: result isCollection.
+	mainProgram := result first first.
+	self assert: mainProgram class equals: FASTFortranProgramMain.
+	self assert: mainProgram name equals: 'hello'.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testMainProgram [
+
+	result := self parse: '
+      program main
+      implicit none
+c2345678901234567890123456789012345678901234567890123456789012
+      end
+ '.
+	
+	self assert: result isCollection
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testMainProgramAndSubroutine [
+
+	| mainProgram |
+	result := self parse: '
+      PROGRAM TESTALT
+       CALL RANK ( N, *8, *9 )
+       WRITE (*,*) ''OK - Normal Return [n=0]''
+       STOP 
+8      WRITE (*,*) ''Minor - 1st alternate return [n=1]'' 
+       STOP 8
+9      WRITE (*,*) ''Major - 2nd alternate return [n=2]'' 
+      END 
+      
+      SUBROUTINE RANK ( N, *, * ) 
+       IF ( N .EQ. 0 ) RETURN 
+       IF ( N .EQ. 1 ) RETURN 1
+       RETURN 2 
+      END
+'.
+
+	self assert: result isCollection.
+	mainProgram := result first first.
+	self assert: mainProgram class equals: FASTFortranProgramMain.
+	self assert: mainProgram name equals: 'hello'.
+]

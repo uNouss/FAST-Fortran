@@ -1,7 +1,7 @@
 Class {
 	#name : #FASTFortranJsonVisitor,
 	#superclass : #Object,
-	#category : #'FAST-Fortran-JSON-Visitor'
+	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
 
 { #category : #'as yet unclassified' }
