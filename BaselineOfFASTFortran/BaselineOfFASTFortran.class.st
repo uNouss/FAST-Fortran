@@ -20,7 +20,7 @@ BaselineOfFASTFortran >> defineDependencies: spec [
 		baseline: 'FAST'
 		with: [ spec
 				loads: #('default');
-				repository: 'github://moosetechnology/FAST:v2/src' ].
+				repository: 'github://moosetechnology/FAST:v1.x.x/src' ].
 	
 	spec
 		baseline: 'NeoJSON'
@@ -40,6 +40,7 @@ BaselineOfFASTFortran >> definePackages: spec [
 	spec
 		repository: 'https://github.com/moosetechnology/FAST-Fortran';
 		package: 'FAST-Fortran-JSON-Visitor' with: [ spec requires: #(FAST NeoJSON) ] ;
-		package: 'FAST-Fortran-Model-Generator' with: [ spec requires: #(FAST) ]
+		package: 'FAST-Fortran-Model-Generator' with: [ spec requires: #(FAST) ] ;
+		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FAST) ]
 
 ]
