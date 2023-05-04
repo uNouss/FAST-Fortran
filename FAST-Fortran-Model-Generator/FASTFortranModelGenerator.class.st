@@ -657,6 +657,16 @@ FASTFortranModelGenerator >> defineRelations [
 		 'Condition')
 	<>- ((expression property: #parentIfBlock) comment:
 			 'Parent if block').
+			
+	((ifLogicalStatement property: #statement) comment:
+		 'Statement of the logical if')
+	<>- ((statement property: #parentIfBlock) comment:
+			 'Parent if block').
+	
+	((ifLogicalStatement property: #condition) comment:
+		 'Condition')
+	<>- ((expression property: #parentIfBlock) comment:
+			 'Parent if block').		
 	
 	((variableDeclaration property: #variables) comment: 'variables')
 	<>-*
@@ -820,7 +830,7 @@ FASTFortranModelGenerator >> defineStatements [
 	ifLogicalStatement := builder
 		                      newClassNamed: #IfLogicalStatement
 		                      comment:
-		                      'I represent Fortran If (Logical) statement'.
+		                      'The logical IF statement executes one single statement, or does not execute it, depending on the value of a logical expression.'.
 	implicitStatement := builder
 		                     newClassNamed: #ImplicitStatement
 		                     comment:

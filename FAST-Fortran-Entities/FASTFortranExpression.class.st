@@ -8,8 +8,8 @@ Class {
 	#classTraits : 'FASTFortranTArgument classTrait + FASTFortranTAssigneable classTrait + FASTFortranTIOListMember classTrait',
 	#instVars : [
 		'#expressionStatementOwner => FMOne type: #FASTFortranExpressionStatement opposite: #expression',
-		'#returnOwner => FMOne type: #FASTFortranReturnStatement opposite: #expression',
-		'#parentExpression => FMOne type: #FASTFortranArithmeticExpression opposite: #left'
+		'#parentExpression => FMOne type: #FASTFortranArithmeticExpression opposite: #left',
+		'#returnOwner => FMOne type: #FASTFortranReturnStatement opposite: #expression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -71,6 +71,31 @@ FASTFortranExpression >> parentExpressionGroup [
 	<generated>
 	<navigation: 'ParentExpression'>
 	^ MooseSpecializedGroup with: self parentExpression
+]
+
+{ #category : #accessing }
+FASTFortranExpression >> parentIfBlock [
+	"Relation named: #parentIfBlock type: #FASTFortranIfBlockStatement opposite: #condition"
+
+	<generated>
+	<FMComment: 'Parent if block'>
+	<container>
+	<derived>
+	^ parentIfBlock
+]
+
+{ #category : #accessing }
+FASTFortranExpression >> parentIfBlock: anObject [
+
+	<generated>
+	parentIfBlock := anObject
+]
+
+{ #category : #navigation }
+FASTFortranExpression >> parentIfBlockGroup [
+	<generated>
+	<navigation: 'ParentIfBlock'>
+	^ MooseSpecializedGroup with: self parentIfBlock
 ]
 
 { #category : #accessing }

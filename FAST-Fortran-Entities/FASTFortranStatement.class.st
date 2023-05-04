@@ -36,6 +36,30 @@ FASTFortranStatement >> label: anObject [
 ]
 
 { #category : #accessing }
+FASTFortranStatement >> parentIfBlock [
+	"Relation named: #parentIfBlock type: #FASTFortranIfBlockStatement opposite: #elseStatements"
+
+	<generated>
+	<FMComment: 'Parent if block'>
+	<container>
+	^ parentIfBlock
+]
+
+{ #category : #accessing }
+FASTFortranStatement >> parentIfBlock: anObject [
+
+	<generated>
+	parentIfBlock := anObject
+]
+
+{ #category : #navigation }
+FASTFortranStatement >> parentIfBlockGroup [
+	<generated>
+	<navigation: 'ParentIfBlock'>
+	^ MooseSpecializedGroup with: self parentIfBlock
+]
+
+{ #category : #accessing }
 FASTFortranStatement >> statementContainer [
 	"Relation named: #statementContainer type: #FASTFortranStatementBlock opposite: #statements"
 
