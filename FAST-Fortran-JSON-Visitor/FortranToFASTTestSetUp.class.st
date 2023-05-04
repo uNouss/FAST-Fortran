@@ -11,7 +11,7 @@ Class {
 FortranToFASTTestSetUp >> astHaskell: sourceCode [
 
 	| filename option |
-	option := '-v77l -t json encode'.
+	option := 'serialize -t json -v77l encode'.
 	filename := './fortran77.f'.
 	filename asFileReference writeStreamDo: [ :stream | 
 		stream truncate.
