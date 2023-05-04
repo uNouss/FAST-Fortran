@@ -32,6 +32,13 @@ FASTFortranJsonVisitor >> doesNotUnderstand: message [
 ]
 
 { #category : #'as yet unclassified' }
+FASTFortranJsonVisitor >> label: anObject [
+	self flag: 'TODO generated automatically, please insert your code here'.
+	1 halt.
+
+]
+
+{ #category : #'as yet unclassified' }
 FASTFortranJsonVisitor >> visit: aJsonElement [
 
 	"Json elements are 
@@ -186,19 +193,23 @@ FASTFortranJsonVisitor >> visitConditions: anObject else: elseObject [
 
 	conditional := FASTFortranIfBlockStatement new
 		             condition: (self visitTaggedElement: anObject first first);
-		             thenPart: (self visit: anObject first last).
+		             thenStatements: (self visit: anObject first last).
 
 	anObject size > 1
-		ifTrue: [conditional elsePart: (self visitConditions: (anObject allButFirst)  else:  elseObject) ]
+		ifTrue: [
+			| col |
+			col := OrderedCollection new.
+			col add: (self visitConditions: (anObject allButFirst)  else:  elseObject).
+			conditional elseStatements: col.  ]
 		ifFalse: [ 
 			elseObject ifNotNil: [ 
-				conditional elsePart: (self visit: elseObject) ] ].
+				conditional elseStatements: (self visit: elseObject) ] ].
 	
 	^ conditional
 ]
 
 { #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitContinue: anObject [
+FASTFortranJsonVisitor >> visitContinueStatement: anObject [
 	
 	^ FASTFortranContinueStatement new
 
@@ -237,8 +248,8 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 		increment: ((increment isNotNil) ifTrue:[self visitTaggedElement: (loopControl at: 'increment') ] ifFalse: [nil]).
 	
 	^ (FASTFortranDoStatement new)
-	 block: (self visitJsonArray: (anObject at: 'body'));
-	loopControl: loopControl.  
+	statements: (self visitJsonArray: (anObject at: 'body'));
+	loopControl: loopControlExpression.  
 	
 
 ]
@@ -303,7 +314,7 @@ FASTFortranJsonVisitor >> visitFunction: anObject [
 	function parameters: (self visitJsonArray: (anObject at: 'arguments' at: 'list')).
 	
 	(anObject includesKey: 'body') ifTrue: [ function body: (self visitArguments: (anObject at: 'body')) ]
-	ifFalse: [ function body: (self visitArguments: (anObject at: 'blocks'))  ]
+	ifFalse: [ function statements: (self visitArguments: (anObject at: 'blocks'))  ]
 	.
 	
 	^ function. 
@@ -326,12 +337,12 @@ FASTFortranJsonVisitor >> visitFunction_call: anObject [
 	"not a statement. call to a certain funstions (INTRINSIC, EXTERNAL) in expressions do not require a call statement"
 
 	^ FASTFortranCallStatement new
-		  name: (self visit: (anObject at: 'function')) name;
-		  arguments: (self visitCallArguments:(anObject at: 'arguments' at: 'list'))
+		name: (self visit: (anObject at: 'function')) name;
+		arguments: (self visitCallArguments:(anObject at: 'arguments' at: 'list'))
 ]
 
 { #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitGoto: anObject [
+FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 	"so far only unconditional case is processed"
 	
@@ -350,6 +361,13 @@ FASTFortranJsonVisitor >> visitIf: anObject [
 	^ self
 		  visitConditions: (anObject at: 'conditions')
 		  else: (anObject at: 'blocks')
+]
+
+{ #category : #'as yet unclassified' }
+FASTFortranJsonVisitor >> visitIf_logicalStatement: anObject [
+	self flag: 'TODO generated automatically, please insert your code here'.
+	1 halt.
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -454,6 +472,13 @@ FASTFortranJsonVisitor >> visitLogical: anObject [
 FASTFortranJsonVisitor >> visitLogicalBaseType: anObject [
 
 	^ FASTFortranLogicalType new
+
+]
+
+{ #category : #'as yet unclassified' }
+FASTFortranJsonVisitor >> visitLt: anObject [
+	
+	^ FASTFortranLogicalExpression new operator: (anObject at: 'op' at: 'tag')
 
 ]
 
@@ -604,7 +629,7 @@ FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 ]
 
 { #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitStop: anObject [
+FASTFortranJsonVisitor >> visitStopStatement: anObject [
 
 	| displayArgument |
 
@@ -644,7 +669,7 @@ FASTFortranJsonVisitor >> visitSubtraction: anObject [
 	^ FASTFortranArithmeticExpression new
 		  left: (self visit: (anObject at: 'left'));
 		  right: (self visit: (anObject at: 'right'));
-		  op: (anObject at: 'op' at: 'tag')
+		  operator: (anObject at: 'op' at: 'tag')
 
 ]
 

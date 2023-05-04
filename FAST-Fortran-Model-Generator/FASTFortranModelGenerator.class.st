@@ -638,6 +638,26 @@ FASTFortranModelGenerator >> defineRelations [
 	<>-
 	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
 	
+	((doStatement property: #statements) comment:
+		 'Statements of the do body ')
+	<>-* ((scopableEntity property: #parentDoStatement) comment:
+			 'Parent do statement').
+	
+	((ifBlockStatement property: #thenStatements) comment:
+		 'Statements of the then branch ')
+	<>-* ((scopableEntity property: #parentIfBlock) comment:
+			 'Parent if block').
+
+	((ifBlockStatement property: #elseStatements) comment:
+		 'Statements of the then branch ')
+	<>-* ((statement property: #parentIfBlock) comment:
+			 'Parent if block').
+	
+	((ifBlockStatement property: #condition) comment:
+		 'Condition')
+	<>- ((expression property: #parentIfBlock) comment:
+			 'Parent if block').
+	
 	((variableDeclaration property: #variables) comment: 'variables')
 	<>-*
 	((variableExpression property: #parentDeclaration) comment: 'Parent declaration').

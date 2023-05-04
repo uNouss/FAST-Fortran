@@ -120,9 +120,7 @@ c desactivate structure
       call desstr(lib, ''mod'')
       write(*,*) ''borbk: end''
                     
-      end 
-
-
+      end
  '.
 
 	self assert: result isCollection 

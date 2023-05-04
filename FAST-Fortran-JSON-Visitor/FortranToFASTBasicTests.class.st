@@ -64,6 +64,68 @@ FortranToFASTBasicTests >> testHelloWorld [
 ]
 
 { #category : #tests }
+FortranToFASTBasicTests >> testIf [
+	
+	| conditional |
+	result := self parse: '
+      PROGRAM MYPROG
+       IF ( A ) THEN
+        I = 1
+        print *, ''Hello, World!''
+       END IF
+      END
+'.
+	conditional := result first first statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional condition class equals: FASTFortranVariableExpression.
+	self assert: conditional condition name equals: 'a'.
+	self assert: conditional thenStatements size = 2.
+	self assert: conditional parentProgramUnit class equals: FASTFortranProgramMain.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testIfElse [
+
+	| conditional |
+	
+	result := self parse: '
+      PROGRAM MYPROG
+       IF ( X .LT. Y ) THEN 
+        M = 0
+       ELSE
+        M = 0
+        I = 1 
+       END IF
+      END
+'.
+
+	conditional := result first first statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testIfElseXTimes [
+
+	| conditional |
+	result := self parse: '      PROGRAM MYPROG
+         IF ( A ) THEN
+            I = 1
+         else if ( b ) then
+            i = 2
+            M = 0
+         else if ( c ) then
+            i = 3         
+         ELSE
+            I = 4
+         END IF
+      END
+'.
+
+	conditional := result first first statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement
+]
+
+{ #category : #tests }
 FortranToFASTBasicTests >> testMainProgram [
 
 	result := self parse: '
