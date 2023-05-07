@@ -47,6 +47,25 @@ FortranToFASTBasicTests >> testCallSubroutine [
 ]
 
 { #category : #tests }
+FortranToFASTBasicTests >> testFunctionProgramNoParameter [
+
+	result := self parse: '
+      integer function aFct()
+      end
+ '.
+	
+	self assert: result isNotEmpty.
+	self assert: result isNotNil.
+	self assert: result class equals: FASTFortranFunction.
+	self assert: result name equals: 'hello'.
+	self assert: result parameters isCollection.
+	self assert: result parameters isEmpty.
+	self assert: result returnType class equals: FASTFortranType.
+	self assert: result returnType name equals: 'integer'.
+	
+]
+
+{ #category : #tests }
 FortranToFASTBasicTests >> testHelloWorld [
 
 	| mainProgram |
