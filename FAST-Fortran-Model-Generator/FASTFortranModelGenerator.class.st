@@ -638,6 +638,36 @@ FASTFortranModelGenerator >> defineRelations [
 	<>-
 	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
 	
+	((doStatement property: #statements) comment:
+		 'Statements of the do body ')
+	<>-* ((scopableEntity property: #parentDoStatement) comment:
+			 'Parent do statement').
+	
+	((ifBlockStatement property: #thenStatements) comment:
+		 'Statements of the then branch ')
+	<>-* ((scopableEntity property: #parentIfBlock) comment:
+			 'Parent if block').
+
+	((ifBlockStatement property: #elseStatements) comment:
+		 'Statements of the then branch ')
+	<>-* ((statement property: #parentIfBlock) comment:
+			 'Parent if block').
+	
+	((ifBlockStatement property: #condition) comment:
+		 'Condition')
+	<>- ((expression property: #parentIfBlock) comment:
+			 'Parent if block').
+			
+	((ifLogicalStatement property: #statement) comment:
+		 'Statement of the logical if')
+	<>- ((statement property: #parentIfBlock) comment:
+			 'Parent if block').
+	
+	((ifLogicalStatement property: #condition) comment:
+		 'Condition')
+	<>- ((expression property: #parentIfBlock) comment:
+			 'Parent if block').		
+	
 	((variableDeclaration property: #variables) comment: 'variables')
 	<>-*
 	((variableExpression property: #parentDeclaration) comment: 'Parent declaration').
@@ -800,7 +830,7 @@ FASTFortranModelGenerator >> defineStatements [
 	ifLogicalStatement := builder
 		                      newClassNamed: #IfLogicalStatement
 		                      comment:
-		                      'I represent Fortran If (Logical) statement'.
+		                      'The logical IF statement executes one single statement, or does not execute it, depending on the value of a logical expression.'.
 	implicitStatement := builder
 		                     newClassNamed: #ImplicitStatement
 		                     comment:

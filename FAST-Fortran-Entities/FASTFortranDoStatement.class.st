@@ -5,7 +5,8 @@ Class {
 	#name : #FASTFortranDoStatement,
 	#superclass : #FASTFortranStatement,
 	#instVars : [
-		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop'
+		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
+		'#statements => FMMany type: #FASTFortranScopableEntity opposite: #parentDoStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -17,6 +18,12 @@ FASTFortranDoStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #adding }
+FASTFortranDoStatement >> addStatement: anObject [
+	<generated>
+	^ self statements add: anObject
 ]
 
 { #category : #accessing }
@@ -40,4 +47,28 @@ FASTFortranDoStatement >> loopControlGroup [
 	<generated>
 	<navigation: 'LoopControl'>
 	^ MooseSpecializedGroup with: self loopControl
+]
+
+{ #category : #accessing }
+FASTFortranDoStatement >> statements [
+	"Relation named: #statements type: #FASTFortranScopableEntity opposite: #parentDoStatement"
+
+	<generated>
+	<FMComment: 'Statements of the do body '>
+	<derived>
+	^ statements
+]
+
+{ #category : #accessing }
+FASTFortranDoStatement >> statements: anObject [
+
+	<generated>
+	statements value: anObject
+]
+
+{ #category : #navigation }
+FASTFortranDoStatement >> statementsGroup [
+	<generated>
+	<navigation: 'Statements'>
+	^ MooseSpecializedGroup withAll: self statements asSet
 ]
