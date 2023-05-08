@@ -22,6 +22,13 @@ FASTFortranJsonVisitor >> builtVisitStatementSelector: key [
 	^ ('visit' , key capitalized , 'Statement:') asSymbol
 ]
 
+{ #category : #'as yet unclassified' }
+FASTFortranJsonVisitor >> do: anObject [
+	self flag: 'TODO generated automatically, please insert your code here'.
+	1 halt.
+
+]
+
 { #category : #'reflective operations' }
 FASTFortranJsonVisitor >> doesNotUnderstand: message [
 
@@ -69,12 +76,6 @@ FASTFortranJsonVisitor >> visitAnno: anObject [
 FASTFortranJsonVisitor >> visitArgumentValue: anObject [
 
 	^ self visitTaggedElement: anObject
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitArguments: anASTArguments [
-
-	^ self visit: (anASTArguments "at: 'list'")
 ]
 
 { #category : #visiting }
@@ -128,7 +129,7 @@ FASTFortranJsonVisitor >> visitBlock_data: anObject [
 	data := super visitBlock_data: anObject.
 
 	^ FASTFortranBlockData new
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		flag: 'need to set source anchor' ;
 		name: data second ;
 		statements: data third ;
 		yourself
@@ -256,7 +257,7 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
 	^FASTFortranVariableExpression new
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		flag: 'need to set source anchor' ;
 		name: data second ;
 		yourself
 	
@@ -343,30 +344,26 @@ where proc is a name of external procedure, dummy procedure, or block data routi
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitFunction: anObject [
-
-	| function |
-	
-	function := FASTFortranFunction new.
-	function name: (anObject at: 'name').
-	function parameters: (self visitJsonArray: (anObject at: 'arguments' at: 'list')).
-	
-	(anObject includesKey: 'body') ifTrue: [ function body: (self visitArguments: (anObject at: 'body')) ]
-	ifFalse: [ function statements: (self visitArguments: (anObject at: 'blocks'))  ]
-	.
-	
-	^ function. 
-	
-	
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
 		
 	^ FASTFortranFunctionStatement new
 		name: (self visit: (anObject at: 'name'));
 		arguments: (self visitJsonArray: (anObject at: 'arguments' at: 'list'));
 		expression: (self visitTaggedElement: (anObject at: 'body')).
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
+	"^self visitJsonMap: aFunctionNode keys: #(span name type arguments blocks result subprograms)"
+	| data |
+	data := super visitFunctionWithBlocks: aFunctionNode.
+	^FASTFortranFunction new
+		flag: 'need to set source anchor' ;
+		name: data second ;
+		flag: 'need to set return type' ;
+		parameters: data fourth ;
+		statements: data fifth ;
+		yourself
 ]
 
 { #category : #visiting }
