@@ -1,28 +1,28 @@
 Class {
 	#name : #FASTFortranJsonVisitor,
-	#superclass : #Object,
+	#superclass : #FortranAbstractJsonVisitor,
 	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - utilities' }
 FASTFortranJsonVisitor >> builtVisitSelector: key [
 
 	^ ('visit' , key capitalized , ':') asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - utilities' }
 FASTFortranJsonVisitor >> builtVisitSelectorBaseTypes: key [
 
 	^ ('visit' , key capitalized , 'BaseType' , ':') asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - utilities' }
 FASTFortranJsonVisitor >> builtVisitStatementSelector: key [
 
 	^ ('visit' , key capitalized , 'Statement:') asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'reflective operations' }
 FASTFortranJsonVisitor >> doesNotUnderstand: message [
 
 	self class compile: message selector , ' anObject
@@ -31,14 +31,14 @@ FASTFortranJsonVisitor >> doesNotUnderstand: message [
 '
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'reflective operations' }
 FASTFortranJsonVisitor >> label: anObject [
 	self flag: 'TODO generated automatically, please insert your code here'.
 	1 halt.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'reflective operations' }
 FASTFortranJsonVisitor >> visit: aJsonElement [
 
 	"Json elements are 
@@ -50,7 +50,7 @@ FASTFortranJsonVisitor >> visit: aJsonElement [
 	aJsonElement isArray ifTrue: [ ^ self visitJsonArray: aJsonElement ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitAddition: anObject [
 
 	^ FASTFortranArithmeticExpression new
@@ -59,25 +59,25 @@ FASTFortranJsonVisitor >> visitAddition: anObject [
 		  operator: (anObject at: 'op' at: 'tag')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitAnno: anObject [
 
 	^ nil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArgumentValue: anObject [
 
 	^ self visitTaggedElement: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArguments: anASTArguments [
 
 	^ self visit: (anASTArguments "at: 'list'")
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArray: anObject [
 	
 	"its a bullshit code that need to be rewritten"
@@ -90,13 +90,13 @@ FASTFortranJsonVisitor >> visitArray: anObject [
 	"TODO process length"	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitAssign_expression: anObject [
 
 	^ self visitAssign_expressionStatement: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
 
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
@@ -106,13 +106,13 @@ FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
 		  expression: (self visit: (anObject at: 'expression'))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitBase_type: anObject [
 
 	^ self perform: (self builtVisitSelectorBaseTypes: anObject) with: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitBinary: anObject [
 	| selector |
 	
@@ -121,25 +121,26 @@ FASTFortranJsonVisitor >> visitBinary: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitBlock_data: anObject [
+	| data |
 
-	| value |
-	value := FASTFortranBlockData new.
-	value name: (anObject at: 'name').
+	data := super visitBlock_data: anObject.
 
-	value statements: (self visit: (anObject at: 'blocks')).
-
-	^ value
+	^ FASTFortranBlockData new
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		name: data second ;
+		statements: data third ;
+		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCallArguments: aList [
 
 	^ aList collect: [ :arg | self visitTaggedElement: (arg at: 'expr') ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCallStatement: anObject [
 	
 	"The CALL statement branches to the specified subroutine, executes the subroutine, and returns to the calling program after finishing the subroutine.
@@ -159,20 +160,27 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCharacterBaseType: anObject [
 	
 	^ FASTFortranCharacterLiteral new 
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitComment: anObject [
 
 	^ FASTFortranComment new content: (anObject at: 'comment')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitCommon: aCommonNode [
+	| data |
+	data := super visitCommon: aCommonNode.
+	^self visitJsonMap: aCommonNode keys: #(span common_groups)
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCommonStatement: anObject [
 	
 	"creates common statement which defines a block of main memory storage so that different program units can share the same data without using arguments.
@@ -185,7 +193,7 @@ nlist: List of variable names, array names, and array declarators  "
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitConditions: anObject else: elseObject [
 	
 	"read recursiveley a list of ""if then"" end ""if else"", adds else part if present"
@@ -208,34 +216,64 @@ FASTFortranJsonVisitor >> visitConditions: anObject else: elseObject [
 	^ conditional
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitContinueStatement: anObject [
 	
 	^ FASTFortranContinueStatement new
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitDeclaration: anObject [
+	| data |
+
+	data := super visitDeclaration: anObject.
+	data fourth do: [ :varExp | varExp type: data second ].
+	^FASTFortranVariablesDeclaration new
+		variables: data fourth ;
+		yourself.
+
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclarationStatement: anObject [
 	
 	| type |
-
+self flag: #REMOVE.
 	type := (self visit: (anObject at: 'type') ) first.
 	^ FASTFortranVariablesDeclaration new
 		variables: ((self visitDeclarators: (anObject at: 'declarators')) do: [ :v | v type: type]).
 
 ]
 
-{ #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitDeclarators: anObject [
-
-	^ (anObject at: 'list') collect: [ :each | 
-		  self
-			  perform: (self builtVisitSelector: (each at: #type))
-			  with: each ]
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
+	^self visitDeclaratorVariable: (aDeclaratorNode at: 'variable')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
+	| data |
+	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
+	^FASTFortranVariableExpression new
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		name: data second ;
+		yourself
+	
+	
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitDeclarators: anObject [
+self flag: #REMOVE.
+	"^ (anObject at: 'list') collect: [ :each | 
+		  self
+			  perform: (self builtVisitSelector: (each at: #type))
+			  with: each ]"
+	^super visitDeclarators: anObject
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitDo: anObject [
 
 	| loopControl loopControlExpression increment|
@@ -254,7 +292,7 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitEq: anObject [
 	
 	^ FASTFortranLogicalExpression new 
@@ -264,14 +302,14 @@ FASTFortranJsonVisitor >> visitEq: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitExitStatement: anObject [
 	
 	^ FASTFortranExitStatement new.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitExponentiation: anObject [
 
 	^ FASTFortranArithmeticExpression new
@@ -280,7 +318,7 @@ FASTFortranJsonVisitor >> visitExponentiation: anObject [
 		  op: (anObject at: 'op' at: 'tag')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitExpr: anObject [
 
 	"encountered in the list of format variables. for the moment the only seen structure was 
@@ -291,7 +329,7 @@ FASTFortranJsonVisitor >> visitExpr: anObject [
 		  ifFalse: [ self visitTaggedElement: anObject ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitExternalStatement: anObject [
 	
 	"The EXTERNAL statement specifies procedures or dummy procedures as external, and allows their symbolic names to be used as actual arguments.
@@ -304,7 +342,7 @@ where proc is a name of external procedure, dummy procedure, or block data routi
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitFunction: anObject [
 
 	| function |
@@ -322,7 +360,7 @@ FASTFortranJsonVisitor >> visitFunction: anObject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
 		
 	^ FASTFortranFunctionStatement new
@@ -331,7 +369,7 @@ FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
 		expression: (self visitTaggedElement: (anObject at: 'body')).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitFunction_call: anObject [
 
 	"not a statement. call to a certain funstions (INTRINSIC, EXTERNAL) in expressions do not require a call statement"
@@ -341,7 +379,7 @@ FASTFortranJsonVisitor >> visitFunction_call: anObject [
 		arguments: (self visitCallArguments:(anObject at: 'arguments' at: 'list'))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 	"so far only unconditional case is processed"
@@ -350,7 +388,7 @@ FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIf: anObject [
 
 	".blocks is an array with one block dedicated to else
@@ -363,14 +401,14 @@ FASTFortranJsonVisitor >> visitIf: anObject [
 		  else: (anObject at: 'blocks')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIf_logicalStatement: anObject [
 	self flag: 'TODO generated automatically, please insert your code here'.
 	1 halt.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitImplicitStatement: anObject [
 	
 	"correspond to the statement implicit none. for the moment we create only a stub entity for the case of 'implicit none'"
@@ -380,65 +418,26 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitInitial: anObject [
 
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitInteger: anObject [
 
 	^ FASTFortranIntegerLiteral new value: (anObject at: 'contents')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIntegerBaseType: anObject [
 	
 	^ FASTFortranIntegerType new 
 
 ]
 
-{ #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitJsonArray: aJsonArray [
-
-	"process JSON Array"
-
-	^ aJsonArray collect: [ :value |
-			"1 halt." 
-		  (value includesKey: 'tag')
-			  ifTrue: [ self visitTaggedElement: value ]
-			  ifFalse: [ self visit: value ] ]
-]
-
-{ #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitJsonMap: aJsonMap [
-
-	"process JSON map (dictionary)"
-
-	| newCollection result |
-	"explain why"
-	(aJsonMap includesKey: 'tag') ifTrue: [ 
-		^ self visitTaggedElement: aJsonMap ].
-
-	newCollection := OrderedCollection new: aJsonMap size.
-
-	aJsonMap associationsDo: [ :assoc | 
-		| selector |
-		selector := self builtVisitSelector: assoc key.
-		"1 halt."
-		newCollection add: (self perform: selector with: assoc value) ].
-
-	"1 halt."
-	"SHIT-CODE AWARD WINNER:"
-	result := newCollection reject: [ :each | each isNil ].
-	^ result
-	"result size = 1
-		ifTrue: [ ^ result first ]
-		ifFalse: [ ^ result ]"
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLabel: anObject [
 
 	^ nil
@@ -446,7 +445,7 @@ FASTFortranJsonVisitor >> visitLabel: anObject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLength: anObject [
 
 	^ nil
@@ -454,13 +453,13 @@ FASTFortranJsonVisitor >> visitLength: anObject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitList: anObject [
 
 	^ self visit: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLogical: anObject [
 
 	(anObject at: 'contents') first
@@ -468,21 +467,21 @@ FASTFortranJsonVisitor >> visitLogical: anObject [
 		ifFalse: [ ^ FASTFortranBooleanLiteral new value: 'false' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLogicalBaseType: anObject [
 
 	^ FASTFortranLogicalType new
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLt: anObject [
 	
 	^ FASTFortranLogicalExpression new operator: (anObject at: 'op' at: 'tag')
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitMain: anObject [
 
 	^ FASTFortranProgramMain new
@@ -492,7 +491,7 @@ FASTFortranJsonVisitor >> visitMain: anObject [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitMeta: anObject [
 
 	"nothing to do for FAST"
@@ -501,15 +500,7 @@ FASTFortranJsonVisitor >> visitMeta: anObject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> visitName: anObject [
-
-	"encountered in the list of format variables. for the moment ignored"
-
-	^ nil
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 
 	^ FASTFortranPrintStatement new
@@ -517,7 +508,7 @@ FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitProgram_units: anObject [
 
 	"anObject is an array of program units that can be main program (tag: main) or subprogram (tags: function, subroutine, ...)"
@@ -534,45 +525,45 @@ FASTFortranJsonVisitor >> visitProgram_units: anObject [
 		ifFalse: [ " TODO exception " ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitReal: anObject [
 
 	^ FASTFortranRealLiteral new value: (anObject at: 'contents')
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitRealBaseType: anObject [
 	
 	^ FASTFortranRealType new
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitReturnStatement: anObject [
 	
 	^ FASTFortranReturnStatement new
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitReturn_spec: anObject [
 	"alternate return label passed as an argument in a subroutine call".
 	
 	^ self visitValue: (anObject at:'target')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitScalar: anObject [
 
 	"not sure if it is correct"
-	
+	self flag: #REMOVE.
 	^ self visitVariable: (anObject at: 'variable') 
 
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitSelector: anObject [
 	
 	"type selector, met in a variable declaraion, for the moment not used"
@@ -581,7 +572,7 @@ FASTFortranJsonVisitor >> visitSelector: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitSpan: anObject [
 
 	" anObject is a source anchor in the form (a:b - c:d) where a and c are line numbers and b and d are columns. 
@@ -592,14 +583,14 @@ FASTFortranJsonVisitor >> visitSpan: anObject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStar: anObject [
 
 	^ FASTFortranAsterisk new.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStatement: anObject [
 
 	| statement |
@@ -620,7 +611,7 @@ FASTFortranJsonVisitor >> visitStatement: anObject [
 		ifFalse: [ "TODO exception" ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 
 	^ "FASTFortranStatementBlock new statements:"
@@ -628,7 +619,7 @@ FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 			   self visitJsonMap: astStatement ])
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStopStatement: anObject [
 
 	| displayArgument |
@@ -641,19 +632,19 @@ FASTFortranJsonVisitor >> visitStopStatement: anObject [
 		  ifNil: [ FASTFortranStopStatement new ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitString: anObject [
 
 	^ FASTFortranStringLiteral new value: (anObject at: 'contents')
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStringBaseType: anObject [
 
 	^ FASTFortranStringLiteral new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitSubroutine: anObject [
 
 	^ FASTFortranSubroutine new
@@ -663,7 +654,7 @@ FASTFortranJsonVisitor >> visitSubroutine: anObject [
 		  statements: (self visitStatementBlock: (anObject at: 'blocks'))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitSubtraction: anObject [
 	
 	^ FASTFortranArithmeticExpression new
@@ -673,7 +664,7 @@ FASTFortranJsonVisitor >> visitSubtraction: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitTaggedElement: value [
 
 	^ self
@@ -681,7 +672,7 @@ FASTFortranJsonVisitor >> visitTaggedElement: value [
 		  with: value
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitTaggedStatement: value [
 
 	^ self
@@ -689,7 +680,7 @@ FASTFortranJsonVisitor >> visitTaggedStatement: value [
 		  with: value
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitValue: anObject [
 	
 	"| value |"
@@ -699,7 +690,7 @@ FASTFortranJsonVisitor >> visitValue: anObject [
 	^ self visitArgumentValue: (anObject at: 'value').
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitVariable: anObject [
 
 	"declaration of variable is ambigous and can be seen in diferent places of given data and might have different structure, which explains the necessity of the code below"
@@ -710,7 +701,7 @@ FASTFortranJsonVisitor >> visitVariable: anObject [
 		  ifFalse: [ self visitTaggedElement: anObject ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitWriteStatement: anObject [
 	
 	"write statement. should follow the pattern: 

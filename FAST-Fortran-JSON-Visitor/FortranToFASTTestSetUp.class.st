@@ -9,19 +9,8 @@ Class {
 
 { #category : #'as yet unclassified' }
 FortranToFASTTestSetUp >> astHaskell: sourceCode [
-
-	| filename option |
-	option := '-v77l -t json encode'.
-	filename := './fortran77.f'.
-	filename asFileReference writeStreamDo: [ :stream | 
-		stream truncate.
-		stream
-		<< (sourceCode copy replaceAll: Character cr with: Character lf) ].
-	
-	LibC runCommand: ('{1} {2} "{3}" >"{3}.json" 2>"{3}.err"' format: { 
-				 self haskellParserPath.
-				 option.
-				 filename. })
+	FortranProjectImporter new
+		astJSON: sourceCode
 ]
 
 { #category : #'as yet unclassified' }
@@ -58,6 +47,6 @@ FortranToFASTTestSetUp >> parse: sourceCode as: puMarker [
 FortranToFASTTestSetUp >> parse: sourceCode rule: aRule [
 
 	^ FASTFortranJsonVisitor new visit:
-		('fortran77.f.json' asFileReference readStreamDo: [ :str | 
+		('fortran77.f.ast' asFileReference readStreamDo: [ :str | 
 			 NeoJSONReader fromString: str contents ]).
 ]
