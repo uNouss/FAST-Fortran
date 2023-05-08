@@ -67,6 +67,29 @@ FortranToFASTBasicTests >> testFunctionNoParameter [
 ]
 
 { #category : #tests }
+FortranToFASTBasicTests >> testFunctionWithParameter [
+	| fct |
+	result := self parse: '
+      integer function aFct(i,j)
+      end
+ '.
+
+	self assert: result isNotEmpty.
+	fct := result first first.
+
+	self assert: fct class equals: FASTFortranFunction.
+	self assert: fct name equals: 'afct'.
+	self assert: fct parameters isCollection.
+	self assert: fct parameters size equals: 2.
+
+	self flag: 'should test the name of each parameter'.
+
+	"self assert: fct returnType class equals: FASTFortranType.
+	self assert: fct returnType name equals: 'integer'."
+	
+]
+
+{ #category : #tests }
 FortranToFASTBasicTests >> testHelloWorld [
 
 	| mainProgram |
