@@ -145,6 +145,30 @@ FortranToFASTBasicTests >> testIfElseXTimes [
 ]
 
 { #category : #tests }
+FortranToFASTBasicTests >> testIntegerVariableDeclaration [
+	| mainProgram stmt var |
+	result := self parse: '      program main
+      integer i
+      end
+'.
+
+	self assert: result isCollection.
+
+	mainProgram := result first first.
+	self assert: mainProgram statements isCollection.
+	self assert: mainProgram statements size equals: 1.
+
+	stmt := mainProgram statements first.	
+	self assert: stmt class equals: FASTFortranVariablesDeclaration.
+	self assert: stmt variables size equals: 1.
+	
+	var := stmt variables first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'i'.
+	self assert: var type equals: 'integer'
+]
+
+{ #category : #tests }
 FortranToFASTBasicTests >> testMainProgram [
 
 	result := self parse: '
