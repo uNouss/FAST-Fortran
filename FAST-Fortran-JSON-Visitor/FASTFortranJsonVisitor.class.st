@@ -67,12 +67,6 @@ FASTFortranJsonVisitor >> visitAddition: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitAnno: anObject [
-
-	^ nil.
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArgumentValue: anObject [
 
 	^ self visitTaggedElement: anObject
