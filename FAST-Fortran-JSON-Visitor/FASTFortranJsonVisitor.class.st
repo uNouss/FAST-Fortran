@@ -506,20 +506,27 @@ FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitProgram_units: anObject [
+FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
+	^(super visitProgramFile: aProgramFileNode)
+		second.
+]
 
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitProgram_units: anObject [
 	"anObject is an array of program units that can be main program (tag: main) or subprogram (tags: function, subroutine, ...)"
 
-	anObject isArray
+	^super visitProgram_units: anObject
+
+	"anObject isArray
 		ifTrue: [ 
 			^ anObject collect: [ :value |
-				"1 halt." 
+				""1 halt."" 
 				(value includesKey: 'tag')
 					ifTrue: [ self visitTaggedElement: value ]
-					ifFalse: [ " TODO exception " ] ] 
-				"^ self visitJsonArray: anObject"
+					ifFalse: [ "" TODO exception "" ] ] 
+				""^ self visitJsonArray: anObject""
 				]
-		ifFalse: [ " TODO exception " ]
+		ifFalse: [ "" TODO exception "" ]"
 ]
 
 { #category : #visiting }

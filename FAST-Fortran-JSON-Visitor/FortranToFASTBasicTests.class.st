@@ -231,3 +231,17 @@ FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 	self assert: mainProgram class equals: FASTFortranProgramMain.
 	self assert: mainProgram name equals: 'hello'.
 ]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testMainProgramEmpty [
+
+	result := self parse: '
+      program main
+      end
+ '.
+	
+	self assert: result isCollection.
+	self assert: result size equals: 1.
+	self assert: result first class equals: FASTFortranProgramMain.
+	self assert: result first name equals: 'main'.
+]
