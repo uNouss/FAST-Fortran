@@ -196,8 +196,7 @@ FortranToFASTBasicTests >> testIntegerVariableDeclaration [
 FortranToFASTBasicTests >> testMainProgram [
 	| body |
 
-	result := self parse: '
-      program main
+	result := self parse: '      program main
       implicit none
 c23456789 123456789 123456789 123456789 123456789 123456789 12
       end
@@ -217,8 +216,7 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
 FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 
 	| progUnit |
-	result := self parse: '
-      PROGRAM TESTALT
+	result := self parse: '      PROGRAM TESTALT
       END 
       
       SUBROUTINE RANK
@@ -240,8 +238,7 @@ FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 { #category : #tests }
 FortranToFASTBasicTests >> testMainProgramEmpty [
 
-	result := self parse: '
-      program main
+	result := self parse: '      program main
       end
  '.
 	
@@ -255,8 +252,7 @@ FortranToFASTBasicTests >> testMainProgramEmpty [
 FortranToFASTBasicTests >> testStatementCallSubroutine [
 
 	| body |
-	result := self parse: '
-      PROGRAM TESTALT
+	result := self parse: '      PROGRAM TESTALT
        CALL RANK ( N, *8, *9 )
       END 
 '.
@@ -287,8 +283,7 @@ FortranToFASTBasicTests >> testStatementCallWrite [
 FortranToFASTBasicTests >> testStatementStop [
 
 	| body |
-	result := self parse: '
-      PROGRAM TESTALT
+	result := self parse: '      PROGRAM TESTALT
        STOP
       END 
 '.
@@ -306,8 +301,7 @@ FortranToFASTBasicTests >> testStatementStop [
 FortranToFASTBasicTests >> testStatementStopLabel [
 
 	| body |
-	result := self parse: '
-      PROGRAM TESTALT
+	result := self parse: '      PROGRAM TESTALT
        STOP 10
       END 
 '.
@@ -319,6 +313,7 @@ FortranToFASTBasicTests >> testStatementStopLabel [
 	self assert: body size equals: 1.
 	self assert: body first class equals: FASTFortranStopStatement.
 	self assert: body first displayArgument class equals: FASTFortranIntegerLiteral .
+	self assert: body first displayArgument value equals: '10'
 ]
 
 { #category : #tests }
