@@ -168,9 +168,11 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitCharacterBaseType: anObject [
+FASTFortranJsonVisitor >> visitCharacterBaseType: aCharacterBaseTypeNode [
 	
-	^ FASTFortranCharacterLiteral new 
+	^ FASTFortranCharacterLiteral new
+		value: (aCharacterBaseTypeNode at: 'contents') ;
+		yourself
 
 ]
 
@@ -350,6 +352,13 @@ where proc is a name of external procedure, dummy procedure, or block data routi
 ]
 
 { #category : #visiting }
+FASTFortranJsonVisitor >> visitFormat: aFormatNode [
+	^(super visitFormat: aFormatNode)
+		second
+		reject: #isNil
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
 		
 	^ FASTFortranFunctionStatement new
@@ -428,12 +437,6 @@ FASTFortranJsonVisitor >> visitInitial: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitInteger: anObject [
-
-	^ FASTFortranIntegerLiteral new value: (anObject at: 'contents')
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIntegerBaseType: anObject [
 	
 	^ FASTFortranIntegerType new 
@@ -441,11 +444,11 @@ FASTFortranJsonVisitor >> visitIntegerBaseType: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitLabel: anObject [
+FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 
-	^ nil
-
-	
+	^FASTFortranIntegerLiteral new
+		value: (super visitIntegerLiteralValue: anIntegerLiteralValueNode) ;
+		yourself
 ]
 
 { #category : #visiting }
@@ -602,23 +605,24 @@ FASTFortranJsonVisitor >> visitStar: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitStatement: anObject [
+	| data |
 
-	| statement |
-	"1 halt."
-	statement := anObject at: 'statement'.
+	data := super visitStatement: anObject.
 
-	"we expect a statement to have a tag"
+	data second ifNotNil: [ data third label: data second ].
+	^data third
+	"statement := anObject at: 'statement'.
+
 	(statement includesKey: 'tag')
 		ifTrue: [ 
 			| st label |
 			st := self visitTaggedStatement: statement.
 			
-			"statement might have a label"
 			label := anObject at: 'label'.
 			^ label
 				  ifNotNil: [ st label: (self visitValue: label) ]
 				  ifNil: [ st ] ]
-		ifFalse: [ "TODO exception" ]
+		ifFalse: [  ]"
 ]
 
 { #category : #visiting }
@@ -643,9 +647,9 @@ FASTFortranJsonVisitor >> visitStopStatement: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitString: anObject [
+FASTFortranJsonVisitor >> visitString: aStringNode [
 
-	^ FASTFortranStringLiteral new value: (anObject at: 'contents')
+	^ FASTFortranStringLiteral new value: (aStringNode at: 'contents')
 ]
 
 { #category : #visiting }
@@ -696,12 +700,7 @@ FASTFortranJsonVisitor >> visitTaggedStatement: value [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitValue: aValueNode [
 	^(super visitValue: aValueNode) second
-	
-	"| value |"
-	"value := (anObject at: 'tag')."
-	"^ self visitTaggedElement: anObject ."
-	
-	"^ self visitArgumentValue: (anObject at: 'value')."
+
 ]
 
 { #category : #visiting }
@@ -715,18 +714,17 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitWriteStatement: anObject [
-	
+FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [	
 	"write statement. should follow the pattern: 
 	WRITE([UNIT=] u [, [FMT=] f] [, IOSTAT=ios] [, REC=rn] [, ERR=s]) iolist
 	WRITE([ UNIT=] u, [NML=] grname [, IOSTAT=ios] [, ERR=s])"
+	| data |
 
-	| statement |
-	statement := FASTFortranWriteStatement new
-		             format: (self visit: (anObject at: 'format'));
-		             iolist:
-			             (self visit: (anObject at: 'arguments' at: 'list')).
+	data := super visitWriteStatement: aWriteStatementNode.
 
-	^ statement
-
+	^FASTFortranWriteStatement new
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		format: data second ;
+		iolist: data third ;
+		yourself
 ]

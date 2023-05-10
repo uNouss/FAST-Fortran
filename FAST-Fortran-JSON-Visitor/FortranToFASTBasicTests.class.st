@@ -267,16 +267,22 @@ FortranToFASTBasicTests >> testStatementCallSubroutine [
 FortranToFASTBasicTests >> testStatementCallWrite [
 
 	| body |
-	result := self parse: '
-      PROGRAM TESTALT
-       WRITE (*,*) ''''OK - Normal Return [n=0]''''
+	result := self parse: '      PROGRAM TESTALT
+       WRITE (*,*) "OK - Normal Return [n=0]"
       END 
 '.
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
-	self fail
+	self assert: body size equals: 1.
+	self assert: body first class equals: FASTFortranWriteStatement.
+	self assert: body first format size equals: 2.
+	self assert: body first format size equals: 2.
+	body first format do: [ :each |
+		self assert: each class equals: FASTFortranAsterisk
+	]
+	
 ]
 
 { #category : #tests }
@@ -320,16 +326,19 @@ FortranToFASTBasicTests >> testStatementStopLabel [
 FortranToFASTBasicTests >> testStatementWithLabel [
 
 	| body |
-	result := self parse: '
-      PROGRAM TESTALT
-10     WRITE (*,*) ''Minor - 1st alternate return [n=1]'' 
+	result := self parse: '      PROGRAM TESTALT
+10     STOP
       END 
 '.
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
-	self fail
+	self assert: body isCollection.
+	self assert: body size equals: 1.
+	self assert: body first class equals: FASTFortranStopStatement.
+	self assert: body first label class equals: FASTFortranIntegerLiteral.
+	self assert: body first label value equals: '10'.
 ]
 
 { #category : #tests }
