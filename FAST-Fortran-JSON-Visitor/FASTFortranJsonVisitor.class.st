@@ -649,13 +649,16 @@ FASTFortranJsonVisitor >> visitStringBaseType: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitSubroutine: anObject [
+FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
+	| data |
+	data := super visitSubroutine: aSubroutineNode.
 
-	^ FASTFortranSubroutine new
-		  name: (anObject at: 'name');
-		  parameters:
-			  (self visitArguments: (anObject at: 'arguments')) first;
-		  statements: (self visitStatementBlock: (anObject at: 'blocks'))
+	^FASTFortranSubroutine new
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		name: data second ;
+		parameters: data third ;
+		statements: data fourth ;
+		yourself
 ]
 
 { #category : #visiting }

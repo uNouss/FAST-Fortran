@@ -194,42 +194,47 @@ FortranToFASTBasicTests >> testIntegerVariableDeclaration [
 
 { #category : #tests }
 FortranToFASTBasicTests >> testMainProgram [
+	| body |
 
 	result := self parse: '
       program main
       implicit none
-c2345678901234567890123456789012345678901234567890123456789012
+c23456789 123456789 123456789 123456789 123456789 123456789 12
       end
  '.
-	
-	self assert: result isCollection
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self assert: body isCollection.
+	self assert: body size equals: 2.
+	self assert: body first class equals: FASTFortranImplicitStatement.
+	self assert: body second class equals: FASTFortranComment.
+	self assert: body second content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
 ]
 
 { #category : #tests }
 FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 
-	| mainProgram |
+	| progUnit |
 	result := self parse: '
       PROGRAM TESTALT
-       CALL RANK ( N, *8, *9 )
-       WRITE (*,*) ''OK - Normal Return [n=0]''
-       STOP 
-8      WRITE (*,*) ''Minor - 1st alternate return [n=1]'' 
-       STOP 8
-9      WRITE (*,*) ''Major - 2nd alternate return [n=2]'' 
       END 
       
-      SUBROUTINE RANK ( N, *, * ) 
-       IF ( N .EQ. 0 ) RETURN 
-       IF ( N .EQ. 1 ) RETURN 1
-       RETURN 2 
+      SUBROUTINE RANK
       END
 '.
 
 	self assert: result isCollection.
-	mainProgram := result first first.
-	self assert: mainProgram class equals: FASTFortranProgramMain.
-	self assert: mainProgram name equals: 'hello'.
+	self assert: result size equals: 2.
+
+	progUnit := result first.
+	self assert: progUnit class equals: FASTFortranProgramMain.
+	self assert: progUnit name equals: 'testalt'.
+
+	progUnit := result second.
+	self assert: progUnit class equals: FASTFortranSubroutine.
+	self assert: progUnit name equals: 'rank'.
 ]
 
 { #category : #tests }
@@ -244,4 +249,97 @@ FortranToFASTBasicTests >> testMainProgramEmpty [
 	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranProgramMain.
 	self assert: result first name equals: 'main'.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testStatementCallSubroutine [
+
+	| body |
+	result := self parse: '
+      PROGRAM TESTALT
+       CALL RANK ( N, *8, *9 )
+      END 
+'.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self fail
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testStatementCallWrite [
+
+	| body |
+	result := self parse: '
+      PROGRAM TESTALT
+       WRITE (*,*) ''''OK - Normal Return [n=0]''''
+      END 
+'.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self fail
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testStatementStop [
+
+	| body |
+	result := self parse: '
+      PROGRAM TESTALT
+       STOP
+      END 
+'.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self fail
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testStatementStopLabel [
+
+	| body |
+	result := self parse: '
+      PROGRAM TESTALT
+       STOP 10
+      END 
+'.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self fail
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testStatementWithLabel [
+
+	| body |
+	result := self parse: '
+      PROGRAM TESTALT
+10     WRITE (*,*) ''Minor - 1st alternate return [n=1]'' 
+      END 
+'.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statements.
+	self fail
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testSubroutineEmpty [
+
+	result := self parse: '      SUBROUTINE RANK
+      end
+ '.
+	
+	self assert: result isCollection.
+	self assert: result size equals: 1.
+	self assert: result first class equals: FASTFortranSubroutine.
+	self assert: result first name equals: 'rank'.
 ]
