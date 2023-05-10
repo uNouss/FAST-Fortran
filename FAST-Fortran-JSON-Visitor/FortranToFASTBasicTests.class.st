@@ -296,7 +296,10 @@ FortranToFASTBasicTests >> testStatementStop [
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
-	self fail
+	self assert: body isCollection.
+	self assert: body size equals: 1.
+	self assert: body first class equals: FASTFortranStopStatement.
+	self assert: body first displayArgument equals: nil.
 ]
 
 { #category : #tests }
@@ -312,7 +315,10 @@ FortranToFASTBasicTests >> testStatementStopLabel [
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
-	self fail
+	self assert: body isCollection.
+	self assert: body size equals: 1.
+	self assert: body first class equals: FASTFortranStopStatement.
+	self assert: body first displayArgument class equals: FASTFortranIntegerLiteral .
 ]
 
 { #category : #tests }

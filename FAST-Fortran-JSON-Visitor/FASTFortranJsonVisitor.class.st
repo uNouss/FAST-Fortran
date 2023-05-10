@@ -67,8 +67,20 @@ FASTFortranJsonVisitor >> visitAddition: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitArgumentValue: anObject [
+FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
+	"used for argument in subprogram calls and parameter in subprogram definition"
 
+	| data |
+	data := super visitArgument: anArgumentNode.
+
+	data isCollection ifFalse: [ ^data ].
+ 	(data size = 2) ifTrue: [ ^data second ].
+	^data
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitArgumentValue: anObject [
+1halt.
 	^ self visitTaggedElement: anObject
 ]
 
@@ -682,24 +694,24 @@ FASTFortranJsonVisitor >> visitTaggedStatement: value [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitValue: anObject [
+FASTFortranJsonVisitor >> visitValue: aValueNode [
+	^(super visitValue: aValueNode) second
 	
 	"| value |"
 	"value := (anObject at: 'tag')."
 	"^ self visitTaggedElement: anObject ."
 	
-	^ self visitArgumentValue: (anObject at: 'value').
+	"^ self visitArgumentValue: (anObject at: 'value')."
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitVariable: anObject [
+FASTFortranJsonVisitor >> visitVariable: aVariableNode [
+	| data |
+	data := super visitVariable: aVariableNode.
 
-	"declaration of variable is ambigous and can be seen in diferent places of given data and might have different structure, which explains the necessity of the code below"
-
-	^ (anObject includesKey: 'contents')
-		  ifTrue: [ 
-		  FASTFortranVariableExpression new name: (anObject at: 'contents') ]
-		  ifFalse: [ self visitTaggedElement: anObject ]
+	^FASTFortranVariableExpression new
+		name: data ;
+		yourself
 ]
 
 { #category : #visiting }
