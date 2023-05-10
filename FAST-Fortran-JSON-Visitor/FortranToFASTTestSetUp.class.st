@@ -26,27 +26,7 @@ FortranToFASTTestSetUp >> haskellParserPath [
 FortranToFASTTestSetUp >> parse: sourceCode [
 
 	self astHaskell: sourceCode.
-	^ FASTFortranJsonVisitor new visit:
+	^ FASTFortranJsonVisitor new visitProgramFile:
 		('fortran77.f.json' asFileReference readStreamDo: [ :str | 
 			 NeoJSONReader fromString: str contents ])
-]
-
-{ #category : #'as yet unclassified' }
-FortranToFASTTestSetUp >> parse: sourceCode as: puMarker [
-	| parseSelector |
-	parseSelector := ('parse' , puMarker , ':') asSymbol.
-	self astHaskell: sourceCode.
-	^ FASTFortranJsonVisitor new
-		perform: parseSelector
-		with:
-		  ('fortran77.f.json' asFileReference readStreamDo: [ :str | 
-			   NeoJSONReader fromString: str contents ])
-]
-
-{ #category : #'as yet unclassified' }
-FortranToFASTTestSetUp >> parse: sourceCode rule: aRule [
-
-	^ FASTFortranJsonVisitor new visit:
-		('fortran77.f.ast' asFileReference readStreamDo: [ :str | 
-			 NeoJSONReader fromString: str contents ]).
 ]
