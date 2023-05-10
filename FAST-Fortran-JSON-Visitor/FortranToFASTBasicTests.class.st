@@ -341,5 +341,20 @@ FortranToFASTBasicTests >> testSubroutineEmpty [
 	self assert: result isCollection.
 	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranSubroutine.
+	self assert: result first parameters isEmpty.
+	self assert: result first statements isEmpty
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testSubroutineWithParameters [
+
+	result := self parse: '      SUBROUTINE RANK( A, B)
+      end
+ '.
+	
+	self assert: result isCollection.
+	self assert: result size equals: 1.
+	self assert: result first class equals: FASTFortranSubroutine.
 	self assert: result first name equals: 'rank'.
+	self assert: result first parameters size equals: 2.
 ]
