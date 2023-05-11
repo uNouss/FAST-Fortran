@@ -94,19 +94,18 @@ FortranToFASTBasicTests >> testFunctionWithParameter [
 FortranToFASTBasicTests >> testIf [
 	
 	| conditional |
-	result := self parse: '
-      PROGRAM MYPROG
+	result := self parse: '      PROGRAM MYPROG
        IF ( A ) THEN
         I = 1
         print *, ''Hello, World!''
        END IF
       END
 '.
-	conditional := result first first statements first.
+	conditional := result first  statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional condition class equals: FASTFortranVariableExpression.
 	self assert: conditional condition name equals: 'a'.
-	self assert: conditional thenStatements size = 2.
+	self assert: conditional thenStatements size equals: 2.
 	self assert: conditional parentProgramUnit class equals: FASTFortranProgramMain.
 ]
 
@@ -115,8 +114,7 @@ FortranToFASTBasicTests >> testIfElse [
 
 	| conditional |
 	
-	result := self parse: '
-      PROGRAM MYPROG
+	result := self parse: '      PROGRAM MYPROG
        IF ( X .LT. Y ) THEN 
         M = 0
        ELSE
@@ -126,7 +124,7 @@ FortranToFASTBasicTests >> testIfElse [
       END
 '.
 
-	conditional := result first first statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 ]
 
@@ -148,7 +146,7 @@ FortranToFASTBasicTests >> testIfElseXTimes [
       END
 '.
 
-	conditional := result first first statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement
 ]
 
@@ -162,8 +160,7 @@ FortranToFASTBasicTests >> testIntegerVariableDeclaration [
 
 	self assert: result isCollection.
 
-	mainProgram := result first first.
-	self assert: mainProgram statements isCollection.
+	mainProgram := result first.
 	self assert: mainProgram statements size equals: 1.
 
 	stmt := mainProgram statements first.	
