@@ -251,16 +251,29 @@ FortranToFASTBasicTests >> testMainProgramEmpty [
 { #category : #tests }
 FortranToFASTBasicTests >> testStatementCallSubroutine [
 
-	| body |
+	| body arg |
 	result := self parse: '      PROGRAM TESTALT
-       CALL RANK ( N, *8, *9 )
+       CALL RANK ( N, *8 )
       END 
 '.
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
-	self fail
+	self assert: body size equals: 1.
+	self assert: body first class equals: FASTFortranCallStatement.
+	self assert: body first name equals: 'rank'.
+	self assert: body first arguments size equals: 2.
+
+	arg := body first arguments first.
+	self assert: arg class equals: FASTFortranVariableExpression.
+	self assert: arg name equals: 'n'.
+
+	arg := body first arguments second.
+	self assert: arg class equals: FASTFortranIntegerLiteral.
+	self assert: arg value equals: '8'.
+	self flag: 'what happened to the "*" ("*8")?'
+
 ]
 
 { #category : #tests }

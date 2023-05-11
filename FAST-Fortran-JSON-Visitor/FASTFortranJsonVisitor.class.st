@@ -141,22 +141,21 @@ FASTFortranJsonVisitor >> visitCallArguments: aList [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitCallStatement: anObject [
+FASTFortranJsonVisitor >> visitCallStatement: aCallNode [
 	
 	"The CALL statement branches to the specified subroutine, executes the subroutine, and returns to the calling program after finishing the subroutine.
 
 CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar is an actual argument to be passed to the subroutine "
 
-	| callStatement arguments|
+	| astNode data |
 	
-	"TODO bullshit code, need to be fixed"
-	
-	callStatement := FASTFortranCallStatement new.
-	arguments := self visit: (anObject at: 'arguments').
-	(arguments first notEmpty) ifTrue: [ callStatement arguments: (arguments first first)].
-	callStatement name: ((self visit: (anObject at: 'function')) name).
-	
-	^ callStatement
+	data := super visitCallStatement: aCallNode.
+
+	^astNode := FASTFortranCallStatement new
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		name: data second ;
+		arguments: data third ;
+		yourself.
 
 ]
 
@@ -349,6 +348,13 @@ FASTFortranJsonVisitor >> visitFormat: aFormatNode [
 	^(super visitFormat: aFormatNode)
 		second
 		reject: #isNil
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
+	^(super visitFunctionAsValue: aFunctionNode)
+		second
+
 ]
 
 { #category : #visiting }
