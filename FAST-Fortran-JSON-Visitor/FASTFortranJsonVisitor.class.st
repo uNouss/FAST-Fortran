@@ -135,6 +135,13 @@ FASTFortranJsonVisitor >> visitBlock_data: anObject [
 ]
 
 { #category : #visiting }
+FASTFortranJsonVisitor >> visitBlocks: aBlockList [
+	^(super visitBlocks: aBlockList)
+		ifNil: [ #() ]
+		ifNotNil: [ :blocks | blocks ]
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCallArguments: aList [
 
 	^ aList collect: [ :arg | self visitTaggedElement: (arg at: 'expr') ]
@@ -384,16 +391,21 @@ FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitIf: anObject [
-
+FASTFortranJsonVisitor >> visitIf: anIfNode [
 	".blocks is an array with one block dedicated to else
 	.conditionals is an erray where each element represent if and if else consequently 
 	.conditionals[_].[0] represents a condition
 	.conditionals[_].[1] is an array containing all statements of the correpsonding block"
 
-	^ self
-		  visitConditions: (anObject at: 'conditions')
-		  else: (anObject at: 'blocks')
+	| data |
+	data := super visitIf: anIfNode.
+
+	^FASTFortranIfBlockStatement new
+		condition: data third first first;
+		thenStatements: data third first second ;
+		elseStatements: data fourth ;
+		yourself.
+
 ]
 
 { #category : #visiting }
@@ -472,10 +484,12 @@ FASTFortranJsonVisitor >> visitLt: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitMain: anObject [
+	| data |
+	data := super visitMain: anObject.
 
 	^ FASTFortranProgramMain new
-		  name: (anObject at: 'name');
-		  statements: (self visitJsonArray: (anObject at: 'blocks')).
+		  name: data second;
+		  statements: data third.
 		
 		
 ]
