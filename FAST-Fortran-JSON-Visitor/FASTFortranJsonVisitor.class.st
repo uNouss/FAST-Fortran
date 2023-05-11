@@ -22,13 +22,6 @@ FASTFortranJsonVisitor >> builtVisitStatementSelector: key [
 	^ ('visit' , key capitalized , 'Statement:') asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
-FASTFortranJsonVisitor >> do: anObject [
-	self flag: 'TODO generated automatically, please insert your code here'.
-	1 halt.
-
-]
-
 { #category : #'reflective operations' }
 FASTFortranJsonVisitor >> doesNotUnderstand: message [
 
