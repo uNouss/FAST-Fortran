@@ -381,16 +381,6 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitFunction_call: anObject [
-
-	"not a statement. call to a certain funstions (INTRINSIC, EXTERNAL) in expressions do not require a call statement"
-
-	^ FASTFortranCallStatement new
-		name: (self visit: (anObject at: 'function')) name;
-		arguments: (self visitCallArguments:(anObject at: 'arguments' at: 'list'))
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 	"so far only unconditional case is processed"

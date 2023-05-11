@@ -49,44 +49,45 @@ FortranToFASTBasicTests >> testCallSubroutine [
 { #category : #tests }
 FortranToFASTBasicTests >> testFunctionNoParameter [
 	| fct |
-	result := self parse: '
-      integer function aFct()
+	result := self parse: '      integer function aFct()
       end
  '.
 
 	self assert: result isNotEmpty.
-	fct := result first first.
+	fct := result first.
 
 	self assert: fct class equals: FASTFortranFunction.
 	self assert: fct name equals: 'afct'.
-	self assert: fct parameters isCollection.
 	self assert: fct parameters isEmpty.
+	self assert: fct statements isEmpty.
 	"self assert: fct returnType class equals: FASTFortranType.
 	self assert: fct returnType name equals: 'integer'."
-	
+
 ]
 
 { #category : #tests }
 FortranToFASTBasicTests >> testFunctionWithParameter [
-	| fct |
+	| fct param |
 	result := self parse: '
       integer function aFct(i,j)
       end
  '.
 
 	self assert: result isNotEmpty.
-	fct := result first first.
+	fct := result first.
 
 	self assert: fct class equals: FASTFortranFunction.
-	self assert: fct name equals: 'afct'.
-	self assert: fct parameters isCollection.
 	self assert: fct parameters size equals: 2.
 
-	self flag: 'should test the name of each parameter'.
+	self flag: 'should be a FASTFortranParameter, not a FASTFortranVariableExpression'.
+	param := fct parameters first.
+	self assert: param class equals: FASTFortranVariableExpression.
+	self assert: param name equals: 'i'.
 
-	"self assert: fct returnType class equals: FASTFortranType.
-	self assert: fct returnType name equals: 'integer'."
-	
+	param := fct parameters second.
+	self assert: param class equals: FASTFortranVariableExpression.
+	self assert: param name equals: 'j'.
+
 ]
 
 { #category : #tests }
