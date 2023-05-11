@@ -237,13 +237,13 @@ FASTFortranJsonVisitor >> visitDeclaration: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitDeclarationStatement: anObject [
-	
-	| type |
-self flag: #REMOVE.
-	type := (self visit: (anObject at: 'type') ) first.
-	^ FASTFortranVariablesDeclaration new
-		variables: ((self visitDeclarators: (anObject at: 'declarators')) do: [ :v | v type: type]).
+FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
+	| data |
+	self flag: 'need a FASTFortranDeclarationStatement ?'.
+	data := super visitDeclarationStatement: aDeclarationStatementNode.
+
+	data fourth do: [ :declaration | declaration type: data second ].
+	^data fourth
 
 ]
 
@@ -257,21 +257,15 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
 	^FASTFortranVariableExpression new
-		flag: 'need to set source anchor' ;
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		name: data second ;
 		yourself
-	
-	
+
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitDeclarators: anObject [
-self flag: #REMOVE.
-	"^ (anObject at: 'list') collect: [ :each | 
-		  self
-			  perform: (self builtVisitSelector: (each at: #type))
-			  with: each ]"
-	^super visitDeclarators: anObject
+FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
+	^(super visitDeclarators: aDeclaratorsList) second
 ]
 
 { #category : #visiting }
