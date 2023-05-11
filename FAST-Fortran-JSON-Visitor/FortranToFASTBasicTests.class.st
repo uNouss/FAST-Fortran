@@ -79,7 +79,7 @@ FortranToFASTBasicTests >> testFunctionWithParameter [
 	self assert: fct class equals: FASTFortranFunction.
 	self assert: fct parameters size equals: 2.
 
-	self flag: 'should be a FASTFortranParameter, not a FASTFortranVariableExpression'.
+	self flag: 'should be a FASTFortranParameter, not a FASTFortranVariableExpression ?'.
 	param := fct parameters first.
 	self assert: param class equals: FASTFortranVariableExpression.
 	self assert: param name equals: 'i'.
