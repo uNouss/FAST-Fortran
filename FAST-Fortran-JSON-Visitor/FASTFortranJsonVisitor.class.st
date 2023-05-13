@@ -11,31 +11,9 @@ FASTFortranJsonVisitor >> builtVisitSelector: key [
 ]
 
 { #category : #'private - utilities' }
-FASTFortranJsonVisitor >> builtVisitSelectorBaseTypes: key [
-
-	^ ('visit' , key capitalized , 'BaseType' , ':') asSymbol
-]
-
-{ #category : #'private - utilities' }
 FASTFortranJsonVisitor >> builtVisitStatementSelector: key [
 
 	^ ('visit' , key capitalized , 'Statement:') asSymbol
-]
-
-{ #category : #'reflective operations' }
-FASTFortranJsonVisitor >> doesNotUnderstand: message [
-
-	self class compile: message selector , ' anObject
-	self flag: ''TODO generated automatically, please insert your code here''.
-	1 halt.
-'
-]
-
-{ #category : #'reflective operations' }
-FASTFortranJsonVisitor >> label: anObject [
-	self flag: 'TODO generated automatically, please insert your code here'.
-	1 halt.
-
 ]
 
 { #category : #'reflective operations' }
@@ -72,12 +50,6 @@ FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitArgumentValue: anObject [
-1halt.
-	^ self visitTaggedElement: anObject
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArray: anObject [
 	
 	"its a bullshit code that need to be rewritten"
@@ -104,12 +76,6 @@ FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
 	^ FASTFortranAssignmentStatement new
 		  variable: (self visit: (anObject at: 'target'));
 		  expression: (self visit: (anObject at: 'expression'))
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitBase_type: anObject [
-
-	^ self perform: (self builtVisitSelectorBaseTypes: anObject) with: anObject
 ]
 
 { #category : #visiting }
