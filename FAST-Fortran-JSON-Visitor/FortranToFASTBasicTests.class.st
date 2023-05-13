@@ -296,7 +296,7 @@ FortranToFASTBasicTests >> testStatementStop [
 ]
 
 { #category : #tests }
-FortranToFASTBasicTests >> testStatementStopLabel [
+FortranToFASTBasicTests >> testStatementStopWithMessage [
 
 	| body |
 	result := self parse: '      PROGRAM TESTALT

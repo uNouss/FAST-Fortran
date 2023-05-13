@@ -592,15 +592,11 @@ FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitStopStatement: anObject [
-
-	| displayArgument |
-
-	displayArgument := anObject at: 'message'.
-	^ displayArgument
-		  ifNotNil: [ 
-			  FASTFortranStopStatement new displayArgument:
-				  (self visitJsonTaggedElement: displayArgument) ]
-		  ifNil: [ FASTFortranStopStatement new ]
+	| data |
+	data := super visitStopStatement: anObject.
+	^FASTFortranStopStatement new
+		displayArgument: data second ;
+		yourself
 ]
 
 { #category : #visiting }
