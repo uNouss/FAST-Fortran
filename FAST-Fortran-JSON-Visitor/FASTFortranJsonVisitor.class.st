@@ -4,21 +4,9 @@ Class {
 	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
 
-{ #category : #'private - utilities' }
-FASTFortranJsonVisitor >> builtVisitSelector: key [
-
-	^ ('visit' , key capitalized , ':') asSymbol
-]
-
-{ #category : #'private - utilities' }
-FASTFortranJsonVisitor >> builtVisitStatementSelector: key [
-
-	^ ('visit' , key capitalized , 'Statement:') asSymbol
-]
-
 { #category : #'reflective operations' }
 FASTFortranJsonVisitor >> visit: aJsonElement [
-
+	self flag: #TOREMOVE.
 	"Json elements are 
 	- lists (an ordered sequenece of values) 
 	- maps (an unordered associative array, mapping string property names to values)"
@@ -30,7 +18,7 @@ FASTFortranJsonVisitor >> visit: aJsonElement [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitAddition: anObject [
-
+	self flag: #TODO.
 	^ FASTFortranArithmeticExpression new
 		  left: (self visit: (anObject at: 'left'));
 		  right: (self visit: (anObject at: 'right'));
@@ -53,7 +41,7 @@ FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 FASTFortranJsonVisitor >> visitArray: anObject [
 	
 	"its a bullshit code that need to be rewritten"
-
+	self flag: #TODO.
 	^ FASTFortranArray new name:
 		  (self visitVariable: (anObject at: 'variable')) name
 
@@ -63,27 +51,22 @@ FASTFortranJsonVisitor >> visitArray: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitAssign_expression: anObject [
-
-	^ self visitAssign_expressionStatement: anObject
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
 
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
-
+	| data |
+	data := super visitAssign_expressionStatement: anObject.
 	^ FASTFortranAssignmentStatement new
-		  variable: (self visit: (anObject at: 'target'));
-		  expression: (self visit: (anObject at: 'expression'))
+		  variable: data first ;
+		  expression: data second
 ]
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitBinary: anObject [
-	| selector |
-	
-	selector := self builtVisitSelector: (anObject at: 'op' at: 'tag').
-	^ self perform: selector with: anObject 
+	| key |
+	self flag: #TODO.
+	key := anObject at: 'op' at: 'tag'.
+	^ self visitJsonNode: key value: anObject 
 
 ]
 
@@ -102,15 +85,7 @@ FASTFortranJsonVisitor >> visitBlock_data: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitBlocks: aBlockList [
-	^(super visitBlocks: aBlockList)
-		ifNil: [ #() ]
-		ifNotNil: [ :blocks | blocks ]
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitCallArguments: aList [
-
-	^ aList collect: [ :arg | self visitJsonTaggedElement: (arg at: 'expr') ]
+	^super visitBlocks: aBlockList
 ]
 
 { #category : #visiting }
@@ -141,9 +116,10 @@ FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitComment: anObject [
+FASTFortranJsonVisitor >> visitComment: aCommentNode [
 
-	^ FASTFortranComment new content: (anObject at: 'comment')
+	^FASTFortranComment new
+		content: (super visitComment: aCommentNode) second
 ]
 
 { #category : #visiting }
@@ -161,7 +137,7 @@ FASTFortranJsonVisitor >> visitCommonStatement: anObject [
 COMMON [/[cb]/] nlist [[,]/[cb]/ nlist] where 
 cb: Common block name,
 nlist: List of variable names, array names, and array declarators  "
-
+	self flag: #TODO.
 	^ FASTFortranCommonStatement new
 
 ]
@@ -221,7 +197,8 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
-	^self visitDeclaratorVariable: (aDeclaratorNode at: 'variable')
+	self flag: 'TODO: deal with the other ones'.
+	^(super visitDeclarator: aDeclaratorNode) last
 ]
 
 { #category : #visiting }
@@ -244,7 +221,7 @@ FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 FASTFortranJsonVisitor >> visitDo: anObject [
 
 	| loopControl loopControlExpression increment|
-	
+	self flag: #TODO.
 	loopControl := anObject at: 'do_spec'.
 	increment := (loopControl at: 'increment').	
 	loopControlExpression := FASTFortranLoopControlExpression new 
@@ -261,7 +238,7 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitEq: anObject [
-	
+	self flag: #TODO.
 	^ FASTFortranLogicalExpression new 
 		left: (self visitJsonTaggedElement: (anObject at: 'left'));
 		right: (self visitJsonTaggedElement: (anObject at: 'right')); 
@@ -271,29 +248,18 @@ FASTFortranJsonVisitor >> visitEq: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitExitStatement: anObject [
-	
+	self flag: #TODO.
 	^ FASTFortranExitStatement new.
 
 ]
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitExponentiation: anObject [
-
+	self flag: #TODO.
 	^ FASTFortranArithmeticExpression new
 		  left: (self visit: (anObject at: 'left'));
 		  right: (self visit: (anObject at: 'right'));
 		  op: (anObject at: 'op' at: 'tag')
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitExpr: anObject [
-
-	"encountered in the list of format variables. for the moment the only seen structure was 
-	expr {contents:[], tag: expr}, which prevents from calling visitTagged element (creates infinite loop), so we visit 	value directly and adapt any other structural variants in the future"
-
-	^ (anObject includesKey: 'contents')
-		  ifTrue: [ self visit: (anObject at: 'contents') ]
-		  ifFalse: [ self visitJsonTaggedElement: anObject ]
 ]
 
 { #category : #visiting }
@@ -305,6 +271,7 @@ EXTERNAL proc [, proc] ...
 where proc is a name of external procedure, dummy procedure, or block data routine. "
 
 	"you will go to hell for this code. TODO rewrite"
+	self flag: #TODO.
  ^ (FASTFortranExternalStatement new) name: (self visit: (anObject at: 'vars')) first first name.
 
 ]
@@ -325,7 +292,7 @@ FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
-		
+	self flag: #TODO.
 	^ FASTFortranFunctionStatement new
 		name: (self visit: (anObject at: 'name'));
 		arguments: (self visitJsonArray: (anObject at: 'arguments' at: 'list'));
@@ -350,7 +317,7 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 	"so far only unconditional case is processed"
-	
+	self flag: #TODO.
 	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (anObject at: 'target'))	
 
 ]
@@ -378,7 +345,7 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anObject [
 	
 	"correspond to the statement implicit none. for the moment we create only a stub entity for the case of 'implicit none'"
 	"TODO: implicit statement arguments"
-	
+	self flag: #TODO.
 	^ FASTFortranImplicitStatement new
 
 ]
@@ -405,28 +372,6 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitLength: anObject [
-
-	^ nil
-
-	
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitList: anObject [
-
-	^ self visit: anObject
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitLogical: anObject [
-
-	(anObject at: 'contents') first
-		ifTrue: [ ^ FASTFortranBooleanLiteral new value: 'true' ]
-		ifFalse: [ ^ FASTFortranBooleanLiteral new value: 'false' ]
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
 	^ FASTFortranLogicalType new
@@ -435,8 +380,16 @@ FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 ]
 
 { #category : #visiting }
+FASTFortranJsonVisitor >> visitLogicalLiteralValue: aString [
+
+	^ FASTFortranBooleanLiteral new
+		value: (super visitLogicalLiteralValue: aString)
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLt: anObject [
-	
+
+	self flag: #TODO.
 	^ FASTFortranLogicalExpression new operator: (anObject at: 'op' at: 'tag')
 
 ]
@@ -454,17 +407,8 @@ FASTFortranJsonVisitor >> visitMain: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitMeta: anObject [
-
-	"nothing to do for FAST"
-
-	^ nil
-	
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitPrintStatement: anObject [
-
+	self flag: #TODO.
 	^ FASTFortranPrintStatement new
 		  format: (self visitJsonTaggedElement: (anObject at: 'format'));
 		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))
@@ -477,31 +421,6 @@ FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitProgram_units: anObject [
-	"anObject is an array of program units that can be main program (tag: main) or subprogram (tags: function, subroutine, ...)"
-
-	^super visitProgram_units: anObject
-
-	"anObject isArray
-		ifTrue: [ 
-			^ anObject collect: [ :value |
-				""1 halt."" 
-				(value includesKey: 'tag')
-					ifTrue: [ self visitTaggedElement: value ]
-					ifFalse: [ "" TODO exception "" ] ] 
-				""^ self visitJsonArray: anObject""
-				]
-		ifFalse: [ "" TODO exception "" ]"
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitReal: anObject [
-
-	^ FASTFortranRealLiteral new value: (anObject at: 'contents')
-
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 	^ FASTFortranRealType new
@@ -510,44 +429,14 @@ FASTFortranJsonVisitor >> visitRealBaseType: aString [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitReturnStatement: anObject [
-	
-	^ FASTFortranReturnStatement new
-
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitReturn_spec: anObject [
-	"alternate return label passed as an argument in a subroutine call".
-	
-	^ self visitValue: (anObject at:'target')
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitScalar: anObject [
-
-	"not sure if it is correct"
-	self flag: #REMOVE.
-	^ self visitVariable: (anObject at: 'variable') 
-
-
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitSelector: anObject [
-	
-	"type selector, met in a variable declaraion, for the moment not used"
-	
-	^ nil
-
+FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
+	^(super visitReturn_spec: aReturn_specNode)
+		second
 ]
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitSpan: anObject [
 
-	" anObject is a source anchor in the form (a:b - c:d) where a and c are line numbers and b and d are columns. 
-	for the moment ignored"
-	
 	^ nil
 
 	
@@ -600,15 +489,10 @@ FASTFortranJsonVisitor >> visitStopStatement: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitString: aStringNode [
-
-	^ FASTFortranStringLiteral new value: (aStringNode at: 'contents')
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitStringBaseType: anObject [
-
-	^ FASTFortranStringLiteral new
+FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
+	^FASTFortranStringLiteral new
+		value: (super visitStringLiteralValue: aString) ;
+		yourself
 ]
 
 { #category : #visiting }
