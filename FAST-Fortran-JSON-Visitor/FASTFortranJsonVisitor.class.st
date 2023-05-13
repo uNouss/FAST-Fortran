@@ -133,10 +133,9 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitCharacterBaseType: aCharacterBaseTypeNode [
+FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 	
-	^ FASTFortranCharacterLiteral new
-		value: (aCharacterBaseTypeNode at: 'contents') ;
+	^ FASTFortranCharacterType new
 		yourself
 
 ]
@@ -210,11 +209,13 @@ FASTFortranJsonVisitor >> visitDeclaration: anObject [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
-	self flag: 'need a FASTFortranDeclarationStatement ?'.
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
-	data fourth do: [ :declaration | declaration type: data second ].
-	^data fourth
+	^FASTFortranDeclarationStatement new
+		type: data second ;
+		attributes: data third ;
+		declarators: data fourth ;
+		yourself
 
 ]
 
@@ -389,7 +390,7 @@ FASTFortranJsonVisitor >> visitInitial: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitIntegerBaseType: anObject [
+FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 	
 	^ FASTFortranIntegerType new 
 
@@ -649,6 +650,12 @@ FASTFortranJsonVisitor >> visitTaggedStatement: value [
 	^ self
 		  perform: (self builtVisitStatementSelector: (value at: #tag))
 		  with: value
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitType: aTypeNode [
+	self flag: 'need to put span in returned type'.
+	^(super visitType: aTypeNode) second
 ]
 
 { #category : #visiting }
