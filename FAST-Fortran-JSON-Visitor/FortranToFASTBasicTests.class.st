@@ -121,13 +121,24 @@ FortranToFASTBasicTests >> testIfElseXTimes [
          else if ( c ) then
           c = 1
          ELSE
+          d = 1
          END IF
       END
 '.
 
 	conditional := result first  statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 0.
+	self assert: conditional thenStatements size equals: 1.
+	self assert: conditional elseStatements size equals: 1.
+
+	conditional := conditional elseStatements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatements size equals: 1.
+	self assert: conditional elseStatements size equals: 1.
+
+	conditional := conditional elseStatements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatements size equals: 1.
 	self assert: conditional elseStatements size equals: 1.
 ]
 

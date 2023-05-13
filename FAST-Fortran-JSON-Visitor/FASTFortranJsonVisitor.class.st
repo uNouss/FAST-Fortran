@@ -202,26 +202,24 @@ nlist: List of variable names, array names, and array declarators  "
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitConditions: anObject else: elseObject [
-	
-	"read recursiveley a list of ""if then"" end ""if else"", adds else part if present"
-	| conditional |
+FASTFortranJsonVisitor >> visitConditions: aConditionList [
+	"a list of {condition . thenPart}, each element being an elseif of the preceding element"
+	| firstIf elseIf data |
+	data := super visitConditions: aConditionList.
 
-	conditional := FASTFortranIfBlockStatement new
-		             condition: (self visitTaggedElement: anObject first first);
-		             thenStatements: (self visit: anObject first last).
+	data do: [ :each || newIf |
+		newIf  := FASTFortranIfBlockStatement new
+			condition: each first ;
+			thenStatements: each second ;
+			yourself.
 
-	anObject size > 1
-		ifTrue: [
-			| col |
-			col := OrderedCollection new.
-			col add: (self visitConditions: (anObject allButFirst)  else:  elseObject).
-			conditional elseStatements: col.  ]
-		ifFalse: [ 
-			elseObject ifNotNil: [ 
-				conditional elseStatements: (self visit: elseObject) ] ].
-	
-	^ conditional
+		firstIf
+			ifNil: [ firstIf := newIf ]
+			ifNotNil: [ elseIf elseStatements: { newIf } ].
+		elseIf := newIf.
+	].
+
+	^firstIf.
 ]
 
 { #category : #visiting }
@@ -397,22 +395,15 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 	.conditionals[_].[0] represents a condition
 	.conditionals[_].[1] is an array containing all statements of the correpsonding block"
 
-	| data |
-	data := super visitIf: anIfNode.
+	| data lastIf |
+	data := (super visitIf: anIfNode).
 
-	^FASTFortranIfBlockStatement new
-		condition: data third first first;
-		thenStatements: data third first second ;
-		elseStatements: data fourth ;
-		yourself.
+	lastIf := data third.
+	[ lastIf elseStatements isEmpty ]
+		whileFalse: [ lastIf := lastIf elseStatements first ].
+	lastIf elseStatements: data fourth.
 
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitIf_logicalStatement: anObject [
-	self flag: 'TODO generated automatically, please insert your code here'.
-	1 halt.
-
+	^data third
 ]
 
 { #category : #visiting }
