@@ -390,10 +390,10 @@ FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitIf: anIfNode [
-	".blocks is an array with one block dedicated to else
+	".blocks is an array with one block dedicated to else part of last if (in case of elseifs)
 	.conditionals is an erray where each element represent if and if else consequently 
 	.conditionals[_].[0] represents a condition
-	.conditionals[_].[1] is an array containing all statements of the correpsonding block"
+	.conditionals[_].[1] is an array containing all statements of the correpsonding then part"
 
 	| data lastIf |
 	data := (super visitIf: anIfNode).

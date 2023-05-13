@@ -21,29 +21,25 @@ FortranToFASTBasicTests >> testBlockData [
 ]
 
 { #category : #tests }
-FortranToFASTBasicTests >> testCallSubroutine [
+FortranToFASTBasicTests >> testCallSeveralProgramUnits [
 
-	| mainProgram subroutine |
+	| progUnit |
 	
-	result := self parse: '
-      PROGRAM call_sub
-       CHARACTER *25 TEXT
-       TEXT = ''Some kind of text string'' 
-       CALL OOPS ( TEXT )
+	result := self parse: '      PROGRAM call_sub
       END
       SUBROUTINE OOPS ( S )
-       CHARACTER S*(*) 
-       WRITE (*,*) S 
       END
  '.
 
-	mainProgram := result first first.
-	subroutine := result first last.
+	self assert: result size equals: 2.
 	
-	self assert: mainProgram name equals: 'call_sub'.
-	self assert: mainProgram class equals: FASTFortranProgramMain.
-	self assert: subroutine name equals: 'oops'.
-	self assert: subroutine class equals: FASTFortranSubroutine.
+	progUnit := result first.
+	self assert: progUnit class equals: FASTFortranProgramMain.
+	self assert: progUnit name equals: 'call_sub'.
+
+	progUnit:= result second.
+	self assert: progUnit class equals: FASTFortranSubroutine.
+	self assert: progUnit name equals: 'oops'.
 ]
 
 { #category : #tests }
@@ -91,26 +87,7 @@ FortranToFASTBasicTests >> testFunctionWithParameter [
 ]
 
 { #category : #tests }
-FortranToFASTBasicTests >> testIfElseWithStatement [
-
-	| conditional |
-	
-	result := self parse: '      PROGRAM MYPROG
-       IF ( A ) THEN 
-       ELSE
-        I = 1 
-       END IF
-      END
-'.
-
-	conditional := result first  statements first.
-	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 0.
-	self assert: conditional elseStatements size equals: 1.
-]
-
-{ #category : #tests }
-FortranToFASTBasicTests >> testIfElseXTimes [
+FortranToFASTBasicTests >> testIfElseIf [
 
 	| conditional |
 	result := self parse: '      PROGRAM MYPROG
@@ -139,6 +116,25 @@ FortranToFASTBasicTests >> testIfElseXTimes [
 	conditional := conditional elseStatements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 1.
+	self assert: conditional elseStatements size equals: 1.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testIfElseWithStatement [
+
+	| conditional |
+	
+	result := self parse: '      PROGRAM MYPROG
+       IF ( A ) THEN 
+       ELSE
+        I = 1 
+       END IF
+      END
+'.
+
+	conditional := result first  statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatements size equals: 0.
 	self assert: conditional elseStatements size equals: 1.
 ]
 
@@ -207,6 +203,7 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
       end
  '.
 
+	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranProgramMain.
 
 	body := result first statements.
