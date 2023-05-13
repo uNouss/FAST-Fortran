@@ -110,7 +110,7 @@ FASTFortranJsonVisitor >> visitBlocks: aBlockList [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitCallArguments: aList [
 
-	^ aList collect: [ :arg | self visitTaggedElement: (arg at: 'expr') ]
+	^ aList collect: [ :arg | self visitJsonTaggedElement: (arg at: 'expr') ]
 ]
 
 { #category : #visiting }
@@ -248,9 +248,9 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 	loopControl := anObject at: 'do_spec'.
 	increment := (loopControl at: 'increment').	
 	loopControlExpression := FASTFortranLoopControlExpression new 
-		init: (self visitTaggedElement: (loopControl at: 'initial'));
-		limit: (self visitTaggedElement: (loopControl at: 'limit'));
-		increment: ((increment isNotNil) ifTrue:[self visitTaggedElement: (loopControl at: 'increment') ] ifFalse: [nil]).
+		init: (self visitJsonTaggedElement: (loopControl at: 'initial'));
+		limit: (self visitJsonTaggedElement: (loopControl at: 'limit'));
+		increment: ((increment isNotNil) ifTrue:[self visitJsonTaggedElement: (loopControl at: 'increment') ] ifFalse: [nil]).
 	
 	^ (FASTFortranDoStatement new)
 	statements: (self visitJsonArray: (anObject at: 'body'));
@@ -263,8 +263,8 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 FASTFortranJsonVisitor >> visitEq: anObject [
 	
 	^ FASTFortranLogicalExpression new 
-		left: (self visitTaggedElement: (anObject at: 'left'));
-		right: (self visitTaggedElement: (anObject at: 'right')); 
+		left: (self visitJsonTaggedElement: (anObject at: 'left'));
+		right: (self visitJsonTaggedElement: (anObject at: 'right')); 
 		operator: (anObject at: 'op' at: 'tag')
 
 ]
@@ -293,7 +293,7 @@ FASTFortranJsonVisitor >> visitExpr: anObject [
 
 	^ (anObject includesKey: 'contents')
 		  ifTrue: [ self visit: (anObject at: 'contents') ]
-		  ifFalse: [ self visitTaggedElement: anObject ]
+		  ifFalse: [ self visitJsonTaggedElement: anObject ]
 ]
 
 { #category : #visiting }
@@ -329,7 +329,7 @@ FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
 	^ FASTFortranFunctionStatement new
 		name: (self visit: (anObject at: 'name'));
 		arguments: (self visitJsonArray: (anObject at: 'arguments' at: 'list'));
-		expression: (self visitTaggedElement: (anObject at: 'body')).
+		expression: (self visitJsonTaggedElement: (anObject at: 'body')).
 ]
 
 { #category : #visiting }
@@ -351,7 +351,7 @@ FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 
 	"so far only unconditional case is processed"
 	
-	^ (FASTFortranGoToStatement new) label: (self visitTaggedElement: (anObject at: 'target'))	
+	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (anObject at: 'target'))	
 
 ]
 
@@ -466,7 +466,7 @@ FASTFortranJsonVisitor >> visitMeta: anObject [
 FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 
 	^ FASTFortranPrintStatement new
-		  format: (self visitTaggedElement: (anObject at: 'format'));
+		  format: (self visitJsonTaggedElement: (anObject at: 'format'));
 		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))
 ]
 
@@ -599,7 +599,7 @@ FASTFortranJsonVisitor >> visitStopStatement: anObject [
 	^ displayArgument
 		  ifNotNil: [ 
 			  FASTFortranStopStatement new displayArgument:
-				  (self visitTaggedElement: displayArgument) ]
+				  (self visitJsonTaggedElement: displayArgument) ]
 		  ifNil: [ FASTFortranStopStatement new ]
 ]
 
@@ -636,22 +636,6 @@ FASTFortranJsonVisitor >> visitSubtraction: anObject [
 		  right: (self visit: (anObject at: 'right'));
 		  operator: (anObject at: 'op' at: 'tag')
 
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitTaggedElement: value [
-
-	^ self
-		  perform: (self builtVisitSelector: (value at: #tag))
-		  with: value
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitTaggedStatement: value [
-
-	^ self
-		  perform: (self builtVisitStatementSelector: (value at: #tag))
-		  with: value
 ]
 
 { #category : #visiting }
