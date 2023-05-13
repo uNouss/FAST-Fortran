@@ -43,26 +43,6 @@ FortranToFASTBasicTests >> testCallSeveralProgramUnits [
 ]
 
 { #category : #tests }
-FortranToFASTBasicTests >> testCharacterVariableDeclaration [
-	| stmt var |
-	result := self parse: '      program main
-      character*40 string
-      end
-'.
-
-	self assert: result first statements size equals: 1.
-
-	stmt := result first statements first.	
-	self assert: stmt class equals: FASTFortranDeclarationStatement.
-	self assert: stmt type class equals: FASTFortranCharacterType.
-	self assert: stmt declarators size equals: 1.
-	
-	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
-	self assert: var name equals: 'string'.
-]
-
-{ #category : #tests }
 FortranToFASTBasicTests >> testFunctionNoParameter [
 	| fct |
 	result := self parse: '      integer function aFct()
@@ -188,26 +168,6 @@ FortranToFASTBasicTests >> testIfThenWithStatement [
 	conditional := result first  statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 1.
-]
-
-{ #category : #tests }
-FortranToFASTBasicTests >> testIntegerVariableDeclaration [
-	| stmt var |
-	result := self parse: '      program main
-      integer i
-      end
-'.
-
-	self assert: result first statements size equals: 1.
-
-	stmt := result first statements first.	
-	self assert: stmt class equals: FASTFortranDeclarationStatement.
-	self assert: stmt type class equals: FASTFortranIntegerType.
-	self assert: stmt declarators size equals: 1.
-	
-	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
-	self assert: var name equals: 'i'.
 ]
 
 { #category : #tests }
@@ -399,4 +359,84 @@ FortranToFASTBasicTests >> testSubroutineWithParameters [
 	self assert: result first class equals: FASTFortranSubroutine.
 	self assert: result first name equals: 'rank'.
 	self assert: result first parameters size equals: 2.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testVariableDeclarationCharacter [
+	| stmt var |
+	result := self parse: '      program main
+      character*40 aString
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt type class equals: FASTFortranCharacterType.
+	self assert: stmt declarators size equals: 1.
+	
+	var := stmt declarators first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'astring'.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testVariableDeclarationInteger [
+	| stmt var |
+	result := self parse: '      program main
+      integer i
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt type class equals: FASTFortranIntegerType.
+	self assert: stmt declarators size equals: 1.
+	
+	var := stmt declarators first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'i'.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testVariableDeclarationLogical [
+	| stmt var |
+	result := self parse: '      program main
+      logical b
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt type class equals: FASTFortranLogicalType.
+	self assert: stmt declarators size equals: 1.
+	
+	var := stmt declarators first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'b'.
+]
+
+{ #category : #tests }
+FortranToFASTBasicTests >> testVariableDeclarationReal [
+	| stmt var |
+	result := self parse: '      program main
+      real c
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt type class equals: FASTFortranRealType.
+	self assert: stmt declarators size equals: 1.
+	
+	var := stmt declarators first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'c'.
 ]

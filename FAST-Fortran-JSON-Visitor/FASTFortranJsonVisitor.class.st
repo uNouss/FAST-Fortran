@@ -427,9 +427,10 @@ FASTFortranJsonVisitor >> visitLogical: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitLogicalBaseType: anObject [
+FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
 	^ FASTFortranLogicalType new
+		yourself
 
 ]
 
@@ -501,9 +502,10 @@ FASTFortranJsonVisitor >> visitReal: anObject [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitRealBaseType: anObject [
-	
+FASTFortranJsonVisitor >> visitRealBaseType: aString [
+
 	^ FASTFortranRealType new
+		yourself
 
 ]
 
