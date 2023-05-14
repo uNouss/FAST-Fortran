@@ -246,13 +246,11 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitEq: anObject [
-	self flag: #TODO halt.
-	^ FASTFortranLogicalExpression new 
-		left: (self visitJsonTaggedElement: (anObject at: 'left'));
-		right: (self visitJsonTaggedElement: (anObject at: 'right')); 
-		operator: (anObject at: 'op' at: 'tag')
+FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 
+	^FASTFortranLogicalExpression new
+		operator: (super visitEq: anEqualtoOperatorNode) ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -263,12 +261,11 @@ FASTFortranJsonVisitor >> visitExitStatement: anObject [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitExponentiation: anObject [
-	self flag: #TODO.
-	^ FASTFortranArithmeticExpression new
-		  left: (self visit: (anObject at: 'left'));
-		  right: (self visit: (anObject at: 'right'));
-		  op: (anObject at: 'op' at: 'tag')
+FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
+
+	^FASTFortranArithmeticExpression new
+		operator: (super visitExponentiation: aExponentiationOperatorNode) ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -329,6 +326,14 @@ FASTFortranJsonVisitor >> visitGotoStatement: anObject [
 	self flag: #TODO.
 	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (anObject at: 'target'))	
 
+]
+
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitGt: aGreaterthanOperatorNode [
+
+	^FASTFortranLogicalExpression new
+		operator: (super visitGt: aGreaterthanOperatorNode) ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -398,11 +403,11 @@ FASTFortranJsonVisitor >> visitLogicalLiteralValue: aString [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitLt: anObject [
+FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
 
-	self flag: #TODO.
-	^ FASTFortranLogicalExpression new operator: (anObject at: 'op' at: 'tag')
-
+	^FASTFortranLogicalExpression new
+		operator: (super visitLt: anLessthanOperatorNode) ;
+		yourself
 ]
 
 { #category : #visiting }

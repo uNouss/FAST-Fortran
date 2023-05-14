@@ -41,6 +41,119 @@ FortranToFASTBasicTests >> testBinaryExpressionDivision [
 ]
 
 { #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionEqKeyword [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       IF ( 5 .eq. 6 ) THEN
+       END IF
+      END
+'.
+
+	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+
+	expr := result first  statements first condition.
+	self assert: expr class equals: FASTFortranLogicalExpression.
+	self assert: expr operator equals: 'eq'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionExponentiation [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 5 ** 6
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'exponentiation'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionGtKeyword [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       IF ( 5 .gt. 6 ) THEN
+       END IF
+      END
+'.
+
+	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+
+	expr := result first  statements first condition.
+	self assert: expr class equals: FASTFortranLogicalExpression.
+	self assert: expr operator equals: 'gt'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionGtSymbol [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       IF ( 5 > 6 ) THEN
+       END IF
+      END
+'.
+
+	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+
+	expr := result first  statements first condition.
+	self assert: expr class equals: FASTFortranLogicalExpression.
+	self assert: expr operator equals: 'gt'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionLtKeyword [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       IF ( 5 .Lt. 6 ) THEN
+       END IF
+      END
+'.
+
+	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+
+	expr := result first  statements first condition.
+	self assert: expr class equals: FASTFortranLogicalExpression.
+	self assert: expr operator equals: 'lt'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionLtSymbol [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       IF ( 5 < 6 ) THEN
+       END IF
+      END
+'.
+
+	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+
+	expr := result first  statements first condition.
+	self assert: expr class equals: FASTFortranLogicalExpression.
+	self assert: expr operator equals: 'lt'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionMultiplication [
 	
 	| expr |
