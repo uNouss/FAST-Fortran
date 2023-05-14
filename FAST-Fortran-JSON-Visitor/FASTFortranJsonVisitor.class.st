@@ -197,8 +197,9 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
-	self flag: 'TODO: deal with the other ones'.
-	^(super visitDeclarator: aDeclaratorNode) last
+	self flag: 'TODO: deal with the other keys in the map'.
+	^(super visitDeclarator: aDeclaratorNode)
+		last
 ]
 
 { #category : #'visiting statement' }
