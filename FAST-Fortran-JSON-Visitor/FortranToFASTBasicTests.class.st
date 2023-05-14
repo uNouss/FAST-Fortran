@@ -22,6 +22,24 @@ FortranToFASTBasicTests >> testBlockData [
 	self assert: bd name equals: 'myblck'.  
 ]
 
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBnaryExpressionAddition [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 2 + 3
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'addition'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testFunctionNoParameter [
 	| fct |

@@ -17,12 +17,11 @@ FASTFortranJsonVisitor >> visit: aJsonElement [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitAddition: anObject [
-	self flag: #TODO.
-	^ FASTFortranArithmeticExpression new
-		  left: (self visit: (anObject at: 'left'));
-		  right: (self visit: (anObject at: 'right'));
-		  operator: (anObject at: 'op' at: 'tag')
+FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
+
+	^FASTFortranArithmeticExpression new
+		operator: (super visitAddition: anAdditionOperatorNode) ;
+		yourself
 ]
 
 { #category : #visiting }
@@ -62,12 +61,13 @@ FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitBinary: anObject [
-	| key |
-	self flag: #TODO.
-	key := anObject at: 'op' at: 'tag'.
-	^ self visitJsonNode: key value: anObject 
-
+FASTFortranJsonVisitor >> visitBinary: aBinaryExpressionNode [
+	| data |
+	data := super visitBinary: aBinaryExpressionNode.
+	^data third
+		left: data second ;
+		right: data fourth ;
+		yourself
 ]
 
 { #category : #visiting }
