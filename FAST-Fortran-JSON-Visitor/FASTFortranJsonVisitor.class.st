@@ -341,12 +341,14 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitImplicitStatement: anObject [
+FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitstatementNode [
 	
-	"correspond to the statement implicit none. for the moment we create only a stub entity for the case of 'implicit none'"
-	"TODO: implicit statement arguments"
-	self flag: #TODO.
-	^ FASTFortranImplicitStatement new
+	"If 'items' is nil, correspond to the statement 'implicit none'"
+	| data |
+	data := super visitImplicitStatement: anImplicitstatementNode.
+	^data second
+	ifNil: [ FASTFortranImplicitStatement new ]
+	ifNotNil: [ self notYetImplemented ]
 
 ]
 
@@ -409,6 +411,7 @@ FASTFortranJsonVisitor >> visitMain: anObject [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 	self flag: #TODO.
+
 	^ FASTFortranPrintStatement new
 		  format: (self visitJsonTaggedElement: (anObject at: 'format'));
 		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))

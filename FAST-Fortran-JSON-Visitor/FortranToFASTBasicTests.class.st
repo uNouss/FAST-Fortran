@@ -171,6 +171,19 @@ FortranToFASTBasicTests >> testIfThenWithStatement [
 ]
 
 { #category : #tests }
+FortranToFASTBasicTests >> testImplicitNoneStatement [
+	
+	| stmt |
+	result := self parse: '      PROGRAM MYPROG
+       implicit none
+      END
+'.
+
+	stmt := result first  statements first.
+	self assert: stmt class equals: FASTFortranImplicitStatement
+]
+
+{ #category : #tests }
 FortranToFASTBasicTests >> testMainProgram [
 	| body |
 
