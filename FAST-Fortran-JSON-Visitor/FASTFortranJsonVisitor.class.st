@@ -218,6 +218,14 @@ FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 	^(super visitDeclarators: aDeclaratorsList) second
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
+
+	^FASTFortranArithmeticExpression new
+		operator: (super visitDivision: aDivisionOperatorNode) ;
+		yourself
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: anObject [
 
@@ -239,7 +247,7 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitEq: anObject [
-	self flag: #TODO.
+	self flag: #TODO halt.
 	^ FASTFortranLogicalExpression new 
 		left: (self visitJsonTaggedElement: (anObject at: 'left'));
 		right: (self visitJsonTaggedElement: (anObject at: 'right')); 
@@ -409,6 +417,22 @@ FASTFortranJsonVisitor >> visitMain: anObject [
 		
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitMinus: aMinusOperatorNode [
+
+	^FASTFortranArithmeticExpression new
+		operator: (super visitMinus: aMinusOperatorNode) ;
+		yourself
+]
+
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
+
+	^FASTFortranArithmeticExpression new
+		operator: (super visitMultiplication: aMultiplicationOperatorNode) ;
+		yourself
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 	self flag: #TODO.
@@ -512,14 +536,12 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 		yourself
 ]
 
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitSubtraction: anObject [
-	
-	^ FASTFortranArithmeticExpression new
-		  left: (self visit: (anObject at: 'left'));
-		  right: (self visit: (anObject at: 'right'));
-		  operator: (anObject at: 'op' at: 'tag')
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 
+	^FASTFortranArithmeticExpression new
+		operator: (super visitSubtraction: aSubtractionOperatorNode) ;
+		yourself
 ]
 
 { #category : #visiting }

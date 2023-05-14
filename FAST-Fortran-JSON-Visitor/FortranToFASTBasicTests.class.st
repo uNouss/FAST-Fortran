@@ -4,6 +4,78 @@ Class {
 	#category : #'FAST-Fortran-JSON-Visitor-Tests'
 }
 
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionAddition [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 5 + 6
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'addition'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionDivision [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 5 / 6
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'division'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionMultiplication [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 5 * 6
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'multiplication'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testBinaryExpressionSubtraction [
+	
+	| expr |
+	result := self parse: '      PROGRAM MYPROG
+       i = 5 - 6
+      END
+'.
+
+	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+
+	expr := result first statements first expression.
+	self assert: expr class equals: FASTFortranArithmeticExpression.
+	self assert: expr operator equals: 'subtraction'.
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr right class equals: FASTFortranIntegerLiteral
+]
+
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testBlockData [
 
@@ -20,24 +92,6 @@ FortranToFASTBasicTests >> testBlockData [
 	bd := result first first. "unpacking"
 	self assert: bd class equals: FASTFortranBlockData.
 	self assert: bd name equals: 'myblck'.  
-]
-
-{ #category : #'tests-expression' }
-FortranToFASTBasicTests >> testBnaryExpressionAddition [
-	
-	| expr |
-	result := self parse: '      PROGRAM MYPROG
-       i = 2 + 3
-      END
-'.
-
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
-
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
-	self assert: expr operator equals: 'addition'.
-	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
 ]
 
 { #category : #'tests-programUnit' }
