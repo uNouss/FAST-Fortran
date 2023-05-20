@@ -269,17 +269,12 @@ FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitExternalStatement: anObject [
-	
-	"The EXTERNAL statement specifies procedures or dummy procedures as external, and allows their symbolic names to be used as actual arguments.
-
-EXTERNAL proc [, proc] ...
-where proc is a name of external procedure, dummy procedure, or block data routine. "
-
-	"you will go to hell for this code. TODO rewrite"
-	self flag: #TODO.
- ^ (FASTFortranExternalStatement new) name: (self visit: (anObject at: 'vars')) first first name.
-
+FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
+	| data |
+	data := super visitExternalStatement: anExternalStatementNode.
+	^FASTFortranExternalStatement new
+		name: data second first name ;
+		yourself
 ]
 
 { #category : #visiting }

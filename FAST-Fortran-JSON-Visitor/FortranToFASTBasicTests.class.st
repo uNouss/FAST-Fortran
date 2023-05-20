@@ -207,6 +207,22 @@ FortranToFASTBasicTests >> testBlockData [
 	self assert: bd name equals: 'myblck'.  
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTBasicTests >> testExternalStatement [
+	| stmt var |
+	result := self parse: '      program main
+      external mypnt
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranExternalStatement.
+	self assert: stmt name equals: 'mypnt'
+
+]
+
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testFunctionNoParameter [
 	| fct |
