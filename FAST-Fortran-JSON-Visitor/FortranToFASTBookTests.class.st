@@ -25,20 +25,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -56,8 +56,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
