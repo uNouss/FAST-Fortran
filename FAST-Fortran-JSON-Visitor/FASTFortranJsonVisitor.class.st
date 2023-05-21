@@ -83,11 +83,6 @@ FASTFortranJsonVisitor >> visitBlock_data: anObject [
 		yourself
 ]
 
-{ #category : #'visiting prog-unit' }
-FASTFortranJsonVisitor >> visitBlocks: aBlockList [
-	^super visitBlocks: aBlockList
-]
-
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCallStatement: aCallNode [
 	
