@@ -7,7 +7,7 @@ Class {
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testAssignementIntegerLiteral [
 
-	| stmt |
+	| stmt result |
 	result := self parse: '      PROGRAM MYPROG
           c = 1
       END
@@ -24,7 +24,7 @@ FortranToFASTBasicTests >> testAssignementIntegerLiteral [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testAssignementRealLiteral [
 
-	| stmt |
+	| result stmt |
 	result := self parse: '      PROGRAM MYPROG
           c = 2.12
       END
@@ -41,7 +41,7 @@ FortranToFASTBasicTests >> testAssignementRealLiteral [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testAssignementStringLiteral [
 
-	| stmt |
+	| result stmt |
 	result := self parse: '      PROGRAM MYPROG
           c = ''once upon a time''
       END
@@ -58,7 +58,7 @@ FortranToFASTBasicTests >> testAssignementStringLiteral [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionAddition [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        i = 5 + 6
       END
@@ -76,7 +76,7 @@ FortranToFASTBasicTests >> testBinaryExpressionAddition [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionDivision [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        i = 5 / 6
       END
@@ -94,7 +94,7 @@ FortranToFASTBasicTests >> testBinaryExpressionDivision [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionEqKeyword [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        IF ( 5 .eq. 6 ) THEN
        END IF
@@ -113,7 +113,7 @@ FortranToFASTBasicTests >> testBinaryExpressionEqKeyword [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionExponentiation [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        i = 5 ** 6
       END
@@ -131,7 +131,7 @@ FortranToFASTBasicTests >> testBinaryExpressionExponentiation [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionGtKeyword [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        IF ( 5 .gt. 6 ) THEN
        END IF
@@ -150,7 +150,7 @@ FortranToFASTBasicTests >> testBinaryExpressionGtKeyword [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionGtSymbol [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        IF ( 5 > 6 ) THEN
        END IF
@@ -169,7 +169,7 @@ FortranToFASTBasicTests >> testBinaryExpressionGtSymbol [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionLtKeyword [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        IF ( 5 .Lt. 6 ) THEN
        END IF
@@ -188,7 +188,7 @@ FortranToFASTBasicTests >> testBinaryExpressionLtKeyword [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionLtSymbol [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        IF ( 5 < 6 ) THEN
        END IF
@@ -207,7 +207,7 @@ FortranToFASTBasicTests >> testBinaryExpressionLtSymbol [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionMultiplication [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        i = 5 * 6
       END
@@ -225,7 +225,7 @@ FortranToFASTBasicTests >> testBinaryExpressionMultiplication [
 { #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionSubtraction [
 	
-	| expr |
+	| result expr |
 	result := self parse: '      PROGRAM MYPROG
        i = 5 - 6
       END
@@ -244,7 +244,7 @@ FortranToFASTBasicTests >> testBinaryExpressionSubtraction [
 FortranToFASTBasicTests >> testBlockData [
 
 
-	| bd |
+	| result bd |
 	
 	result := self
 		        parse: '      block data myblck
@@ -260,7 +260,7 @@ FortranToFASTBasicTests >> testBlockData [
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testExternalStatement [
-	| stmt var |
+	| result stmt |
 	result := self parse: '      program main
       external mypnt
       end
@@ -276,7 +276,7 @@ FortranToFASTBasicTests >> testExternalStatement [
 
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testFunctionNoParameter [
-	| fct |
+	| result fct |
 	result := self parse: '      integer function aFct()
       end
  '.
@@ -295,7 +295,7 @@ FortranToFASTBasicTests >> testFunctionNoParameter [
 
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testFunctionWithParameter [
-	| fct param |
+	| result fct param |
 	result := self parse: '
       integer function aFct(i,j)
       end
@@ -321,7 +321,7 @@ FortranToFASTBasicTests >> testFunctionWithParameter [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testIfElseIf [
 
-	| conditional |
+	| result conditional |
 	result := self parse: '      PROGRAM MYPROG
          IF ( A ) THEN
           a = 1
@@ -335,7 +335,7 @@ FortranToFASTBasicTests >> testIfElseIf [
       END
 '.
 
-	conditional := result first  statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 1.
 	self assert: conditional elseStatements size equals: 1.
@@ -354,7 +354,7 @@ FortranToFASTBasicTests >> testIfElseIf [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testIfElseWithStatement [
 
-	| conditional |
+	| result conditional |
 	
 	result := self parse: '      PROGRAM MYPROG
        IF ( A ) THEN 
@@ -364,7 +364,7 @@ FortranToFASTBasicTests >> testIfElseWithStatement [
       END
 '.
 
-	conditional := result first  statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 0.
 	self assert: conditional elseStatements size equals: 1.
@@ -373,13 +373,13 @@ FortranToFASTBasicTests >> testIfElseWithStatement [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testIfEmpty [
 	
-	| conditional |
+	| result conditional |
 	result := self parse: '      PROGRAM MYPROG
        IF ( A ) THEN
        END IF
       END
 '.
-	conditional := result first  statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional condition class equals: FASTFortranVariableExpression.
 	self assert: conditional condition name equals: 'a'.
@@ -389,7 +389,7 @@ FortranToFASTBasicTests >> testIfEmpty [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testIfThenWithStatement [
 	
-	| conditional |
+	| result conditional |
 	result := self parse: '      PROGRAM MYPROG
        IF ( A ) THEN
         I = 1
@@ -397,7 +397,7 @@ FortranToFASTBasicTests >> testIfThenWithStatement [
       END
 '.
 
-	conditional := result first  statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 1.
 ]
@@ -405,7 +405,7 @@ FortranToFASTBasicTests >> testIfThenWithStatement [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testIfThenWithTwoStatements [
 	
-	| conditional |
+	| result conditional |
 	result := self parse: '      PROGRAM MYPROG
       if (iur .eq. 0) then 
          write(*,*) '' user'',name,'' does not exist''
@@ -414,7 +414,7 @@ FortranToFASTBasicTests >> testIfThenWithTwoStatements [
       END
 '.
 
-	conditional := result first  statements first.
+	conditional := result first statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatements size equals: 2.
 
@@ -426,19 +426,19 @@ FortranToFASTBasicTests >> testIfThenWithTwoStatements [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testImplicitNoneStatement [
 	
-	| stmt |
+	| result stmt |
 	result := self parse: '      PROGRAM MYPROG
        implicit none
       END
 '.
 
-	stmt := result first  statements first.
+	stmt := result first statements first.
 	self assert: stmt class equals: FASTFortranImplicitStatement
 ]
 
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testMainProgram [
-	| body |
+	| result body |
 
 	result := self parse: '      program main
       implicit none
@@ -460,7 +460,7 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 
-	| progUnit |
+	| result progUnit |
 	result := self parse: '      PROGRAM TESTALT
       END 
       
@@ -483,6 +483,7 @@ FortranToFASTBasicTests >> testMainProgramAndSubroutine [
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testMainProgramEmpty [
 
+	| result |
 	result := self parse: '      program main
       end
  '.
@@ -496,13 +497,13 @@ FortranToFASTBasicTests >> testMainProgramEmpty [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testReturnStatementEmpty [
 	
-	| stmt |
+	| stmt result |
 	result := self parse: '      PROGRAM MYPROG
       return
       END
 '.
 
-	stmt := result first  statements first.
+	stmt := result first statements first.
 	self assert: stmt class equals: FASTFortranReturnStatement.
 
 ]
@@ -510,13 +511,13 @@ FortranToFASTBasicTests >> testReturnStatementEmpty [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementAssignement [
 
-	| stmt |
+	| result stmt |
 	result := self parse: '      PROGRAM MYPROG
           c = 1
       END
 '.
 
-	stmt := result first  statements first.
+	stmt := result first statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 
 	self assert: stmt variable class equals: FASTFortranVariableExpression.
@@ -526,7 +527,7 @@ FortranToFASTBasicTests >> testStatementAssignement [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementCallSubroutine [
 
-	| body arg |
+	| result body arg |
 	result := self parse: '      PROGRAM TESTALT
        CALL RANK ( N, *8 )
       END 
@@ -547,14 +548,14 @@ FortranToFASTBasicTests >> testStatementCallSubroutine [
 	arg := body first arguments second.
 	self assert: arg class equals: FASTFortranIntegerLiteral.
 	self assert: arg value equals: '8'.
-	self flag: 'what happened to the "*" ("*8")?'
+	self flag: 'what happened to "*" ("*8")?'
 
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementCallWrite [
 
-	| body stmt |
+	| result body stmt |
 	result := self parse: '      PROGRAM TESTALT
        WRITE (*,*) "OK - Normal Return [n=0]"
       END 
@@ -577,64 +578,74 @@ FortranToFASTBasicTests >> testStatementCallWrite [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testStatementGoto [
+
+	| result stmt |
+	result := self parse: '      PROGRAM TESTALT
+       GOTO 100
+      END 
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.
+	self assert: stmt first class equals: FASTFortranGoToStatement.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementStop [
 
-	| body |
+	| result stmt |
 	result := self parse: '      PROGRAM TESTALT
        STOP
       END 
 '.
 
-	self assert: result first class equals: FASTFortranProgramMain.
+	self assert: result first statements size equals: 1.
 
-	body := result first statements.
-	self assert: body isCollection.
-	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranStopStatement.
-	self assert: body first displayArgument equals: nil.
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt displayArgument equals: nil.
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementStopWithMessage [
 
-	| body |
+	| result stmt |
 	result := self parse: '      PROGRAM TESTALT
        STOP 10
       END 
 '.
 
-	self assert: result first class equals: FASTFortranProgramMain.
+	self assert: result first statements size equals: 1.
 
-	body := result first statements.
-	self assert: body isCollection.
-	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranStopStatement.
-	self assert: body first displayArgument class equals: FASTFortranIntegerLiteral .
-	self assert: body first displayArgument value equals: '10'
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt displayArgument class equals: FASTFortranIntegerLiteral .
+	self assert: stmt displayArgument value equals: '10'
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementWithLabel [
 
-	| body |
+	| result stmt |
 	result := self parse: '      PROGRAM TESTALT
 10     STOP
       END 
 '.
 
-	self assert: result first class equals: FASTFortranProgramMain.
+	self assert: result first statements size equals: 1.
 
-	body := result first statements.
-	self assert: body isCollection.
-	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranStopStatement.
-	self assert: body first label class equals: FASTFortranIntegerLiteral.
-	self assert: body first label value equals: '10'.
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt label class equals: FASTFortranIntegerLiteral.
+	self assert: stmt label value equals: '10'.
 ]
 
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testSubroutineEmpty [
 
+	| result |
 	result := self parse: '      SUBROUTINE RANK
       end
  '.
@@ -649,6 +660,7 @@ FortranToFASTBasicTests >> testSubroutineEmpty [
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testSubroutineWithParameters [
 
+	| result |
 	result := self parse: '      SUBROUTINE RANK( A, B)
       end
  '.
@@ -662,7 +674,7 @@ FortranToFASTBasicTests >> testSubroutineWithParameters [
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testVariableDeclarationCharacter [
-	| stmt var |
+	| result stmt var |
 	result := self parse: '      program main
       character*40 aString
       end
@@ -682,7 +694,7 @@ FortranToFASTBasicTests >> testVariableDeclarationCharacter [
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testVariableDeclarationInteger [
-	| stmt var |
+	| result stmt var |
 	result := self parse: '      program main
       integer i
       end
@@ -702,7 +714,7 @@ FortranToFASTBasicTests >> testVariableDeclarationInteger [
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testVariableDeclarationLogical [
-	| stmt var |
+	| result stmt var |
 	result := self parse: '      program main
       logical b
       end
@@ -722,7 +734,7 @@ FortranToFASTBasicTests >> testVariableDeclarationLogical [
 
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testVariableDeclarationReal [
-	| stmt var |
+	| result stmt var |
 	result := self parse: '      program main
       real c
       end

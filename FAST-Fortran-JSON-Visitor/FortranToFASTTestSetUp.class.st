@@ -1,9 +1,6 @@
 Class {
 	#name : #FortranToFASTTestSetUp,
 	#superclass : #TestCase,
-	#instVars : [
-		'result'
-	],
 	#category : #'FAST-Fortran-JSON-Visitor-Tests'
 }
 
@@ -11,15 +8,6 @@ Class {
 FortranToFASTTestSetUp >> astHaskell: sourceCode [
 	FortranProjectImporter new
 		astJSON: sourceCode
-]
-
-{ #category : #'as yet unclassified' }
-FortranToFASTTestSetUp >> haskellParserPath [
-
-	"temporal dirty hard-coding"
-
-	^ '/Users/lsafina/.cabal/bin/fortran-src-extras serialize'
-	"^ '/Users/lsafina/.cabal/bin/fortran-src' - when we need to receive a haskell-based representation"
 ]
 
 { #category : #'as yet unclassified' }

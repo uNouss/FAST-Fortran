@@ -7,6 +7,7 @@ Class {
 { #category : #tests }
 FortranToFASTBookTests >> testBorbk [
 
+	| result |
 	result := self parse: '
       subroutine borbk(lib,name,title)
       implicit none
@@ -129,6 +130,7 @@ c desactivate structure
 { #category : #tests }
 FortranToFASTBookTests >> testFindbk [
 
+	| result |
 	result := self parse: '
       integer function findbk(lib,title)
       implicit none
@@ -242,6 +244,7 @@ cESO  segdes, lb*nomod
 { #category : #tests }
 FortranToFASTBookTests >> testFindur [
 
+	| result |
 	result := self parse: '
       integer function findur(lib,name) 
       implicit none
@@ -355,6 +358,7 @@ cESO  segdes, lb*nomod
 { #category : #tests }
 FortranToFASTBookTests >> testLibpnt [
 
+	| result |
 	result := self parse: '
       subroutine libprt(lib)
       implicit none
@@ -485,6 +489,7 @@ c desactivate structure
 { #category : #tests }
 FortranToFASTBookTests >> testMain [
 
+	| result |
 	result := self parse: '
       program main
       implicit none
@@ -575,6 +580,7 @@ cESO  pointeur lib.pstr
 { #category : #tests }
 FortranToFASTBookTests >> testNewbook [
 
+	| result |
 	result := self parse: '
       subroutine newbook(lib,title,pages,udc)
       implicit none
@@ -685,6 +691,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testNewlib [
 
+	| result |
 	result := self parse: '
       subroutine newlib(lib)
       implicit none
@@ -782,6 +789,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testNewuser [
 
+	| result |
 	result := self parse: '
       subroutine newuser(lib,name)
       implicit none
@@ -893,6 +901,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testRelbk [
 
+	| result |
 	result := self parse: '
       subroutine relbk(lib,name,title)
       implicit none
