@@ -476,14 +476,6 @@ FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitSpan: anObject [
-
-	^ nil
-
-	
-]
-
-{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStar: anObject [
 
 	^ FASTFortranAsterisk new.
@@ -547,6 +539,20 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 		parameters: data third ;
 		statements: data fourth ;
 		yourself
+]
+
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
+
+	| data |
+	data := super visitSubscript: aSubscriptNode.
+
+	^FASTFortranArray new
+		flag: 'TODO span' ;
+		name: data second name ;
+		flag: 'TODO indices' ;
+		yourself
+
 ]
 
 { #category : #'visiting expression' }
