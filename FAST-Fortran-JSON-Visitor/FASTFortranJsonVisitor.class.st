@@ -24,7 +24,7 @@ FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 	"used for argument in subprogram calls and parameter in subprogram definition"
 
@@ -70,7 +70,7 @@ FASTFortranJsonVisitor >> visitBinary: aBinaryExpressionNode [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitBlock_data: anObject [
 	| data |
 
@@ -83,7 +83,7 @@ FASTFortranJsonVisitor >> visitBlock_data: anObject [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitBlocks: aBlockList [
 	^super visitBlocks: aBlockList
 ]
@@ -107,7 +107,7 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 	
 	^ FASTFortranCharacterType new
@@ -277,7 +277,7 @@ FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitFormat: aFormatNode [
 	^(super visitFormat: aFormatNode)
 		second
@@ -361,13 +361,13 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitstatementNode [
 
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitInitial: anObject [
 
 	^ nil
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 	
 	^ FASTFortranIntegerType new 
@@ -382,7 +382,7 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
 	^ FASTFortranLogicalType new
@@ -405,7 +405,7 @@ FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMain: anObject [
 	| data |
 	data := super visitMain: anObject.
@@ -442,13 +442,13 @@ FASTFortranJsonVisitor >> visitPrintStatement: anObject [
 		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
 	^(super visitProgramFile: aProgramFileNode)
 		second.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 	^ FASTFortranRealType new
@@ -523,7 +523,7 @@ FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 	| data |
 	data := super visitSubroutine: aSubroutineNode.
