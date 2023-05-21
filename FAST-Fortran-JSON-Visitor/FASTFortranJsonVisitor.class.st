@@ -451,6 +451,15 @@ FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitRealLiteralValue: aRealLiteralValueNode [
+	| data |
+	data := super visitRealLiteralValue: aRealLiteralValueNode.
+	^FASTFortranRealLiteral new
+		value: (data second) ;
+		yourself
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 	| data |

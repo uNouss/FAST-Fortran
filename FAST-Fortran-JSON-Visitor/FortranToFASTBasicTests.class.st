@@ -5,6 +5,57 @@ Class {
 }
 
 { #category : #'tests-expression' }
+FortranToFASTBasicTests >> testAssignementIntegerLiteral [
+
+	| stmt |
+	result := self parse: '      PROGRAM MYPROG
+          c = 1
+      END
+'.
+
+	stmt := result first  statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+
+	self assert: stmt expression class equals: FASTFortranIntegerLiteral.
+	self assert: stmt expression value equals: '1'.
+
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testAssignementRealLiteral [
+
+	| stmt |
+	result := self parse: '      PROGRAM MYPROG
+          c = 2.12
+      END
+'.
+
+	stmt := result first  statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+
+	self assert: stmt expression class equals: FASTFortranRealLiteral.
+	self assert: stmt expression value equals: '2.12'.
+
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTBasicTests >> testAssignementStringLiteral [
+
+	| stmt |
+	result := self parse: '      PROGRAM MYPROG
+          c = ''once upon a time''
+      END
+'.
+
+	stmt := result first  statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+
+	self assert: stmt expression class equals: FASTFortranStringLiteral.
+	self assert: stmt expression value equals: 'once upon a time'.
+
+]
+
+{ #category : #'tests-expression' }
 FortranToFASTBasicTests >> testBinaryExpressionAddition [
 	
 	| expr |
@@ -470,10 +521,6 @@ FortranToFASTBasicTests >> testStatementAssignement [
 
 	self assert: stmt variable class equals: FASTFortranVariableExpression.
 	self assert: stmt variable name equals: 'c'.
-
-	self assert: stmt expression class equals: FASTFortranIntegerLiteral.
-	self assert: stmt expression value equals: '1'.
-
 ]
 
 { #category : #'tests-statement' }
