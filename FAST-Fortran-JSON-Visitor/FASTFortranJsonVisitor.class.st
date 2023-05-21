@@ -305,8 +305,12 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 
 	"so far only unconditional case is processed"
-	self flag: #TODO.
-	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (aGotoStatementNode at: 'target'))	
+	| data |
+	data := super visitGotoStatement: aGotoStatementNode.
+	^FASTFortranGoToStatement new
+		flag: 'TODO: span = data first' ;
+		flag: 'TODO: target = data second' ;
+		yourself	
 
 ]
 

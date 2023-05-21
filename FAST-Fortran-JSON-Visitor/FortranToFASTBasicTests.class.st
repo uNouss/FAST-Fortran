@@ -589,7 +589,7 @@ FortranToFASTBasicTests >> testStatementGoto [
 	self assert: result first statements size equals: 1.
 
 	stmt := result first statements first.
-	self assert: stmt first class equals: FASTFortranGoToStatement.
+	self assert: stmt class equals: FASTFortranGoToStatement.
 ]
 
 { #category : #'tests-statement' }
