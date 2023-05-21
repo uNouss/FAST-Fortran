@@ -166,20 +166,6 @@ FASTFortranJsonVisitor >> visitContinueStatement: aContinueStatementNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitDeclaration: anObject [
-	| data |
-1halt.
-
-	self flag: 'super does not exist!'.
-	data := super visitDeclaration: anObject.
-	data fourth do: [ :varExp | varExp type: data second ].
-	^FASTFortranVariablesDeclaration new
-		variables: data fourth ;
-		yourself.
-
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
