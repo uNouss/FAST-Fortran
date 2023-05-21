@@ -238,8 +238,9 @@ FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
-	self flag: #TODO.
-	^ FASTFortranExitStatement new.
+	| data |
+	data := super visitExitStatement: anExitNode.
+	^ FASTFortranExitStatement new
 
 ]
 

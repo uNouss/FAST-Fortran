@@ -578,6 +578,21 @@ FortranToFASTBasicTests >> testStatementCallWrite [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testStatementExit [
+
+	| result stmt |
+	result := self parse: '      PROGRAM TESTALT
+       exit
+      END 
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranExitStatement.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementGoto [
 
 	| result stmt |
