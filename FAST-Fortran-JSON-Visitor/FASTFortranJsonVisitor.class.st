@@ -50,11 +50,11 @@ FASTFortranJsonVisitor >> visitArray: anObject [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitAssign_expressionStatement: anObject [
+FASTFortranJsonVisitor >> visitAssign_expressionStatement: anAssignExpressionNode [
 
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
 	| data |
-	data := super visitAssign_expressionStatement: anObject.
+	data := super visitAssign_expressionStatement: anAssignExpressionNode.
 	^ FASTFortranAssignmentStatement new
 		  variable: data first ;
 		  expression: data second
@@ -71,10 +71,10 @@ FASTFortranJsonVisitor >> visitBinary: aBinaryExpressionNode [
 ]
 
 { #category : #'visiting prog-unit' }
-FASTFortranJsonVisitor >> visitBlock_data: anObject [
+FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 	| data |
 
-	data := super visitBlock_data: anObject.
+	data := super visitBlock_data: aBlockDataNode.
 
 	^ FASTFortranBlockData new
 		flag: 'need to set source anchor' ;
@@ -125,7 +125,7 @@ FASTFortranJsonVisitor >> visitCommon: aCommonNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitCommonStatement: anObject [
+FASTFortranJsonVisitor >> visitCommonStatement: aCommonStatementNode [
 	
 	"creates common statement which defines a block of main memory storage so that different program units can share the same data without using arguments.
 
@@ -159,7 +159,7 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitContinueStatement: anObject [
+FASTFortranJsonVisitor >> visitContinueStatement: aContinueStatementNode [
 	self flag: #TODO.
 	^ FASTFortranContinueStatement new
 
@@ -168,7 +168,9 @@ FASTFortranJsonVisitor >> visitContinueStatement: anObject [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclaration: anObject [
 	| data |
+1halt.
 
+	self flag: 'super does not exist!'.
 	data := super visitDeclaration: anObject.
 	data fourth do: [ :varExp | varExp type: data second ].
 	^FASTFortranVariablesDeclaration new
@@ -222,11 +224,11 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitDo: anObject [
+FASTFortranJsonVisitor >> visitDo: aDoNode [
 
 	| loopControl loopControlExpression increment|
 	self flag: #TODO.
-	loopControl := anObject at: 'do_spec'.
+	loopControl := aDoNode at: 'do_spec'.
 	increment := (loopControl at: 'increment').	
 	loopControlExpression := FASTFortranLoopControlExpression new 
 		init: (self visitJsonTaggedElement: (loopControl at: 'initial'));
@@ -234,7 +236,7 @@ FASTFortranJsonVisitor >> visitDo: anObject [
 		increment: ((increment isNotNil) ifTrue:[self visitJsonTaggedElement: (loopControl at: 'increment') ] ifFalse: [nil]).
 	
 	^ (FASTFortranDoStatement new)
-	statements: (self visitJsonArray: (anObject at: 'body'));
+	statements: (self visitJsonArray: (aDoNode at: 'body'));
 	loopControl: loopControlExpression.  
 	
 
@@ -249,7 +251,7 @@ FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitExitStatement: anObject [
+FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 	self flag: #TODO.
 	^ FASTFortranExitStatement new.
 
@@ -287,12 +289,16 @@ FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitFunctionStatement: anObject [
-	self flag: #TODO.
-	^ FASTFortranFunctionStatement new
-		name: (self visit: (anObject at: 'name'));
-		arguments: (self visitJsonArray: (anObject at: 'arguments' at: 'list'));
-		expression: (self visitJsonTaggedElement: (anObject at: 'body')).
+FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
+	| data |
+	data := super visitFunctionStatement: aFunctionStatementNode.
+
+	^FASTFortranFunctionStatement new
+		name: data second;
+		flag: 'TODO span' ;
+		arguments: data third ;
+		expression: data fourth ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -310,11 +316,11 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitGotoStatement: anObject [
+FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 
 	"so far only unconditional case is processed"
 	self flag: #TODO.
-	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (anObject at: 'target'))	
+	^ (FASTFortranGoToStatement new) label: (self visitJsonTaggedElement: (aGotoStatementNode at: 'target'))	
 
 ]
 
@@ -357,15 +363,9 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitstatementNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitInitial: anObject [
-
-	^ nil
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 	
-	^ FASTFortranIntegerType new 
+	^FASTFortranIntegerType new 
 
 ]
 
@@ -380,7 +380,7 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
-	^ FASTFortranLogicalType new
+	^FASTFortranLogicalType new
 		yourself
 
 ]
@@ -401,9 +401,9 @@ FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
 ]
 
 { #category : #'visiting prog-unit' }
-FASTFortranJsonVisitor >> visitMain: anObject [
+FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 	| data |
-	data := super visitMain: anObject.
+	data := super visitMain: aMainProgramNode.
 
 	^ FASTFortranProgramMain new
 		  name: data second;
@@ -429,12 +429,12 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitPrintStatement: anObject [
+FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
 	self flag: #TODO.
 
 	^ FASTFortranPrintStatement new
-		  format: (self visitJsonTaggedElement: (anObject at: 'format'));
-		  iolist: (self visitJsonArray: (anObject at: 'arguments' at: 'list'))
+		  format: (self visitJsonTaggedElement: (aPrintStatementNode at: 'format'));
+		  iolist: (self visitJsonArray: (aPrintStatementNode at: 'arguments' at: 'list'))
 ]
 
 { #category : #'visiting prog-unit' }
@@ -483,25 +483,14 @@ FASTFortranJsonVisitor >> visitStar: anObject [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitStatement: anObject [
+FASTFortranJsonVisitor >> visitStatement: aStatementNode [
 	| data |
 
-	data := super visitStatement: anObject.
+	data := super visitStatement: aStatementNode.
 
 	data second ifNotNil: [ data third label: data second ].
 	^data third
-	"statement := anObject at: 'statement'.
 
-	(statement includesKey: 'tag')
-		ifTrue: [ 
-			| st label |
-			st := self visitTaggedStatement: statement.
-			
-			label := anObject at: 'label'.
-			^ label
-				  ifNotNil: [ st label: (self visitValue: label) ]
-				  ifNil: [ st ] ]
-		ifFalse: [  ]"
 ]
 
 { #category : #'visiting statement' }
@@ -513,9 +502,9 @@ FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitStopStatement: anObject [
+FASTFortranJsonVisitor >> visitStopStatement: aStopStatementNode [
 	| data |
-	data := super visitStopStatement: anObject.
+	data := super visitStopStatement: aStopStatementNode.
 	^FASTFortranStopStatement new
 		displayArgument: data second ;
 		yourself
