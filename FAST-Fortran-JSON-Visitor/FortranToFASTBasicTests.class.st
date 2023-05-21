@@ -352,6 +352,27 @@ FortranToFASTBasicTests >> testIfThenWithStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testIfThenWithTwoStatements [
+	
+	| conditional |
+	result := self parse: '      PROGRAM MYPROG
+      if (iur .eq. 0) then 
+         write(*,*) '' user'',name,'' does not exist''
+         return
+      end if 
+      END
+'.
+
+	conditional := result first  statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatements size equals: 2.
+
+	self assert: conditional thenStatements first class equals: FASTFortranWriteStatement.
+	self assert: conditional thenStatements second class equals: FASTFortranReturnStatement
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testImplicitNoneStatement [
 	
 	| stmt |
@@ -422,6 +443,20 @@ FortranToFASTBasicTests >> testMainProgramEmpty [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testReturnStatementEmpty [
+	
+	| stmt |
+	result := self parse: '      PROGRAM MYPROG
+      return
+      END
+'.
+
+	stmt := result first  statements first.
+	self assert: stmt class equals: FASTFortranReturnStatement.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementAssignement [
 
 	| stmt |
@@ -472,7 +507,7 @@ FortranToFASTBasicTests >> testStatementCallSubroutine [
 { #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementCallWrite [
 
-	| body |
+	| body stmt |
 	result := self parse: '      PROGRAM TESTALT
        WRITE (*,*) "OK - Normal Return [n=0]"
       END 
@@ -482,13 +517,16 @@ FortranToFASTBasicTests >> testStatementCallWrite [
 
 	body := result first statements.
 	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranWriteStatement.
-	self assert: body first format size equals: 2.
-	self assert: body first format size equals: 2.
-	body first format do: [ :each |
+
+	stmt := body first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt format size equals: 2.
+	stmt format do: [ :each |
 		self assert: each class equals: FASTFortranAsterisk
-	]
-	
+	].
+
+	self assert: stmt iolist size equals: 1.
+
 ]
 
 { #category : #'tests-statement' }

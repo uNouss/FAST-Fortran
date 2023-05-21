@@ -457,6 +457,15 @@ FASTFortranJsonVisitor >> visitRealBaseType: aString [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
+	| data |
+	data := super visitReturnStatement: aReturnStatementNode.
+	^FASTFortranReturnStatement new
+		flag: 'TODO span' ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
 	^(super visitReturn_spec: aReturn_specNode)
 		second
