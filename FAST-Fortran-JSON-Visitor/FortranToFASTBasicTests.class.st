@@ -259,6 +259,37 @@ FortranToFASTBasicTests >> testBlockData [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testDoStatementEmptyNoIncrement [
+	| result stmt control |
+	result := self parse: '      program main
+      do i=1, max
+      end do
+      end
+'.
+
+	self assert: result first statements size equals: 1.
+
+	stmt := result first statements first.	
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt loopControl isNotNil.
+	self assert: stmt statements isEmpty.
+
+	control := stmt loopControl.
+	self assert: control class equals: FASTFortranLoopControlExpression.
+	self assert: control limit class equals: FASTFortranVariableExpression.
+	self assert: control limit name equals: 'max'.
+	self assert: control increment isNil.
+
+	self assert: control init class equals: FASTFortranAssignmentStatement.
+	self assert: control init variable class equals: FASTFortranVariableExpression.
+	self assert: control init variable name equals: 'i'.
+	self assert: control init expression class equals: FASTFortranIntegerLiteral.
+	self assert: control init expression value equals: '1'.
+	
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testExternalStatement [
 	| result stmt |
 	result := self parse: '      program main

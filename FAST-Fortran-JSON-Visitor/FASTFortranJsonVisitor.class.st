@@ -50,11 +50,11 @@ FASTFortranJsonVisitor >> visitArray: anObject [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitAssign_expressionStatement: anAssignExpressionNode [
+FASTFortranJsonVisitor >> visitAssign_expression: anAssignExpressionNode [
 
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
 	| data |
-	data := super visitAssign_expressionStatement: anAssignExpressionNode.
+	data := super visitAssign_expression: anAssignExpressionNode.
 	^ FASTFortranAssignmentStatement new
 		  variable: data first ;
 		  expression: data second
@@ -212,18 +212,21 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: aDoNode [
 
-	| loopControl loopControlExpression increment|
-	self flag: #TODO.
-	loopControl := aDoNode at: 'do_spec'.
-	increment := (loopControl at: 'increment').	
-	loopControlExpression := FASTFortranLoopControlExpression new 
-		init: (self visitJsonTaggedElement: (loopControl at: 'initial'));
-		limit: (self visitJsonTaggedElement: (loopControl at: 'limit'));
-		increment: ((increment isNotNil) ifTrue:[self visitJsonTaggedElement: (loopControl at: 'increment') ] ifFalse: [nil]).
+	| loopControl data |
+	data := super visitDo: aDoNode.
+
+	loopControl := FASTFortranLoopControlExpression new 
+		flag: 'TODO: separate "init" into "controlVar" and "initValue" ' ;
+		flag: 'TODO: span' ;
+		init: data second second ;
+		limit: data second third ;
+		increment: data second fourth ;
+		yourself.
 	
-	^ (FASTFortranDoStatement new)
-	statements: (self visitJsonArray: (aDoNode at: 'body'));
-	loopControl: loopControlExpression.  
+	^FASTFortranDoStatement new
+		loopControl: loopControl ;
+		statements: data third ;
+		yourself
 	
 
 ]
