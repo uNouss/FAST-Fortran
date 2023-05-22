@@ -263,13 +263,12 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 	"^self visitJsonMap: aFunctionNode keys: #(span name type arguments blocks result subprograms)"
 	| data |
 	data := super visitFunctionWithBlocks: aFunctionNode.
 	^FASTFortranFunction new
-		flag: 'need to set source anchor' ;
 		name: data second ;
 		flag: 'need to set return type' ;
 		parameters: data fourth ;
