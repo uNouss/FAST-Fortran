@@ -639,6 +639,50 @@ FortranToFASTBasicTests >> testStatementGoto [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testStatementPrintMultipleVariables [
+	
+	| stmt result  var |
+	result := self parse: '      subroutine mysub (msg)
+      PRINT *, X, Y, Z
+      end
+'.
+
+	stmt := result first statements first.
+	self assert: stmt class equals: FASTFortranPrintStatement.
+	self assert: stmt format class equals: FASTFortranAsterisk.
+	self assert: stmt iolist size equals: 3.
+
+	var := stmt iolist first.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'x'.
+
+	var := stmt iolist second.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'y'.
+
+	var := stmt iolist third.
+	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var name equals: 'z'
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTBasicTests >> testStatementPrintOneVariable [
+	
+	| stmt result |
+	result := self parse: '      subroutine mysub (msg)
+      PRINT *, X
+      end
+'.
+
+	stmt := result first statements first.
+	self assert: stmt class equals: FASTFortranPrintStatement.
+	self assert: stmt format class equals: FASTFortranAsterisk.
+	self assert: stmt iolist size equals: 1.
+	self assert: stmt iolist first class equals: FASTFortranVariableExpression.
+	self assert: stmt iolist first name equals: 'x'
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testStatementStop [
 
 	| result stmt |

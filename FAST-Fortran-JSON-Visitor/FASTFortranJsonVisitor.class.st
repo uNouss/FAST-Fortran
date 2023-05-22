@@ -237,13 +237,6 @@ FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitFormat: aFormatNode [
-	^(super visitFormat: aFormatNode)
-		second
-		reject: #isNil
-]
-
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 	^(super visitFunctionAsValue: aFunctionNode)
@@ -394,11 +387,13 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
-	self flag: #TODO.
+	| data |
+	data := super visitPrintStatement: aPrintStatementNode.
 
-	^ FASTFortranPrintStatement new
-		  format: (self visitJsonTaggedElement: (aPrintStatementNode at: 'format'));
-		  iolist: (self visitJsonArray: (aPrintStatementNode at: 'arguments' at: 'list'))
+	^FASTFortranPrintStatement new
+		format: data second ;
+		iolist: data third ;
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -534,6 +529,13 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 	^FASTFortranVariableExpression new
 		name: data ;
 		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitWriteFormat: aWriteFormatNode [
+	^(super visitWriteFormat: aWriteFormatNode)
+		second
+		reject: #isNil
 ]
 
 { #category : #'visiting statement' }
