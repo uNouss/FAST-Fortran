@@ -4,18 +4,6 @@ Class {
 	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
 
-{ #category : #'reflective operations' }
-FASTFortranJsonVisitor >> visit: aJsonElement [
-	self flag: #TOREMOVE.
-	"Json elements are 
-	- lists (an ordered sequenece of values) 
-	- maps (an unordered associative array, mapping string property names to values)"
-
-	aJsonElement isDictionary ifTrue: [ ^ self visitJsonMap: aJsonElement ].
-
-	aJsonElement isArray ifTrue: [ ^ self visitJsonArray: aJsonElement ]
-]
-
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
 
@@ -34,19 +22,6 @@ FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 	data isCollection ifFalse: [ ^data ].
  	(data size = 2) ifTrue: [ ^data second ].
 	^data
-]
-
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitArray: anObject [
-	
-	"its a bullshit code that need to be rewritten"
-	self flag: #TODO.
-	^ FASTFortranArray new name:
-		  (self visitVariable: (anObject at: 'variable')) name
-
-	"TODO process dimensions"
-
-	"TODO process length"	
 ]
 
 { #category : #'visiting statement' }
@@ -77,7 +52,6 @@ FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 	data := super visitBlock_data: aBlockDataNode.
 
 	^ FASTFortranBlockData new
-		flag: 'need to set source anchor' ;
 		name: data second ;
 		statements: data third ;
 		yourself
@@ -217,7 +191,6 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 
 	loopControl := FASTFortranLoopControlExpression new 
 		flag: 'TODO: separate "init" into "controlVar" and "initValue" ' ;
-		flag: 'TODO: span' ;
 		init: data second second ;
 		limit: data second third ;
 		increment: data second fourth ;
@@ -284,8 +257,7 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 	data := super visitFunctionStatement: aFunctionStatementNode.
 
 	^FASTFortranFunctionStatement new
-		name: data second;
-		flag: 'TODO span' ;
+		name: data second ;
 		arguments: data third ;
 		expression: data fourth ;
 		yourself
@@ -312,7 +284,6 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	| data |
 	data := super visitGotoStatement: aGotoStatementNode.
 	^FASTFortranGoToStatement new
-		flag: 'TODO: span = data first' ;
 		flag: 'TODO: target = data second' ;
 		yourself	
 
@@ -459,7 +430,6 @@ FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 	| data |
 	data := super visitReturnStatement: aReturnStatementNode.
 	^FASTFortranReturnStatement new
-		flag: 'TODO span' ;
 		yourself
 ]
 
@@ -531,9 +501,7 @@ FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
 	data := super visitSubscript: aSubscriptNode.
 
 	^FASTFortranArray new
-		flag: 'TODO span' ;
 		name: data second name ;
-		flag: 'TODO indices' ;
 		yourself
 
 ]
