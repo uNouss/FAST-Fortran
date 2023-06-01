@@ -134,7 +134,7 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitContinueStatement: aContinueStatementNode [
-	self flag: #TODO.
+
 	^ FASTFortranContinueStatement new
 
 ]

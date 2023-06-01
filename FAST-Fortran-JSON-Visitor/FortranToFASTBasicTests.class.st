@@ -242,8 +242,6 @@ FortranToFASTBasicTests >> testBinaryExpressionSubtraction [
 
 { #category : #'tests-programUnit' }
 FortranToFASTBasicTests >> testBlockData [
-
-
 	| result bd |
 	
 	result := self
@@ -252,10 +250,24 @@ FortranToFASTBasicTests >> testBlockData [
       end
  '.
 
-	self skip.
-	bd := result first first. "unpacking"
+	bd := result first.
 	self assert: bd class equals: FASTFortranBlockData.
-	self assert: bd name equals: 'myblck'.  
+	self assert: bd name equals: 'myblck'.
+
+	self flag: 'TODO need more assertions'
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTBasicTests >> testContinueStatement [
+	
+	| result stmt |
+	result := self parse: '      PROGRAM MYPROG
+       CONTINUE
+      END
+'.
+	stmt := result first statements first.
+	self assert: stmt class equals: FASTFortranContinueStatement.
 ]
 
 { #category : #'tests-statement' }
