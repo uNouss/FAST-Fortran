@@ -1,8 +1,36 @@
 Class {
 	#name : #FASTFortranJsonVisitor,
 	#superclass : #FortranAbstractJsonVisitor,
+	#instVars : [
+		'lineSizes'
+	],
 	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
+
+{ #category : #initialization }
+FASTFortranJsonVisitor >> initialize [ 
+	super initialize.
+
+	lineSizes := #()
+]
+
+{ #category : #private }
+FASTFortranJsonVisitor >> newEntity: aFASTFortranClass atPosition: aPoint [
+	^aFASTFortranClass new
+		startPos: (self pointToPosition: aPoint first) ;
+		endPos: ((self pointToPosition: aPoint second) - 1) ;
+		yourself
+]
+
+{ #category : #private }
+FASTFortranJsonVisitor >> pointToPosition: lineColumn [
+	| position |
+	position := 0.
+	1 to: (lineColumn x - 1) do: [ :i |
+		position := position + (lineSizes at: i) + 1
+	].
+	^position + (lineColumn y)
+]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
@@ -64,12 +92,11 @@ FASTFortranJsonVisitor >> visitCallStatement: aCallNode [
 
 CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar is an actual argument to be passed to the subroutine "
 
-	| astNode data |
+	| data |
 	
 	data := super visitCallStatement: aCallNode.
 
-	^astNode := FASTFortranCallStatement new
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+	^(self newEntity: FASTFortranCallStatement atPosition: data first)
 		name: data second ;
 		arguments: data third ;
 		yourself.
@@ -134,8 +161,10 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitContinueStatement: aContinueStatementNode [
+	| data |
+	data := super visitContinueStatement: aContinueStatementNode.
 
-	^ FASTFortranContinueStatement new
+	^self newEntity: FASTFortranContinueStatement atPosition: data
 
 ]
 
@@ -215,8 +244,10 @@ FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 	| data |
+	self flag: 'TODO -- what about "var" attribute ?'.
+
 	data := super visitExitStatement: anExitNode.
-	^ FASTFortranExitStatement new
+	^(self newEntity: FASTFortranExitStatement atPosition: data first)
 
 ]
 
@@ -369,6 +400,12 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 		
 ]
 
+{ #category : #'visiting prog-unit' }
+FASTFortranJsonVisitor >> visitMiFilename: aString [
+	lineSizes := aString asFileReference contents lines collect: #size.
+	^aString
+]
+
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitMinus: aMinusOperatorNode [
 
@@ -463,7 +500,8 @@ FASTFortranJsonVisitor >> visitStatementBlock: anASTStatementBlock [
 FASTFortranJsonVisitor >> visitStopStatement: aStopStatementNode [
 	| data |
 	data := super visitStopStatement: aStopStatementNode.
-	^FASTFortranStopStatement new
+
+	^(self newEntity: FASTFortranStopStatement atPosition: data first)
 		displayArgument: data second ;
 		yourself
 ]

@@ -775,6 +775,30 @@ FortranToFASTBasicTests >> testSubroutineWithParameters [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTBasicTests >> testTokenPosition [
+	
+	| result stmt |
+	result := self parse: '      PROGRAM MYPROG
+       STOP
+100    CONTINUE
+       EXIT
+      END
+'.
+
+	stmt := result first statements first.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 32.
+
+	stmt := result first statements second.
+	self assert: stmt startPos equals: 41.
+	self assert: stmt endPos equals: 48.
+
+	stmt := result first statements third.
+	self assert: stmt startPos equals: 57.
+	self assert: stmt endPos equals: 60.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTBasicTests >> testVariableDeclarationCharacter [
 	| result stmt var |
 	result := self parse: '      program main
