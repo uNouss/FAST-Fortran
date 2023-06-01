@@ -7,6 +7,7 @@ Class {
 { #category : #tests }
 FortranToFASTBookTests >> testBorbk [
 
+	| result |
 	result := self parse: '
       subroutine borbk(lib,name,title)
       implicit none
@@ -25,20 +26,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -56,8 +57,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -129,6 +130,7 @@ c desactivate structure
 { #category : #tests }
 FortranToFASTBookTests >> testFindbk [
 
+	| result |
 	result := self parse: '
       integer function findbk(lib,title)
       implicit none
@@ -147,20 +149,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -178,8 +180,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -242,6 +244,7 @@ cESO  segdes, lb*nomod
 { #category : #tests }
 FortranToFASTBookTests >> testFindur [
 
+	| result |
 	result := self parse: '
       integer function findur(lib,name) 
       implicit none
@@ -260,20 +263,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -291,8 +294,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -355,6 +358,7 @@ cESO  segdes, lb*nomod
 { #category : #tests }
 FortranToFASTBookTests >> testLibpnt [
 
+	| result |
 	result := self parse: '
       subroutine libprt(lib)
       implicit none
@@ -372,20 +376,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -403,8 +407,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -485,6 +489,7 @@ c desactivate structure
 { #category : #tests }
 FortranToFASTBookTests >> testMain [
 
+	| result |
 	result := self parse: '
       program main
       implicit none
@@ -502,20 +507,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -533,8 +538,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -575,6 +580,7 @@ cESO  pointeur lib.pstr
 { #category : #tests }
 FortranToFASTBookTests >> testNewbook [
 
+	| result |
 	result := self parse: '
       subroutine newbook(lib,title,pages,udc)
       implicit none
@@ -593,20 +599,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -624,8 +630,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -685,6 +691,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testNewlib [
 
+	| result |
 	result := self parse: '
       subroutine newlib(lib)
       implicit none
@@ -703,20 +710,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -734,8 +741,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -782,6 +789,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testNewuser [
 
+	| result |
 	result := self parse: '
       subroutine newuser(lib,name)
       implicit none
@@ -800,20 +808,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -831,8 +839,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
@@ -893,6 +901,7 @@ c desactivate struct
 { #category : #tests }
 FortranToFASTBookTests >> testRelbk [
 
+	| result |
 	result := self parse: '
       subroutine relbk(lib,name,title)
       implicit none
@@ -909,20 +918,20 @@ c: MAILLON 1
 
 c segment de tête
 cESO  segment, tlib
-cESO    integer bref(brcnt)
-cESO    logical bstatu(brcnt)
-cESO    integer uref(urcnt)
+        integer bref(brcnt)
+        logical bstatu(brcnt)
+        integer uref(urcnt)
 cESO  end segment
 
 cESO  segment, book
-cESO    character*40 btitle
-cESO    integer bpages
-cESO    real budc
+        character*40 btitle
+        integer bpages
+        real budc
 cESO  end segment
 
 cESO  segment, user
-cESO    character*40 uname
-cESO    integer ubb(ubbcnt)
+        character*40 uname
+        integer ubb(ubbcnt)
 cESO  end segment
 
 c******************************************************************
@@ -940,8 +949,8 @@ c:pstr   segment dentete des structures : nouvelles definition
 *:pntseg pointeurs des segments apartenants a la structure
 *:pntref pointeurs des objects references par la structure
 cESO  segment, pstr
-cESO    character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
-cESO    integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
+        character*8 nomcode, date, heure, typseg(nbseg), typref(nbref)
+        integer     ibseg, ibref,         pntseg(nbseg), pntref(nbref)
 cESO  endsegment
 *-------------------------------------------------------------
 
