@@ -310,6 +310,7 @@ FortranToFASTBasicTests >> testBlockData [
 	bd := result first.
 	self assert: bd class equals: FASTFortranBlockData.
 	self assert: bd name equals: 'myblck'.
+	self assert: bd startPos equals: 7.
 
 ]
 
@@ -321,8 +322,10 @@ FortranToFASTBasicTests >> testContinueStatement [
        CONTINUE
       END
 '.
+
 	stmt := result first statements first.
 	self assert: stmt class equals: FASTFortranContinueStatement.
+	self assert: stmt startPos equals: 29
 ]
 
 { #category : #'tests-statement' }
@@ -340,19 +343,22 @@ FortranToFASTBasicTests >> testDoStatementEmptyNoIncrement [
 	self assert: stmt class equals: FASTFortranDoStatement.
 	self assert: stmt loopControl isNotNil.
 	self assert: stmt statements isEmpty.
+	self assert: stmt startPos equals: 26.
 
 	control := stmt loopControl.
 	self assert: control class equals: FASTFortranLoopControlExpression.
 	self assert: control limit class equals: FASTFortranVariableExpression.
 	self assert: control limit name equals: 'max'.
 	self assert: control increment isNil.
+	self assert: control startPos equals: 29.
 
 	self assert: control init class equals: FASTFortranAssignmentStatement.
 	self assert: control init variable class equals: FASTFortranVariableExpression.
 	self assert: control init variable name equals: 'i'.
+
 	self assert: control init expression class equals: FASTFortranIntegerLiteral.
 	self assert: control init expression value equals: '1'.
-	
+
 
 ]
 
@@ -368,7 +374,8 @@ FortranToFASTBasicTests >> testExternalStatement [
 
 	stmt := result first statements first.	
 	self assert: stmt class equals: FASTFortranExternalStatement.
-	self assert: stmt name equals: 'mypnt'
+	self assert: stmt name equals: 'mypnt'.
+	self assert: stmt startPos equals: 26.
 
 ]
 

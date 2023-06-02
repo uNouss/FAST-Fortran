@@ -221,21 +221,28 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: aDoNode [
 
-	| loopControl data |
+	| data |
 	data := super visitDo: aDoNode.
 
-	loopControl := FASTFortranLoopControlExpression new 
-		flag: 'TODO: separate "init" into "controlVar" and "initValue" ' ;
-		init: data second second ;
-		limit: data second third ;
-		increment: data second fourth ;
-		yourself.
-	
-	^FASTFortranDoStatement new
-		loopControl: loopControl ;
+	^(self newEntity: FASTFortranDoStatement atPosition: data first)
+		loopControl: data second ;
 		statements: data third ;
 		yourself
 	
+
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
+	| data |
+	data := super visitDo_spec: aDoSpecNode.
+
+	^(self newEntity: FASTFortranLoopControlExpression atPosition: data first)
+		flag: 'TODO: separate "init" into "controlVar" and "initValue" ' ;
+		init: data second ;
+		limit: data third ;
+		increment: data fourth ;
+		yourself.
 
 ]
 
@@ -269,7 +276,7 @@ FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
 FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
 	| data |
 	data := super visitExternalStatement: anExternalStatementNode.
-	^FASTFortranExternalStatement new
+	^(self newEntity: FASTFortranExternalStatement atPosition: data first)
 		name: data second first name ;
 		yourself
 ]
