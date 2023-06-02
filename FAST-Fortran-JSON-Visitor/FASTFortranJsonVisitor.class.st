@@ -16,10 +16,10 @@ FASTFortranJsonVisitor >> initialize [
 
 { #category : #private }
 FASTFortranJsonVisitor >> newEntity: aFASTFortranClass atPosition: aPoint [
-	^aFASTFortranClass new
-		startPos: (self pointToPosition: aPoint first) ;
-		endPos: ((self pointToPosition: aPoint second) - 1) ;
-		yourself
+	| node |
+	node := aFASTFortranClass new.
+	self set: node startEnd: aPoint.
+	^node
 ]
 
 { #category : #private }
@@ -30,6 +30,14 @@ FASTFortranJsonVisitor >> pointToPosition: lineColumn [
 		position := position + (lineSizes at: i) + 1
 	].
 	^position + (lineColumn y)
+]
+
+{ #category : #private }
+FASTFortranJsonVisitor >> set: aFASTFortranNode startEnd: aPoint [
+	aFASTFortranNode
+		startPos: (self pointToPosition: aPoint first) ;
+		endPos: ((self pointToPosition: aPoint second) - 1)
+
 ]
 
 { #category : #'visiting expression' }
@@ -58,19 +66,23 @@ FASTFortranJsonVisitor >> visitAssign_expression: anAssignExpressionNode [
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
 	| data |
 	data := super visitAssign_expression: anAssignExpressionNode.
-	^ FASTFortranAssignmentStatement new
-		  variable: data first ;
-		  expression: data second
+	^(self newEntity: FASTFortranAssignmentStatement atPosition: data first)
+		variable: data second ;
+		expression: data third ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitBinary: aBinaryExpressionNode [
-	| data |
+	| data expr |
 	data := super visitBinary: aBinaryExpressionNode.
-	^data third
+
+	expr := data third.
+	self set: expr startEnd: data first.
+	expr
 		left: data second ;
-		right: data fourth ;
-		yourself
+		right: data fourth.
+	^expr
 ]
 
 { #category : #'visiting prog-unit' }
@@ -79,7 +91,7 @@ FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 
 	data := super visitBlock_data: aBlockDataNode.
 
-	^ FASTFortranBlockData new
+	^(self newEntity: FASTFortranBlockData atPosition: data first)
 		name: data second ;
 		statements: data third ;
 		yourself
@@ -126,8 +138,9 @@ FASTFortranJsonVisitor >> visitCommonStatement: aCommonStatementNode [
 COMMON [/[cb]/] nlist [[,]/[cb]/ nlist] where 
 cb: Common block name,
 nlist: List of variable names, array names, and array declarators  "
-	self flag: #TODO.
-	^ FASTFortranCommonStatement new
+	| data |
+	data := super visitCommonStatement: aCommonStatementNode.
+	^self newEntity: FASTFortranCommonStatement atPosition: data first
 
 ]
 
@@ -548,7 +561,12 @@ FASTFortranJsonVisitor >> visitType: aTypeNode [
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitValue: aValueNode [
-	^(super visitValue: aValueNode) second
+	| data val |
+	data := (super visitValue: aValueNode).
+
+	val := data second.
+	self set: val startEnd: data first.
+	^val
 
 ]
 

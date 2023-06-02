@@ -15,9 +15,11 @@ FortranToFASTBasicTests >> testAssignementIntegerLiteral [
 
 	stmt := result first  statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranIntegerLiteral.
 	self assert: stmt expression value equals: '1'.
+	self assert: stmt expression startPos equals: 36.
 
 ]
 
@@ -32,9 +34,11 @@ FortranToFASTBasicTests >> testAssignementRealLiteral [
 
 	stmt := result first  statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranRealLiteral.
 	self assert: stmt expression value equals: '2.12'.
+	self assert: stmt expression startPos equals: 36.
 
 ]
 
@@ -49,9 +53,11 @@ FortranToFASTBasicTests >> testAssignementStringLiteral [
 
 	stmt := result first  statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranStringLiteral.
 	self assert: stmt expression value equals: 'once upon a time'.
+	self assert: stmt expression startPos equals: 36.
 
 ]
 
@@ -69,8 +75,13 @@ FortranToFASTBasicTests >> testBinaryExpressionAddition [
 	expr := result first statements first expression.
 	self assert: expr class equals: FASTFortranArithmeticExpression.
 	self assert: expr operator equals: 'addition'.
+	self assert: expr startPos equals: 33.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 33.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 37.
 ]
 
 { #category : #'tests-expression' }
@@ -87,8 +98,13 @@ FortranToFASTBasicTests >> testBinaryExpressionDivision [
 	expr := result first statements first expression.
 	self assert: expr class equals: FASTFortranArithmeticExpression.
 	self assert: expr operator equals: 'division'.
+	self assert: expr startPos equals: 33.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 33.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 37.
 ]
 
 { #category : #'tests-expression' }
@@ -106,8 +122,13 @@ FortranToFASTBasicTests >> testBinaryExpressionEqKeyword [
 	expr := result first  statements first condition.
 	self assert: expr class equals: FASTFortranLogicalExpression.
 	self assert: expr operator equals: 'eq'.
+	self assert: expr startPos equals: 34.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
@@ -124,8 +145,14 @@ FortranToFASTBasicTests >> testBinaryExpressionExponentiation [
 	expr := result first statements first expression.
 	self assert: expr class equals: FASTFortranArithmeticExpression.
 	self assert: expr operator equals: 'exponentiation'.
+	self assert: expr startPos equals: 33.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 33.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 38.
+	
 ]
 
 { #category : #'tests-expression' }
@@ -143,8 +170,13 @@ FortranToFASTBasicTests >> testBinaryExpressionGtKeyword [
 	expr := result first  statements first condition.
 	self assert: expr class equals: FASTFortranLogicalExpression.
 	self assert: expr operator equals: 'gt'.
+	self assert: expr startPos equals: 34.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
@@ -162,8 +194,13 @@ FortranToFASTBasicTests >> testBinaryExpressionGtSymbol [
 	expr := result first  statements first condition.
 	self assert: expr class equals: FASTFortranLogicalExpression.
 	self assert: expr operator equals: 'gt'.
+	self assert: expr startPos equals: 34.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 38.
 ]
 
 { #category : #'tests-expression' }
@@ -181,8 +218,13 @@ FortranToFASTBasicTests >> testBinaryExpressionLtKeyword [
 	expr := result first  statements first condition.
 	self assert: expr class equals: FASTFortranLogicalExpression.
 	self assert: expr operator equals: 'lt'.
+	self assert: expr startPos equals: 34.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
@@ -200,8 +242,13 @@ FortranToFASTBasicTests >> testBinaryExpressionLtSymbol [
 	expr := result first  statements first condition.
 	self assert: expr class equals: FASTFortranLogicalExpression.
 	self assert: expr operator equals: 'lt'.
+	self assert: expr startPos equals: 34.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 38
 ]
 
 { #category : #'tests-expression' }
@@ -218,8 +265,13 @@ FortranToFASTBasicTests >> testBinaryExpressionMultiplication [
 	expr := result first statements first expression.
 	self assert: expr class equals: FASTFortranArithmeticExpression.
 	self assert: expr operator equals: 'multiplication'.
+	self assert: expr startPos equals: 33.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 33.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 37.
 ]
 
 { #category : #'tests-expression' }
@@ -236,8 +288,13 @@ FortranToFASTBasicTests >> testBinaryExpressionSubtraction [
 	expr := result first statements first expression.
 	self assert: expr class equals: FASTFortranArithmeticExpression.
 	self assert: expr operator equals: 'subtraction'.
+	self assert: expr startPos equals: 33.
+
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
-	self assert: expr right class equals: FASTFortranIntegerLiteral
+	self assert: expr left startPos equals: 33.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right startPos equals: 37.
 ]
 
 { #category : #'tests-programUnit' }
