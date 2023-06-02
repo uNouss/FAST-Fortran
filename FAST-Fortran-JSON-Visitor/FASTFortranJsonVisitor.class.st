@@ -119,13 +119,6 @@ FASTFortranJsonVisitor >> visitComment: aCommentNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitCommon: aCommonNode [
-	| data |
-	data := super visitCommon: aCommonNode.
-	^self visitJsonMap: aCommonNode keys: #(span common_groups)
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCommonStatement: aCommonStatementNode [
 	
 	"creates common statement which defines a block of main memory storage so that different program units can share the same data without using arguments.

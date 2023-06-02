@@ -254,8 +254,6 @@ FortranToFASTBasicTests >> testBlockData [
 	self assert: bd class equals: FASTFortranBlockData.
 	self assert: bd name equals: 'myblck'.
 
-	self flag: 'TODO need more assertions'
-
 ]
 
 { #category : #'tests-statement' }
