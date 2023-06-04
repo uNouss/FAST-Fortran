@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #initialization }
+FASTFortranJsonVisitor >> initLineSizes: fortranSource [
+	lineSizes := fortranSource lines collect: #size
+]
+
+{ #category : #initialization }
 FASTFortranJsonVisitor >> initialize [ 
 	super initialize.
 
@@ -305,7 +310,7 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 	"^self visitJsonMap: aFunctionNode keys: #(span name type arguments blocks result subprograms)"
 	| data |
 	data := super visitFunctionWithBlocks: aFunctionNode.
-	^FASTFortranFunction new
+	^(self newEntity: FASTFortranFunction atPosition: data first)
 		name: data second ;
 		flag: 'need to set return type' ;
 		parameters: data fourth ;
@@ -415,7 +420,7 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMiFilename: aString [
-	lineSizes := aString asFileReference contents lines collect: #size.
+	lineSizes ifEmpty: [ self initLineSizes: aString asFileReference contents ].
 	^aString
 ]
 
