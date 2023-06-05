@@ -20,19 +20,15 @@ BaselineOfFASTFortran >> defineDependencies: spec [
 		baseline: 'FAST'
 		with: [ spec
 				loads: #('default');
-				repository: 'github://moosetechnology/FAST:v1.x.x/src' ].
+				repository: 'github://moosetechnology/Famix:development/src' ].
 	
-	spec
+	"will be loaded from Famix"
+	"spec
 		baseline: 'NeoJSON'
 		with: [ spec
 				loads: #('default');
-				repository: 'https://github.com/svenvc/NeoJSON' ].
-			
-	"spec
-		baseline: 'PetitParser2'
-		with: [ spec
-				loads: #('default');
-				repository: 'https://github.com/kursjan/petitparser2' ]."
+				repository: 'https://github.com/svenvc/NeoJSON' ]."
+		
 ]
 
 { #category : #baselines }
@@ -40,7 +36,7 @@ BaselineOfFASTFortran >> definePackages: spec [
 	spec
 		repository: 'https://github.com/moosetechnology/FAST-Fortran';
 		package: 'FAST-Fortran-JSON-Visitor' with: [ spec requires: #(FAST NeoJSON) ] ;
-		package: 'FAST-Fortran-Model-Generator' with: [ spec requires: #(FAST) ] ;
-		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FAST) ]
-
+		package: 'FAST-Fortran-Generator' with: [ spec requires: #(FAST) ] ;
+		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FAST) ];
+		package: 'FAST-Fortran-Visitor' with: [ spec requires: #(FAST) ]
 ]

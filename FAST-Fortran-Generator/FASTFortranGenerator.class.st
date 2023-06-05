@@ -1,5 +1,5 @@
 Class {
-	#name : #FASTFortranModelGenerator,
+	#name : #FASTFortranGenerator,
 	#superclass : #FASTMetamodelGenerator,
 	#instVars : [
 		'programUnit',
@@ -105,11 +105,11 @@ Class {
 		'variableDeclaration',
 		'functionStatement'
 	],
-	#category : #'FAST-Fortran-Model-Generator'
+	#category : #'FAST-Fortran-Generator'
 }
 
 { #category : #generating }
-FASTFortranModelGenerator class >> generate [
+FASTFortranGenerator class >> generate [
 
 	"TODO: can it be removed? As FamixMetamodelGenerator class has generate"
 
@@ -118,25 +118,25 @@ FASTFortranModelGenerator class >> generate [
 ]
 
 { #category : #generating }
-FASTFortranModelGenerator class >> packageName [
+FASTFortranGenerator class >> packageName [
 
 	^ #'FAST-Fortran-Entities'
 ]
 
 { #category : #generating }
-FASTFortranModelGenerator class >> prefix [
+FASTFortranGenerator class >> prefix [
 
 	^ #FASTFortran
 ]
 
 { #category : #generating }
-FASTFortranModelGenerator class >> submetamodels [
+FASTFortranGenerator class >> submetamodels [
 
 	^ { FASTMetamodelGenerator }
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineClasses [
+FASTFortranGenerator >> defineClasses [
 
 	super defineClasses.
 	
@@ -210,7 +210,7 @@ FASTFortranModelGenerator >> defineClasses [
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineData [
+FASTFortranGenerator >> defineData [
 
 	variableDeclaration := builder newClassNamed: #VariablesDeclaration
 		comment: 'I represent a declaration statement for one or many variables'.
@@ -385,7 +385,7 @@ changed by compiling with certain special options.'.
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineHierarchy [
+FASTFortranGenerator >> defineHierarchy [
 
 	super defineHierarchy.
 
@@ -536,7 +536,7 @@ FASTFortranModelGenerator >> defineHierarchy [
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineProperties [
+FASTFortranGenerator >> defineProperties [
 
 	super defineProperties.
 
@@ -605,7 +605,7 @@ FASTFortranModelGenerator >> defineProperties [
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineRelations [
+FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
@@ -694,7 +694,7 @@ FASTFortranModelGenerator >> defineRelations [
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineStatements [
+FASTFortranGenerator >> defineStatements [
 
 	"A statement consists of zero or more key words, symbolic names, literal constants, statement labels, operators, and special characters."
 
@@ -914,7 +914,7 @@ FASTFortranModelGenerator >> defineStatements [
 ]
 
 { #category : #definition }
-FASTFortranModelGenerator >> defineTraits [
+FASTFortranGenerator >> defineTraits [
 
 	super defineTraits.
 	
