@@ -1,16 +1,14 @@
 "
-A node that wraps around structural entity
+a Fortran Variable Expression
 "
 Class {
 	#name : #FASTFortranVariableExpression,
 	#superclass : #FASTFortranExpression,
-	#traits : 'FASTFortranTParameter + FamixTNamedEntity',
-	#classTraits : 'FASTFortranTParameter classTrait + FamixTNamedEntity classTrait',
 	#instVars : [
 		'#type => FMProperty',
 		'#value => FMProperty',
 		'#defined => FMProperty',
-		'#parentDeclaration => FMOne type: #FASTFortranVariablesDeclaration opposite: #variables'
+		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -41,7 +39,7 @@ FASTFortranVariableExpression >> defined: anObject [
 
 { #category : #accessing }
 FASTFortranVariableExpression >> parentDeclaration [
-	"Relation named: #parentDeclaration type: #FASTFortranVariablesDeclaration opposite: #variables"
+	"Relation named: #parentDeclaration type: #FASTFortranDeclarationStatement opposite: #declarators"
 
 	<generated>
 	<FMComment: 'Parent declaration'>

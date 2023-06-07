@@ -4,8 +4,8 @@ I represent Fortran Record statement
 Class {
 	#name : #FASTFortranRecord,
 	#superclass : #FASTFortranExpression,
-	#traits : 'FASTFortranTParameter',
-	#classTraits : 'FASTFortranTParameter classTrait',
+	#traits : 'FASTFortranTAssigneable',
+	#classTraits : 'FASTFortranTAssigneable classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

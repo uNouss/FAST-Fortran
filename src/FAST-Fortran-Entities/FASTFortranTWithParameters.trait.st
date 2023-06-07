@@ -4,7 +4,7 @@ I have parameters
 Trait {
 	#name : #FASTFortranTWithParameters,
 	#instVars : [
-		'#parameters => FMMany type: #FASTFortranTParameter opposite: #parameterOwner'
+		'#parameters => FMMany type: #FASTFortranTVariableEntity opposite: #parameterOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -26,7 +26,7 @@ FASTFortranTWithParameters >> addParameter: anObject [
 
 { #category : #accessing }
 FASTFortranTWithParameters >> parameters [
-	"Relation named: #parameters type: #FASTFortranTParameter opposite: #parameterOwner"
+	"Relation named: #parameters type: #FASTFortranTVariableEntity opposite: #parameterOwner"
 
 	<generated>
 	<FMComment: 'My parameters'>

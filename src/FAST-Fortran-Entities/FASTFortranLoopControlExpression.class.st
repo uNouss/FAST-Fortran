@@ -1,5 +1,5 @@
 "
-An abstract superclass representing an expression node of a source code.
+a Fortran Loop Control Expression
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,

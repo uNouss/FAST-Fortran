@@ -1,5 +1,5 @@
 "
-A character literal
+a Fortran Character Literal
 "
 Class {
 	#name : #FASTFortranCharacterLiteral,

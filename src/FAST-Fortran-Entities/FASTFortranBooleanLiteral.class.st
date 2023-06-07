@@ -1,5 +1,5 @@
 "
-A boolean literal
+a Fortran Boolean Literal
 "
 Class {
 	#name : #FASTFortranBooleanLiteral,

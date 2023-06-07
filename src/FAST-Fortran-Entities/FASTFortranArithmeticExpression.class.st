@@ -1,5 +1,5 @@
 "
-An abstract superclass representing an expression node of a source code.
+a Fortran Arithmetic Expression
 "
 Class {
 	#name : #FASTFortranArithmeticExpression,
