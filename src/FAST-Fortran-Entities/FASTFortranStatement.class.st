@@ -1,12 +1,11 @@
 "
-An abstract subclass which represents a source code statemnet 
+a Fortran Statement
 "
 Class {
 	#name : #FASTFortranStatement,
 	#superclass : #FASTFortranScopableEntity,
 	#instVars : [
-		'#label => FMProperty',
-		'#statementContainer => FMOne type: #FASTFortranStatementBlock opposite: #statements'
+		'#label => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -57,28 +56,4 @@ FASTFortranStatement >> parentIfBlockGroup [
 	<generated>
 	<navigation: 'ParentIfBlock'>
 	^ MooseSpecializedGroup with: self parentIfBlock
-]
-
-{ #category : #accessing }
-FASTFortranStatement >> statementContainer [
-	"Relation named: #statementContainer type: #FASTFortranStatementBlock opposite: #statements"
-
-	<generated>
-	<FMComment: 'Block containing this statement.'>
-	<container>
-	^ statementContainer
-]
-
-{ #category : #accessing }
-FASTFortranStatement >> statementContainer: anObject [
-
-	<generated>
-	statementContainer := anObject
-]
-
-{ #category : #navigation }
-FASTFortranStatement >> statementContainerGroup [
-	<generated>
-	<navigation: 'StatementContainer'>
-	^ MooseSpecializedGroup with: self statementContainer
 ]

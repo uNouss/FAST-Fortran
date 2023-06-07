@@ -7,29 +7,28 @@ Subclassed for NamedBehavioural as methods/functions
 Has parameters , and a body (StatementBlock).
 Local variables are intended to be stored in the local entities of the body
 "
-Class {
-	#name : #FASTFortranBehaviouralEntity,
-	#superclass : #FASTFortranScopableEntity,
-	#traits : 'FASTFortranTWithParameters',
-	#classTraits : 'FASTFortranTWithParameters classTrait',
+Trait {
+	#name : #FASTFortranTBehaviouralEntity,
 	#instVars : [
-		'#statementBlock => FMOne type: #FASTFortranStatementBlock opposite: #fastBehaviouralParent'
+		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #fastBehaviouralParent'
 	],
-	#category : #'FAST-Fortran-Entities-Entities'
+	#traits : 'FASTFortranTScopableEntity + FASTFortranTWithParameters',
+	#classTraits : 'FASTFortranTScopableEntity classTrait + FASTFortranTWithParameters classTrait',
+	#category : #'FAST-Fortran-Entities-Traits'
 }
 
 { #category : #meta }
-FASTFortranBehaviouralEntity class >> annotation [
+FASTFortranTBehaviouralEntity classSide >> annotation [
 
-	<FMClass: #BehaviouralEntity super: #FASTFortranScopableEntity>
+	<FMClass: #TBehaviouralEntity super: #Object>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
 ]
 
 { #category : #accessing }
-FASTFortranBehaviouralEntity >> statementBlock [
-	"Relation named: #statementBlock type: #FASTFortranStatementBlock opposite: #fastBehaviouralParent"
+FASTFortranTBehaviouralEntity >> statementBlock [
+	"Relation named: #statementBlock type: #FASTFortranTStatementBlock opposite: #fastBehaviouralParent"
 
 	<generated>
 	<FMComment: 'Statements block of the behavioural entity'>
@@ -37,14 +36,14 @@ FASTFortranBehaviouralEntity >> statementBlock [
 ]
 
 { #category : #accessing }
-FASTFortranBehaviouralEntity >> statementBlock: anObject [
+FASTFortranTBehaviouralEntity >> statementBlock: anObject [
 
 	<generated>
 	statementBlock := anObject
 ]
 
 { #category : #navigation }
-FASTFortranBehaviouralEntity >> statementBlockGroup [
+FASTFortranTBehaviouralEntity >> statementBlockGroup [
 	<generated>
 	<navigation: 'StatementBlock'>
 	^ MooseSpecializedGroup with: self statementBlock

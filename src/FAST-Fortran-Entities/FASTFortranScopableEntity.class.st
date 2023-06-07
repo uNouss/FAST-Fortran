@@ -1,7 +1,5 @@
 "
-A Entity with an optional scope
-
-Statements are scopable because many statements allow to introduce local variables (e.g. for statement in Java)
+a Fortran Scopable Entity (syntetic entity, not presented in the syntax)
 "
 Class {
 	#name : #FASTFortranScopableEntity,

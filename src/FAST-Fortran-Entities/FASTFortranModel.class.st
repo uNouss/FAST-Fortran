@@ -1,6 +1,8 @@
 Class {
 	#name : #FASTFortranModel,
 	#superclass : #MooseModel,
+	#traits : 'FASTFortranTEntityCreator + FASTTEntityCreator',
+	#classTraits : 'FASTFortranTEntityCreator classTrait + FASTTEntityCreator classTrait',
 	#category : #'FAST-Fortran-Entities-Model'
 }
 

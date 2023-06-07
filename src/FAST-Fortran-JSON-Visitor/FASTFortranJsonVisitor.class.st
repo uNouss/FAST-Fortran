@@ -526,7 +526,7 @@ FASTFortranJsonVisitor >> visitStopStatement: aStopStatementNode [
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
-	^FASTFortranStringLiteral new
+	^FASTFortranCharacterLiteral new
 		value: (super visitStringLiteralValue: aString) ;
 		yourself
 ]

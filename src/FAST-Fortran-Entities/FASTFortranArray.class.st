@@ -4,8 +4,8 @@ I represent Fortran Array
 Class {
 	#name : #FASTFortranArray,
 	#superclass : #FASTFortranExpression,
-	#traits : 'FASTFortranTParameter',
-	#classTraits : 'FASTFortranTParameter classTrait',
+	#traits : 'FASTFortranTAssigneable',
+	#classTraits : 'FASTFortranTAssigneable classTrait',
 	#instVars : [
 		'#name => FMProperty'
 	],

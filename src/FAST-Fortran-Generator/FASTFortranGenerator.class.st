@@ -102,7 +102,6 @@ Class {
 		'tAssigneable',
 		'tWithAssigneable',
 		'tBinaryExpression',
-		'variableDeclaration',
 		'functionStatement',
 		'statement',
 		'expression',
@@ -110,7 +109,9 @@ Class {
 		'characterLiteral',
 		'literal',
 		'variableExpression',
-		'returnStatement'
+		'returnStatement',
+		'booleanLiteral',
+		'declarationStatement'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -155,8 +156,14 @@ FASTFortranGenerator >> defineClasses [
 { #category : #definition }
 FASTFortranGenerator >> defineData [
 
+	" DelarationStatement is used instead
 	variableDeclaration := builder
 		                       newClassNamed: #VariablesDeclaration
+		                       comment:
+		                       'I represent a declaration statement for one or many variables'."
+
+	declarationStatement := builder
+		                       newClassNamed: #DeclarationStatement
 		                       comment:
 		                       'I represent a declaration statement for one or many variables'.
 
@@ -189,12 +196,6 @@ FASTFortranGenerator >> defineData [
 
 
 	"OTHER DATA TYPES"
-
-	"Variable is defined by default  FAST"
-	"variable := builder
-		                   newClassNamed: #Variable
-		                   comment: 'I represent Fortran Variable'."
-
 	array := builder
 		         newClassNamed: #Array
 		         comment: 'I represent Fortran Array'.
@@ -241,6 +242,10 @@ FASTFortranGenerator >> defineData [
 	characterLiteral := builder
 		                    newClassNamed: #CharacterLiteral
 		                    comment: 'a Fortran Character Literal'.
+
+	booleanLiteral := builder
+		                    newClassNamed: #BooleanLiteral
+		                    comment: 'a Fortran Boolean Literal'.
 
 
 	arithmeticConstant := builder
@@ -405,7 +410,7 @@ FASTFortranGenerator >> defineHierarchy [
 	"other entities"
 	comment --|> scopableEntity.
 	statement --|> scopableEntity.
-	variableDeclaration --|> scopableEntity.
+	declarationStatement --|> scopableEntity.
 
 	"STATEMENTS"
 	acceptStatement --|> statement.
@@ -486,7 +491,9 @@ FASTFortranGenerator >> defineHierarchy [
 	structure --|> expression.
 	literal  --|> expression. "TODO: Not sure if this is correct"
 	
+	
 	arithmeticConstant --|> literal.
+	booleanLiteral --|> literal.
 	complexConstant --|> arithmeticConstant.
 	doubleComplexConstant --|> arithmeticConstant.
 	doublePrecisionConstant --|> arithmeticConstant.
@@ -647,40 +654,45 @@ FASTFortranGenerator >> defineRelations [
 	((doStatement property: #loopControl) comment: 'loop control')
 	<>-
 	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
-	
+
 	((doStatement property: #statements) comment:
 		 'Statements of the do body ')
 	<>-* ((scopableEntity property: #parentDoStatement) comment:
 			 'Parent do statement').
-	
+
 	((ifBlockStatement property: #thenStatements) comment:
 		 'Statements of the then branch ')
-	<>-* ((scopableEntity property: #parentIfBlock) comment:
-			 'Parent if block').
+	<>-*
+	((scopableEntity property: #parentIfBlock) comment: 'Parent if block').
 
 	((ifBlockStatement property: #elseStatements) comment:
 		 'Statements of the then branch ')
-	<>-* ((statement property: #parentIfBlock) comment:
-			 'Parent if block').
-	
-	((ifBlockStatement property: #condition) comment:
-		 'Condition')
-	<>- ((expression property: #parentIfBlock) comment:
-			 'Parent if block').
-			
+	<>-*
+	((statement property: #parentIfBlock) comment: 'Parent if block').
+
+	((ifBlockStatement property: #condition) comment: 'Condition')
+	<>-
+	((expression property: #parentIfBlock) comment: 'Parent if block').
+
 	((ifLogicalStatement property: #statement) comment:
 		 'Statement of the logical if')
-	<>- ((statement property: #parentIfBlock) comment:
-			 'Parent if block').
-	
-	((ifLogicalStatement property: #condition) comment:
-		 'Condition')
-	<>- ((expression property: #parentIfBlock) comment:
-			 'Parent if block').		
-	
-	((variableDeclaration property: #variables) comment: 'variables')
-	<>-*
-	((variableExpression property: #parentDeclaration) comment: 'Parent declaration').
+	<>- ((statement property: #parentIfBlock) comment: 'Parent if block').
+
+	((ifLogicalStatement property: #condition) comment: 'Condition')
+	<>-
+	((expression property: #parentIfBlock) comment: 'Parent if block').
+
+	((declarationStatement property: #declarators) comment: 'declarators')
+	<>-* ((variableExpression property: #parentDeclaration) comment:
+			 'Parent declaration').
+
+	((declarationStatement property: #attributes) comment: 'attributes')
+	<>-* ((variableExpression property: #parentDeclaration) comment:
+			 'Parent declaration').
+
+	((declarationStatement property: #type) comment: 'type')
+	<>- ((variableExpression property: #parentDeclaration) comment:
+			 'Parent declaration').
 
 
 	"TRAITS"
@@ -695,12 +707,16 @@ FASTFortranGenerator >> defineRelations [
 	((tWithAssigneable property: #variable) comment: 'My variable')
 	<>- ((tAssigneable property: #variableAssignementOwner) comment:
 			 'The owner of the modifier').
-			
-	((assignmentStatement property: #expression) comment: 'Expression thats being assigned upon declaration to the var')
-		<>- ((tAssigneable property: #assignementExpressionOwner) comment: 'The AssignementExpression owner (if possible)').
-		
-	((functionStatement property: #expression) comment: 'Expression thats being assigned upon declaration to the var')
-		<>- ((tAssigneable property: #assignementExpressionOwner) comment: 'The AssignementExpression owner (if possible)').
+
+	((assignmentStatement property: #expression) comment:
+		 'Expression thats being assigned upon declaration to the var')
+	<>- ((tAssigneable property: #assignementExpressionOwner) comment:
+			 'The AssignementExpression owner (if possible)').
+
+	((functionStatement property: #expression) comment:
+		 'Expression thats being assigned upon declaration to the var')
+	<>- ((tAssigneable property: #assignementExpressionOwner) comment:
+			 'The AssignementExpression owner (if possible)')
 ]
 
 { #category : #definition }

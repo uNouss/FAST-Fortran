@@ -5,8 +5,8 @@ Class {
 	#name : #FASTFortranIfLogicalStatement,
 	#superclass : #FASTFortranStatement,
 	#instVars : [
-		'#condition => FMOne type: #FASTFortranExpression opposite: #parentIfBlock',
-		'#statement => FMOne type: #FASTFortranStatement opposite: #parentIfBlock'
+		'#statement => FMOne type: #FASTFortranStatement opposite: #parentIfBlock',
+		'#condition => FMOne type: #FASTFortranExpression opposite: #parentIfBlock'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }

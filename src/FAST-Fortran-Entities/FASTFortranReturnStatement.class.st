@@ -1,12 +1,11 @@
 "
-A return statement node. Contains a reference to the expression which is returned.  
+a Fortran Return Statement
 "
 Class {
 	#name : #FASTFortranReturnStatement,
 	#superclass : #FASTFortranStatement,
 	#instVars : [
-		'#alternateReturnLable => FMProperty',
-		'#expression => FMOne type: #FASTFortranExpression opposite: #returnOwner'
+		'#alternateReturnLable => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -33,27 +32,4 @@ FASTFortranReturnStatement >> alternateReturnLable [
 FASTFortranReturnStatement >> alternateReturnLable: anObject [
 	<generated>
 	alternateReturnLable := anObject
-]
-
-{ #category : #accessing }
-FASTFortranReturnStatement >> expression [
-	"Relation named: #expression type: #FASTFortranExpression opposite: #returnOwner"
-
-	<generated>
-	<FMComment: 'The expression returned'>
-	^ expression
-]
-
-{ #category : #accessing }
-FASTFortranReturnStatement >> expression: anObject [
-
-	<generated>
-	expression := anObject
-]
-
-{ #category : #navigation }
-FASTFortranReturnStatement >> expressionGroup [
-	<generated>
-	<navigation: 'Expression'>
-	^ MooseSpecializedGroup with: self expression
 ]
