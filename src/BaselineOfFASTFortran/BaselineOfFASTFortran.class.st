@@ -21,7 +21,7 @@ BaselineOfFASTFortran >> defineDependencies: spec [
 		baseline: 'FAST'
 		with: [ spec
 				loads: #('default');
-				repository: 'github://moosetechnology/FAST' ];
+				repository: 'github://moosetechnology/FAST:v2/src' ];
 
 	baseline: 'FamixFortran'
 		with: [ spec
@@ -42,6 +42,6 @@ BaselineOfFASTFortran >> definePackages: spec [
 		repository: 'https://github.com/moosetechnology/FAST-Fortran';
 		package: 'FAST-Fortran-Generator' with: [ spec requires: #(FAST FamixFortran) ] ;
 		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FamixFortran) ];
-		package: 'FAST-Fortran-Visitor' with: [ spec requires: #(FamixFortran) ];
+		package: 'FAST-Fortran-Visitor' with: [ spec requires: #(FamixFortran FAST-Fortran-Entities) ];
 		package: 'FAST-Fortran-JSON-Visitor' with: [ spec requires: #(FamixFortran NeoJSON) ] .
 ]
