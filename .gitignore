@@ -29,3 +29,6 @@ SqueakDebug.log
 # Metacello-github cache
 /github-cache
 github-*.zip
+
+#I HATE MACINTOSH!
+.DS_Store
