@@ -23,15 +23,13 @@ BaselineOfFASTFortran >> defineDependencies: spec [
 				loads: #('default');
 				repository: 'github://moosetechnology/FAST' ];
 
-	spec
-		baseline: 'FamixFortran'
+	baseline: 'FamixFortran'
 		with: [ spec
 				loads: #('default');
 				repository: 'github://moosetechnology/Famix-Fortran' ];
 	
 	
-	spec
-		baseline: 'NeoJSON'
+	baseline: 'NeoJSON'
 		with: [ spec
 				loads: #('default');
 				repository: 'github://svenvc/NeoJSON' ].
