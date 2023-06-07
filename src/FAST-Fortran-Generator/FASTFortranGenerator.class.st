@@ -103,7 +103,14 @@ Class {
 		'tWithAssigneable',
 		'tBinaryExpression',
 		'variableDeclaration',
-		'functionStatement'
+		'functionStatement',
+		'statement',
+		'expression',
+		'scopableEntity',
+		'characterLiteral',
+		'literal',
+		'variableExpression',
+		'returnStatement'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -139,97 +146,46 @@ FASTFortranGenerator class >> submetamodels [
 FASTFortranGenerator >> defineClasses [
 
 	super defineClasses.
-	
-	"FAMIX-level classes (might be removed later)"
-	programUnit := builder
-		               newClassNamed: #ProgramUnit
-		               comment:
-		               'A fortran program unit is a sequence of statements, terminated by an END statement. Every program unit is either a main program or a subprogram. If a program is to be executable, it must have a main program'.
 
-	comment := builder
-		           newClassNamed: #Comment
-		           comment: 'A fortran comment'.
-
-
-	subprogram := builder
-		              newClassNamed: #Subprogram
-		              comment:
-		              'I represent a fortran subprogram: procedure or block data'.
-
-	mainprogram := builder
-		               newClassNamed: #ProgramMain
-		               comment:
-		               'The PROGRAM statement identifies the program unit as a main program. program. For the loader, the main program is always named MAIN. The PROGRAM statement serves only the person who reads the program'.
-
-
-	procedure := builder
-		             newClassNamed: #Procedure
-		             comment:
-		             'I represent a fortran subroutine or a function'.
-
-	function := builder
-		            newClassNamed: #Function
-		            comment: 'I represent a Fortran Function'.
-
-	subroutine := builder
-		              newClassNamed: #Subroutine
-		              comment:
-		              'The SUBROUTINE statement identifies a subprogram, a named program unit as a subroutine, and specifies arguments for it'.
-
-	blockData := builder
-		             newClassNamed: #BlockData
-		             comment:
-		             'The BLOCK DATA statement identifies a subprogram that initializes variables and arrays in labeled common blocks.'.
-
+	self defineFamixClasses. 
 	self defineStatements.
-	self defineData.
-	
-	"From FAST"
-	"entity := self remoteEntity: #Entity withPrefix: #FAST.
-	expression := self remoteEntity: #Expression withPrefix: #FAST. 
-	statement := self remoteEntity: #Statement withPrefix: #FAST.
-	
-	literal := self remoteEntity: #Literal withPrefix: #FAST.
-	characterLiteral := self remoteEntity: #CharacterLiteral withPrefix: #FAST.
-	nullPointerLiteral := self remoteEntity: #NullPointerLiteral withPrefix: #FAST.
-	stringLiteral := self remoteEntity: #StringLiteral withPrefix: #FAST.
-	
-	variableExpression := self remoteEntity: #VariableExpression withPrefix: #FAST.
-	variableEntity := self remoteEntity: #VariableEntity withPrefix: #FAST. 
-	
-	namedBehaviouralEntity := self remoteEntity: #NamedBehaviouralEntity withPrefix: #FAST.
-	scopableEntity := self remoteEntity: #ScopableEntity withPrefix: #FAST.
-	namedEntity := self remoteEntity: #NamedEntity withPrefix: #FAST. 
-	
-	statementBlock := self remoteEntity: #StatementBlock withPrefix: #FAST.
-	expressionStatement := self remoteEntity: #ExpressionStatement withPrefix: #FAST.
-	returnStatement  := self remoteEntity: #ReturnStatement withPrefix: #FAST.
-	
-	fastTParameter := self remoteTrait: #TParameter withPrefix: #FAST. 
-	fastTWithParameters := self remoteTrait: #TWithParameters withPrefix: #FAST."
+	self defineData
 ]
 
 { #category : #definition }
 FASTFortranGenerator >> defineData [
 
-	variableDeclaration := builder newClassNamed: #VariablesDeclaration
-		comment: 'I represent a declaration statement for one or many variables'.
+	variableDeclaration := builder
+		                       newClassNamed: #VariablesDeclaration
+		                       comment:
+		                       'I represent a declaration statement for one or many variables'.
 
 	"EXPRESSIONS"
+	
+	expression := builder
+		             newClassNamed: #Expression
+		             comment:
+		             'a Fortran Expression'.
+		
+	variableExpression := builder
+		             newClassNamed: #VariableExpression
+		             comment:
+		             'a Fortran Variable Expression'.
 
 	arithmeticExpression := builder
 		                        newClassNamed: #ArithmeticExpression
-		                        comment: self commentForExpression.
+		                        comment: 'a Fortran Arithmetic Expression'.
 	characterExpression := builder
 		                       newClassNamed: #CharacterExpression
-		                       comment: self commentForExpression.
+		                       comment: 'a Fortran Character Expression'.
 	logicalExpression := builder
 		                     newClassNamed: #LogicalExpression
-		                     comment: self commentForExpression.
+		                     comment: 'a Fortran Logical Expression'.
 
 	loopControlExpression := builder
 		                         newClassNamed: #LoopControlExpression
-		                         comment: self commentForExpression.
+		                         comment:
+		                         'a Fortran Loop Control Expression'.
 
 
 	"OTHER DATA TYPES"
@@ -278,25 +234,29 @@ FASTFortranGenerator >> defineData [
 		                   newClassNamed: #Literal
 		                   comment: 'I represent Fortran Literal (Constant) statement'."
 
+	literal := builder
+		           newClassNamed: #Literal
+		           comment: 'a Fortran Literal'.
+
+	characterLiteral := builder
+		                    newClassNamed: #CharacterLiteral
+		                    comment: 'a Fortran Character Literal'.
+
+
 	arithmeticConstant := builder
 		                      newClassNamed: #ArithmeticLiteral
 		                      comment:
 		                      'I represent Fortran Arithmetic Literal (Constant) statement'.
 
-	"characterLiteral := builder
-		                            newClassNamed: #CharacterLiteral
-		                            comment:
-		                            'I represent Fortran Character Literal (Constant) statement'."
-		
-	asterisk  := builder
-		                            newClassNamed: #Asterisk
-		                            comment:
-		                            'I represent an Asterisk Character Literal (Constant) that is often used as a format identifier'.
+	asterisk := builder
+		            newClassNamed: #Asterisk
+		            comment:
+		            'I represent an Asterisk Character Literal (Constant) that is often used as a format identifier'.
 
-	ampersand  := builder
-		                            newClassNamed: #Ampersand
-		                            comment:
-		                            'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
+	ampersand := builder
+		             newClassNamed: #Ampersand
+		             comment:
+		             'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
 
 	"booleanLiteral := builder
 		                          newClassNamed: #BooleanLiteral
@@ -309,79 +269,124 @@ FASTFortranGenerator >> defineData [
 		                   'I represent Fortran Arithmetic Complex Literal (Constant) statement'.
 
 	doubleComplexConstant := builder
-		                   newClassNamed: #DoubleComplexLiteral
-		                   comment:
-		                   'I represent Fortran Arithmetic Double Complex Literal (Constant) statement'.
+		                         newClassNamed: #DoubleComplexLiteral
+		                         comment:
+		                         'I represent Fortran Arithmetic Double Complex Literal (Constant) statement'.
 
 	doublePrecisionConstant := builder
-		                   newClassNamed: #DoublePrecisionLiteral
-		                   comment:
-		                   'I represent Fortran Arithmetic Double Precision Literal (Constant) statement'.
+		                           newClassNamed: #DoublePrecisionLiteral
+		                           comment:
+		                           'I represent Fortran Arithmetic Double Precision Literal (Constant) statement'.
 
 	integerConstant := builder
 		                   newClassNamed: #IntegerLiteral
 		                   comment:
-		                   'I represent Fortran Arithmetic Integer Literal (Constant) statement'.	
-			
+		                   'I represent Fortran Arithmetic Integer Literal (Constant) statement'.
+
 	realConstant := builder
-		                   newClassNamed: #RealLiteral
-		                   comment:
-		                   'I represent Fortran Arithmetic Real Literal (Constant) statement'.
-	
+		                newClassNamed: #RealLiteral
+		                comment:
+		                'I represent Fortran Arithmetic Real Literal (Constant) statement'.
+
 	"TYPES"
- 
+
 	type := builder
-		                        newClassNamed: #Type
-		                        comment:
-		                        'I represent Fortran Type statement'.
+		        newClassNamed: #Type
+		        comment: 'I represent Fortran Type statement'.
 
 	byteType := builder
-		                        newClassNamed: #ByteType
-		                        comment:
-			                        'I represent Fortran Byte statement. The BYTE data type provides a data type that uses only one byte of storage. It is a logical data type, and has the synonym,
+		            newClassNamed: #ByteType
+		            comment:
+			            'I represent Fortran Byte statement. The BYTE data type provides a data type that uses only one byte of storage. It is a logical data type, and has the synonym,
 LOGICAL*1. A variable of type BYTE can hold any of the following: 1)one character, 2)an integer between -128 and 127, 3)the logical values, .TRUE. or .FALSE. If it is interpreted as a logical value, a value of 0 represents .FALSE., and any other value is interpreted as .TRUE.
 f77 allows the BYTE type as an array index, just as it allows the REAL type, but it does not allow BYTE as a DO loop index (where it allows only INTEGER, REAL, and DOUBLE PRECISION). Wherever the compiler expects INTEGER explicitly, it will not allow BYTE.'.
 
 	characterType := builder
-		                             newClassNamed: #CharacterType
-		                             comment:
-		                             'I represent Fortran Character statement. The character data type, CHARACTER, which has the synonym, CHARACTER*1, holds one character. The character is enclosed in apostrophes ('') or quotes (""). @ Allowing quotes ("") is nonstandard; if you compile with the -xl option, quotes mean something else, and you must use apostrophes to enclose a string. The data of type CHARACTER is always unsigned. A CHARACTER item occupies 1 byte (8 bits) of storage and is aligned on 1-byte boundaries.'.
+		                 newClassNamed: #CharacterType
+		                 comment:
+		                 'I represent Fortran Character statement. The character data type, CHARACTER, which has the synonym, CHARACTER*1, holds one character. The character is enclosed in apostrophes ('') or quotes (""). @ Allowing quotes ("") is nonstandard; if you compile with the -xl option, quotes mean something else, and you must use apostrophes to enclose a string. The data of type CHARACTER is always unsigned. A CHARACTER item occupies 1 byte (8 bits) of storage and is aligned on 1-byte boundaries.'.
 
 	complexType := builder
-		                           newClassNamed: #ComplexType
-		                           comment:
-		                           'I represent Fortran Complex statement. A complex datum is an approximation of a complex number. The complex data type, COMPLEX, which defaults to a synonym for COMPLEX*8, is a pair of REAL*4 values that represent a complex number. The first element represents the real part and the second represents the imaginary part.The default size for a COMPLEX item (no size specified) is 8 bytes. The default alignment is on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options'.
+		               newClassNamed: #ComplexType
+		               comment:
+		               'I represent Fortran Complex statement. A complex datum is an approximation of a complex number. The complex data type, COMPLEX, which defaults to a synonym for COMPLEX*8, is a pair of REAL*4 values that represent a complex number. The first element represents the real part and the second represents the imaginary part.The default size for a COMPLEX item (no size specified) is 8 bytes. The default alignment is on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options'.
 
 	doubleComplexType := builder
-		                                 newClassNamed:
-		                                 #DoubleComplexType
-		                                 comment:
-		                                 'I represent Fortran Double Complex statement. The complex data type, DOUBLE COMPLEX, which usually has the synonym, COMPLEX*16, is a pair of DOUBLE PRECISION (REAL*8)values that represents a complex number. The first element represents the real part; the second represents the imaginary part.The default size for DOUBLE COMPLEX with no size specified is 16.'.
+		                     newClassNamed: #DoubleComplexType
+		                     comment:
+		                     'I represent Fortran Double Complex statement. The complex data type, DOUBLE COMPLEX, which usually has the synonym, COMPLEX*16, is a pair of DOUBLE PRECISION (REAL*8)values that represents a complex number. The first element represents the real part; the second represents the imaginary part.The default size for DOUBLE COMPLEX with no size specified is 16.'.
 
 	doublePrecisionType := builder
-		                                   newClassNamed:
-		                                   #DoublePrecisionType
-		                                   comment:
-		                                   'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
+		                       newClassNamed: #DoublePrecisionType
+		                       comment:
+		                       'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
 
 	integerType := builder
-		                           newClassNamed: #IntegerType
-		                           comment:
-			                           'I represent Fortran Integer statement. The integer data type, INTEGER, holds a signed integer.
+		               newClassNamed: #IntegerType
+		               comment:
+			               'I represent Fortran Integer statement. The integer data type, INTEGER, holds a signed integer.
 The default size for INTEGER with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be
 changed by compiling with certain special options.'.
 
 	logicalType := builder
-		                           newClassNamed: #LogicalType
-		                           comment:
-		                           'I represent Fortran Logical statement. The logical data type, LOGICAL, holds a logical value .TRUE. or .FALSE. The value 0 represents .FALSE.; any other value represents .TRUE.The usual default size for an LOGICAL item with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.'.
+		               newClassNamed: #LogicalType
+		               comment:
+		               'I represent Fortran Logical statement. The logical data type, LOGICAL, holds a logical value .TRUE. or .FALSE. The value 0 represents .FALSE.; any other value represents .TRUE.The usual default size for an LOGICAL item with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.'.
 
 	realType := builder
-		                        newClassNamed: #RealType
-		                        comment:
-		                        'I represent Fortran Real statement. A real datum is an approximation of a real number. The real data type, REAL, which usually has the synonym, REAL*4, holds one real datum.The usual default size for a REAL item with no size specified is 4 bytes, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.A REAL element has a sign bit, an 8-bit exponent, and a 23-bit fraction. These REAL elements in f77 conform to the IEEE standard.'
-	
+		            newClassNamed: #RealType
+		            comment:
+		            'I represent Fortran Real statement. A real datum is an approximation of a real number. The real data type, REAL, which usually has the synonym, REAL*4, holds one real datum.The usual default size for a REAL item with no size specified is 4 bytes, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.A REAL element has a sign bit, an 8-bit exponent, and a 23-bit fraction. These REAL elements in f77 conform to the IEEE standard.'
+]
 
+{ #category : #definition }
+FASTFortranGenerator >> defineFamixClasses [
+	"FAMIX-level classes (might be removed later)"
+
+	programUnit := builder
+		               newClassNamed: #ProgramUnit
+		               comment:
+		               'A fortran program unit is a sequence of statements, terminated by an END statement. Every program unit is either a main program or a subprogram. If a program is to be executable, it must have a main program'.
+
+	comment := builder
+		           newClassNamed: #Comment
+		           comment: 'A fortran comment'.
+
+
+	subprogram := builder
+		              newClassNamed: #Subprogram
+		              comment:
+		              'I represent a fortran subprogram: procedure or block data'.
+
+	mainprogram := builder
+		               newClassNamed: #ProgramMain
+		               comment:
+		               'The PROGRAM statement identifies the program unit as a main program. program. For the loader, the main program is always named MAIN. The PROGRAM statement serves only the person who reads the program'.
+
+
+	procedure := builder
+		             newClassNamed: #Procedure
+		             comment:
+		             'I represent a fortran subroutine or a function'.
+
+	function := builder
+		            newClassNamed: #Function
+		            comment: 'I represent a Fortran Function'.
+
+	subroutine := builder
+		              newClassNamed: #Subroutine
+		              comment:
+		              'The SUBROUTINE statement identifies a subprogram, a named program unit as a subroutine, and specifies arguments for it'.
+
+	blockData := builder
+		             newClassNamed: #BlockData
+		             comment:
+		             'The BLOCK DATA statement identifies a subprogram that initializes variables and arrays in labeled common blocks.'.
+
+	scopableEntity := builder
+		                  newClassNamed: #ScopableEntity
+		                  comment:
+		                  'a Fortran Scopable Entity (syntetic entity, not presented in the syntax)'
 ]
 
 { #category : #definition }
@@ -399,6 +404,7 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"other entities"
 	comment --|> scopableEntity.
+	statement --|> scopableEntity.
 	variableDeclaration --|> scopableEntity.
 
 	"STATEMENTS"
@@ -451,6 +457,7 @@ FASTFortranGenerator >> defineHierarchy [
 	pragmaStatement --|> statement.
 	printStatement --|> statement.
 	readStatement --|> statement.
+	returnStatement --|> statement.
 	rewindStatement --|> statement.
 	saveStatement --|> statement.
 	staticStatement --|> statement.
@@ -464,6 +471,7 @@ FASTFortranGenerator >> defineHierarchy [
 	
 	"DATA"
 	expression --|> scopableEntity.
+	variableExpression  --|> expression.
 	arithmeticExpression --|> expression.
 	characterExpression --|> expression.
 	logicalExpression --|> expression.
@@ -476,6 +484,7 @@ FASTFortranGenerator >> defineHierarchy [
 	record --|> expression.
 	recordField --|> record.
 	structure --|> expression.
+	literal  --|> expression. "TODO: Not sure if this is correct"
 	
 	arithmeticConstant --|> literal.
 	complexConstant --|> arithmeticConstant.
@@ -483,6 +492,7 @@ FASTFortranGenerator >> defineHierarchy [
 	doublePrecisionConstant --|> arithmeticConstant.
 	integerConstant --|> arithmeticConstant.
 	realConstant  --|> arithmeticConstant.
+	characterLiteral --|> literal.
 	asterisk --|> characterLiteral.
 	ampersand --|> characterLiteral. 
 	
@@ -499,19 +509,19 @@ FASTFortranGenerator >> defineHierarchy [
 	"TRAITS"
 	subroutine --|> tWithParameters.
 	"TODO: an asterisk, or an ampersand can be a subroutine parameter as well"
-	asterisk --|> tParameter. 
-	array --|> tParameter.
-	record --|> tParameter.
-	procedure --|> tParameter.
+	asterisk --|> tAssigneable. 
+	array --|> tAssigneable.
+	record --|> tAssigneable.
+	procedure --|> tAssigneable.
 	"TODO: check if a function and a subroutine has the same set of parameters and join the definiton to procedure --|> tWithParameters in this case."
 	function --|> tWithParameters.
 	  
 	
 	functionStatement --|> tWithArguments. 
 	callStatement --|> tWithArguments.
-	callStatement --|> tArgument. "not sure if this is right"
-	expression --|> tArgument. 
-	subroutine --|> tArgument.
+	callStatement --|> tAssigneable.
+	expression --|> tAssigneable. 
+	subroutine --|> tAssigneable.
 	"TODO: also as an argument may serve 
 		- an intrinsic function permitted to be passed as an argument
 		- an external function name
@@ -697,6 +707,11 @@ FASTFortranGenerator >> defineRelations [
 FASTFortranGenerator >> defineStatements [
 
 	"A statement consists of zero or more key words, symbolic names, literal constants, statement labels, operators, and special characters."
+	
+	statement := builder
+		             newClassNamed: #Statement
+		             comment:
+		             'a Fortran Statement'.
 
 	acceptStatement := builder
 		                   newClassNamed: #AcceptStatement
@@ -875,11 +890,12 @@ FASTFortranGenerator >> defineStatements [
 	readStatement := builder
 		                 newClassNamed: #ReadStatement
 		                 comment: 'I represent Fortran Read statement'.
-	"defined globally"
-	"statementReturn := builder
-		                          newClassNamed: #StatementReturn
-		                          comment:
-		                          'I represent Fortran Return statement'."
+	
+	returnStatement := builder
+		             newClassNamed: #ReturnStatement
+		             comment:
+		             'a Fortran Return Statement'.
+		
 	rewindStatement := builder
 		                   newClassNamed: #RewindStatement
 		                   comment: 'I represent Fortran Rewind statement'.
@@ -930,5 +946,6 @@ FASTFortranGenerator >> defineTraits [
 	tWithAssigneable := builder newTraitNamed: #TWithAssigneable comment: 'I have an assigneable'.
 	
 	tBinaryExpression  := builder newTraitNamed: #TBinaryExpression comment: 'I represent a binary expression'.
+	
 	
 ]
