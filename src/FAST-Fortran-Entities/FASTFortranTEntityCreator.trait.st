@@ -31,20 +31,6 @@ FASTFortranTEntityCreator >> newAmpersand [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArithmeticLiteral [
-
-	<generated>
-	^ self add: FASTFortranArithmeticLiteral new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArray [
-
-	<generated>
-	^ self add: FASTFortranArray new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newArrayDimensionDeclarator [
 
 	<generated>
@@ -56,13 +42,6 @@ FASTFortranTEntityCreator >> newArrayVariable [
 
 	<generated>
 	^ self add: FASTFortranArrayVariable new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newAssignStatement [
-
-	<generated>
-	^ self add: FASTFortranAssignStatement new
 ]
 
 { #category : #'entity creation' }
@@ -108,13 +87,6 @@ FASTFortranTEntityCreator >> newBlockData [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newBooleanLiteral [
-
-	<generated>
-	^ self add: FASTFortranBooleanLiteral new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newByteType [
 
 	<generated>
@@ -126,13 +98,6 @@ FASTFortranTEntityCreator >> newCallStatement [
 
 	<generated>
 	^ self add: FASTFortranCallStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newCharacterLiteral [
-
-	<generated>
-	^ self add: FASTFortranCharacterLiteral new
 ]
 
 { #category : #'entity creation' }
@@ -297,13 +262,6 @@ FASTFortranTEntityCreator >> newExitStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newExpression [
-
-	<generated>
-	^ self add: FASTFortranExpression new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newExternalStatement [
 
 	<generated>
@@ -427,13 +385,6 @@ FASTFortranTEntityCreator >> newIntrinsicStatement [
 
 	<generated>
 	^ self add: FASTFortranIntrinsicStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newLiteral [
-
-	<generated>
-	^ self add: FASTFortranLiteral new
 ]
 
 { #category : #'entity creation' }
@@ -570,13 +521,6 @@ FASTFortranTEntityCreator >> newRecord [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newRecordField [
-
-	<generated>
-	^ self add: FASTFortranRecordField new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newReturnStatement [
 
 	<generated>
@@ -602,20 +546,6 @@ FASTFortranTEntityCreator >> newScalarVariable [
 
 	<generated>
 	^ self add: FASTFortranScalarVariable new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newScopableEntity [
-
-	<generated>
-	^ self add: FASTFortranScopableEntity new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newStatement [
-
-	<generated>
-	^ self add: FASTFortranStatement new
 ]
 
 { #category : #'entity creation' }

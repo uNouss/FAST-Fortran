@@ -4,9 +4,10 @@ A fortran comment
 Class {
 	#name : #FASTFortranComment,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTEntity',
+	#classTraits : 'FASTFortranTEntity classTrait',
 	#instVars : [
-		'#content => FMProperty',
-		'#parentProgramFile => FMOne type: #FASTFortranProgramFile opposite: #comment'
+		'#content => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -33,28 +34,4 @@ FASTFortranComment >> content [
 FASTFortranComment >> content: anObject [
 	<generated>
 	content := anObject
-]
-
-{ #category : #accessing }
-FASTFortranComment >> parentProgramFile [
-	"Relation named: #parentProgramFile type: #FASTFortranProgramFile opposite: #comment"
-
-	<generated>
-	<FMComment: 'Parent program file'>
-	<container>
-	^ parentProgramFile
-]
-
-{ #category : #accessing }
-FASTFortranComment >> parentProgramFile: anObject [
-
-	<generated>
-	parentProgramFile := anObject
-]
-
-{ #category : #navigation }
-FASTFortranComment >> parentProgramFileGroup [
-	<generated>
-	<navigation: 'ParentProgramFile'>
-	^ MooseSpecializedGroup with: self parentProgramFile
 ]

@@ -3,14 +3,16 @@ I represent Fortran Substring
 "
 Class {
 	#name : #FASTFortranSubstring,
-	#superclass : #FASTFortranExpression,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression',
+	#classTraits : 'FASTFortranTExpression classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranSubstring class >> annotation [
 
-	<FMClass: #Substring super: #FASTFortranExpression>
+	<FMClass: #Substring super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

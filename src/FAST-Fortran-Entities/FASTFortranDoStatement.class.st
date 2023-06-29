@@ -3,10 +3,12 @@ I represent Fortran Do statement
 "
 Class {
 	#name : #FASTFortranDoStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
 		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
-		'#statements => FMMany type: #FASTFortranScopableEntity opposite: #parentDoStatement'
+		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentDoStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -14,16 +16,10 @@ Class {
 { #category : #meta }
 FASTFortranDoStatement class >> annotation [
 
-	<FMClass: #DoStatement super: #FASTFortranStatement>
+	<FMClass: #DoStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranDoStatement >> addStatement: anObject [
-	<generated>
-	^ self statements add: anObject
 ]
 
 { #category : #accessing }
@@ -50,25 +46,24 @@ FASTFortranDoStatement >> loopControlGroup [
 ]
 
 { #category : #accessing }
-FASTFortranDoStatement >> statements [
-	"Relation named: #statements type: #FASTFortranScopableEntity opposite: #parentDoStatement"
+FASTFortranDoStatement >> statementBlock [
+	"Relation named: #statementBlock type: #FASTFortranTStatementBlock opposite: #parentDoStatement"
 
 	<generated>
-	<FMComment: 'Statements of the do body '>
-	<derived>
-	^ statements
+	<FMComment: 'Statement block containing statements of the do body '>
+	^ statementBlock
 ]
 
 { #category : #accessing }
-FASTFortranDoStatement >> statements: anObject [
+FASTFortranDoStatement >> statementBlock: anObject [
 
 	<generated>
-	statements value: anObject
+	statementBlock := anObject
 ]
 
 { #category : #navigation }
-FASTFortranDoStatement >> statementsGroup [
+FASTFortranDoStatement >> statementBlockGroup [
 	<generated>
-	<navigation: 'Statements'>
-	^ MooseSpecializedGroup withAll: self statements asSet
+	<navigation: 'StatementBlock'>
+	^ MooseSpecializedGroup with: self statementBlock
 ]

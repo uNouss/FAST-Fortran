@@ -3,14 +3,14 @@ I represent Fortran accept statement
 "
 Class {
 	#name : #FASTFortranAcceptStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranAcceptStatement class >> annotation [
 
-	<FMClass: #AcceptStatement super: #FASTFortranStatement>
+	<FMClass: #AcceptStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

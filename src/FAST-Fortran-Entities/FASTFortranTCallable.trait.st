@@ -1,5 +1,5 @@
 "
-I represent a callable entity (function or function statement
+I represent a callable entity (function or function statement)
 "
 Trait {
 	#name : #FASTFortranTCallable,

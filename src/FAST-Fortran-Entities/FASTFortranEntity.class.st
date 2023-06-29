@@ -32,3 +32,10 @@ FASTFortranEntity class >> metamodel [
 	<generated>
 	^ FASTFortranModel metamodel
 ]
+
+{ #category : #testing }
+FASTFortranEntity >> isStatement [
+
+	<generated>
+	^ false
+]

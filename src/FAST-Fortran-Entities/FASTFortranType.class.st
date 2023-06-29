@@ -3,9 +3,10 @@ I represent Fortran Type statement
 "
 Class {
 	#name : #FASTFortranType,
-	#superclass : #FASTFortranScopableEntity,
+	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#size => FMProperty'
+		'#size => FMProperty',
+		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #type'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -13,10 +14,35 @@ Class {
 { #category : #meta }
 FASTFortranType class >> annotation [
 
-	<FMClass: #Type super: #FASTFortranScopableEntity>
+	<FMClass: #Type super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentDeclaration [
+	"Relation named: #parentDeclaration type: #FASTFortranDeclarationStatement opposite: #type"
+
+	<generated>
+	<FMComment: 'Parent declaration'>
+	<container>
+	<derived>
+	^ parentDeclaration
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentDeclaration: anObject [
+
+	<generated>
+	parentDeclaration := anObject
+]
+
+{ #category : #navigation }
+FASTFortranType >> parentDeclarationGroup [
+	<generated>
+	<navigation: 'ParentDeclaration'>
+	^ MooseSpecializedGroup with: self parentDeclaration
 ]
 
 { #category : #accessing }

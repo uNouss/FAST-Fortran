@@ -3,11 +3,11 @@ I represent Fortran assignment made without ASSIGN statement
 "
 Class {
 	#name : #FASTFortranAssignmentStatement,
-	#superclass : #FASTFortranStatement,
-	#traits : 'FASTFortranTWithAssigneable',
-	#classTraits : 'FASTFortranTWithAssigneable classTrait',
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTAssignment + FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTAssigneable opposite: #assignementExpressionOwner'
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranAssignmentStatement class >> annotation [
 
-	<FMClass: #AssignmentStatement super: #FASTFortranStatement>
+	<FMClass: #AssignmentStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -23,7 +23,7 @@ FASTFortranAssignmentStatement class >> annotation [
 
 { #category : #accessing }
 FASTFortranAssignmentStatement >> expression [
-	"Relation named: #expression type: #FASTFortranTAssigneable opposite: #assignementExpressionOwner"
+	"Relation named: #expression type: #FASTFortranTExpression opposite: #assignementExpressionOwner"
 
 	<generated>
 	<FMComment: 'Expression thats being assigned upon declaration to the var'>

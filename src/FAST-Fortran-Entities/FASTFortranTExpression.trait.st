@@ -7,7 +7,10 @@ Trait {
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#argumentOwner => FMOne type: #FASTFortranTWithArguments opposite: #arguments',
-		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression'
+		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
+		'#parentExpression => FMOne type: #FASTFortranBinaryExpression opposite: #left',
+		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #condition',
+		'#assignementExpressionOwner => FMOne type: #FASTFortranAssignmentStatement opposite: #expression'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',
@@ -65,6 +68,31 @@ FASTFortranTExpression >> assignedIn: anObject [
 ]
 
 { #category : #accessing }
+FASTFortranTExpression >> assignementExpressionOwner [
+	"Relation named: #assignementExpressionOwner type: #FASTFortranAssignmentStatement opposite: #expression"
+
+	<generated>
+	<FMComment: 'The AssignementExpression owner (if possible)'>
+	<container>
+	<derived>
+	^ assignementExpressionOwner
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> assignementExpressionOwner: anObject [
+
+	<generated>
+	assignementExpressionOwner := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> assignementExpressionOwnerGroup [
+	<generated>
+	<navigation: 'AssignementExpressionOwner'>
+	^ MooseSpecializedGroup with: self assignementExpressionOwner
+]
+
+{ #category : #accessing }
 FASTFortranTExpression >> expressionStatementOwner [
 	"Relation named: #expressionStatementOwner type: #FASTFortranTExpressionStatement opposite: #expression"
 
@@ -87,6 +115,56 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 	<generated>
 	<navigation: 'ExpressionStatementOwner'>
 	^ MooseSpecializedGroup with: self expressionStatementOwner
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpression [
+	"Relation named: #parentExpression type: #FASTFortranBinaryExpression opposite: #left"
+
+	<generated>
+	<FMComment: 'Parent expression (if possible)'>
+	<container>
+	<derived>
+	^ parentExpression
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpression: anObject [
+
+	<generated>
+	parentExpression := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentExpressionGroup [
+	<generated>
+	<navigation: 'ParentExpression'>
+	^ MooseSpecializedGroup with: self parentExpression
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentIfBlock [
+	"Relation named: #parentIfBlock type: #FASTFortranIfBlockStatement opposite: #condition"
+
+	<generated>
+	<FMComment: 'Parent if block'>
+	<container>
+	<derived>
+	^ parentIfBlock
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentIfBlock: anObject [
+
+	<generated>
+	parentIfBlock := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentIfBlockGroup [
+	<generated>
+	<navigation: 'ParentIfBlock'>
+	^ MooseSpecializedGroup with: self parentIfBlock
 ]
 
 { #category : #accessing }

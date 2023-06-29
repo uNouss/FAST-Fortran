@@ -3,9 +3,9 @@ I represent a call to a function (or function statement)
 "
 Class {
 	#name : #FASTFortranFunctionCall,
-	#superclass : #FASTFortranExpression,
-	#traits : 'FASTFortranTAssigneable + FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTAssigneable classTrait + FASTFortranTWithArguments classTrait',
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression + FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTWithArguments classTrait',
 	#instVars : [
 		'#function => FMOne type: #FASTFortranTCallable opposite: #parentFunctionCall'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranFunctionCall class >> annotation [
 
-	<FMClass: #FunctionCall super: #FASTFortranExpression>
+	<FMClass: #FunctionCall super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

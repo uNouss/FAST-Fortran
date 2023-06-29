@@ -3,10 +3,13 @@ a Fortran Binary Expression (arithmetic, logical)
 "
 Class {
 	#name : #FASTFortranBinaryExpression,
-	#superclass : #FASTFortranExpression,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression + FASTFortranTFortranBinaryExpression',
+	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTFortranBinaryExpression classTrait',
 	#instVars : [
-		'#left => FMOne type: #FASTFortranTAssigneable opposite: #parentExpression',
-		'#right => FMOne type: #FASTFortranTAssigneable opposite: #parentExpression'
+		'#operator => FMProperty',
+		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
+		'#right => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -14,7 +17,7 @@ Class {
 { #category : #meta }
 FASTFortranBinaryExpression class >> annotation [
 
-	<FMClass: #BinaryExpression super: #FASTFortranExpression>
+	<FMClass: #BinaryExpression super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -22,7 +25,7 @@ FASTFortranBinaryExpression class >> annotation [
 
 { #category : #accessing }
 FASTFortranBinaryExpression >> left [
-	"Relation named: #left type: #FASTFortranTAssigneable opposite: #parentExpression"
+	"Relation named: #left type: #FASTFortranTExpression opposite: #parentExpression"
 
 	<generated>
 	<FMComment: 'left part of a binary expression'>
@@ -44,8 +47,23 @@ FASTFortranBinaryExpression >> leftGroup [
 ]
 
 { #category : #accessing }
+FASTFortranBinaryExpression >> operator [
+
+	<FMProperty: #operator type: #String>
+	<generated>
+	<FMComment: 'Binary expression operator'>
+	^ operator
+]
+
+{ #category : #accessing }
+FASTFortranBinaryExpression >> operator: anObject [
+	<generated>
+	operator := anObject
+]
+
+{ #category : #accessing }
 FASTFortranBinaryExpression >> right [
-	"Relation named: #right type: #FASTFortranTAssigneable opposite: #parentExpression"
+	"Relation named: #right type: #FASTFortranTExpression opposite: #parentExpression"
 
 	<generated>
 	<FMComment: 'left part of the expression'>

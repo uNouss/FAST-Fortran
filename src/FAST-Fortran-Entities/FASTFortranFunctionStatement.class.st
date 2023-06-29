@@ -3,12 +3,12 @@ I represent a function statement - a function-like declaration, made in a single
 "
 Class {
 	#name : #FASTFortranFunctionStatement,
-	#superclass : #FASTFortranStatement,
-	#traits : 'FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTWithArguments classTrait',
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTWithArguments + FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
 		'#name => FMProperty',
-		'#expression => FMOne type: #FASTFortranTAssigneable opposite: #assignementExpressionOwner'
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -16,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranFunctionStatement class >> annotation [
 
-	<FMClass: #FunctionStatement super: #FASTFortranStatement>
+	<FMClass: #FunctionStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -24,7 +24,7 @@ FASTFortranFunctionStatement class >> annotation [
 
 { #category : #accessing }
 FASTFortranFunctionStatement >> expression [
-	"Relation named: #expression type: #FASTFortranTAssigneable opposite: #assignementExpressionOwner"
+	"Relation named: #expression type: #FASTFortranTExpression opposite: #assignementExpressionOwner"
 
 	<generated>
 	<FMComment: 'Expression thats being assigned upon declaration to the var'>

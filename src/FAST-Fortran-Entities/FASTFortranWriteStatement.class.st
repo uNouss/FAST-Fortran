@@ -3,10 +3,11 @@ I represent Fortran Write statement
 "
 Class {
 	#name : #FASTFortranWriteStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
-		'#format => FMProperty',
-		'#iolist => FMMany type: #FASTFortranVariable opposite: #parentStatement'
+		'#format => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -14,16 +15,10 @@ Class {
 { #category : #meta }
 FASTFortranWriteStatement class >> annotation [
 
-	<FMClass: #WriteStatement super: #FASTFortranStatement>
+	<FMClass: #WriteStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranWriteStatement >> addIolist: anObject [
-	<generated>
-	^ self iolist add: anObject
 ]
 
 { #category : #accessing }
@@ -39,28 +34,4 @@ FASTFortranWriteStatement >> format [
 FASTFortranWriteStatement >> format: anObject [
 	<generated>
 	format := anObject
-]
-
-{ #category : #accessing }
-FASTFortranWriteStatement >> iolist [
-	"Relation named: #iolist type: #FASTFortranVariable opposite: #parentStatement"
-
-	<generated>
-	<FMComment: 'List of variables, substrings, arrays, records and more. see documentation for more details'>
-	<derived>
-	^ iolist
-]
-
-{ #category : #accessing }
-FASTFortranWriteStatement >> iolist: anObject [
-
-	<generated>
-	iolist value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranWriteStatement >> iolistGroup [
-	<generated>
-	<navigation: 'Iolist'>
-	^ MooseSpecializedGroup withAll: self iolist asSet
 ]

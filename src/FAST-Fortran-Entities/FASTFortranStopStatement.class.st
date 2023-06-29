@@ -3,7 +3,9 @@ I represent Fortran Stop statement
 "
 Class {
 	#name : #FASTFortranStopStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
 		'#displayArgument => FMProperty'
 	],
@@ -13,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranStopStatement class >> annotation [
 
-	<FMClass: #StopStatement super: #FASTFortranStatement>
+	<FMClass: #StopStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

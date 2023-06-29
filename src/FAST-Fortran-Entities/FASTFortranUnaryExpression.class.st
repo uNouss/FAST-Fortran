@@ -3,9 +3,12 @@ a Fortran Unary Expression (arithmetic, logical, character)
 "
 Class {
 	#name : #FASTFortranUnaryExpression,
-	#superclass : #FASTFortranExpression,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression + FASTFortranTFortranUnaryExpression',
+	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTFortranUnaryExpression classTrait',
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTAssigneable opposite: #parentExpression'
+		'#operator => FMProperty',
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -13,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranUnaryExpression class >> annotation [
 
-	<FMClass: #UnaryExpression super: #FASTFortranExpression>
+	<FMClass: #UnaryExpression super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -21,7 +24,7 @@ FASTFortranUnaryExpression class >> annotation [
 
 { #category : #accessing }
 FASTFortranUnaryExpression >> expression [
-	"Relation named: #expression type: #FASTFortranTAssigneable opposite: #parentExpression"
+	"Relation named: #expression type: #FASTFortranTExpression opposite: #parentExpression"
 
 	<generated>
 	<FMComment: 'expression'>
@@ -40,4 +43,19 @@ FASTFortranUnaryExpression >> expressionGroup [
 	<generated>
 	<navigation: 'Expression'>
 	^ MooseSpecializedGroup with: self expression
+]
+
+{ #category : #accessing }
+FASTFortranUnaryExpression >> operator [
+
+	<FMProperty: #operator type: #String>
+	<generated>
+	<FMComment: 'Unary expression operator'>
+	^ operator
+]
+
+{ #category : #accessing }
+FASTFortranUnaryExpression >> operator: anObject [
+	<generated>
+	operator := anObject
 ]

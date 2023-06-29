@@ -3,14 +3,16 @@ I represent Fortran Arithmetic Double Precision Literal (Constant) statement
 "
 Class {
 	#name : #FASTFortranDoublePrecisionLiteral,
-	#superclass : #FASTFortranArithmeticLiteral,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTNumericalLiteral',
+	#classTraits : 'FASTFortranTNumericalLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranDoublePrecisionLiteral class >> annotation [
 
-	<FMClass: #DoublePrecisionLiteral super: #FASTFortranArithmeticLiteral>
+	<FMClass: #DoublePrecisionLiteral super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

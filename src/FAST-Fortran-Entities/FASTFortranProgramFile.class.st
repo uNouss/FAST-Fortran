@@ -4,8 +4,9 @@ An entity that can contain fortran program units and comments
 Class {
 	#name : #FASTFortranProgramFile,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTWithComments',
+	#classTraits : 'FASTFortranTWithComments classTrait',
 	#instVars : [
-		'#comment => FMMany type: #FASTFortranComment opposite: #parentProgramFile',
 		'#programUnit => FMMany type: #FASTFortranProgramUnit opposite: #parentProgramFile'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -21,39 +22,9 @@ FASTFortranProgramFile class >> annotation [
 ]
 
 { #category : #adding }
-FASTFortranProgramFile >> addComment: anObject [
-	<generated>
-	^ self comment add: anObject
-]
-
-{ #category : #adding }
 FASTFortranProgramFile >> addProgramUnit: anObject [
 	<generated>
 	^ self programUnit add: anObject
-]
-
-{ #category : #accessing }
-FASTFortranProgramFile >> comment [
-	"Relation named: #comment type: #FASTFortranComment opposite: #parentProgramFile"
-
-	<generated>
-	<FMComment: 'Comments in a program file'>
-	<derived>
-	^ comment
-]
-
-{ #category : #accessing }
-FASTFortranProgramFile >> comment: anObject [
-
-	<generated>
-	comment value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranProgramFile >> commentGroup [
-	<generated>
-	<navigation: 'Comment'>
-	^ MooseSpecializedGroup withAll: self comment asSet
 ]
 
 { #category : #accessing }

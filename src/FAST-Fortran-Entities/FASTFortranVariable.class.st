@@ -3,11 +3,12 @@ an abstract Fortran Variable, could be an array or a scalar
 "
 Class {
 	#name : #FASTFortranVariable,
-	#superclass : #FASTFortranExpression,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression + FASTFortranTVariableEntity',
+	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
 		'#name => FMProperty',
-		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators',
-		'#parentStatement => FMOne type: #FASTFortranWriteStatement opposite: #iolist'
+		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -15,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranVariable class >> annotation [
 
-	<FMClass: #Variable super: #FASTFortranExpression>
+	<FMClass: #Variable super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -58,28 +59,4 @@ FASTFortranVariable >> parentDeclarationGroup [
 	<generated>
 	<navigation: 'ParentDeclaration'>
 	^ MooseSpecializedGroup with: self parentDeclaration
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentStatement [
-	"Relation named: #parentStatement type: #FASTFortranWriteStatement opposite: #iolist"
-
-	<generated>
-	<FMComment: 'Parent write or print statement'>
-	<container>
-	^ parentStatement
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentStatement: anObject [
-
-	<generated>
-	parentStatement := anObject
-]
-
-{ #category : #navigation }
-FASTFortranVariable >> parentStatementGroup [
-	<generated>
-	<navigation: 'ParentStatement'>
-	^ MooseSpecializedGroup with: self parentStatement
 ]

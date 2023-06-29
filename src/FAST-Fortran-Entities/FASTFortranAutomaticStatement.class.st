@@ -3,14 +3,16 @@ I represent Fortran Automatic statement
 "
 Class {
 	#name : #FASTFortranAutomaticStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranAutomaticStatement class >> annotation [
 
-	<FMClass: #AutomaticStatement super: #FASTFortranStatement>
+	<FMClass: #AutomaticStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
