@@ -3,14 +3,16 @@ I represent Fortran NameList statement
 "
 Class {
 	#name : #FASTFortranNameListStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranNameListStatement class >> annotation [
 
-	<FMClass: #NameListStatement super: #FASTFortranStatement>
+	<FMClass: #NameListStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

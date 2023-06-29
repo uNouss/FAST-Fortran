@@ -4,9 +4,10 @@ A fortran program unit is a sequence of statements, terminated by an END stateme
 Class {
 	#name : #FASTFortranProgramUnit,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTEntity + FASTFortranTNamedBehaviouralEntity',
+	#classTraits : 'FASTFortranTEntity classTrait + FASTFortranTNamedBehaviouralEntity classTrait',
 	#instVars : [
-		'#name => FMProperty',
-		'#statements => FMMany type: #FASTFortranScopableEntity opposite: #parentProgramUnit'
+		'#parentProgramFile => FMOne type: #FASTFortranProgramFile opposite: #programUnit'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -20,47 +21,26 @@ FASTFortranProgramUnit class >> annotation [
 	^ self
 ]
 
-{ #category : #adding }
-FASTFortranProgramUnit >> addStatement: anObject [
+{ #category : #accessing }
+FASTFortranProgramUnit >> parentProgramFile [
+	"Relation named: #parentProgramFile type: #FASTFortranProgramFile opposite: #programUnit"
+
 	<generated>
-	^ self statements add: anObject
+	<FMComment: 'Parent program file'>
+	<container>
+	^ parentProgramFile
 ]
 
 { #category : #accessing }
-FASTFortranProgramUnit >> name [
-
-	<FMProperty: #name type: #String>
-	<generated>
-	<FMComment: 'Symbolic name of a program unit'>
-	^ name
-]
-
-{ #category : #accessing }
-FASTFortranProgramUnit >> name: anObject [
-	<generated>
-	name := anObject
-]
-
-{ #category : #accessing }
-FASTFortranProgramUnit >> statements [
-	"Relation named: #statements type: #FASTFortranScopableEntity opposite: #parentProgramUnit"
+FASTFortranProgramUnit >> parentProgramFile: anObject [
 
 	<generated>
-	<FMComment: 'Statements of the program unit '>
-	<derived>
-	^ statements
-]
-
-{ #category : #accessing }
-FASTFortranProgramUnit >> statements: anObject [
-
-	<generated>
-	statements value: anObject
+	parentProgramFile := anObject
 ]
 
 { #category : #navigation }
-FASTFortranProgramUnit >> statementsGroup [
+FASTFortranProgramUnit >> parentProgramFileGroup [
 	<generated>
-	<navigation: 'Statements'>
-	^ MooseSpecializedGroup withAll: self statements asSet
+	<navigation: 'ParentProgramFile'>
+	^ MooseSpecializedGroup with: self parentProgramFile
 ]

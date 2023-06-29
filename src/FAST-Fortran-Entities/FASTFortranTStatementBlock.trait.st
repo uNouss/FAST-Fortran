@@ -5,7 +5,9 @@ Trait {
 	#name : #FASTFortranTStatementBlock,
 	#instVars : [
 		'#fastBehaviouralParent => FMOne type: #FASTFortranTBehaviouralEntity opposite: #statementBlock',
-		'#statements => FMMany type: #FASTFortranTStatement opposite: #statementContainer'
+		'#statements => FMMany type: #FASTFortranTStatement opposite: #statementContainer',
+		'#parentDoStatement => FMOne type: #FASTFortranDoStatement opposite: #statementBlock',
+		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #thenStatementBlock'
 	],
 	#traits : 'FASTFortranTStatement',
 	#classTraits : 'FASTFortranTStatement classTrait',
@@ -50,6 +52,56 @@ FASTFortranTStatementBlock >> fastBehaviouralParentGroup [
 	<generated>
 	<navigation: 'FastBehaviouralParent'>
 	^ MooseSpecializedGroup with: self fastBehaviouralParent
+]
+
+{ #category : #accessing }
+FASTFortranTStatementBlock >> parentDoStatement [
+	"Relation named: #parentDoStatement type: #FASTFortranDoStatement opposite: #statementBlock"
+
+	<generated>
+	<FMComment: 'Parent do statement'>
+	<container>
+	<derived>
+	^ parentDoStatement
+]
+
+{ #category : #accessing }
+FASTFortranTStatementBlock >> parentDoStatement: anObject [
+
+	<generated>
+	parentDoStatement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTStatementBlock >> parentDoStatementGroup [
+	<generated>
+	<navigation: 'ParentDoStatement'>
+	^ MooseSpecializedGroup with: self parentDoStatement
+]
+
+{ #category : #accessing }
+FASTFortranTStatementBlock >> parentIfBlock [
+	"Relation named: #parentIfBlock type: #FASTFortranIfBlockStatement opposite: #thenStatementBlock"
+
+	<generated>
+	<FMComment: 'Parent if block'>
+	<container>
+	<derived>
+	^ parentIfBlock
+]
+
+{ #category : #accessing }
+FASTFortranTStatementBlock >> parentIfBlock: anObject [
+
+	<generated>
+	parentIfBlock := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTStatementBlock >> parentIfBlockGroup [
+	<generated>
+	<navigation: 'ParentIfBlock'>
+	^ MooseSpecializedGroup with: self parentIfBlock
 ]
 
 { #category : #accessing }

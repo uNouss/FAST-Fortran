@@ -3,9 +3,9 @@ I represent Fortran Write statement
 "
 Class {
 	#name : #FASTFortranWriteStatement,
-	#superclass : #FASTFortranStatement,
-	#traits : 'FASTFortranTWithIOList',
-	#classTraits : 'FASTFortranTWithIOList classTrait',
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
 		'#format => FMProperty'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranWriteStatement class >> annotation [
 
-	<FMClass: #WriteStatement super: #FASTFortranStatement>
+	<FMClass: #WriteStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

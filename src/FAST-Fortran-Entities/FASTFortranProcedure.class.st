@@ -4,8 +4,6 @@ I represent a fortran subroutine or a function
 Class {
 	#name : #FASTFortranProcedure,
 	#superclass : #FASTFortranSubprogram,
-	#traits : 'FASTFortranTAssigneable',
-	#classTraits : 'FASTFortranTAssigneable classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

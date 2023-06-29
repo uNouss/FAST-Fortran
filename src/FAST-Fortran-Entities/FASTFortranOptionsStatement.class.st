@@ -3,14 +3,16 @@ I represent Fortran Options statement
 "
 Class {
 	#name : #FASTFortranOptionsStatement,
-	#superclass : #FASTFortranStatement,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranOptionsStatement class >> annotation [
 
-	<FMClass: #OptionsStatement super: #FASTFortranStatement>
+	<FMClass: #OptionsStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

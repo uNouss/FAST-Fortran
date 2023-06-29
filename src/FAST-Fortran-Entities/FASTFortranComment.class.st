@@ -3,7 +3,9 @@ A fortran comment
 "
 Class {
 	#name : #FASTFortranComment,
-	#superclass : #FASTFortranScopableEntity,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTEntity',
+	#classTraits : 'FASTFortranTEntity classTrait',
 	#instVars : [
 		'#content => FMProperty'
 	],
@@ -13,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranComment class >> annotation [
 
-	<FMClass: #Comment super: #FASTFortranScopableEntity>
+	<FMClass: #Comment super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

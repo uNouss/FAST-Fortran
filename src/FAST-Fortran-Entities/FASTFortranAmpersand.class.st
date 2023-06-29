@@ -3,14 +3,16 @@ I represent an Ampersand Character Literal (Constant) that is often used in para
 "
 Class {
 	#name : #FASTFortranAmpersand,
-	#superclass : #FASTFortranCharacterLiteral,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTCharacterLiteral',
+	#classTraits : 'FASTFortranTCharacterLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranAmpersand class >> annotation [
 
-	<FMClass: #Ampersand super: #FASTFortranCharacterLiteral>
+	<FMClass: #Ampersand super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

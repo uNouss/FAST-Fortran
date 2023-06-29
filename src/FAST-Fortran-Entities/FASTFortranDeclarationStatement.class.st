@@ -3,11 +3,12 @@ I represent a declaration statement for one or many variables
 "
 Class {
 	#name : #FASTFortranDeclarationStatement,
-	#superclass : #FASTFortranScopableEntity,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTtFortranLabelledStatement',
+	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
 	#instVars : [
-		'#attributes => FMMany type: #FASTFortranVariableExpression opposite: #parentDeclaration',
-		'#declarators => FMMany type: #FASTFortranVariableExpression opposite: #parentDeclaration',
-		'#type => FMOne type: #FASTFortranVariableExpression opposite: #parentDeclaration'
+		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
+		'#type => FMOne type: #FASTFortranType opposite: #parentDeclaration'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -15,16 +16,10 @@ Class {
 { #category : #meta }
 FASTFortranDeclarationStatement class >> annotation [
 
-	<FMClass: #DeclarationStatement super: #FASTFortranScopableEntity>
+	<FMClass: #DeclarationStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranDeclarationStatement >> addAttribute: anObject [
-	<generated>
-	^ self attributes add: anObject
 ]
 
 { #category : #adding }
@@ -34,32 +29,8 @@ FASTFortranDeclarationStatement >> addDeclarator: anObject [
 ]
 
 { #category : #accessing }
-FASTFortranDeclarationStatement >> attributes [
-	"Relation named: #attributes type: #FASTFortranVariableExpression opposite: #parentDeclaration"
-
-	<generated>
-	<FMComment: 'attributes'>
-	<derived>
-	^ attributes
-]
-
-{ #category : #accessing }
-FASTFortranDeclarationStatement >> attributes: anObject [
-
-	<generated>
-	attributes value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranDeclarationStatement >> attributesGroup [
-	<generated>
-	<navigation: 'Attributes'>
-	^ MooseSpecializedGroup withAll: self attributes asSet
-]
-
-{ #category : #accessing }
 FASTFortranDeclarationStatement >> declarators [
-	"Relation named: #declarators type: #FASTFortranVariableExpression opposite: #parentDeclaration"
+	"Relation named: #declarators type: #FASTFortranVariable opposite: #parentDeclaration"
 
 	<generated>
 	<FMComment: 'declarators'>
@@ -83,7 +54,7 @@ FASTFortranDeclarationStatement >> declaratorsGroup [
 
 { #category : #accessing }
 FASTFortranDeclarationStatement >> type [
-	"Relation named: #type type: #FASTFortranVariableExpression opposite: #parentDeclaration"
+	"Relation named: #type type: #FASTFortranType opposite: #parentDeclaration"
 
 	<generated>
 	<FMComment: 'type'>

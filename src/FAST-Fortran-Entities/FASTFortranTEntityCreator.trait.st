@@ -31,27 +31,6 @@ FASTFortranTEntityCreator >> newAmpersand [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArithmeticExpression [
-
-	<generated>
-	^ self add: FASTFortranArithmeticExpression new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArithmeticLiteral [
-
-	<generated>
-	^ self add: FASTFortranArithmeticLiteral new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArray [
-
-	<generated>
-	^ self add: FASTFortranArray new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newArrayDimensionDeclarator [
 
 	<generated>
@@ -59,10 +38,10 @@ FASTFortranTEntityCreator >> newArrayDimensionDeclarator [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newAssignStatement [
+FASTFortranTEntityCreator >> newArrayVariable [
 
 	<generated>
-	^ self add: FASTFortranAssignStatement new
+	^ self add: FASTFortranArrayVariable new
 ]
 
 { #category : #'entity creation' }
@@ -94,17 +73,17 @@ FASTFortranTEntityCreator >> newBackspaceStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newBinaryExpression [
+
+	<generated>
+	^ self add: FASTFortranBinaryExpression new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newBlockData [
 
 	<generated>
 	^ self add: FASTFortranBlockData new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newBooleanLiteral [
-
-	<generated>
-	^ self add: FASTFortranBooleanLiteral new
 ]
 
 { #category : #'entity creation' }
@@ -119,20 +98,6 @@ FASTFortranTEntityCreator >> newCallStatement [
 
 	<generated>
 	^ self add: FASTFortranCallStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newCharacterExpression [
-
-	<generated>
-	^ self add: FASTFortranCharacterExpression new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newCharacterLiteral [
-
-	<generated>
-	^ self add: FASTFortranCharacterLiteral new
 ]
 
 { #category : #'entity creation' }
@@ -255,13 +220,6 @@ FASTFortranTEntityCreator >> newDoublePrecisionType [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newElseIfStatement [
-
-	<generated>
-	^ self add: FASTFortranElseIfStatement new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newElseStatement [
 
 	<generated>
@@ -276,52 +234,10 @@ FASTFortranTEntityCreator >> newEncodeStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndDoStatement [
-
-	<generated>
-	^ self add: FASTFortranEndDoStatement new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newEndFileStatement [
 
 	<generated>
 	^ self add: FASTFortranEndFileStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndIfStatement [
-
-	<generated>
-	^ self add: FASTFortranEndIfStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndMapStatement [
-
-	<generated>
-	^ self add: FASTFortranEndMapStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndStatement [
-
-	<generated>
-	^ self add: FASTFortranEndStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndStructureStatement [
-
-	<generated>
-	^ self add: FASTFortranEndStructureStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newEndUnionStatement [
-
-	<generated>
-	^ self add: FASTFortranEndUnionStatement new
 ]
 
 { #category : #'entity creation' }
@@ -346,13 +262,6 @@ FASTFortranTEntityCreator >> newExitStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newExpression [
-
-	<generated>
-	^ self add: FASTFortranExpression new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newExternalStatement [
 
 	<generated>
@@ -371,6 +280,13 @@ FASTFortranTEntityCreator >> newFunction [
 
 	<generated>
 	^ self add: FASTFortranFunction new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newFunctionCall [
+
+	<generated>
+	^ self add: FASTFortranFunctionCall new
 ]
 
 { #category : #'entity creation' }
@@ -472,20 +388,6 @@ FASTFortranTEntityCreator >> newIntrinsicStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newLiteral [
-
-	<generated>
-	^ self add: FASTFortranLiteral new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newLogicalExpression [
-
-	<generated>
-	^ self add: FASTFortranLogicalExpression new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newLogicalType [
 
 	<generated>
@@ -570,6 +472,13 @@ FASTFortranTEntityCreator >> newProcedure [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newProgramFile [
+
+	<generated>
+	^ self add: FASTFortranProgramFile new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newProgramMain [
 
 	<generated>
@@ -612,13 +521,6 @@ FASTFortranTEntityCreator >> newRecord [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newRecordField [
-
-	<generated>
-	^ self add: FASTFortranRecordField new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newReturnStatement [
 
 	<generated>
@@ -640,17 +542,10 @@ FASTFortranTEntityCreator >> newSaveStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newScopableEntity [
+FASTFortranTEntityCreator >> newScalarVariable [
 
 	<generated>
-	^ self add: FASTFortranScopableEntity new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newStatement [
-
-	<generated>
-	^ self add: FASTFortranStatement new
+	^ self add: FASTFortranScalarVariable new
 ]
 
 { #category : #'entity creation' }
@@ -703,6 +598,13 @@ FASTFortranTEntityCreator >> newType [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newUnaryExpression [
+
+	<generated>
+	^ self add: FASTFortranUnaryExpression new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newUnionStatement [
 
 	<generated>
@@ -710,10 +612,10 @@ FASTFortranTEntityCreator >> newUnionStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newVariableExpression [
+FASTFortranTEntityCreator >> newVariable [
 
 	<generated>
-	^ self add: FASTFortranVariableExpression new
+	^ self add: FASTFortranVariable new
 ]
 
 { #category : #'entity creation' }

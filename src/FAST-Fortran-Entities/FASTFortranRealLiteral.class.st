@@ -3,14 +3,16 @@ I represent Fortran Arithmetic Real Literal (Constant) statement
 "
 Class {
 	#name : #FASTFortranRealLiteral,
-	#superclass : #FASTFortranArithmeticLiteral,
+	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTNumericalLiteral',
+	#classTraits : 'FASTFortranTNumericalLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranRealLiteral class >> annotation [
 
-	<FMClass: #RealLiteral super: #FASTFortranArithmeticLiteral>
+	<FMClass: #RealLiteral super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
