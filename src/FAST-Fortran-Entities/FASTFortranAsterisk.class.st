@@ -3,7 +3,7 @@ I represent an Asterisk Character Literal (Constant) that is often used as a for
 "
 Class {
 	#name : #FASTFortranAsterisk,
-	#superclass : #FASTFortranCharacterLiteral,
+	#superclass : #FASTFortranArithmeticLiteral,
 	#traits : 'FASTFortranTAssigneable + FASTFortranTFormatIdentifier',
 	#classTraits : 'FASTFortranTAssigneable classTrait + FASTFortranTFormatIdentifier classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -12,7 +12,7 @@ Class {
 { #category : #meta }
 FASTFortranAsterisk class >> annotation [
 
-	<FMClass: #Asterisk super: #FASTFortranCharacterLiteral>
+	<FMClass: #Asterisk super: #FASTFortranArithmeticLiteral>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

@@ -5,9 +5,9 @@ Class {
 	#name : #FASTFortranDeclarationStatement,
 	#superclass : #FASTFortranScopableEntity,
 	#instVars : [
-		'#attributes => FMMany type: #FASTFortranVariableExpression opposite: #parentDeclaration',
-		'#declarators => FMMany type: #FASTFortranVariableExpression opposite: #parentDeclaration',
-		'#type => FMOne type: #FASTFortranVariableExpression opposite: #parentDeclaration'
+		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
+		'#attributes => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
+		'#type => FMOne type: #FASTFortranVariable opposite: #parentDeclaration'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -35,7 +35,7 @@ FASTFortranDeclarationStatement >> addDeclarator: anObject [
 
 { #category : #accessing }
 FASTFortranDeclarationStatement >> attributes [
-	"Relation named: #attributes type: #FASTFortranVariableExpression opposite: #parentDeclaration"
+	"Relation named: #attributes type: #FASTFortranVariable opposite: #parentDeclaration"
 
 	<generated>
 	<FMComment: 'attributes'>
@@ -59,7 +59,7 @@ FASTFortranDeclarationStatement >> attributesGroup [
 
 { #category : #accessing }
 FASTFortranDeclarationStatement >> declarators [
-	"Relation named: #declarators type: #FASTFortranVariableExpression opposite: #parentDeclaration"
+	"Relation named: #declarators type: #FASTFortranVariable opposite: #parentDeclaration"
 
 	<generated>
 	<FMComment: 'declarators'>
@@ -83,7 +83,7 @@ FASTFortranDeclarationStatement >> declaratorsGroup [
 
 { #category : #accessing }
 FASTFortranDeclarationStatement >> type [
-	"Relation named: #type type: #FASTFortranVariableExpression opposite: #parentDeclaration"
+	"Relation named: #type type: #FASTFortranVariable opposite: #parentDeclaration"
 
 	<generated>
 	<FMComment: 'type'>

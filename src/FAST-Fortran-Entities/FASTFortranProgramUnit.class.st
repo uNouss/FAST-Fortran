@@ -6,6 +6,7 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#name => FMProperty',
+		'#parentProgramFile => FMOne type: #FASTFortranProgramFile opposite: #programUnit',
 		'#statements => FMMany type: #FASTFortranScopableEntity opposite: #parentProgramUnit'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -39,6 +40,30 @@ FASTFortranProgramUnit >> name [
 FASTFortranProgramUnit >> name: anObject [
 	<generated>
 	name := anObject
+]
+
+{ #category : #accessing }
+FASTFortranProgramUnit >> parentProgramFile [
+	"Relation named: #parentProgramFile type: #FASTFortranProgramFile opposite: #programUnit"
+
+	<generated>
+	<FMComment: 'Parent program file'>
+	<container>
+	^ parentProgramFile
+]
+
+{ #category : #accessing }
+FASTFortranProgramUnit >> parentProgramFile: anObject [
+
+	<generated>
+	parentProgramFile := anObject
+]
+
+{ #category : #navigation }
+FASTFortranProgramUnit >> parentProgramFileGroup [
+	<generated>
+	<navigation: 'ParentProgramFile'>
+	^ MooseSpecializedGroup with: self parentProgramFile
 ]
 
 { #category : #accessing }

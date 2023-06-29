@@ -4,7 +4,7 @@ assignable entity
 Trait {
 	#name : #FASTFortranTAssigneable,
 	#instVars : [
-		'#parentExpression => FMOne type: #FASTFortranLogicalExpression opposite: #left',
+		'#parentExpression => FMOne type: #FASTFortranBinaryExpression opposite: #left',
 		'#variableAssignementOwner => FMOne type: #FASTFortranTWithAssigneable opposite: #variable',
 		'#assignementExpressionOwner => FMOne type: #FASTFortranAssignmentStatement opposite: #expression'
 	],
@@ -47,7 +47,7 @@ FASTFortranTAssigneable >> assignementExpressionOwnerGroup [
 
 { #category : #accessing }
 FASTFortranTAssigneable >> parentExpression [
-	"Relation named: #parentExpression type: #FASTFortranLogicalExpression opposite: #left"
+	"Relation named: #parentExpression type: #FASTFortranBinaryExpression opposite: #left"
 
 	<generated>
 	<FMComment: 'Parent expression (if possible)'>

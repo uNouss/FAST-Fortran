@@ -4,8 +4,8 @@ I represent a Fortran Function
 Class {
 	#name : #FASTFortranFunction,
 	#superclass : #FASTFortranProcedure,
-	#traits : 'FASTFortranTWithParameters',
-	#classTraits : 'FASTFortranTWithParameters classTrait',
+	#traits : 'FASTFortranTAssigneable + FASTFortranTWithParameters',
+	#classTraits : 'FASTFortranTAssigneable classTrait + FASTFortranTWithParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

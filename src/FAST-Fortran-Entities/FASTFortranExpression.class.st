@@ -6,9 +6,6 @@ Class {
 	#superclass : #FASTFortranScopableEntity,
 	#traits : 'FASTFortranTAssigneable + FASTFortranTIOListMember',
 	#classTraits : 'FASTFortranTAssigneable classTrait + FASTFortranTIOListMember classTrait',
-	#instVars : [
-		'#parentExpression => FMOne type: #FASTFortranArithmeticExpression opposite: #left'
-	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -19,31 +16,6 @@ FASTFortranExpression class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranExpression >> parentExpression [
-	"Relation named: #parentExpression type: #FASTFortranArithmeticExpression opposite: #left"
-
-	<generated>
-	<FMComment: 'Parent expression (if possible)'>
-	<container>
-	<derived>
-	^ parentExpression
-]
-
-{ #category : #accessing }
-FASTFortranExpression >> parentExpression: anObject [
-
-	<generated>
-	parentExpression := anObject
-]
-
-{ #category : #navigation }
-FASTFortranExpression >> parentExpressionGroup [
-	<generated>
-	<navigation: 'ParentExpression'>
-	^ MooseSpecializedGroup with: self parentExpression
 ]
 
 { #category : #accessing }

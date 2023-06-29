@@ -108,10 +108,17 @@ Class {
 		'scopableEntity',
 		'characterLiteral',
 		'literal',
-		'variableExpression',
 		'returnStatement',
 		'booleanLiteral',
-		'declarationStatement'
+		'declarationStatement',
+		'variable',
+		'variableArray',
+		'variableScalar',
+		'binaryExpression',
+		'unaryExpression',
+		'programFile',
+		'functionCall',
+		'tCallable'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -174,11 +181,30 @@ FASTFortranGenerator >> defineData [
 		             comment:
 		             'a Fortran Expression'.
 		
-	variableExpression := builder
-		             newClassNamed: #VariableExpression
+	variable := builder
+		             newClassNamed: #Variable
 		             comment:
-		             'a Fortran Variable Expression'.
+		             'an abstract Fortran Variable, could be an array or a scalar'.
+		
+	variableArray := builder
+		             newClassNamed: #ArrayVariable
+		             comment:
+		             'an array Fortran Variable, used in declarations'.
 
+	variableScalar := builder
+		             newClassNamed: #ScalarVariable
+		             comment:
+		             'a scalar Fortran Variable, used in declarations'.		
+
+	binaryExpression := builder
+		                        newClassNamed: #BinaryExpression
+		                        comment: 'a Fortran Binary Expression (arithmetic, logical)'.
+
+	unaryExpression := builder
+		                        newClassNamed: #UnaryExpression
+		                        comment: 'a Fortran Unary Expression (arithmetic, logical, character)'.
+
+	"
 	arithmeticExpression := builder
 		                        newClassNamed: #ArithmeticExpression
 		                        comment: 'a Fortran Arithmetic Expression'.
@@ -187,7 +213,7 @@ FASTFortranGenerator >> defineData [
 		                       comment: 'a Fortran Character Expression'.
 	logicalExpression := builder
 		                     newClassNamed: #LogicalExpression
-		                     comment: 'a Fortran Logical Expression'.
+		                     comment: 'a Fortran Logical Expression'."
 
 	loopControlExpression := builder
 		                         newClassNamed: #LoopControlExpression
@@ -348,6 +374,11 @@ changed by compiling with certain special options.'.
 FASTFortranGenerator >> defineFamixClasses [
 	"FAMIX-level classes (might be removed later)"
 
+	programFile := builder
+		               newClassNamed: #ProgramFile
+		               comment:
+		               'An entity that can contain fortran program units and comments'.
+
 	programUnit := builder
 		               newClassNamed: #ProgramUnit
 		               comment:
@@ -377,6 +408,11 @@ FASTFortranGenerator >> defineFamixClasses [
 	function := builder
 		            newClassNamed: #Function
 		            comment: 'I represent a Fortran Function'.
+	
+	functionCall := builder
+		                     newClassNamed: #FunctionCall
+		                     comment:
+		                     'I represent a call to a function (or function statement)'.
 
 	subroutine := builder
 		              newClassNamed: #Subroutine
@@ -408,7 +444,7 @@ FASTFortranGenerator >> defineHierarchy [
 	subroutine --|> procedure.
 
 	"other entities"
-	comment --|> scopableEntity.
+	comment --|> entity.
 	statement --|> scopableEntity.
 	declarationStatement --|> scopableEntity.
 
@@ -429,14 +465,7 @@ FASTFortranGenerator >> defineHierarchy [
 	doStatement --|> statement.
 	doWhileStatement --|> statement.
 	elseStatement --|> statement.
-	elseIfStatement --|> statement.
-	endStatement --|> statement.
-	endDoStatement --|> statement.
 	endFileStatement --|> statement.
-	endIfStatement --|> statement.
-	endMapStatement --|> statement.
-	endStructureStatement --|> statement.
-	endUnionStatement --|> statement.
 	entryStatement --|> statement.
 	equivalenceStatement --|> statement.
 	externalStatement --|> statement.
@@ -476,10 +505,17 @@ FASTFortranGenerator >> defineHierarchy [
 	
 	"DATA"
 	expression --|> scopableEntity.
-	variableExpression  --|> expression.
+	functionCall --|> expression.
+	variable  --|> expression.
+	variableScalar --|> variable.
+	variableArray --|> variable.  
+	" deprecated
 	arithmeticExpression --|> expression.
 	characterExpression --|> expression.
 	logicalExpression --|> expression.
+	"
+	binaryExpression --|> expression.
+	unaryExpression --|> expression.
 	loopControlExpression --|> expression.
 	
 	array --|> expression.
@@ -500,7 +536,7 @@ FASTFortranGenerator >> defineHierarchy [
 	integerConstant --|> arithmeticConstant.
 	realConstant  --|> arithmeticConstant.
 	characterLiteral --|> literal.
-	asterisk --|> characterLiteral.
+	asterisk --|> arithmeticConstant.
 	ampersand --|> characterLiteral. 
 	
 	type --|> scopableEntity.
@@ -514,42 +550,43 @@ FASTFortranGenerator >> defineHierarchy [
 	realType --|> type.
 	
 	"TRAITS"
-	subroutine --|> tWithParameters.
 	"TODO: an asterisk, or an ampersand can be a subroutine parameter as well"
 	asterisk --|> tAssigneable. 
 	array --|> tAssigneable.
 	record --|> tAssigneable.
-	procedure --|> tAssigneable.
-	"TODO: check if a function and a subroutine has the same set of parameters and join the definiton to procedure --|> tWithParameters in this case."
-	function --|> tWithParameters.
-	  
-	
-	functionStatement --|> tWithArguments. 
-	callStatement --|> tWithArguments.
+	function --|> tAssigneable.
+	functionCall --|> tAssigneable.
 	callStatement --|> tAssigneable.
 	expression --|> tAssigneable. 
-	subroutine --|> tAssigneable.
+
+	"TODO: check if a function and a subroutine has the same set of parameters and join the definiton to procedure --|> tWithParameters in this case."
+	function --|> tWithParameters.
+	subroutine --|> tWithParameters.
+	
+	functionCall --|> tWithArguments.
+	functionStatement --|> tWithArguments. 
+	callStatement --|> tWithArguments.
+	printStatement --|> tWithArguments.
+	writeStatement --|> tWithArguments.
+	
 	"TODO: also as an argument may serve 
 		- an intrinsic function permitted to be passed as an argument
 		- an external function name
 		- an alternate return specifier, * or &,followed by a statement number."
 	
 	printStatement --|> tWithFormatIdentifier.
+	writeStatement --|> tWithFormatIdentifier.
 	formatStatement --|> tFormatIdentifier.
 	asterisk --|> tFormatIdentifier.
 	
-	writeStatement --|> tWithIOList.
-	printStatement --|> tWithIOList.
+	writeStatement --|> statement.
+	printStatement --|> statement.
 	expression --|> tIOListMember.
 	callStatement --|> tIOListMember. 
 	
 	assignmentStatement --|> tWithAssigneable.
 	expression --|> tAssigneable.
 	callStatement --|> tAssigneable. 
-	
-	logicalExpression --|> tBinaryExpression.
-	arithmeticExpression --|> tBinaryExpression.  
-	
 ]
 
 { #category : #definition }
@@ -575,13 +612,8 @@ FASTFortranGenerator >> defineProperties [
 		'Determines the arithmetic constant sign'.
 
 	"variables"
-	(variableExpression property: #type type: #String) comment:
-		'Determines the variable type'.
-	(variableExpression property: #value type: #String) comment:
-		'Determines the variable value'.
-	(variableExpression property: #defined type: #Boolean) comment:
-		'Determines if the variableis defined (stores a value)'.
-
+	(variable property: #name type: #String) comment:
+		'Determines the variable name'.
 
 	(array property: #name type: #String) comment:
 		'Determines the array name'.
@@ -616,6 +648,10 @@ FASTFortranGenerator >> defineProperties [
 	(loopControlExpression property: #limit type: #String) comment:
 		'Loop control limit value'.
 		
+	"TYPES"
+	(type property: #size type: #Number) comment:
+		'a data size in bytes'.
+		
 	"TARITS"
 	(tBinaryExpression property: #operator type: #String) comment:
 		'Operator of a binary expression'.
@@ -626,29 +662,35 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
+	((programFile property: #comment) comment:
+		 'Comments in a program file')
+	<>-*
+	((comment property: #parentProgramFile) comment:
+		 'Parent program file').
+
+	((programFile property: #programUnit) comment:
+		 'Program Units in a program file')
+	<>-*
+	((programUnit property: #parentProgramFile) comment:
+		 'Parent program file').
+
 	((programUnit property: #statements) comment:
 		 'Statements of the program unit ')
 	<>-* ((scopableEntity property: #parentProgramUnit) comment:
 			 'Parent program unit').
 
-	((logicalExpression property: #left) comment:
+	((binaryExpression property: #left) comment:
+		 'left part of a binary expression')
+	<>- ((tAssigneable property: #parentExpression) comment:
+			 'Parent expression (if possible)').
+
+	((binaryExpression property: #right) comment:
 		 'left part of the expression')
 	<>- ((tAssigneable property: #parentExpression) comment:
 			 'Parent expression (if possible)').
 
-	((logicalExpression property: #right) comment:
-		 'left part of the expression')
+	((unaryExpression property: #expression) comment: 'expression')
 	<>- ((tAssigneable property: #parentExpression) comment:
-			 'Parent expression (if possible)').
-
-	((arithmeticExpression property: #left) comment:
-		 'left part of the expression')
-	<>- ((expression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
-
-	((arithmeticExpression property: #right) comment:
-		 'left part of the expression')
-	<>- ((expression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
 
 	((doStatement property: #loopControl) comment: 'loop control')
@@ -683,26 +725,37 @@ FASTFortranGenerator >> defineRelations [
 	((expression property: #parentIfBlock) comment: 'Parent if block').
 
 	((declarationStatement property: #declarators) comment: 'declarators')
-	<>-* ((variableExpression property: #parentDeclaration) comment:
-			 'Parent declaration').
+	<>-*
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
 
 	((declarationStatement property: #attributes) comment: 'attributes')
-	<>-* ((variableExpression property: #parentDeclaration) comment:
-			 'Parent declaration').
+	<>-*
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
 
 	((declarationStatement property: #type) comment: 'type')
-	<>- ((variableExpression property: #parentDeclaration) comment:
-			 'Parent declaration').
+	<>-
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
 
+	"
+	deprecated. change to --|> TWithArgument
+	((writeStatement property: #iolist) comment:
+		 'List of variables, substrings, arrays, records and more. see documentation for more details')
+	<>-* ((variable property: #parentStatement) comment:
+			 'Parent write or print statement').
+	((printStatement property: #iolist) comment:
+		 'List of variables, substrings, arrays, records and more. see documentation for more details')
+	<>-* ((variable property: #parentStatement) comment:
+			 'Parent write or print statement').
+"
 
 	"TRAITS"
 	((tWithFormatIdentifier property: #format) comment:
 		 'format identifier')
 	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
 			 'The owner of the format identifier').
-	((tWithIOList property: #iolist) comment: 'iolist')
-	<>-* ((tIOListMember property: #iolistParentStatement) comment:
-			 'The owner of the iolist').
 
 	((tWithAssigneable property: #variable) comment: 'My variable')
 	<>- ((tAssigneable property: #variableAssignementOwner) comment:
@@ -716,7 +769,13 @@ FASTFortranGenerator >> defineRelations [
 	((functionStatement property: #expression) comment:
 		 'Expression thats being assigned upon declaration to the var')
 	<>- ((tAssigneable property: #assignementExpressionOwner) comment:
-			 'The AssignementExpression owner (if possible)')
+			 'The AssignementExpression owner (if possible)').
+	
+	((functionCall property: #function) comment:
+			 'Function or function statement being called')
+	<>-		
+	((tCallable property: #parentFunctionCall) comment:
+		 'a parent function call').
 ]
 
 { #category : #definition }
@@ -786,9 +845,14 @@ FASTFortranGenerator >> defineStatements [
 	elseStatement := builder
 		                 newClassNamed: #ElseStatement
 		                 comment: 'I represent Fortran Else statement'.
+	endFileStatement := builder
+		                    newClassNamed: #EndFileStatement
+		                    comment:
+		                    'I represent Fortran End File statement'.
+	" not really used
 	elseIfStatement := builder
 		                   newClassNamed: #ElseIfStatement
-		                   comment: 'I represent Fortran Else If statement'.
+		                   comment: 'I represent Fortran Else If statement'.	
 	endStatement := builder
 		                newClassNamed: #EndStatement
 		                comment: 'I represent Fortran End statement'.
@@ -796,10 +860,6 @@ FASTFortranGenerator >> defineStatements [
 		                  newClassNamed: #EndDoStatement
 		                  comment:
 		                  'I represent Fortran End Do or ENDDO statement'.
-	endFileStatement := builder
-		                    newClassNamed: #EndFileStatement
-		                    comment:
-		                    'I represent Fortran End File statement'.
 	endIfStatement := builder
 		                  newClassNamed: #EndIfStatement
 		                  comment: 'I represent Fortran End If statement'.
@@ -814,6 +874,7 @@ FASTFortranGenerator >> defineStatements [
 		                     newClassNamed: #EndUnionStatement
 		                     comment:
 		                     'I represent Fortran End Union statement'.
+	"
 	entryStatement := builder
 		                  newClassNamed: #EntryStatement
 		                  comment: 'I represent Fortran Entry statement'.
@@ -953,7 +1014,9 @@ FASTFortranGenerator >> defineTraits [
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tWithIOList := builder newTraitNamed: #TWithIOList comment: 'I represent a statement with iolist (print, write, ...)'.
+	"
+	deprecated
+	tWithIOList := builder newTraitNamed: #TWithIOList comment: 'I represent a statement with iolist (print, write, ...)'."
 
 	tIOListMember := builder newTraitNamed: #TIOListMember comment: 'I represent an item that can be encountered in the iolist of certain statments (print)'.
 	
@@ -962,6 +1025,7 @@ FASTFortranGenerator >> defineTraits [
 	tWithAssigneable := builder newTraitNamed: #TWithAssigneable comment: 'I have an assigneable'.
 	
 	tBinaryExpression  := builder newTraitNamed: #TBinaryExpression comment: 'I represent a binary expression'.
-	
+
+	tCallable := builder newTraitNamed: #TCallable comment: 'I represent a callable entity (function or function statement'.	
 	
 ]

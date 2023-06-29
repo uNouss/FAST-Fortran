@@ -1,11 +1,9 @@
 "
-a Fortran Logical Expression
+a Fortran Binary Expression (arithmetic, logical)
 "
 Class {
-	#name : #FASTFortranLogicalExpression,
+	#name : #FASTFortranBinaryExpression,
 	#superclass : #FASTFortranExpression,
-	#traits : 'FASTFortranTBinaryExpression',
-	#classTraits : 'FASTFortranTBinaryExpression classTrait',
 	#instVars : [
 		'#left => FMOne type: #FASTFortranTAssigneable opposite: #parentExpression',
 		'#right => FMOne type: #FASTFortranTAssigneable opposite: #parentExpression'
@@ -14,39 +12,39 @@ Class {
 }
 
 { #category : #meta }
-FASTFortranLogicalExpression class >> annotation [
+FASTFortranBinaryExpression class >> annotation [
 
-	<FMClass: #LogicalExpression super: #FASTFortranExpression>
+	<FMClass: #BinaryExpression super: #FASTFortranExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
 ]
 
 { #category : #accessing }
-FASTFortranLogicalExpression >> left [
+FASTFortranBinaryExpression >> left [
 	"Relation named: #left type: #FASTFortranTAssigneable opposite: #parentExpression"
 
 	<generated>
-	<FMComment: 'left part of the expression'>
+	<FMComment: 'left part of a binary expression'>
 	^ left
 ]
 
 { #category : #accessing }
-FASTFortranLogicalExpression >> left: anObject [
+FASTFortranBinaryExpression >> left: anObject [
 
 	<generated>
 	left := anObject
 ]
 
 { #category : #navigation }
-FASTFortranLogicalExpression >> leftGroup [
+FASTFortranBinaryExpression >> leftGroup [
 	<generated>
 	<navigation: 'Left'>
 	^ MooseSpecializedGroup with: self left
 ]
 
 { #category : #accessing }
-FASTFortranLogicalExpression >> right [
+FASTFortranBinaryExpression >> right [
 	"Relation named: #right type: #FASTFortranTAssigneable opposite: #parentExpression"
 
 	<generated>
@@ -55,14 +53,14 @@ FASTFortranLogicalExpression >> right [
 ]
 
 { #category : #accessing }
-FASTFortranLogicalExpression >> right: anObject [
+FASTFortranBinaryExpression >> right: anObject [
 
 	<generated>
 	right := anObject
 ]
 
 { #category : #navigation }
-FASTFortranLogicalExpression >> rightGroup [
+FASTFortranBinaryExpression >> rightGroup [
 	<generated>
 	<navigation: 'Right'>
 	^ MooseSpecializedGroup with: self right
