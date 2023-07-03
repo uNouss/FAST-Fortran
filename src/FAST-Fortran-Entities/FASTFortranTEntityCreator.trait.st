@@ -87,6 +87,13 @@ FASTFortranTEntityCreator >> newBlockData [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newBooleanLiteral [
+
+	<generated>
+	^ self add: FASTFortranBooleanLiteral new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newByteType [
 
 	<generated>
@@ -98,6 +105,13 @@ FASTFortranTEntityCreator >> newCallStatement [
 
 	<generated>
 	^ self add: FASTFortranCallStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newCharacterLiteral [
+
+	<generated>
+	^ self add: FASTFortranCharacterLiteral new
 ]
 
 { #category : #'entity creation' }

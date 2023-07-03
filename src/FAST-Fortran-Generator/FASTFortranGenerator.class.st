@@ -96,7 +96,9 @@ Class {
 		'tCallable',
 		'tFortranLabelledStatement',
 		'tFortranBinaryExpression',
-		'tFortranUnaryExpression'
+		'tFortranUnaryExpression',
+		'booleanConstant',
+		'characterConstant'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -140,7 +142,6 @@ FASTFortranGenerator >> defineClasses [
 
 { #category : #definition }
 FASTFortranGenerator >> defineData [
-
 	" DelarationStatement is used instead
 	variableDeclaration := builder
 		                       newClassNamed: #VariablesDeclaration
@@ -148,34 +149,36 @@ FASTFortranGenerator >> defineData [
 		                       'I represent a declaration statement for one or many variables'."
 
 	declarationStatement := builder
-		                       newClassNamed: #DeclarationStatement
-		                       comment:
-		                       'I represent a declaration statement for one or many variables'.
+		                        newClassNamed: #DeclarationStatement
+		                        comment:
+		                        'I represent a declaration statement for one or many variables'.
 
 	"EXPRESSIONS"
-		
+
 	variable := builder
-		             newClassNamed: #Variable
-		             comment:
-		             'an abstract Fortran Variable, could be an array or a scalar'.
-		
+		            newClassNamed: #Variable
+		            comment:
+		            'an abstract Fortran Variable, could be an array or a scalar'.
+
 	variableArray := builder
-		             newClassNamed: #ArrayVariable
-		             comment:
-		             'an array Fortran Variable, used in declarations'.
+		                 newClassNamed: #ArrayVariable
+		                 comment:
+		                 'an array Fortran Variable, used in declarations'.
 
 	variableScalar := builder
-		             newClassNamed: #ScalarVariable
-		             comment:
-		             'a scalar Fortran Variable, used in declarations'.		
+		                  newClassNamed: #ScalarVariable
+		                  comment:
+		                  'a scalar Fortran Variable, used in declarations'.
 
 	binaryExpression := builder
-		                        newClassNamed: #BinaryExpression
-		                        comment: 'a Fortran Binary Expression (arithmetic, logical)'.
+		                    newClassNamed: #BinaryExpression
+		                    comment:
+		                    'a Fortran Binary Expression (arithmetic, logical)'.
 
 	unaryExpression := builder
-		                        newClassNamed: #UnaryExpression
-		                        comment: 'a Fortran Unary Expression (arithmetic, logical, character)'.
+		                   newClassNamed: #UnaryExpression
+		                   comment:
+		                   'a Fortran Unary Expression (arithmetic, logical, character)'.
 
 	"
 	arithmeticExpression := builder
@@ -218,7 +221,7 @@ FASTFortranGenerator >> defineData [
 
 
 	"CONSTANTS"
-	
+
 	asterisk := builder
 		            newClassNamed: #Asterisk
 		            comment:
@@ -253,6 +256,17 @@ FASTFortranGenerator >> defineData [
 		                newClassNamed: #RealLiteral
 		                comment:
 		                'I represent Fortran Arithmetic Real Literal (Constant) statement'.
+
+	booleanConstant := builder
+		                   newClassNamed: #BooleanLiteral
+		                   comment:
+		                   'I represent Fortran Boolean Literal (Constant) statement'.
+
+	characterConstant := builder
+		                     newClassNamed: #CharacterLiteral
+		                     comment:
+		                     'I represent Fortran Character Literal (Constant) statement'.
+
 
 	"TYPES"
 
@@ -458,6 +472,8 @@ FASTFortranGenerator >> defineHierarchy [
 	realConstant --|> tNumericalLiteral.
 	asterisk --|> tNumericalLiteral.
 	ampersand --|> tCharacterLiteral.
+	characterConstant --|> tCharacterLiteral.
+	booleanConstant --|> tBooleanLiteral.
 
 	byteType --|> type.
 	characterType --|> type.
