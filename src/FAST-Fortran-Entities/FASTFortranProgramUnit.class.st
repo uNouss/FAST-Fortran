@@ -4,8 +4,8 @@ A fortran program unit is a sequence of statements, terminated by an END stateme
 Class {
 	#name : #FASTFortranProgramUnit,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTEntity + FASTFortranTNamedBehaviouralEntity',
-	#classTraits : 'FASTFortranTEntity classTrait + FASTFortranTNamedBehaviouralEntity classTrait',
+	#traits : 'FASTFortranTEntity + FASTFortranTNamedBehaviouralEntity + FASTFortranTWithComments',
+	#classTraits : 'FASTFortranTEntity classTrait + FASTFortranTNamedBehaviouralEntity classTrait + FASTFortranTWithComments classTrait',
 	#instVars : [
 		'#parentProgramFile => FMOne type: #FASTFortranProgramFile opposite: #programUnit'
 	],

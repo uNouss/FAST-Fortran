@@ -4,8 +4,8 @@ A fortran comment
 Class {
 	#name : #FASTFortranComment,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTEntity',
-	#classTraits : 'FASTFortranTEntity classTrait',
+	#traits : 'FASTFortranTComment + FASTFortranTEntity',
+	#classTraits : 'FASTFortranTComment classTrait + FASTFortranTEntity classTrait',
 	#instVars : [
 		'#content => FMProperty'
 	],
