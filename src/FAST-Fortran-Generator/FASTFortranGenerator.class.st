@@ -98,7 +98,8 @@ Class {
 		'tFortranBinaryExpression',
 		'tFortranUnaryExpression',
 		'booleanConstant',
-		'characterConstant'
+		'characterConstant',
+		'statementBlock'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -372,6 +373,11 @@ FASTFortranGenerator >> defineFamixClasses [
 		             newClassNamed: #BlockData
 		             comment:
 		             'The BLOCK DATA statement identifies a subprogram that initializes variables and arrays in labeled common blocks.'.
+		
+	statementBlock := builder
+		             newClassNamed: #StatementBlock
+		             comment:
+		             'Contains the block of Fortran statements'.
 ]
 
 { #category : #definition }
@@ -390,8 +396,11 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"other entities"
 	comment --|> tEntity.
+	comment --|> tComment. 
 	tFortranLabelledStatement --|> tStatement.
 	declarationStatement --|> tFortranLabelledStatement.
+	statementBlock --|> tStatementBlock. 
+	statementBlock --|> tWithComments. 
 
 	"FORTRAN STATEMENTS"
 	assignmentStatement --|> tFortranLabelledStatement.
@@ -507,6 +516,7 @@ FASTFortranGenerator >> defineHierarchy [
 	asterisk --|> tFormatIdentifier.
 
 	programFile --|> tWithComments.
+	programUnit --|> tWithComments.
 
 	assignmentStatement --|> tAssignment.
 	returnStatement --|> tReturnStatement.

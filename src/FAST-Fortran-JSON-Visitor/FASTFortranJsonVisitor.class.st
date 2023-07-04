@@ -104,7 +104,7 @@ FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 
 	^ (self newEntity: FASTFortranBlockData atPosition: data first)
 		  name: data second;
-		  statements: data third;
+		  statementBlock: (FASTFortranStatementBlock new statements: data third);
 		  yourself
 ]
 
@@ -158,14 +158,15 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 
 	data do: [ :each |
 		| newIf |
+
 		newIf := FASTFortranIfBlockStatement new
 			         condition: each first;
-			         thenStatements: each second;
+			         thenStatementBlock: (FASTFortranStatementBlock new statements: each second);
 			         yourself.
 
 		firstIf
 			ifNil: [ firstIf := newIf ]
-			ifNotNil: [ elseIf elseStatements: { newIf } ].
+			ifNotNil: [ elseIf elseStatementBlock: ( FASTFortranStatementBlock new statements: {newIf} ) ].
 		elseIf := newIf ].
 
 	^ firstIf
@@ -188,7 +189,8 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 
 	^ FASTFortranDeclarationStatement new
 		  type: data second;
-		  attributes: data third;
+			"TODO clarify the need of attributes"
+		  "attributes: data third;"
 		  declarators: data fourth;
 		  yourself
 ]
@@ -233,7 +235,7 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 
 	^ (self newEntity: FASTFortranDoStatement atPosition: data first)
 		  loopControl: data second;
-		  statements: data third;
+		  statementBlock: (FASTFortranStatementBlock new statements: data third);
 		  yourself
 ]
 
@@ -320,7 +322,7 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 		  name: data second;
 		  flag: 'need to set return type';
 		  parameters: data fourth;
-		  statements: data fifth;
+		  statementBlock: (FASTFortranStatementBlock new statements: data fifth);
 		  yourself
 ]
 
@@ -350,13 +352,16 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 	.conditionals[_].[0] represents a condition
 	.conditionals[_].[1] is an array containing all statements of the correpsonding then part"
 
-	| data lastIf |
+	| data lastIf lastElse |
 	data := super visitIf: anIfNode.
-
 	lastIf := data third.
-	[ lastIf elseStatements isEmpty ] whileFalse: [
-		lastIf := lastIf elseStatements first ].
-	lastIf elseStatements: data fourth.
+	lastElse := data fourth.
+
+	lastElse isNotEmpty ifTrue: [
+		[ lastIf elseStatementBlock isNil ] whileFalse: [
+			lastIf := lastIf elseStatementBlock statements first ].
+		lastIf elseStatementBlock:
+			(FASTFortranStatementBlock new statements: lastElse) ].
 
 	^ data third
 ]
@@ -382,7 +387,7 @@ FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 
 	^ FASTFortranIntegerLiteral new
-		  value: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
+		  primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
 		  yourself
 ]
 
@@ -415,7 +420,11 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 
 	^ FASTFortranProgramMain new
 		  name: data second;
-		  statements: data third
+		  statementBlock: (FASTFortranStatementBlock new statements:
+					   (data third reject: [ :each |
+							    each isKindOf: FASTFortranComment ]));
+		  comments:
+			  (data third select: [ :each | each isKindOf: FASTFortranComment ])
 ]
 
 { #category : #'visiting prog-unit' }
@@ -450,7 +459,7 @@ FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
 
 	^ FASTFortranPrintStatement new
 		  format: data second;
-		  iolist: data third;
+		  arguments: data third;
 		  yourself
 ]
 
@@ -472,7 +481,7 @@ FASTFortranJsonVisitor >> visitRealLiteralValue: aRealLiteralValueNode [
 	| data |
 	data := super visitRealLiteralValue: aRealLiteralValueNode.
 	^ FASTFortranRealLiteral new
-		  value: data second;
+		  primitiveValue: data second;
 		  yourself
 ]
 
@@ -528,7 +537,7 @@ FASTFortranJsonVisitor >> visitStopStatement: aStopStatementNode [
 FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 
 	^ FASTFortranCharacterLiteral new
-		  value: (super visitStringLiteralValue: aString);
+		  primitiveValue: (super visitStringLiteralValue: aString);
 		  yourself
 ]
 
@@ -541,7 +550,7 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 	^ FASTFortranSubroutine new
 		  name: data second;
 		  parameters: data third;
-		  statements: data fourth;
+		  statementBlock: (FASTFortranStatementBlock new statements: data fourth);
 		  "sourceAnchor: (self makeIndexedAnchor: data first) ;"yourself
 ]
 
@@ -609,7 +618,7 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 
 	^ FASTFortranWriteStatement new
 		  format: data second;
-		  iolist: data third;
+		  arguments: data third;
 		  yourself
 	"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 ]

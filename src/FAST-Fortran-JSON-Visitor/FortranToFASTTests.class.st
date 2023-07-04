@@ -11,20 +11,24 @@ Class {
 { #category : #'tests-expression' }
 FortranToFASTTests >> testAssignementIntegerLiteral [
 
-	| stmt result |
+	| stmt main result |
 	fortranCode := '      PROGRAM MYPROG
           c = 1
       END
 '.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:11)-(2:15)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
-
-	stmt := result first  statements first.
+	
+	main := result first.
+	self assert: main class equals: FASTFortranProgramMain.
+	self assert: main statementBlock class equals: FASTFortranStatementBlock.
+	
+	stmt := main statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranIntegerLiteral.
-	self assert: stmt expression value equals: '1'.
+	self assert: stmt expression primitiveValue equals: '1'.
 	self assert: stmt expression startPos equals: 36.
 
 ]
@@ -41,12 +45,12 @@ FortranToFASTTests >> testAssignementRealLiteral [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:18)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:18)","tag":"value","value":{"contents":[{"exponent":{"letter":"e","num":"0"},"significand":"2.12"},null],"tag":"real"}},"span":"(2:11)-(2:18)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first  statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranRealLiteral.
-	self assert: stmt expression value equals: '2.12'.
+	self assert: stmt expression primitiveValue equals: '2.12'.
 	self assert: stmt expression startPos equals: 36.
 
 ]
@@ -62,12 +66,12 @@ FortranToFASTTests >> testAssignementStringLiteral [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:32)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:32)","tag":"value","value":{"contents":"once upon a time","tag":"string"}},"span":"(2:11)-(2:32)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first  statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 	self assert: stmt startPos equals: 32.
 
-	self assert: stmt expression class equals: FASTFortranStringLiteral.
-	self assert: stmt expression value equals: 'once upon a time'.
+	self assert: stmt expression class equals: FASTFortranCharacterLiteral.
+	self assert: stmt expression primitiveValue equals: 'once upon a time'.
 	self assert: stmt expression startPos equals: 36.
 
 ]
@@ -75,7 +79,7 @@ FortranToFASTTests >> testAssignementStringLiteral [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionAddition [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        i = 5 + 6
       END
@@ -83,11 +87,11 @@ FortranToFASTTests >> testBinaryExpressionAddition [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"addition"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
-
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.	
+	
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'addition'.
 	self assert: expr startPos equals: 33.
 
@@ -101,7 +105,7 @@ FortranToFASTTests >> testBinaryExpressionAddition [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionDivision [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        i = 5 / 6
       END
@@ -109,10 +113,11 @@ FortranToFASTTests >> testBinaryExpressionDivision [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"division"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.
 
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'division'.
 	self assert: expr startPos equals: 33.
 
@@ -126,7 +131,7 @@ FortranToFASTTests >> testBinaryExpressionDivision [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionEqKeyword [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 .eq. 6 ) THEN
        END IF
@@ -135,10 +140,11 @@ FortranToFASTTests >> testBinaryExpressionEqKeyword [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"eq"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
 
-	expr := result first  statements first condition.
-	self assert: expr class equals: FASTFortranLogicalExpression.
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'eq'.
 	self assert: expr startPos equals: 34.
 
@@ -152,18 +158,19 @@ FortranToFASTTests >> testBinaryExpressionEqKeyword [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionExponentiation [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        i = 5 ** 6
       END
 '.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:17)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"exponentiation"},"right":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:17)","tag":"binary"},"span":"(2:8)-(2:17)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
+	
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.
 
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
-
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'exponentiation'.
 	self assert: expr startPos equals: 33.
 
@@ -178,7 +185,7 @@ FortranToFASTTests >> testBinaryExpressionExponentiation [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionGtKeyword [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 .gt. 6 ) THEN
        END IF
@@ -187,10 +194,11 @@ FortranToFASTTests >> testBinaryExpressionGtKeyword [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"gt"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
 
-	expr := result first  statements first condition.
-	self assert: expr class equals: FASTFortranLogicalExpression.
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'gt'.
 	self assert: expr startPos equals: 34.
 
@@ -204,7 +212,7 @@ FortranToFASTTests >> testBinaryExpressionGtKeyword [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionGtSymbol [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 > 6 ) THEN
        END IF
@@ -213,10 +221,11 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"gt"},"right":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:17)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
 
-	expr := result first  statements first condition.
-	self assert: expr class equals: FASTFortranLogicalExpression.
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'gt'.
 	self assert: expr startPos equals: 34.
 
@@ -230,7 +239,7 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionLtKeyword [
 	
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 .Lt. 6 ) THEN
        END IF
@@ -239,10 +248,11 @@ FortranToFASTTests >> testBinaryExpressionLtKeyword [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"lt"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
 
-	expr := result first  statements first condition.
-	self assert: expr class equals: FASTFortranLogicalExpression.
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'lt'.
 	self assert: expr startPos equals: 34.
 
@@ -256,7 +266,7 @@ FortranToFASTTests >> testBinaryExpressionLtKeyword [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionLtSymbol [
 
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 < 6 ) THEN
        END IF
@@ -265,10 +275,11 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"lt"},"right":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:17)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first  statements first class equals: FASTFortranIfBlockStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
 
-	expr := result first  statements first condition.
-	self assert: expr class equals: FASTFortranLogicalExpression.
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'lt'.
 	self assert: expr startPos equals: 34.
 
@@ -282,7 +293,7 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionMultiplication [
 
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        i = 5 * 6
       END
@@ -290,10 +301,11 @@ FortranToFASTTests >> testBinaryExpressionMultiplication [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"multiplication"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.
 
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'multiplication'.
 	self assert: expr startPos equals: 33.
 
@@ -307,7 +319,7 @@ FortranToFASTTests >> testBinaryExpressionMultiplication [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionSubtraction [
 
-	| result expr |
+	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        i = 5 - 6
       END
@@ -315,10 +327,11 @@ FortranToFASTTests >> testBinaryExpressionSubtraction [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"subtraction"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements first class equals: FASTFortranAssignmentStatement.
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.
 
-	expr := result first statements first expression.
-	self assert: expr class equals: FASTFortranArithmeticExpression.
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranBinaryExpression.
 	self assert: expr operator equals: 'subtraction'.
 	self assert: expr startPos equals: 33.
 
@@ -358,7 +371,7 @@ FortranToFASTTests >> testContinueStatement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:15)","statement":{"anno":[],"span":"(2:8)-(2:15)","tag":"continue"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranContinueStatement.
 	self assert: stmt startPos equals: 29
 ]
@@ -375,27 +388,27 @@ FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:10)-(2:12)","tag":"assign_expression","target":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"max","tag":"variable"}},"span":"(2:10)-(2:17)"},"end_label":null,"label":null,"name":null,"span":"(2:7)-(3:12)","tag":"do","target":null}],"name":"main","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDoStatement.
 	self assert: stmt loopControl isNotNil.
-	self assert: stmt statements isEmpty.
+	self assert: stmt statementBlock statements isEmpty.
 	self assert: stmt startPos equals: 26.
 
 	control := stmt loopControl.
 	self assert: control class equals: FASTFortranLoopControlExpression.
-	self assert: control limit class equals: FASTFortranVariableExpression.
+	self assert: control limit class equals: FASTFortranScalarVariable.
 	self assert: control limit name equals: 'max'.
 	self assert: control increment isNil.
 	self assert: control startPos equals: 29.
 
 	self assert: control init class equals: FASTFortranAssignmentStatement.
-	self assert: control init variable class equals: FASTFortranVariableExpression.
+	self assert: control init variable class equals: FASTFortranScalarVariable.
 	self assert: control init variable name equals: 'i'.
 
 	self assert: control init expression class equals: FASTFortranIntegerLiteral.
-	self assert: control init expression value equals: '1'.
+	self assert: control init expression primitiveValue equals: '1'.
 
 
 ]
@@ -411,9 +424,9 @@ FortranToFASTTests >> testExternalStatement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:20)","statement":{"anno":[],"span":"(2:7)-(2:20)","tag":"external","vars":{"anno":[],"list":[{"anno":[],"span":"(2:16)-(2:20)","tag":"value","value":{"contents":"mypnt","tag":"variable"}}],"span":"(2:16)-(2:20)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranExternalStatement.
 	self assert: stmt name equals: 'mypnt'.
 	self assert: stmt startPos equals: 26.
@@ -436,7 +449,7 @@ FortranToFASTTests >> testFunctionNoParameter [
 	self assert: fct class equals: FASTFortranFunction.
 	self assert: fct name equals: 'afct'.
 	self assert: fct parameters isEmpty.
-	self assert: fct statements isEmpty.
+	self assert: fct statementBlock statements isEmpty.
 	self assert: fct startPos equals: 7.
 	"self assert: fct returnType class equals: FASTFortranType.
 	self assert: fct returnType name equals: 'integer'."
@@ -462,12 +475,12 @@ FortranToFASTTests >> testFunctionWithParameter [
 
 	self flag: 'should be a FASTFortranParameter, not a FASTFortranVariableExpression ?'.
 	param := fct parameters first.
-	self assert: param class equals: FASTFortranVariableExpression.
+	self assert: param class equals: FASTFortranScalarVariable.
 	self assert: param name equals: 'i'.
 	self assert: param startPos equals: 30.
 
 	param := fct parameters second.
-	self assert: param class equals: FASTFortranVariableExpression.
+	self assert: param class equals: FASTFortranScalarVariable.
 	self assert: param name equals: 'j'.
 	self assert: param startPos equals: 32.
 
@@ -492,20 +505,23 @@ FortranToFASTTests >> testIfElseIf [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(9:11)-(9:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(9:15)-(9:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(9:11)-(9:15)","tag":"assign_expression","target":{"anno":[],"span":"(9:11)-(9:11)","tag":"value","value":{"contents":"d","tag":"variable"}}},"tag":"statement"}],"conditions":[[{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"a","tag":"variable"}},[{"anno":[],"label":null,"span":"(3:11)-(3:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(3:15)-(3:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(3:11)-(3:15)","tag":"assign_expression","target":{"anno":[],"span":"(3:11)-(3:11)","tag":"value","value":{"contents":"a","tag":"variable"}}},"tag":"statement"}]],[{"anno":[],"span":"(4:20)-(4:20)","tag":"value","value":{"contents":"b","tag":"variable"}},[{"anno":[],"label":null,"span":"(5:11)-(5:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(5:15)-(5:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(5:11)-(5:15)","tag":"assign_expression","target":{"anno":[],"span":"(5:11)-(5:11)","tag":"value","value":{"contents":"b","tag":"variable"}}},"tag":"statement"}]],[{"anno":[],"span":"(6:20)-(6:20)","tag":"value","value":{"contents":"c","tag":"variable"}},[{"anno":[],"label":null,"span":"(7:11)-(7:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(7:15)-(7:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(7:11)-(7:15)","tag":"assign_expression","target":{"anno":[],"span":"(7:11)-(7:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}]]],"end_label":null,"label":null,"name":null,"span":"(2:10)-(10:15)","tag":"if"}],"name":"myprog","span":"(1:7)-(11:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	conditional := result first statements first.
+	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 1.
-	self assert: conditional elseStatements size equals: 1.
+	self assert: conditional thenStatementBlock statements size equals: 1.
+	self assert: conditional elseStatementBlock statements size equals: 1.
 
-	conditional := conditional elseStatements first.
+	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 1.
-	self assert: conditional elseStatements size equals: 1.
+	self assert: conditional thenStatementBlock statements size equals: 1.
+	self assert: conditional elseStatementBlock statements size equals: 1.
 
-	conditional := conditional elseStatements first.
+	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 1.
-	self assert: conditional elseStatements size equals: 1.
+	self assert: conditional thenStatementBlock statements size equals: 1.
+	self assert: conditional elseStatementBlock statements size equals: 1.
+	
+	conditional := conditional elseStatementBlock statements first.
+	self assert: conditional class equals: FASTFortranAssignmentStatement.
 ]
 
 { #category : #'tests-statement' }
@@ -523,10 +539,11 @@ FortranToFASTTests >> testIfElseWithStatement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(4:9)-(4:13)","statement":{"anno":[],"expression":{"anno":[],"span":"(4:13)-(4:13)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(4:9)-(4:13)","tag":"assign_expression","target":{"anno":[],"span":"(4:9)-(4:9)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"conditions":[[{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(5:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(6:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	conditional := result first statements first.
+	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 0.
-	self assert: conditional elseStatements size equals: 1.
+	self assert: conditional thenStatementBlock statements size equals: 0.
+	self assert: conditional elseStatementBlock statements size equals: 1.
+	self assert: conditional elseStatementBlock statements first class equals: FASTFortranAssignmentStatement.
 ]
 
 { #category : #'tests-statement' }
@@ -541,11 +558,11 @@ FortranToFASTTests >> testIfEmpty [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 	
-	conditional := result first statements first.
+	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional condition class equals: FASTFortranVariableExpression.
+	self assert: conditional condition class equals: FASTFortranScalarVariable.
 	self assert: conditional condition name equals: 'a'.
-	self assert: conditional thenStatements size equals: 0.
+	self assert: conditional thenStatementBlock statements size equals: 0.
 ]
 
 { #category : #'tests-statement' }
@@ -561,15 +578,15 @@ FortranToFASTTests >> testIfThenWithStatement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},[{"anno":[],"label":null,"span":"(3:9)-(3:13)","statement":{"anno":[],"expression":{"anno":[],"span":"(3:13)-(3:13)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(3:9)-(3:13)","tag":"assign_expression","target":{"anno":[],"span":"(3:9)-(3:9)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(4:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	conditional := result first statements first.
+	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 1.
+	self assert: conditional thenStatementBlock statements size equals: 1.
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testIfThenWithTwoStatements [
 
-	| result conditional |
+	| result conditional thenStatements|
 	fortranCode := '      PROGRAM MYPROG
       if (iur .eq. 0) then 
          write(*,*) '' user'',name,'' does not exist''
@@ -580,12 +597,13 @@ FortranToFASTTests >> testIfThenWithTwoStatements [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:11)-(2:13)","tag":"value","value":{"contents":"iur","tag":"variable"}},"op":{"tag":"eq"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["0",null],"tag":"integer"}},"span":"(2:11)-(2:20)","tag":"binary"},[{"anno":[],"label":null,"span":"(3:10)-(3:50)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(3:21)-(3:27)","tag":"value","value":{"contents":" user","tag":"string"}},{"anno":[],"span":"(3:29)-(3:32)","tag":"value","value":{"contents":"name","tag":"variable"}},{"anno":[],"span":"(3:34)-(3:50)","tag":"value","value":{"contents":" does not exist","tag":"string"}}],"span":"(3:21)-(3:50)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(3:16)-(3:16)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(3:16)-(3:16)"},{"anno":[],"expr":{"anno":[],"span":"(3:18)-(3:18)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(3:18)-(3:18)"}],"span":"(3:15)-(3:19)"},"span":"(3:10)-(3:50)","tag":"write"},"tag":"statement"},{"anno":[],"label":null,"span":"(4:10)-(4:15)","statement":{"anno":[],"span":"(4:10)-(4:15)","tag":"return","target":null},"tag":"statement"}]]],"end_label":null,"label":null,"name":null,"span":"(2:7)-(5:12)","tag":"if"}],"name":"myprog","span":"(1:7)-(6:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	conditional := result first statements first.
+	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
-	self assert: conditional thenStatements size equals: 2.
-
-	self assert: conditional thenStatements first class equals: FASTFortranWriteStatement.
-	self assert: conditional thenStatements second class equals: FASTFortranReturnStatement
+	
+	thenStatements := conditional thenStatementBlock statements.
+	self assert: thenStatements size equals: 2.
+	self assert: thenStatements first class equals: FASTFortranWriteStatement.
+	self assert: thenStatements second class equals: FASTFortranReturnStatement
 
 ]
 
@@ -600,7 +618,7 @@ FortranToFASTTests >> testImplicitNoneStatement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:20)","statement":{"anno":[],"items":null,"span":"(2:8)-(2:20)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranImplicitStatement
 ]
 
@@ -619,12 +637,14 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
 	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranProgramMain.
 
-	body := result first statements.
+	body := result first statementBlock statements.
 	self assert: body isCollection.
-	self assert: body size equals: 2.
+	self assert: body size equals: 1.
 	self assert: body first class equals: FASTFortranImplicitStatement.
-	self assert: body second class equals: FASTFortranComment.
-	self assert: body second content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
+	
+	self assert: result first comments size equals: 1.
+	self assert: result first comments first class equals: FASTFortranComment.
+	self assert: result first comments first content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
 ]
 
 { #category : #'tests-programUnit' }
@@ -680,7 +700,7 @@ FortranToFASTTests >> testReturnStatementEmpty [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"span":"(2:7)-(2:12)","tag":"return","target":null},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranReturnStatement.
 
 ]
@@ -696,10 +716,10 @@ FortranToFASTTests >> testStatementAssignement [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:11)-(2:15)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 
-	self assert: stmt variable class equals: FASTFortranVariableExpression.
+	self assert: stmt variable class equals: FASTFortranScalarVariable.
 	self assert: stmt variable name equals: 'c'.
 ]
 
@@ -716,19 +736,19 @@ FortranToFASTTests >> testStatementCallSubroutine [
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
-	body := result first statements.
+	body := result first statementBlock statements.
 	self assert: body size equals: 1.
 	self assert: body first class equals: FASTFortranCallStatement.
 	self assert: body first name equals: 'rank'.
 	self assert: body first arguments size equals: 2.
 
 	arg := body first arguments first.
-	self assert: arg class equals: FASTFortranVariableExpression.
+	self assert: arg class equals: FASTFortranScalarVariable.
 	self assert: arg name equals: 'n'.
 
 	arg := body first arguments second.
 	self assert: arg class equals: FASTFortranIntegerLiteral.
-	self assert: arg value equals: '8'.
+	self assert: arg primitiveValue equals: '8'.
 	self flag: 'what happened to "*" ("*8")?'
 
 ]
@@ -746,7 +766,7 @@ FortranToFASTTests >> testStatementCallWrite [
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
-	body := result first statements.
+	body := result first statementBlock statements.
 	self assert: body size equals: 1.
 
 	stmt := body first.
@@ -756,7 +776,7 @@ FortranToFASTTests >> testStatementCallWrite [
 		self assert: each class equals: FASTFortranAsterisk
 	].
 
-	self assert: stmt iolist size equals: 1.
+	self assert: stmt arguments size equals: 1.
 
 ]
 
@@ -771,9 +791,9 @@ FortranToFASTTests >> testStatementExit [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"span":"(2:8)-(2:11)","tag":"exit","var":null},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranExitStatement.
 ]
 
@@ -788,16 +808,16 @@ FortranToFASTTests >> testStatementGoto [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:15)","statement":{"anno":[],"span":"(2:8)-(2:15)","tag":"goto","target":{"anno":[],"span":"(2:13)-(2:15)","tag":"value","value":{"contents":["100",null],"tag":"integer"}}},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranGoToStatement.
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testStatementPrintMultipleVariables [
 
-	| stmt result  var |
+	| stmt result  var arguments |
 	fortranCode := '      subroutine mysub (msg)
       PRINT *, X, Y, Z
       end
@@ -805,28 +825,30 @@ FortranToFASTTests >> testStatementPrintMultipleVariables [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:25)-(1:27)","tag":"value","value":{"contents":"msg","tag":"variable"}}],"span":"(1:25)-(1:27)"},"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":"x","tag":"variable"}},{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":"y","tag":"variable"}},{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"z","tag":"variable"}}],"span":"(2:16)-(2:22)"},"format":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"tag":"star"}},"span":"(2:7)-(2:22)","tag":"print"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranPrintStatement.
 	self assert: stmt format class equals: FASTFortranAsterisk.
-	self assert: stmt iolist size equals: 3.
+	
+	arguments := stmt arguments.
+	self assert: arguments size equals: 3.
 
-	var := stmt iolist first.
-	self assert: var class equals: FASTFortranVariableExpression.
+	var := arguments first.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'x'.
 
-	var := stmt iolist second.
-	self assert: var class equals: FASTFortranVariableExpression.
+	var := arguments second.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'y'.
 
-	var := stmt iolist third.
-	self assert: var class equals: FASTFortranVariableExpression.
+	var := arguments third.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'z'
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testStatementPrintOneVariable [
 
-	| stmt result |
+	| stmt result arguments |
 	fortranCode := '      subroutine mysub (msg)
       PRINT *, X
       end
@@ -834,12 +856,13 @@ FortranToFASTTests >> testStatementPrintOneVariable [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:25)-(1:27)","tag":"value","value":{"contents":"msg","tag":"variable"}}],"span":"(1:25)-(1:27)"},"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:16)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":"x","tag":"variable"}}],"span":"(2:16)-(2:16)"},"format":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"tag":"star"}},"span":"(2:7)-(2:16)","tag":"print"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
 	result := self visitJsonCode.
 
-	stmt := result first statements first.
+	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranPrintStatement.
 	self assert: stmt format class equals: FASTFortranAsterisk.
-	self assert: stmt iolist size equals: 1.
-	self assert: stmt iolist first class equals: FASTFortranVariableExpression.
-	self assert: stmt iolist first name equals: 'x'
+	arguments := stmt arguments.
+	self assert: arguments size equals: 1.
+	self assert: arguments first class equals: FASTFortranScalarVariable.
+	self assert: arguments first name equals: 'x'
 ]
 
 { #category : #'tests-statement' }
@@ -853,9 +876,9 @@ FortranToFASTTests >> testStatementStop [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
 	self assert: stmt displayArgument equals: nil.
 ]
@@ -871,12 +894,12 @@ FortranToFASTTests >> testStatementStopWithMessage [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:14)","statement":{"anno":[],"message":{"anno":[],"span":"(2:13)-(2:14)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:8)-(2:14)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
 	self assert: stmt displayArgument class equals: FASTFortranIntegerLiteral .
-	self assert: stmt displayArgument value equals: '10'
+	self assert: stmt displayArgument primitiveValue equals: '10'
 ]
 
 { #category : #'tests-statement' }
@@ -890,12 +913,12 @@ FortranToFASTTests >> testStatementWithLabel [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:2)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:1)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
 	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label value equals: '10'.
+	self assert: stmt label primitiveValue equals: '10'.
 ]
 
 { #category : #'tests-programUnit' }
@@ -912,7 +935,7 @@ FortranToFASTTests >> testSubroutineEmpty [
 	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranSubroutine.
 	self assert: result first parameters isEmpty.
-	self assert: result first statements isEmpty
+	self assert: result first statementBlock statements isEmpty
 ]
 
 { #category : #'tests-programUnit' }
@@ -935,7 +958,7 @@ FortranToFASTTests >> testSubroutineWithParameters [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testTokenPosition [
 
-	| result stmt |
+	| result stmnts stmt |
 	fortranCode := '      PROGRAM MYPROG
        STOP
 100    CONTINUE
@@ -944,16 +967,17 @@ FortranToFASTTests >> testTokenPosition [
 '.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"},{"anno":[],"label":{"anno":[],"span":"(3:1)-(3:3)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},"span":"(3:1)-(3:15)","statement":{"anno":[],"span":"(3:8)-(3:15)","tag":"continue"},"tag":"statement"},{"anno":[],"label":null,"span":"(4:8)-(4:11)","statement":{"anno":[],"span":"(4:8)-(4:11)","tag":"exit","var":null},"tag":"statement"}],"name":"myprog","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
-
-	stmt := result first statements first.
+	
+	stmnts := result first statementBlock statements.
+	stmt := stmnts first.
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 32.
 
-	stmt := result first statements second.
+	stmt := stmnts second.
 	self assert: stmt startPos equals: 41.
 	self assert: stmt endPos equals: 48.
 
-	stmt := result first statements third.
+	stmt := stmnts third.
 	self assert: stmt startPos equals: 57.
 	self assert: stmt endPos equals: 60.
 ]
@@ -969,15 +993,15 @@ FortranToFASTTests >> testVariableDeclarationCharacter [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:26)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:20)-(2:26)","type":"scalar","variable":{"anno":[],"span":"(2:20)-(2:26)","tag":"value","value":{"contents":"astring","tag":"variable"}}}],"span":"(2:20)-(2:26)"},"span":"(2:7)-(2:26)","tag":"declaration","type":{"anno":[],"base_type":"character","selector":{"anno":[],"kind":null,"length":{"anno":[],"span":"(2:17)-(2:18)","tag":"value","value":{"contents":["40",null],"tag":"integer"}},"span":"(2:16)-(2:18)"},"span":"(2:7)-(2:18)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
 	self assert: stmt type class equals: FASTFortranCharacterType.
 	self assert: stmt declarators size equals: 1.
 	
 	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'astring'.
 ]
 
@@ -992,15 +1016,15 @@ FortranToFASTTests >> testVariableDeclarationInteger [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:15)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:15)-(2:15)","type":"scalar","variable":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"i","tag":"variable"}}}],"span":"(2:15)-(2:15)"},"span":"(2:7)-(2:15)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
 	self assert: stmt type class equals: FASTFortranIntegerType.
 	self assert: stmt declarators size equals: 1.
 	
 	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'i'.
 ]
 
@@ -1015,15 +1039,15 @@ FortranToFASTTests >> testVariableDeclarationLogical [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:15)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:15)-(2:15)","type":"scalar","variable":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"b","tag":"variable"}}}],"span":"(2:15)-(2:15)"},"span":"(2:7)-(2:15)","tag":"declaration","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
 	self assert: stmt type class equals: FASTFortranLogicalType.
 	self assert: stmt declarators size equals: 1.
 	
 	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'b'.
 ]
 
@@ -1038,15 +1062,15 @@ FortranToFASTTests >> testVariableDeclarationReal [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:12)-(2:12)","type":"scalar","variable":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":"c","tag":"variable"}}}],"span":"(2:12)-(2:12)"},"span":"(2:7)-(2:12)","tag":"declaration","type":{"anno":[],"base_type":"real","selector":null,"span":"(2:7)-(2:10)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statements size equals: 1.
+	self assert: result first statementBlock statements size equals: 1.
 
-	stmt := result first statements first.	
+	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
 	self assert: stmt type class equals: FASTFortranRealType.
 	self assert: stmt declarators size equals: 1.
 	
 	var := stmt declarators first.
-	self assert: var class equals: FASTFortranVariableExpression.
+	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'c'.
 ]
 

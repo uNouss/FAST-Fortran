@@ -563,6 +563,13 @@ FASTFortranTEntityCreator >> newScalarVariable [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newStatementBlock [
+
+	<generated>
+	^ self add: FASTFortranStatementBlock new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newStaticStatement [
 
 	<generated>
