@@ -145,7 +145,7 @@ FortranToFASTTests >> testBinaryExpressionEqKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'eq'.
+	self assert: expr operator equals: '.eq.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -199,7 +199,7 @@ FortranToFASTTests >> testBinaryExpressionGtKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'gt'.
+	self assert: expr operator equals: '.gt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -226,7 +226,7 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'gt'.
+	self assert: expr operator equals: '.gt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -253,7 +253,7 @@ FortranToFASTTests >> testBinaryExpressionLtKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'lt'.
+	self assert: expr operator equals: '.lt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -280,7 +280,7 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'lt'.
+	self assert: expr operator equals: '.lt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
