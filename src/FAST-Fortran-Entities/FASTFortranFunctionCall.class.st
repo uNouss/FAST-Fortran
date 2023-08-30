@@ -7,7 +7,7 @@ Class {
 	#traits : 'FASTFortranTExpression + FASTFortranTWithArguments',
 	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTWithArguments classTrait',
 	#instVars : [
-		'#function => FMOne type: #FASTFortranTCallable opposite: #parentFunctionCall'
+		'#name => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -22,24 +22,16 @@ FASTFortranFunctionCall class >> annotation [
 ]
 
 { #category : #accessing }
-FASTFortranFunctionCall >> function [
-	"Relation named: #function type: #FASTFortranTCallable opposite: #parentFunctionCall"
+FASTFortranFunctionCall >> name [
 
+	<FMProperty: #name type: #String>
 	<generated>
-	<FMComment: 'Function or function statement being called'>
-	^ function
+	<FMComment: 'Name of called function'>
+	^ name
 ]
 
 { #category : #accessing }
-FASTFortranFunctionCall >> function: anObject [
-
+FASTFortranFunctionCall >> name: anObject [
 	<generated>
-	function := anObject
-]
-
-{ #category : #navigation }
-FASTFortranFunctionCall >> functionGroup [
-	<generated>
-	<navigation: 'Function'>
-	^ MooseSpecializedGroup with: self function
+	name := anObject
 ]

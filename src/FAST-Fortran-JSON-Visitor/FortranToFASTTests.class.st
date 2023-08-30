@@ -9,6 +9,56 @@ Class {
 }
 
 { #category : #'tests-expression' }
+FortranToFASTTests >> testAssignementBooleanLiteral [
+
+	| stmt main result |
+	fortranCode := '      PROGRAM MYPROG
+          c = .true.
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:20)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:20)","tag":"value","value":{"contents":[true,null],"tag":"logical"}},"span":"(2:11)-(2:20)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	main := result first.
+	self assert: main class equals: FASTFortranProgramMain.
+	self assert: main statementBlock class equals: FASTFortranStatementBlock.
+	
+	stmt := main statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+
+	self assert: stmt expression class equals: FASTFortranBooleanLiteral.
+	self assert: stmt expression primitiveValue equals: '.true.'.
+	self assert: stmt expression startPos equals: 36.
+
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTTests >> testAssignementFunctionCall [
+
+	| stmt main result |
+	fortranCode := '      PROGRAM MYPROG
+          c = fct()
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:19)","statement":{"anno":[],"expression":{"anno":[],"arguments":{"anno":[],"list":[],"span":"(2:18)-(2:19)"},"function":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"fct","tag":"variable"}},"span":"(2:15)-(2:19)","tag":"function_call"},"span":"(2:11)-(2:19)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	main := result first.
+	self assert: main class equals: FASTFortranProgramMain.
+	self assert: main statementBlock class equals: FASTFortranStatementBlock.
+	
+	stmt := main statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+
+	self assert: stmt expression class equals: FASTFortranFunctionCall.
+	self assert: stmt expression name equals: 'fct'.
+	self assert: stmt expression startPos equals: 36.
+
+]
+
+{ #category : #'tests-expression' }
 FortranToFASTTests >> testAssignementIntegerLiteral [
 
 	| stmt main result |

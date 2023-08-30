@@ -357,6 +357,18 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitFunction_call: aFunctionCallNode [
+
+	| data |
+	data := super visitFunction_call: aFunctionCallNode.
+
+	^ (self newEntity: FASTFortranFunctionCall atPosition: data first)
+		  name: data second;
+		  arguments: data third;
+		  yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	"so far only unconditional case is processed"
 
@@ -440,11 +452,11 @@ FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitLogicalLiteralValue: aString [
+FASTFortranJsonVisitor >> visitLogicalLiteralValue: aLogicalLiteralValue [
 
 	^FASTFortranBooleanLiteral new
 		mooseModel: model ;
-		value: (super visitLogicalLiteralValue: aString) ;
+		primitiveValue: (super visitLogicalLiteralValue: aLogicalLiteralValue) ;
 		yourself
 ]
 
