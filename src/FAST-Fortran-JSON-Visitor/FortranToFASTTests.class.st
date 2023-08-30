@@ -145,7 +145,7 @@ FortranToFASTTests >> testBinaryExpressionEqKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'eq'.
+	self assert: expr operator equals: '.eq.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -199,7 +199,7 @@ FortranToFASTTests >> testBinaryExpressionGtKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'gt'.
+	self assert: expr operator equals: '.gt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -226,7 +226,7 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'gt'.
+	self assert: expr operator equals: '.gt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -253,7 +253,7 @@ FortranToFASTTests >> testBinaryExpressionLtKeyword [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'lt'.
+	self assert: expr operator equals: '.lt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -280,7 +280,7 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 
 	expr := asnmt condition.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'lt'.
+	self assert: expr operator equals: '.lt.'.
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -465,6 +465,7 @@ FortranToFASTTests >> testFunctionWithParameter [
       end
  '.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":"i","tag":"variable"}},{"anno":[],"span":"(2:31)-(2:31)","tag":"value","value":{"contents":"j","tag":"variable"}}],"span":"(2:29)-(2:31)"},"blocks":[],"name":"afct","result":null,"span":"(2:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}}]}'.
+
 	result := self visitJsonCode.
 
 	self assert: result isNotEmpty.
