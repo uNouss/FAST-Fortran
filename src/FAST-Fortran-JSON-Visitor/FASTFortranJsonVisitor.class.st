@@ -299,6 +299,16 @@ FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 	^ (super visitFunctionAsValue: aFunctionNode) second
 ]
 
+{ #category : #'visiting prog-unit' }
+FASTFortranJsonVisitor >> visitFunctionParameters: aParameterList [
+	| data |
+	data := (super visitFunctionParameters: aParameterList).
+	^data
+	ifEmpty: [ data ]
+	ifNotEmpty: [ data second ]
+
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 
