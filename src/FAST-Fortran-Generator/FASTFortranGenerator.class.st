@@ -93,7 +93,6 @@ Class {
 		'unaryExpression',
 		'programFile',
 		'functionCall',
-		'tCallable',
 		'tFortranLabelledStatement',
 		'tFortranBinaryExpression',
 		'tFortranUnaryExpression',
@@ -562,7 +561,10 @@ FASTFortranGenerator >> defineProperties [
 		'Name of external procedure, dummy procedure, or block data routine'.
 
 	(callStatement property: #name type: #String) comment:
-		'Name of a callling entity'.
+		'Name of called entity (a subroutine)'.
+		
+	(functionCall property: #name type: #String) comment:
+			 'Name of called function'.
 
 	(functionStatement property: #name type: #String) comment:
 		'Name of a function statement'.
@@ -671,12 +673,7 @@ FASTFortranGenerator >> defineRelations [
 		 'Expression thats being assigned upon declaration to the var')
 	<>- ((tExpression property: #assignementExpressionOwner) comment:
 			 'The AssignementExpression owner (if possible)').
-	
-	((functionCall property: #function) comment:
-			 'Function or function statement being called')
-	<>-		
-	((tCallable property: #parentFunctionCall) comment:
-		 'a parent function call').
+
 ]
 
 { #category : #definition }
@@ -879,8 +876,6 @@ FASTFortranGenerator >> defineTraits [
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tCallable := builder newTraitNamed: #TCallable comment: 'I represent a callable entity (function or function statement)'.	
-		
 	tFortranLabelledStatement := builder newTraitNamed: #TtFortranLabelledStatement comment: 'I represent a fortran statement with a label'.
 	
 	tFortranBinaryExpression := builder newTraitNamed: #TFortranBinaryExpression comment: 'I represent a fortran binary expression'.

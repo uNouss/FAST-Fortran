@@ -2,7 +2,8 @@ Class {
 	#name : #FASTFortranJsonVisitor,
 	#superclass : #FortranAbstractJsonVisitor,
 	#instVars : [
-		'lineSizes'
+		'lineSizes',
+		'model'
 	],
 	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
 }
@@ -26,6 +27,7 @@ FASTFortranJsonVisitor >> newEntity: aFASTFortranClass atPosition: aPoint [
 
 	| node |
 	node := aFASTFortranClass new.
+	node mooseModel: model.
 	self set: node startEnd: aPoint.
 	^ node
 ]
@@ -51,9 +53,10 @@ FASTFortranJsonVisitor >> set: aFASTFortranNode startEnd: aPoint [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitAddition: anAdditionOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		operator: (super visitAddition: anAdditionOperatorNode);
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -126,13 +129,17 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 
-	^ FASTFortranCharacterType new yourself
+	^FASTFortranCharacterType new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitComment: aCommentNode [
 
-	^ FASTFortranComment new content:
+	^FASTFortranComment new
+		mooseModel: model ;
+		content:
 		  (super visitComment: aCommentNode) second
 ]
 
@@ -156,17 +163,23 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 	| firstIf elseIf data |
 	data := super visitConditions: aConditionList.
 
+	firstIf := nil.
+	elseIf := nil.
 	data do: [ :each |
 		| newIf |
 
 		newIf := FASTFortranIfBlockStatement new
-			         condition: each first;
-			         thenStatementBlock: (FASTFortranStatementBlock new statements: each second);
-			         yourself.
+			mooseModel: model ;
+			condition: each first;
+			thenStatementBlock: (FASTFortranStatementBlock new statements: each second);
+			yourself.
 
 		firstIf
 			ifNil: [ firstIf := newIf ]
-			ifNotNil: [ elseIf elseStatementBlock: ( FASTFortranStatementBlock new statements: {newIf} ) ].
+			ifNotNil: [ elseIf elseStatementBlock: ( FASTFortranStatementBlock new
+				mooseModel: model ;
+				statements: {newIf} ;
+				yourself ) ].
 		elseIf := newIf ].
 
 	^ firstIf
@@ -187,12 +200,13 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
-	^ FASTFortranDeclarationStatement new
-		  type: data second;
+	^FASTFortranDeclarationStatement new
+		mooseModel: model ;
+		type: data second;
 			"TODO clarify the need of attributes"
 		  "attributes: data third;"
-		  declarators: data fourth;
-		  yourself
+		declarators: data fourth;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -207,9 +221,10 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
-	^ FASTFortranScalarVariable new
-		  name: data second;
-		  yourself
+	^FASTFortranScalarVariable new
+		mooseModel: model ;
+		name: data second;
+		yourself
 	"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 ]
 
@@ -222,9 +237,10 @@ FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitDivision: aDivisionOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitDivision: aDivisionOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -258,9 +274,10 @@ FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitEq: anEqualtoOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitEq: anEqualtoOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -276,9 +293,10 @@ FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitExponentiation: aExponentiationOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitExponentiation: aExponentiationOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -302,11 +320,10 @@ FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitFunctionParameters: aParameterList [
 	| data |
-	data := (super visitFunctionParameters: aParameterList).
+	data := super visitFunctionParameters: aParameterList.
 	^data
-	ifEmpty: [ data ]
-	ifNotEmpty: [ data second ]
-
+		ifEmpty: [ data ]
+		ifNotEmpty: [ data second ]
 ]
 
 { #category : #'visiting statement' }
@@ -315,11 +332,12 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 	| data |
 	data := super visitFunctionStatement: aFunctionStatementNode.
 
-	^ FASTFortranFunctionStatement new
-		  name: data second;
-		  arguments: data third;
-		  expression: data fourth;
-		  yourself
+	^FASTFortranFunctionStatement new
+		mooseModel: model ;
+		name: data second;
+		arguments: data third;
+		expression: data fourth;
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -328,11 +346,25 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 
 	| data |
 	data := super visitFunctionWithBlocks: aFunctionNode.
-	^ (self newEntity: FASTFortranFunction atPosition: data first)
+	^(self newEntity: FASTFortranFunction atPosition: data first)
+		name: data second;
+		flag: 'need to set return type';
+		parameters: data fourth;
+		statementBlock: (FASTFortranStatementBlock new
+			mooseModel: model ;
+			statements: data fifth);
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitFunction_call: aFunctionCallNode [
+
+	| data |
+	data := super visitFunction_call: aFunctionCallNode.
+
+	^ (self newEntity: FASTFortranFunctionCall atPosition: data first)
 		  name: data second;
-		  flag: 'need to set return type';
-		  parameters: data fourth;
-		  statementBlock: (FASTFortranStatementBlock new statements: data fifth);
+		  arguments: data third;
 		  yourself
 ]
 
@@ -342,17 +374,19 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 
 	| data |
 	data := super visitGotoStatement: aGotoStatementNode.
-	^ FASTFortranGoToStatement new
-		  flag: 'TODO: target = data second';
-		  yourself
+	^FASTFortranGoToStatement new
+		mooseModel: model ;
+		flag: 'TODO: target = data second';
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitGt: aGreaterthanOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitGt: aGreaterthanOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitGt: aGreaterthanOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -371,7 +405,10 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 		[ lastIf elseStatementBlock isNil ] whileFalse: [
 			lastIf := lastIf elseStatementBlock statements first ].
 		lastIf elseStatementBlock:
-			(FASTFortranStatementBlock new statements: lastElse) ].
+			(FASTFortranStatementBlock new
+				mooseModel: model ;
+				statements: lastElse ;
+				yourself) ].
 
 	^ data third
 ]
@@ -383,43 +420,53 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
 	^ data second
-		  ifNil: [ FASTFortranImplicitStatement new ]
+		  ifNil: [ FASTFortranImplicitStatement new
+				mooseModel: model ;
+				yourself ]
 		  ifNotNil: [ self notYetImplemented ]
 ]
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 
-	^ FASTFortranIntegerType new
+	^FASTFortranIntegerType new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 
-	^ FASTFortranIntegerLiteral new
-		  primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
-		  yourself
+	^FASTFortranIntegerLiteral new
+		mooseModel: model ;
+		primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
+		yourself
 ]
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
-	^ FASTFortranLogicalType new yourself
+	^FASTFortranLogicalType new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitLogicalLiteralValue: aString [
+FASTFortranJsonVisitor >> visitLogicalLiteralValue: aLogicalLiteralValue [
 
-	^ FASTFortranBooleanLiteral new value:
-		  (super visitLogicalLiteralValue: aString)
+	^FASTFortranBooleanLiteral new
+		mooseModel: model ;
+		primitiveValue: (super visitLogicalLiteralValue: aLogicalLiteralValue) ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitLt: anLessthanOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitLt: anLessthanOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -429,12 +476,17 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 	data := super visitMain: aMainProgramNode.
 
 	^ FASTFortranProgramMain new
-		  name: data second;
-		  statementBlock: (FASTFortranStatementBlock new statements:
-					   (data third reject: [ :each |
-							    each isKindOf: FASTFortranComment ]));
-		  comments:
-			  (data third select: [ :each | each isKindOf: FASTFortranComment ])
+		mooseModel: model ;
+		name: data second;
+		statementBlock: (FASTFortranStatementBlock new
+			mooseModel: model ;
+			statements:
+		 		(data third reject: [ :each |
+					each isKindOf: FASTFortranComment ]) ;
+			yourself);
+		comments:
+			(data third select: [ :each | each isKindOf: FASTFortranComment ]) ;
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -448,15 +500,17 @@ FASTFortranJsonVisitor >> visitMiFilename: aString [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitMinus: aMinusOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitMinus: aMinusOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitMinus: aMinusOperatorNode);
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 
 	^FASTFortranBinaryExpression new
+		mooseModel: model ;
 		operator: (super visitMultiplication: aMultiplicationOperatorNode) ;
 		yourself
 ]
@@ -467,22 +521,25 @@ FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
 	| data |
 	data := super visitPrintStatement: aPrintStatementNode.
 
-	^ FASTFortranPrintStatement new
-		  format: data second;
-		  arguments: data third;
-		  yourself
+	^FASTFortranPrintStatement new
+		mooseModel: model ;
+		format: data second;
+		arguments: data third;
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
-
+	model := FASTFortranModel new.
 	^ (super visitProgramFile: aProgramFileNode) second
 ]
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
-	^ FASTFortranRealType new yourself
+	^FASTFortranRealType new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
@@ -490,9 +547,10 @@ FASTFortranJsonVisitor >> visitRealLiteralValue: aRealLiteralValueNode [
 
 	| data |
 	data := super visitRealLiteralValue: aRealLiteralValueNode.
-	^ FASTFortranRealLiteral new
-		  primitiveValue: data second;
-		  yourself
+	^FASTFortranRealLiteral new
+		mooseModel: model ;
+		primitiveValue: data second;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -500,7 +558,9 @@ FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 
 	| data |
 	data := super visitReturnStatement: aReturnStatementNode.
-	^ FASTFortranReturnStatement new yourself
+	^FASTFortranReturnStatement new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -512,7 +572,9 @@ FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitStar: anObject [
 
-	^ FASTFortranAsterisk new
+	^FASTFortranAsterisk new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -546,9 +608,10 @@ FASTFortranJsonVisitor >> visitStopStatement: aStopStatementNode [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 
-	^ FASTFortranCharacterLiteral new
-		  primitiveValue: (super visitStringLiteralValue: aString);
-		  yourself
+	^FASTFortranCharacterLiteral new
+		mooseModel: model ;
+		primitiveValue: (super visitStringLiteralValue: aString);
+		yourself
 ]
 
 { #category : #'visiting prog-unit' }
@@ -557,11 +620,15 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 	| data |
 	data := super visitSubroutine: aSubroutineNode.
 
-	^ FASTFortranSubroutine new
-		  name: data second;
-		  parameters: data third;
-		  statementBlock: (FASTFortranStatementBlock new statements: data fourth);
-		  "sourceAnchor: (self makeIndexedAnchor: data first) ;"yourself
+	^FASTFortranSubroutine new
+		mooseModel: model ;
+		name: data second;
+		parameters: data third;
+		statementBlock: (FASTFortranStatementBlock new
+			mooseModel: model ;
+			statements: data fourth);
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		yourself
 ]
 
 { #category : #'visiting expression' }
@@ -570,17 +637,19 @@ FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
 	| data |
 	data := super visitSubscript: aSubscriptNode.
 
-	^ FASTFortranArrayVariable new
-		  name: data second name;
-		  yourself
+	^FASTFortranArrayVariable new
+		mooseModel: model ;
+		name: data second name;
+		yourself
 ]
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 
-	^ FASTFortranBinaryExpression new
-		  operator: (super visitSubtraction: aSubtractionOperatorNode);
-		  yourself
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitSubtraction: aSubtractionOperatorNode);
+		yourself
 ]
 
 { #category : #visiting }
@@ -606,9 +675,10 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 	| data |
 	data := super visitVariable: aVariableNode.
 
-	^ FASTFortranScalarVariable new
-		  name: data;
-		  yourself
+	^FASTFortranScalarVariable new
+		mooseModel: model ;
+		name: data;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -627,8 +697,10 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	data := super visitWriteStatement: aWriteStatementNode.
 
 	^ FASTFortranWriteStatement new
-		  format: data second;
-		  arguments: data third;
-		  yourself
-	"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		mooseModel: model ;
+		format: data second;
+		arguments: data third;
+		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
+		yourself
+
 ]

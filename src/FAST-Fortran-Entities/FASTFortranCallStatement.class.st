@@ -26,7 +26,7 @@ FASTFortranCallStatement >> name [
 
 	<FMProperty: #name type: #String>
 	<generated>
-	<FMComment: 'Name of a callling entity'>
+	<FMComment: 'Name of called entity (a subroutine)'>
 	^ name
 ]
 
