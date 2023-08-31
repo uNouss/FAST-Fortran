@@ -399,7 +399,7 @@ FortranToFASTTests >> testBlockData [
 	fortranCode := '      block data myblck
       common /mycom/ i
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"common_groups":{"anno":[],"list":[{"anno":[],"name":{"anno":[],"span":"(2:14)-(2:20)","tag":"value","value":{"contents":"mycom","tag":"variable"}},"span":"(2:14)-(2:22)","vars":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:22)-(2:22)","type":"scalar","variable":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"i","tag":"variable"}}}],"span":"(2:22)-(2:22)"}}],"span":"(2:14)-(2:22)"},"span":"(2:7)-(2:22)","tag":"common"},"tag":"statement"}],"name":"myblck","span":"(1:7)-(3:9)","tag":"block_data"}]}'.
 	result := self visitJsonCode.
 
@@ -513,7 +513,7 @@ FortranToFASTTests >> testFunctionNoParameter [
 	| result fct |
 	fortranCode := '      integer function aFct()
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[],"name":"afct","result":null,"span":"(1:7)-(2:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
 	result := self visitJsonCode.
 
@@ -555,7 +555,7 @@ FortranToFASTTests >> testFunctionWithParameter [
 	fortranCode := '
       integer function aFct(i,j)
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":"i","tag":"variable"}},{"anno":[],"span":"(2:31)-(2:31)","tag":"value","value":{"contents":"j","tag":"variable"}}],"span":"(2:29)-(2:31)"},"blocks":[],"name":"afct","result":null,"span":"(2:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}}]}'.
 
 	result := self visitJsonCode.
@@ -586,7 +586,7 @@ FortranToFASTTests >> testFunctionWithStatement [
 	fortranCode := '      integer function aFct()
       return 1
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[],"name":"afct","result":null,"span":"(1:7)-(2:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
 	result := self visitJsonCode.
 
@@ -788,7 +788,7 @@ FortranToFASTTests >> testMainProgram [
       implicit none
 c23456789 123456789 123456789 123456789 123456789 123456789 12
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:19)","statement":{"anno":[],"items":null,"span":"(2:7)-(2:19)","tag":"implicit"},"tag":"statement"},{"anno":[],"comment":"23456789 123456789 123456789 123456789 123456789 123456789 12","span":"(3:1)-(3:62)","tag":"comment"}],"name":"main","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
@@ -837,7 +837,7 @@ FortranToFASTTests >> testMainProgramEmpty [
 	| result |
 	fortranCode := '      program main
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[],"name":"main","span":"(1:7)-(2:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 	
@@ -1085,7 +1085,7 @@ FortranToFASTTests >> testSubroutineEmpty [
 	| result |
 	fortranCode := '      SUBROUTINE RANK
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[],"name":"rank","options":[null,null],"span":"(1:7)-(2:9)","subprograms":null,"tag":"subroutine"}]}'.
 	result := self visitJsonCode.
 	
@@ -1102,7 +1102,7 @@ FortranToFASTTests >> testSubroutineWithParameters [
 	| result |
 	fortranCode := '      SUBROUTINE RANK( A, B)
       end
- '.
+'.
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:24)-(1:24)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(1:27)-(1:27)","tag":"value","value":{"contents":"b","tag":"variable"}}],"span":"(1:24)-(1:27)"},"blocks":[],"name":"rank","options":[null,null],"span":"(1:7)-(2:9)","subprograms":null,"tag":"subroutine"}]}'.
 	result := self visitJsonCode.
 	
