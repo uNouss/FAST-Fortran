@@ -345,15 +345,15 @@ FASTFortranJsonVisitor >> visitFunctionParameters: aParameterList [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
-
+	"FunctionStatement have a quite different representation than regular functions..."
 	| data |
 	data := super visitFunctionStatement: aFunctionStatementNode.
 
 	^FASTFortranFunctionStatement new
 		mooseModel: model ;
-		name: data second;
-		arguments: data third;
-		expression: data fourth;
+		name: data second name ;
+		arguments: data third second ;
+		expression: data fourth ;
 		yourself
 ]
 
