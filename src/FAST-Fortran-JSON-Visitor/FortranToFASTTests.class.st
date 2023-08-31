@@ -464,6 +464,30 @@ FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDoStatementWithComment [
+
+	| result stmt |
+	fortranCode := '      program main
+      do i=1, max
+C comment in loop
+      end do
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[{"anno":[],"comment":" comment in loop","span":"(3:1)-(3:17)","tag":"comment"}],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:10)-(2:12)","tag":"assign_expression","target":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"max","tag":"variable"}},"span":"(2:10)-(2:17)"},"end_label":null,"label":null,"name":null,"span":"(2:7)-(4:12)","tag":"do","target":null}],"name":"main","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt loopControl isNotNil.
+	self assert: stmt statementBlock statements isEmpty.
+	self assert: stmt startPos equals: 26.
+
+	self assert: stmt statementBlock comments size equals: 1.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testExternalStatement [
 
 	| result stmt |
@@ -537,6 +561,30 @@ FortranToFASTTests >> testFunctionWithParameter [
 
 ]
 
+{ #category : #'tests-programUnit' }
+FortranToFASTTests >> testFunctionWithStatement [
+
+	| result fct |
+	fortranCode := '      integer function aFct()
+      return 1
+      end
+ '.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[],"name":"afct","result":null,"span":"(1:7)-(2:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
+	result := self visitJsonCode.
+
+	self assert: result isNotEmpty.
+	fct := result first.
+
+	self assert: fct class equals: FASTFortranFunction.
+	self assert: fct name equals: 'afct'.
+	self assert: fct parameters isEmpty.
+	self assert: fct statementBlock statements isEmpty.
+	self assert: fct startPos equals: 7.
+	"self assert: fct returnType class equals: FASTFortranType.
+	self assert: fct returnType name equals: 'integer'."
+
+]
+
 { #category : #'tests-statement' }
 FortranToFASTTests >> testIfElseIf [
 
@@ -573,6 +621,28 @@ FortranToFASTTests >> testIfElseIf [
 	
 	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranAssignmentStatement.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testIfElseWithComment [
+
+	| result conditional |
+	
+	fortranCode := '      PROGRAM MYPROG
+       IF ( A ) THEN 
+       ELSE
+C comment in else part
+       END IF
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":[{"anno":[],"comment":" comment in else part","span":"(4:1)-(4:22)","tag":"comment"}],"conditions":[[{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(5:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(6:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	conditional := result first statementBlock statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatementBlock statements isEmpty.
+	self assert: conditional elseStatementBlock statements isEmpty.
+	self assert: conditional elseStatementBlock comments size equals: 1.
 ]
 
 { #category : #'tests-statement' }
@@ -614,6 +684,25 @@ FortranToFASTTests >> testIfEmpty [
 	self assert: conditional condition class equals: FASTFortranScalarVariable.
 	self assert: conditional condition name equals: 'a'.
 	self assert: conditional thenStatementBlock statements size equals: 0.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testIfThenWithComment [
+
+	| result conditional |
+	fortranCode := '      PROGRAM MYPROG
+       IF ( A ) THEN
+C comment in then part
+       END IF
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},[{"anno":[],"comment":" comment in then part","span":"(3:1)-(3:22)","tag":"comment"}]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(4:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	conditional := result first statementBlock statements first.
+	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatementBlock statements isEmpty.
+	self assert: conditional thenStatementBlock comments size equals: 1.
 ]
 
 { #category : #'tests-statement' }
@@ -688,14 +777,14 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
 	self assert: result size equals: 1.
 	self assert: result first class equals: FASTFortranProgramMain.
 
-	body := result first statementBlock statements.
-	self assert: body isCollection.
-	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranImplicitStatement.
+	body := result first statementBlock.
+	self assert: body statements isCollection.
+	self assert: body statements size equals: 1.
+	self assert: body statements first class equals: FASTFortranImplicitStatement.
 	
-	self assert: result first comments size equals: 1.
-	self assert: result first comments first class equals: FASTFortranComment.
-	self assert: result first comments first content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
+	self assert: body comments size equals: 1.
+	self assert: body comments first class equals: FASTFortranComment.
+	self assert: body comments first content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
 ]
 
 { #category : #'tests-programUnit' }

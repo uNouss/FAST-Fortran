@@ -112,6 +112,23 @@ FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitBody: aNode [
+	| data stmtBlock |
+	data := aNode 
+		ifNil: [ #() ]
+		ifNotNil: [ super visitBody: aNode ].
+
+	stmtBlock := FASTFortranStatementBlock new.
+	data do: [ :each |
+		each isStatement
+		ifTrue: [ stmtBlock addStatement: each ]
+		ifFalse: [ stmtBlock addComment: each ] ].
+	
+	^stmtBlock 
+
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCallStatement: aCallNode [
 	"The CALL statement branches to the specified subroutine, executes the subroutine, and returns to the calling program after finishing the subroutine.
 
@@ -171,7 +188,7 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 		newIf := FASTFortranIfBlockStatement new
 			mooseModel: model ;
 			condition: each first;
-			thenStatementBlock: (FASTFortranStatementBlock new statements: each second);
+			thenStatementBlock: each second;
 			yourself.
 
 		firstIf
@@ -251,7 +268,7 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 
 	^ (self newEntity: FASTFortranDoStatement atPosition: data first)
 		  loopControl: data second;
-		  statementBlock: (FASTFortranStatementBlock new statements: data third);
+		  statementBlock: data third ;
 		  yourself
 ]
 
@@ -391,24 +408,21 @@ FASTFortranJsonVisitor >> visitGt: aGreaterthanOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIf: anIfNode [
-	".blocks is an array with one block dedicated to else part of last if (in case of elseifs)
-	.conditionals is an erray where each element represent if and if else consequently 
-	.conditionals[_].[0] represents a condition
-	.conditionals[_].[1] is an array containing all statements of the correpsonding then part"
+	"ifNode has 'conditionals' and 'blocks'
+	- 'conditionals' is an array of pairs where
+	  - first element is an if/elseif condition
+	  - second element contains all statements of the corresponding then
+	- 'blocks' contains all statements of the last else (i.e. not an elseif)"
 
-	| data lastIf lastElse |
+	| data ifStmt lastElse |
 	data := super visitIf: anIfNode.
-	lastIf := data third.
+	ifStmt := data third.
 	lastElse := data fourth.
 
-	lastElse isNotEmpty ifTrue: [
-		[ lastIf elseStatementBlock isNil ] whileFalse: [
-			lastIf := lastIf elseStatementBlock statements first ].
-		lastIf elseStatementBlock:
-			(FASTFortranStatementBlock new
-				mooseModel: model ;
-				statements: lastElse ;
-				yourself) ].
+	[ ifStmt elseStatementBlock isNil ]
+	whileFalse: [ ifStmt := ifStmt elseStatementBlock statements first ].
+	
+	ifStmt elseStatementBlock: data fourth.
 
 	^ data third
 ]
@@ -478,14 +492,7 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 	^ FASTFortranProgramMain new
 		mooseModel: model ;
 		name: data second;
-		statementBlock: (FASTFortranStatementBlock new
-			mooseModel: model ;
-			statements:
-		 		(data third reject: [ :each |
-					each isKindOf: FASTFortranComment ]) ;
-			yourself);
-		comments:
-			(data third select: [ :each | each isKindOf: FASTFortranComment ]) ;
+		statementBlock: data third ;
 		yourself
 ]
 
@@ -624,9 +631,7 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 		mooseModel: model ;
 		name: data second;
 		parameters: data third;
-		statementBlock: (FASTFortranStatementBlock new
-			mooseModel: model ;
-			statements: data fourth);
+		statementBlock: data fourth;
 		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		yourself
 ]
