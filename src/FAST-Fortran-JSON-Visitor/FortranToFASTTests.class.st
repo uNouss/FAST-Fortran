@@ -549,6 +549,26 @@ FortranToFASTTests >> testFunctionStatement [
 ]
 
 { #category : #'tests-programUnit' }
+FortranToFASTTests >> testFunctionWithComment [
+
+	| result fct |
+	fortranCode := '      integer function aFct()
+C comment in a function''s body
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"comment":" comment in a function''s body","span":"(2:1)-(2:30)","tag":"comment"}],"name":"afct","result":null,"span":"(1:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
+	result := self visitJsonCode.
+
+	self assert: result isNotEmpty.
+	fct := result first.
+
+	self assert: fct class equals: FASTFortranFunction.
+	self assert: fct name equals: 'afct'.
+	self assert: fct statementBlock statements isEmpty.
+	self assert: fct statementBlock comments size equals: 1.
+]
+
+{ #category : #'tests-programUnit' }
 FortranToFASTTests >> testFunctionWithParameter [
 
 	| result fct param |
