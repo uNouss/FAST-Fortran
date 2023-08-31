@@ -530,6 +530,24 @@ FortranToFASTTests >> testFunctionNoParameter [
 
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testFunctionStatement [
+
+	| result stmt |
+	fortranCode := '      program main
+      add(x,y) = x + y
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"x","tag":"variable"}},{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"y","tag":"variable"}}],"span":"(2:11)-(2:13)"},"body":{"anno":[],"left":{"anno":[],"span":"(2:18)-(2:18)","tag":"value","value":{"contents":"x","tag":"variable"}},"op":{"tag":"addition"},"right":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"y","tag":"variable"}},"span":"(2:18)-(2:22)","tag":"binary"},"name":{"anno":[],"span":"(2:7)-(2:9)","tag":"value","value":{"contents":"add","tag":"variable"}},"span":"(2:7)-(2:22)","tag":"function"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranFunctionStatement.
+	self assert: stmt name equals: 'add'.
+]
+
 { #category : #'tests-programUnit' }
 FortranToFASTTests >> testFunctionWithParameter [
 
