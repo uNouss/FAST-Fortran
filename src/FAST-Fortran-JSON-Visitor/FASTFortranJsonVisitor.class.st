@@ -352,7 +352,7 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 	^FASTFortranFunctionStatement new
 		mooseModel: model ;
 		name: data second name ;
-		arguments: data third second ;
+		arguments: data third ;
 		expression: data fourth ;
 		yourself
 ]
@@ -364,12 +364,10 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 	| data |
 	data := super visitFunctionWithBlocks: aFunctionNode.
 	^(self newEntity: FASTFortranFunction atPosition: data first)
-		name: data second;
-		flag: 'need to set return type';
-		parameters: data fourth;
-		statementBlock: (FASTFortranStatementBlock new
-			mooseModel: model ;
-			statements: data fifth);
+		name: data second ;
+		flag: 'need to set return type' ;
+		parameters: data fourth ;
+		statementBlock: data fifth ;
 		yourself
 ]
 
