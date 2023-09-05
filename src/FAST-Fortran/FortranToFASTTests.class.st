@@ -5,7 +5,7 @@ Class {
 		'fortranCode',
 		'jsonCode'
 	],
-	#category : #'FAST-Fortran-JSON-Visitor-Tests'
+	#category : #'FAST-Fortran-Tests'
 }
 
 { #category : #'tests-expression' }

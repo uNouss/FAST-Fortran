@@ -5,7 +5,7 @@ Class {
 		'lineSizes',
 		'model'
 	],
-	#category : #'FAST-Fortran-JSON-Visitor-Visitor'
+	#category : #'FAST-Fortran-Importer'
 }
 
 { #category : #initialization }
