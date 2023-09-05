@@ -39,10 +39,27 @@ FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
+	self sixSpaces.
+	aFASTFortranDeclarationStatement type accept: self.
+	self << ' '.
+	aFASTFortranDeclarationStatement declarators
+		do: [ :decl |self << decl name ]
+		separatedBy: [ self << ', ' ].
+	self newLine
+		
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 	<generated>
 	self visitFASTFortranTWithParameters: aFASTFortranFunction.
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
+	self << 'integer'
 ]
 
 { #category : #visiting }
