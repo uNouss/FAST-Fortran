@@ -650,8 +650,9 @@ FASTFortranVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTStatementBlock: aFASTFortranTStatementBlock [
-	<generated>
-	self visitFASTFortranTStatement: aFASTFortranTStatementBlock.
+	aFASTFortranTStatementBlock statements do: [ :statement |
+		statement accept: self
+	]
 ]
 
 { #category : #'visiting - traits' }
