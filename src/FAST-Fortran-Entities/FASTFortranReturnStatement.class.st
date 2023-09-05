@@ -4,8 +4,8 @@ a Fortran Return Statement
 Class {
 	#name : #FASTFortranReturnStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTReturnStatement + FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTReturnStatement classTrait + FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTReturnStatement + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTReturnStatement classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#alternateReturnLable => FMProperty'
 	],

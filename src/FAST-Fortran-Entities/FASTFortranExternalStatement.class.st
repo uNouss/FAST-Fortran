@@ -4,8 +4,8 @@ I represent Fortran External statement
 Class {
 	#name : #FASTFortranExternalStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#name => FMProperty'
 	],

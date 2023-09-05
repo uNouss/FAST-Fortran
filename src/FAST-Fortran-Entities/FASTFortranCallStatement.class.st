@@ -4,8 +4,8 @@ I represent Fortran Call statement
 Class {
 	#name : #FASTFortranCallStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTWithArguments + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#name => FMProperty'
 	],

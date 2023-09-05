@@ -1,8 +1,8 @@
 "
-I represent Fortran Pause statement
+I represent Fortran Volatile statement
 "
 Class {
-	#name : #FASTFortranPauseStatement,
+	#name : #FASTFortranVolatileStatement,
 	#superclass : #FASTFortranEntity,
 	#traits : 'FASTFortranTLabelledStatement',
 	#classTraits : 'FASTFortranTLabelledStatement classTrait',
@@ -10,9 +10,9 @@ Class {
 }
 
 { #category : #meta }
-FASTFortranPauseStatement class >> annotation [
+FASTFortranVolatileStatement class >> annotation [
 
-	<FMClass: #PauseStatement super: #FASTFortranEntity>
+	<FMClass: #VolatileStatement super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
