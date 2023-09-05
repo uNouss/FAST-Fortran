@@ -2,5 +2,6 @@ Extension { #name : #FASTFortranExitStatement }
 
 { #category : #'*FAST-Fortran' }
 FASTFortranExitStatement >> accept: aVisitor [
-	^aVisitor visitFASTFortranExitStatement: self
+	<generated>
+	^aVisitor visitFASTFortranExitStatement: self.
 ]

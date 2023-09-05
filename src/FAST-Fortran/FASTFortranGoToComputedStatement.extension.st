@@ -2,5 +2,6 @@ Extension { #name : #FASTFortranGoToComputedStatement }
 
 { #category : #'*FAST-Fortran' }
 FASTFortranGoToComputedStatement >> accept: aVisitor [
-	^aVisitor visitFASTFortranGoToComputedStatement: self
+	<generated>
+	^aVisitor visitFASTFortranGoToComputedStatement: self.
 ]

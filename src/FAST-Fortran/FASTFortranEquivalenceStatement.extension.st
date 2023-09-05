@@ -2,5 +2,6 @@ Extension { #name : #FASTFortranEquivalenceStatement }
 
 { #category : #'*FAST-Fortran' }
 FASTFortranEquivalenceStatement >> accept: aVisitor [
-	^aVisitor visitFASTFortranEquivalenceStatement: self
+	<generated>
+	^aVisitor visitFASTFortranEquivalenceStatement: self.
 ]
