@@ -2,16 +2,16 @@
 I represent a fortran statement with a label
 "
 Trait {
-	#name : #FASTFortranTtFortranLabelledStatement,
+	#name : #FASTFortranTLabelledStatement,
 	#traits : 'FASTFortranTStatement',
 	#classTraits : 'FASTFortranTStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
 { #category : #meta }
-FASTFortranTtFortranLabelledStatement classSide >> annotation [
+FASTFortranTLabelledStatement classSide >> annotation [
 
-	<FMClass: #TtFortranLabelledStatement super: #Object>
+	<FMClass: #TLabelledStatement super: #Object>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

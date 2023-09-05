@@ -4,8 +4,8 @@ I represent a declaration statement for one or many variables
 Class {
 	#name : #FASTFortranDeclarationStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
 		'#type => FMOne type: #FASTFortranType opposite: #parentDeclaration'

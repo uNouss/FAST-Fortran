@@ -4,8 +4,8 @@ I represent a function statement - a function-like declaration, made in a single
 Class {
 	#name : #FASTFortranFunctionStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTWithArguments + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#name => FMProperty',
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'

@@ -4,8 +4,8 @@ I represent Fortran Include statement
 Class {
 	#name : #FASTFortranIncludeStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

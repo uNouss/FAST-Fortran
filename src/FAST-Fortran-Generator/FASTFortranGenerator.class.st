@@ -855,7 +855,7 @@ FASTFortranGenerator >> defineStatements [
 		                    newClassNamed: #VirtualStatement
 		                    comment: 'I represent Fortran Virtual statement'.
 	volatileStatement := builder
-		                     newClassNamed: #volatileStatement
+		                     newClassNamed: #VolatileStatement
 		                     comment:
 		                     'I represent Fortran Volatile statement'.
 	writeStatement := builder
@@ -876,7 +876,7 @@ FASTFortranGenerator >> defineTraits [
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tFortranLabelledStatement := builder newTraitNamed: #TtFortranLabelledStatement comment: 'I represent a fortran statement with a label'.
+	tFortranLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
 	
 	tFortranBinaryExpression := builder newTraitNamed: #TFortranBinaryExpression comment: 'I represent a fortran binary expression'.
 	

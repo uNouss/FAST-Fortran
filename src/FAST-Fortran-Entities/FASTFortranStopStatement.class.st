@@ -4,8 +4,8 @@ I represent Fortran Stop statement
 Class {
 	#name : #FASTFortranStopStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#displayArgument => FMProperty'
 	],

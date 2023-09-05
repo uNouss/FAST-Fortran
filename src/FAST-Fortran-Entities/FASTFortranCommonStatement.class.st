@@ -4,8 +4,8 @@ I represent Fortran Common statement
 Class {
 	#name : #FASTFortranCommonStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

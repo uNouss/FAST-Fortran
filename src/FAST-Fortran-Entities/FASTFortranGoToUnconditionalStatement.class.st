@@ -4,8 +4,8 @@ I represent Fortran Go To (Unconditional) statement
 Class {
 	#name : #FASTFortranGoToUnconditionalStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

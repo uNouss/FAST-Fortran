@@ -647,15 +647,15 @@ FASTFortranTEntityCreator >> newVirtualStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVolatileStatement [
+
+	<generated>
+	^ self add: FASTFortranVolatileStatement new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newWriteStatement [
 
 	<generated>
 	^ self add: FASTFortranWriteStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newvolatileStatement [
-
-	<generated>
-	^ self add: FASTFortranvolatileStatement new
 ]

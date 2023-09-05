@@ -4,8 +4,8 @@ I represent Fortran assignment made without ASSIGN statement
 Class {
 	#name : #FASTFortranAssignmentStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTAssignment + FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTAssignment + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
 	],

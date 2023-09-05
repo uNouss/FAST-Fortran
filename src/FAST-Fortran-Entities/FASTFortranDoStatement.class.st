@@ -4,8 +4,8 @@ I represent Fortran Do statement
 Class {
 	#name : #FASTFortranDoStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
 		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentDoStatement'

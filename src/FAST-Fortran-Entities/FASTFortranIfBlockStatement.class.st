@@ -4,8 +4,8 @@ I represent Fortran If (BLock) statement
 Class {
 	#name : #FASTFortranIfBlockStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTtFortranLabelledStatement',
-	#classTraits : 'FASTFortranTtFortranLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
 		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
