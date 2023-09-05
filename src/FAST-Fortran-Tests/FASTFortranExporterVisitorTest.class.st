@@ -22,8 +22,29 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
 	^FASTFortranDeclarationStatement new
 		type: type ;
-		declarators: aCollection ;
+		declarators: (self scalarVariables: aCollection)  ;
 		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> entity: owner parameters: aCollection [
+	^owner
+		parameters: (self scalarVariables: aCollection) ;
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> entity: owner statementBlock: aCollection [
+	^owner
+		statementBlock: (FASTFortranStatementBlock new
+			statements: aCollection ;
+			yourself)
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> implicitStatement [
+	^FASTFortranImplicitStatement new
 ]
 
 { #category : #'entity creation' }
@@ -82,7 +103,9 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineNoParameters [
 FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 	| sub |
 	sub := self subroutine: 'blah'.
-	sub parameters: (self scalarVariables: #(i j) ).
+	self
+		entity: sub
+		parameters: #(i j).
 
 	self
 		assertExport: sub
@@ -93,43 +116,60 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 ]
 
 { #category : #tests }
-FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParametersWithOneDeclaration [
+FASTFortranExporterVisitorTest >> testImplicitStatement [
 	| sub |
 	sub := self subroutine: 'blah'.
-	sub parameters: (self scalarVariables: #(i j)).
-	sub statementBlock:
-		(self statementBlock: {
-			self
-				declarationStatement: self integerType
-				variables: (self scalarVariables: #(i j)) }).
+	self
+		entity: sub
+		statementBlock: { self implicitStatement }.
 
 	self
 		assertExport: sub
 		equals: 
-'      subroutine blah(i, j)
+'      subroutine blah()
+      implicit none
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				declarationStatement: self integerType
+				variables: #(i j) }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
       integer i, j
       end
 '
 ]
 
 { #category : #tests }
-FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParametersWithTwoDeclarations [
+FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 	| sub |
 	sub := self subroutine: 'blah'.
-	sub parameters: (self scalarVariables: #(i j)).
-	sub statementBlock:
-		(self statementBlock: {
+	self
+		entity: sub
+		statementBlock: {
 			self
 				declarationStatement: self integerType
-				variables: (self scalarVariables: #(i)) .
+				variables: #(i) .
 			self
 				declarationStatement: self integerType
-				variables: (self scalarVariables: #(j)) }).
+				variables: #(j) }.
 
 	self
 		assertExport: sub
 		equals: 
-'      subroutine blah(i, j)
+'      subroutine blah()
       integer i
       integer j
       end

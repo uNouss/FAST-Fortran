@@ -57,6 +57,15 @@ FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 	self visitFASTFortranTWithParameters: aFASTFortranFunction.
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
+
+	self
+		sixSpaces ;
+		<< 'implicit none' ;
+		newLine
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
 	self << 'integer'
