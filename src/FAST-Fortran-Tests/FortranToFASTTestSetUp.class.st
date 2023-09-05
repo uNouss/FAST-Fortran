@@ -1,7 +1,7 @@
 Class {
 	#name : #FortranToFASTTestSetUp,
 	#superclass : #TestCase,
-	#category : #'FAST-Fortran-Tests'
+	#category : #'FAST-Fortran-Tests-Visitor'
 }
 
 { #category : #'as yet unclassified' }
