@@ -35,5 +35,6 @@ BaselineOfFASTFortran >> definePackages: spec [
 		repository: 'https://github.com/moosetechnology/FAST-Fortran';
 		package: 'FAST-Fortran-Generator' with: [ spec requires: #(FAST Esope) ] ;
 		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FAST Esope) ];
-		package: 'FAST-Fortran' with: [ spec requires: #('FAST-Fortran-Entities') ] .
+		package: 'FAST-Fortran' with: [ spec requires: #('FAST-Fortran-Entities') ];
+		package: 'FAST-Fortran-Tests' with: [ spec requires: #('FAST-Fortran') ] .
 ]
