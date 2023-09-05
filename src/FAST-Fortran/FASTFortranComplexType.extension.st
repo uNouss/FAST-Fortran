@@ -2,5 +2,6 @@ Extension { #name : #FASTFortranComplexType }
 
 { #category : #'*FAST-Fortran' }
 FASTFortranComplexType >> accept: aVisitor [
-	^aVisitor visitFASTFortranComplexType: self
+	<generated>
+	^aVisitor visitFASTFortranComplexType: self.
 ]

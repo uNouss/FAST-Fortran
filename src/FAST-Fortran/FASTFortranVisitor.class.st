@@ -4,611 +4,735 @@ Class {
 	#category : #'FAST-Fortran-Visitor'
 }
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAcceptStatement: aFASTFortranAcceptStatement [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranAmpersand: aFASTFortranAmpersand [
+	<generated>
 	self visitFASTFortranTCharacterLiteral: aFASTFortranAmpersand.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranArrayDimensionDeclarator: aFASTFortranArrayDimensionDeclarator [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVariable [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
+	<generated>
 	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranAssignmentStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
+	<generated>
 	self visitFASTFortranTFormatIdentifier: aFASTFortranAsterisk.
 	self visitFASTFortranTNumericalLiteral: aFASTFortranAsterisk.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAutomaticStatement: aFASTFortranAutomaticStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranAutomaticStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranBackspaceStatement: aFASTFortranBackspaceStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranBackspaceStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranBinaryExpression.
 	self visitFASTFortranTFortranBinaryExpression: aFASTFortranBinaryExpression.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranBlockData: aFASTFortranBlockData [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranBooleanLiteral: aFASTFortranBooleanLiteral [
+	<generated>
 	self visitFASTFortranTBooleanLiteral: aFASTFortranBooleanLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranByteType: aFASTFortranByteType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
+	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranCallStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranCallStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranCharacterLiteral: aFASTFortranCharacterLiteral [
+	<generated>
 	self visitFASTFortranTCharacterLiteral: aFASTFortranCharacterLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranCharacterType: aFASTFortranCharacterType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCloseStatement: aFASTFortranCloseStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranCloseStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranComment: aFASTFortranComment [
+	<generated>
 	self visitFASTFortranTComment: aFASTFortranComment.
 	self visitFASTFortranTEntity: aFASTFortranComment.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranCommonStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranComplexLiteral: aFASTFortranComplexLiteral [
+	<generated>
 	self visitFASTFortranTNumericalLiteral: aFASTFortranComplexLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranComplexType: aFASTFortranComplexType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranContinueStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDataStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDeclarationStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDecodeStatement: aFASTFortranDecodeStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDecodeStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDimensionStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDoStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDoWhileStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranDoubleComplexLiteral: aFASTFortranDoubleComplexLiteral [
+	<generated>
 	self visitFASTFortranTNumericalLiteral: aFASTFortranDoubleComplexLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranDoubleComplexType: aFASTFortranDoubleComplexType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranDoublePrecisionLiteral: aFASTFortranDoublePrecisionLiteral [
+	<generated>
 	self visitFASTFortranTNumericalLiteral: aFASTFortranDoublePrecisionLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranDoublePrecisionType: aFASTFortranDoublePrecisionType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranElseStatement: aFASTFortranElseStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranElseStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEncodeStatement: aFASTFortranEncodeStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranEncodeStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEndFileStatement: aFASTFortranEndFileStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranEndFileStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranEntity: aFASTFortranEntity [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranEntity.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranEntryStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivalenceStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranEquivalenceStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranExitStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranExternalStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranFormatStatement: aFASTFortranFormatStatement [
+	<generated>
 	self visitFASTFortranTFormatIdentifier: aFASTFortranFormatStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranFormatStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
+	<generated>
 	self visitFASTFortranTWithParameters: aFASTFortranFunction.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunctionCall [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranFunctionCall.
 	self visitFASTFortranTWithArguments: aFASTFortranFunctionCall.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranFunctionStatement: aFASTFortranFunctionStatement [
+	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranFunctionStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranFunctionStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranGoToAssignedStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranGoToComputedStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranGoToStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranGoToUnconditionalStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfArithmeticStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfBlockStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfLogicalStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranImplicitStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIncludeStatement: aFASTFortranIncludeStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranIncludeStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranInquireStatement: aFASTFortranInquireStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranInquireStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranIntegerLiteral: aFASTFortranIntegerLiteral [
+	<generated>
 	self visitFASTFortranTNumericalLiteral: aFASTFortranIntegerLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIntrinsicStatement: aFASTFortranIntrinsicStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranIntrinsicStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranLogicalType: aFASTFortranLogicalType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranLoopControlExpression.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranMapStatement: aFASTFortranMapStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranMapStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranNameListStatement: aFASTFortranNameListStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranNameListStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranOpenStatement: aFASTFortranOpenStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranOpenStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranOptionsStatement: aFASTFortranOptionsStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranOptionsStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranParameterStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPauseStatement: aFASTFortranPauseStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranPauseStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranPointer: aFASTFortranPointer [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranPointer.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPragmaStatement: aFASTFortranPragmaStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranPragmaStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement [
+	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranPrintStatement.
 	self visitFASTFortranTWithFormatIdentifier: aFASTFortranPrintStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranPrintStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProcedure: aFASTFortranProcedure [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProgramFile: aFASTFortranProgramFile [
+	<generated>
 	self visitFASTFortranTWithComments: aFASTFortranProgramFile.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMain [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranProgramUnit.
 	self visitFASTFortranTNamedBehaviouralEntity: aFASTFortranProgramUnit.
 	self visitFASTFortranTWithComments: aFASTFortranProgramUnit.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReadStatement: aFASTFortranReadStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranReadStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranRealLiteral: aFASTFortranRealLiteral [
+	<generated>
 	self visitFASTFortranTNumericalLiteral: aFASTFortranRealLiteral.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranRealType: aFASTFortranRealType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranRecord: aFASTFortranRecord [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranRecord.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
+	<generated>
 	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranReturnStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranRewindStatement: aFASTFortranRewindStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranRewindStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranSaveStatement: aFASTFortranSaveStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranSaveStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalarVariable [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
+	<generated>
 	self visitFASTFortranTStatementBlock: aFASTFortranStatementBlock.
 	self visitFASTFortranTWithComments: aFASTFortranStatementBlock.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranStaticStatement: aFASTFortranStaticStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranStaticStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranStopStatement: aFASTFortranStopStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranStopStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranStructure: aFASTFortranStructure [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranStructure.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranSubprogram: aFASTFortranSubprogram [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine [
+	<generated>
 	self visitFASTFortranTWithParameters: aFASTFortranSubroutine.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranSubstring: aFASTFortranSubstring [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranSubstring.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranTAssignment.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTBehaviouralEntity: aFASTFortranTBehaviouralEntity [
+	<generated>
 	self visitFASTFortranTScopableEntity: aFASTFortranTBehaviouralEntity.
 	self visitFASTFortranTWithParameters: aFASTFortranTBehaviouralEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTBooleanLiteral: aFASTFortranTBooleanLiteral [
+	<generated>
 	self visitFASTFortranTLiteral: aFASTFortranTBooleanLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTCharacterLiteral [
+	<generated>
 	self visitFASTFortranTLiteral: aFASTFortranTCharacterLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTComment: aFASTFortranTComment [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTEntity: aFASTFortranTEntity [
+	<generated>
+	self visitFASTTEntity: aFASTFortranTEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTEntityCreator: aFASTFortranTEntityCreator [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTExpression: aFASTFortranTExpression [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranTExpression.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTExpressionStatement: aFASTFortranTExpressionStatement [
+	<generated>
 	self visitFASTFortranTStatement: aFASTFortranTExpressionStatement.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTFormatIdentifier: aFASTFortranTFormatIdentifier [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTFortranBinaryExpression: aFASTFortranTFortranBinaryExpression [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTFortranUnaryExpression: aFASTFortranTFortranUnaryExpression [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTInvocation: aFASTFortranTInvocation [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranTInvocation.
 	self visitFASTFortranTWithArguments: aFASTFortranTInvocation.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTLabelledStatement: aFASTFortranTLabelledStatement [
+	<generated>
 	self visitFASTFortranTStatement: aFASTFortranTLabelledStatement.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranTLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTNamedBehaviouralEntity: aFASTFortranTNamedBehaviouralEntity [
+	<generated>
 	self visitFASTFortranTBehaviouralEntity: aFASTFortranTNamedBehaviouralEntity.
 	self visitFASTFortranTNamedEntity: aFASTFortranTNamedBehaviouralEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTNamedEntity: aFASTFortranTNamedEntity [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranTNamedEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTNullPointerLiteral: aFASTFortranTNullPointerLiteral [
+	<generated>
 	self visitFASTFortranTLiteral: aFASTFortranTNullPointerLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTNumericalLiteral: aFASTFortranTNumericalLiteral [
+	<generated>
 	self visitFASTFortranTLiteral: aFASTFortranTNumericalLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTReturnStatement [
+	<generated>
 	self visitFASTFortranTStatement: aFASTFortranTReturnStatement.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTScopableEntity: aFASTFortranTScopableEntity [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranTScopableEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
+	<generated>
 	self visitFASTFortranTEntity: aFASTFortranTStatement.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTStatementBlock: aFASTFortranTStatementBlock [
+	<generated>
 	self visitFASTFortranTStatement: aFASTFortranTStatementBlock.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTStringLiteral: aFASTFortranTStringLiteral [
+	<generated>
 	self visitFASTFortranTLiteral: aFASTFortranTStringLiteral.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTVariableEntity: aFASTFortranTVariableEntity [
+	<generated>
 	self visitFASTFortranTNamedEntity: aFASTFortranTVariableEntity.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTVariableExpression: aFASTFortranTVariableExpression [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranTVariableExpression.
 	self visitFASTFortranTNamedEntity: aFASTFortranTVariableExpression.
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithComments: aFASTFortranTWithComments [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
+	<generated>
 ]
 
-{ #category : #visiting }
+{ #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParameters [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranType: aFASTFortranType [
+	<generated>
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranUnaryExpression: aFASTFortranUnaryExpression [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranUnaryExpression.
 	self visitFASTFortranTFortranUnaryExpression: aFASTFortranUnaryExpression.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranUnionStatement: aFASTFortranUnionStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranUnionStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranVariable: aFASTFortranVariable [
+	<generated>
 	self visitFASTFortranTExpression: aFASTFortranVariable.
 	self visitFASTFortranTVariableEntity: aFASTFortranVariable.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVirtualStatement: aFASTFortranVirtualStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranVirtualStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVolatileStatement: aFASTFortranVolatileStatement [
+	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranVolatileStatement.
 ]
 
-{ #category : #'visiting - traits' }
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
+	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranWriteStatement.
