@@ -34,8 +34,7 @@ FASTFortranVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmen
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
-	<generated>
-	self visitFASTFortranTFormatIdentifier: aFASTFortranAsterisk.
+
 	self visitFASTFortranTNumericalLiteral: aFASTFortranAsterisk.
 ]
 
@@ -136,8 +135,10 @@ FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranDeclarationStatement.
+	aFASTFortranDeclarationStatement type accept: self.
+	aFASTFortranDeclarationStatement declarators do: [:decl | decl accept: self]
 ]
 
 { #category : #'visiting - statements' }
@@ -243,8 +244,8 @@ FASTFortranVisitor >> visitFASTFortranFormatStatement: aFASTFortranFormatStateme
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
-	<generated>
-	self visitFASTFortranTWithParameters: aFASTFortranFunction.
+
+	self visitFASTFortranProcedure: aFASTFortranFunction.
 ]
 
 { #category : #'visiting - expressions' }
@@ -407,7 +408,8 @@ FASTFortranVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProcedure: aFASTFortranProcedure [
-	<generated>
+	self visitFASTFortranSubprogram: aFASTFortranProcedure.
+	self visitFASTFortranTWithParameters: aFASTFortranProcedure
 ]
 
 { #category : #'visiting - programUnits' }
@@ -503,13 +505,13 @@ FASTFortranVisitor >> visitFASTFortranStructure: aFASTFortranStructure [
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranSubprogram: aFASTFortranSubprogram [
-	<generated>
+	self visitFASTFortranProgramUnit: aFASTFortranSubprogram 
 ]
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine [
-	<generated>
-	self visitFASTFortranTWithParameters: aFASTFortranSubroutine.
+
+	self visitFASTFortranProcedure: aFASTFortranSubroutine.
 ]
 
 { #category : #'visiting - expressions' }
@@ -676,7 +678,9 @@ FASTFortranVisitor >> visitFASTFortranTVariableExpression: aFASTFortranTVariable
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
-	<generated>
+
+	
+	aFASTFortranTWithArguments arguments do: [ :arg | arg accept: self ]
 ]
 
 { #category : #'visiting - traits' }
@@ -686,12 +690,16 @@ FASTFortranVisitor >> visitFASTFortranTWithComments: aFASTFortranTWithComments [
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
-	<generated>
+
+	aFASTFortranTWithFormatIdentifier format do: [ :fmt | fmt accept: self ]
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParameters [
-	<generated>
+
+	aFASTFortranTWithParameters parameters
+		do: [ :param | param accept: self ]
+
 ]
 
 { #category : #'visiting - expressions' }
@@ -734,7 +742,7 @@ FASTFortranVisitor >> visitFASTFortranVolatileStatement: aFASTFortranVolatileSta
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
 	<generated>
-	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
-	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranWriteStatement.
+	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
+	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 ]

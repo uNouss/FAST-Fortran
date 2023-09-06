@@ -19,6 +19,13 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> characterLiteral: value [
+	^FASTFortranCharacterLiteral new
+		primitiveValue: value ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> characterType: dimension [
 	^FASTFortranCharacterType new
 ]
@@ -273,4 +280,32 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
       integer j
       end
 '
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testWriteStatement [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				writeStatement: { self characterLiteral: 'message' }.
+		}.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      write(*,*) ''message''
+      end
+'
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> writeStatement: aCollection [
+	^FASTFortranWriteStatement new
+		format: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
+		arguments: aCollection ;
+		yourself
 ]
