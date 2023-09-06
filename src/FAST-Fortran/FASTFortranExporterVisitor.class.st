@@ -40,6 +40,12 @@ FASTFortranExporterVisitor >> stream [
 ]
 
 { #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
+
+	self << '*'
+]
+
+{ #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 	self << 'character'
 ]
@@ -63,12 +69,6 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 		<< 'external ' ;
 		<< aFASTFortranExternalStatement name ;
 		newLine
-]
-
-{ #category : #'visiting - programUnits' }
-FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
-	<generated>
-	self visitFASTFortranTWithParameters: aFASTFortranFunction.
 ]
 
 { #category : #'visiting - statements' }
@@ -98,16 +98,6 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 	^self stream
 ]
 
-{ #category : #'visiting - programUnits' }
-FASTFortranExporterVisitor >> visitFASTFortranProcedure: aFASTFortranProcedure [
-	self << '('.
-	aFASTFortranProcedure parameters
-		do: [ :param | self << param name ]
-		separatedBy: [ self << ', ' ].
-	self << ')'.
-
-]
-
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'
@@ -119,7 +109,7 @@ FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine
 		sixSpaces ;
 		<< 'subroutine ' ;
 		<< aFASTFortranSubroutine name.
-	self visitFASTFortranProcedure: aFASTFortranSubroutine.
+	self visitFASTFortranTWithParameters: aFASTFortranSubroutine.
 	self newLine.
 	self visitFASTFortranTBehaviouralEntity: aFASTFortranSubroutine
 ]
@@ -132,4 +122,54 @@ FASTFortranExporterVisitor >> visitFASTFortranTBehaviouralEntity: aFASTFortranTB
 		<< 'end' ;
 		newLine
 
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLiteral [
+	self
+		<< '''' ;
+		<< aFASTFortranTLiteral primitiveValue ;
+		<< ''''
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
+	self << aFASTFortranTLiteral primitiveValue
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
+
+	aFASTFortranTWithArguments arguments
+		do: [ :arg | arg accept: self ]
+		separatedBy: [ self << ', ' ]
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
+	self << '('.
+	aFASTFortranTWithFormatIdentifier format
+		do: [ :fmt | fmt accept: self ]
+		separatedBy: [ self << ',' ].
+	self << ')'.
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParameters [
+	self << '('.
+	aFASTFortranTWithParameters parameters
+		do: [ :param | self << param name ]
+		separatedBy: [ self << ', ' ].
+	self << ')'.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
+	self
+		sixSpaces ;
+		<< 'write'.
+	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
+	self << ' '.
+	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
+	self newLine
 ]
