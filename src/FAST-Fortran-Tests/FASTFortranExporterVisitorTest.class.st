@@ -19,6 +19,11 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> characterType: dimension [
+	^FASTFortranCharacterType new
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
 	^FASTFortranDeclarationStatement new
 		type: type ;
@@ -48,8 +53,18 @@ FASTFortranExporterVisitorTest >> implicitStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranExporterVisitorTest >> integerType [
+FASTFortranExporterVisitorTest >> integerType: dimension [
 	^FASTFortranIntegerType new
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> logicalType: dimension [
+	^FASTFortranLogicalType new
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> realType: dimension [
+	^FASTFortranRealType new
 ]
 
 { #category : #'entity creation' }
@@ -133,6 +148,66 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 ]
 
 { #category : #tests }
+FASTFortranExporterVisitorTest >> testOneDeclarationCharcaterType [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				declarationStatement: (self characterType: nil)
+				variables: #(r) }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      character r
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOneDeclarationLogicalType [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				declarationStatement: (self logicalType: nil)
+				variables: #(r) }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      logical r
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOneDeclarationRealType [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				declarationStatement: (self realType: nil)
+				variables: #(r) }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      real r
+      end
+'
+]
+
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 	| sub |
 	sub := self subroutine: 'blah'.
@@ -140,7 +215,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 		entity: sub
 		statementBlock: {
 			self
-				declarationStatement: self integerType
+				declarationStatement: (self integerType: nil)
 				variables: #(i j) }.
 
 	self
@@ -160,10 +235,10 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 		entity: sub
 		statementBlock: {
 			self
-				declarationStatement: self integerType
+				declarationStatement: (self integerType: nil)
 				variables: #(i) .
 			self
-				declarationStatement: self integerType
+				declarationStatement: (self integerType: nil)
 				variables: #(j) }.
 
 	self
