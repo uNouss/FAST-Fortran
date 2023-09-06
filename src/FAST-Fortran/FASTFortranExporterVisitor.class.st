@@ -56,6 +56,15 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 		
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
+	self
+		sixSpaces ;
+		<< 'external ' ;
+		<< aFASTFortranExternalStatement name ;
+		newLine
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 	<generated>

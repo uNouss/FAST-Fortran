@@ -48,6 +48,13 @@ FASTFortranExporterVisitorTest >> entity: owner statementBlock: aCollection [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> externalStatement: aName [
+	^FASTFortranExternalStatement new
+		name: aName ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> implicitStatement [
 	^FASTFortranImplicitStatement new
 ]
@@ -126,6 +133,23 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 		assertExport: sub
 		equals: 
 '      subroutine blah(i, j)
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testExternalStatement [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: { self externalStatement: 'aVar' }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      external aVar
       end
 '
 ]
