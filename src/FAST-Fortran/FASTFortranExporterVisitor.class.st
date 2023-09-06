@@ -39,6 +39,11 @@ FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
+	self << 'character'
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
 	self sixSpaces.
@@ -49,6 +54,15 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 		separatedBy: [ self << ', ' ].
 	self newLine
 		
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
+	self
+		sixSpaces ;
+		<< 'external ' ;
+		<< aFASTFortranExternalStatement name ;
+		newLine
 ]
 
 { #category : #'visiting - programUnits' }
@@ -71,6 +85,11 @@ FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerTy
 	self << 'integer'
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
+	self << 'logical'
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 	(self rootEntitiesIn: aFASTFortranModel) do: [ :rootEntity |
@@ -87,6 +106,11 @@ FASTFortranExporterVisitor >> visitFASTFortranProcedure: aFASTFortranProcedure [
 		separatedBy: [ self << ', ' ].
 	self << ')'.
 
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
+	self << 'real'
 ]
 
 { #category : #'visiting - programUnits' }
