@@ -15,7 +15,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranLoopControlExpression class >> annotation [
 
 	<FMClass: #LoopControlExpression super: #FASTFortranEntity>

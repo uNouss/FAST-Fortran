@@ -17,7 +17,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTBehaviouralEntity classSide >> annotation [
 
 	<FMClass: #TBehaviouralEntity super: #Object>

@@ -13,7 +13,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTNamedBehaviouralEntity classSide >> annotation [
 
 	<FMClass: #TNamedBehaviouralEntity super: #Object>

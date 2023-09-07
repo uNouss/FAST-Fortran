@@ -9,7 +9,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranAmpersand class >> annotation [
 
 	<FMClass: #Ampersand super: #FASTFortranEntity>

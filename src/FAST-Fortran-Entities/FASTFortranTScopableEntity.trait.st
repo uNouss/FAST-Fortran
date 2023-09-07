@@ -10,7 +10,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTScopableEntity classSide >> annotation [
 
 	<FMClass: #TScopableEntity super: #Object>

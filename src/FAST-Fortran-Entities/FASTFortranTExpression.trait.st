@@ -17,7 +17,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTExpression classSide >> annotation [
 
 	<FMClass: #TExpression super: #Object>
