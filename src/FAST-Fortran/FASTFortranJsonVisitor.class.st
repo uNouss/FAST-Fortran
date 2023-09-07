@@ -22,6 +22,18 @@ FASTFortranJsonVisitor >> initialize [
 	lineSizes := #(  )
 ]
 
+{ #category : #accessing }
+FASTFortranJsonVisitor >> model [
+
+	^ model
+]
+
+{ #category : #accessing }
+FASTFortranJsonVisitor >> model: anObject [
+
+	model := anObject
+]
+
 { #category : #private }
 FASTFortranJsonVisitor >> newEntity: aFASTFortranClass atPosition: aPoint [
 
