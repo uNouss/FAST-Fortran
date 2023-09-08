@@ -199,9 +199,11 @@ FortranToFASTTests >> testBinaryExpressionEqKeyword [
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
 	self assert: expr left startPos equals: 34.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 41.
 ]
 
@@ -253,15 +255,18 @@ FortranToFASTTests >> testBinaryExpressionGtKeyword [
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
 	self assert: expr left startPos equals: 34.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionGtSymbol [
-	
+	"Note: not valid in Fortran 77"
+
 	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
        IF ( 5 > 6 ) THEN
@@ -280,9 +285,11 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
 	self assert: expr left startPos equals: 34.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 38.
 ]
 
@@ -307,14 +314,17 @@ FortranToFASTTests >> testBinaryExpressionLtKeyword [
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
 	self assert: expr left startPos equals: 34.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionLtSymbol [
+	"Note: not valid in Fortran 77"
 
 	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
@@ -334,9 +344,11 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 	self assert: expr startPos equals: 34.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
 	self assert: expr left startPos equals: 34.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 38
 ]
 
