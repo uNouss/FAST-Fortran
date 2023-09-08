@@ -259,6 +259,31 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 ]
 
 { #category : #tests }
+FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
+	| sub |
+	self skip: 'not implemented in FAST yet'.
+
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				declarationStatement: (self integerType: nil)
+				variables: #(i) .
+			self
+				declarationStatement: (self integerType: nil)
+				variables: #(j) }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      integer arr(5)
+      end
+'
+]
+
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 	| sub |
 	sub := self subroutine: 'blah'.
