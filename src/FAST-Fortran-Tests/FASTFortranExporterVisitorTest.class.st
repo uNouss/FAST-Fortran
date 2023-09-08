@@ -350,6 +350,25 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
 ]
 
 { #category : #tests }
+FASTFortranExporterVisitorTest >> testIfBlockStatementEmptyBinaryCondition [
+	| sub cond |
+	sub := self subroutine: 'blah'.
+	cond := self binary: '.gt.' left: 'a' right: '0'.
+	self
+		entity: sub
+		statementBlock: { self ifBlock: cond then: #() else:  #() }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      if (a .gt. 0) then
+      end if
+      end
+'
+]
+
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testIfBlockStatementWithElseBlock [
 	| sub ifStmt |
 	sub := self subroutine: 'blah'.

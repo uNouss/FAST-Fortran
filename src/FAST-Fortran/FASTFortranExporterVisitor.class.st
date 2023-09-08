@@ -77,6 +77,18 @@ FASTFortranExporterVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
 	self << '*'
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
+
+	aFASTFortranBinaryExpression left accept: self.
+	self
+		<< ' ' ;
+		<< aFASTFortranBinaryExpression operator ;
+		<< ' ' .
+	aFASTFortranBinaryExpression right accept: self.
+	
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
 

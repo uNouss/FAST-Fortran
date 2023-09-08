@@ -52,9 +52,12 @@ FASTFortranVisitor >> visitFASTFortranBackspaceStatement: aFASTFortranBackspaceS
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
-	<generated>
+
 	self visitFASTFortranTExpression: aFASTFortranBinaryExpression.
 	self visitFASTFortranTFortranBinaryExpression: aFASTFortranBinaryExpression.
+	aFASTFortranBinaryExpression left accept: self.
+	aFASTFortranBinaryExpression right accept: self.
+	
 ]
 
 { #category : #'visiting - programUnits' }
