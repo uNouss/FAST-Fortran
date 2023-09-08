@@ -19,6 +19,14 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> callStatement: aName arguments: aCollection [
+	^FASTFortranCallStatement new
+		name: aName ;
+		arguments: aCollection ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> characterLiteral: value [
 	^FASTFortranCharacterLiteral new
 		primitiveValue: value ;
@@ -67,6 +75,13 @@ FASTFortranExporterVisitorTest >> implicitStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> integerLiteral: value [
+	^FASTFortranIntegerLiteral new
+		primitiveValue: value ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> integerType: dimension [
 	^FASTFortranIntegerType new
 ]
@@ -74,6 +89,13 @@ FASTFortranExporterVisitorTest >> integerType: dimension [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> logicalType: dimension [
 	^FASTFortranLogicalType new
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> realLiteral: value [
+	^FASTFortranRealLiteral new
+		primitiveValue: value ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -113,6 +135,48 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		name: aName ;
 		statementBlock: (self statementBlock: #()) ;
 		yourself
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testCallStatementNoArgs [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				callStatement: 'subrtn' arguments: #().
+		}.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      call subrtn
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				callStatement: 'subrtn' arguments: {
+					self scalarVariable: 'a' .
+					self integerLiteral: '5' }
+		}.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      call subrtn(a,5)
+      end
+'
 ]
 
 { #category : #tests }

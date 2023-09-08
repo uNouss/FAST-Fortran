@@ -45,6 +45,23 @@ FASTFortranExporterVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
 	self << '*'
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
+
+	self
+		sixSpaces ;
+		<< 'call ' ;
+		<< aFASTFortranCallStatement name.
+		
+	aFASTFortranCallStatement arguments
+		ifNotEmpty: [
+			self << '('.
+			self visitFASTFortranTWithArguments: aFASTFortranCallStatement.
+			self << ')'
+	].
+	self newLine
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 	self << 'character'
@@ -101,6 +118,11 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalarVariable [
+	self << aFASTFortranScalarVariable name
 ]
 
 { #category : #'visiting - programUnits' }
