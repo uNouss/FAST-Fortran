@@ -57,7 +57,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 	self << ' '.
 	aFASTFortranDeclarationStatement declarators
 		do: [ :decl |self << decl name ]
-		separatedBy: [ self << ', ' ].
+		separatedBy: [ self << ',' ].
 	self newLine
 		
 ]
@@ -142,7 +142,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithA
 
 	aFASTFortranTWithArguments arguments
 		do: [ :arg | arg accept: self ]
-		separatedBy: [ self << ', ' ]
+		separatedBy: [ self << ',' ]
 ]
 
 { #category : #'visiting - traits' }
@@ -159,7 +159,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << '('.
 	aFASTFortranTWithParameters parameters
 		do: [ :param | self << param name ]
-		separatedBy: [ self << ', ' ].
+		separatedBy: [ self << ',' ].
 	self << ')'.
 ]
 

@@ -139,7 +139,7 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 	self
 		assertExport: sub
 		equals: 
-'      subroutine blah(i, j)
+'      subroutine blah(i,j)
       end
 '
 ]
@@ -253,7 +253,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 		assertExport: sub
 		equals: 
 '      subroutine blah()
-      integer i, j
+      integer i,j
       end
 '
 ]
