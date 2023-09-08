@@ -241,6 +241,17 @@ FASTFortranExporterVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
 ]
 
 { #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTReturnStatement [
+
+	self
+		sixSpaces ;
+		<< 'return '.
+	aFASTFortranTReturnStatement expression
+		ifNotNil: [ :expr | expr accept: self ].
+	self newLine
+]
+
+{ #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
 
 	aFASTFortranTWithArguments arguments
@@ -275,4 +286,9 @@ FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteS
 	self << ' '.
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 	self newLine
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTTEntity: aFASTTEntity [
+	"all children visit are explicit, so don't do anything here"
 ]

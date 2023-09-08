@@ -147,6 +147,13 @@ FASTFortranExporterVisitorTest >> realType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> returnStatement: expression [
+	^FASTFortranReturnStatement new
+		expression: expression ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> scalarVariable: aName [
 	^FASTFortranScalarVariable new
 		name: aName ;
@@ -478,6 +485,40 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 		equals: 
 '      subroutine blah()
       integer i,j
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testReturnStatementEmpty [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: { self returnStatement: nil }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      return 
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testReturnStatementLiteralValue [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: { self returnStatement: (self realLiteral: '3.5') }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      return 3.5
       end
 '
 ]
