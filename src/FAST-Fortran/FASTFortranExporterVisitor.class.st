@@ -109,6 +109,31 @@ FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunction
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfBlockStatement condition accept: self.
+	self
+		<< ') then' ;
+		newLine.
+	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	(aFASTFortranIfBlockStatement elseStatementBlock statements)
+		ifNotEmpty: [
+			self
+				sixSpaces ;
+				<< 'else' ;
+				newLine.
+			aFASTFortranIfBlockStatement elseStatementBlock accept: self
+	].
+	self
+		sixSpaces ;
+		<< 'end if' ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 
 	self

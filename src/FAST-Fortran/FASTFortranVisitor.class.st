@@ -293,8 +293,11 @@ FASTFortranVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArith
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfBlockStatement.
+	aFASTFortranIfBlockStatement condition accept: self.
+	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
 ]
 
 { #category : #'visiting - statements' }

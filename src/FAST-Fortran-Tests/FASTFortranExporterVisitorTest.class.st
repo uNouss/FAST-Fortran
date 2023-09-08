@@ -27,6 +27,17 @@ FASTFortranExporterVisitorTest >> assignementStatement: aName value: rhs [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> binary: op left: lhsVar right: rhsVal [
+	"a binary operation between a variable (left) and an integer value (right)"
+
+	^FASTFortranBinaryExpression new
+		operator: op ;
+		left: (self scalarVariable: lhsVar) ;
+		right: (self integerLiteral: rhsVal) ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> callStatement: aName arguments: aCollection [
 	^FASTFortranCallStatement new
 		name: aName ;
@@ -82,6 +93,15 @@ FASTFortranExporterVisitorTest >> functionCall: aName arguments: aCollection [
 	^FASTFortranFunctionCall new
 		name: aName ;
 		arguments: aCollection ;
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> ifBlock: condition then: thenBlock else: elseBlock [
+	^FASTFortranIfBlockStatement new
+		condition: condition ;
+		thenStatementBlock: (self statementBlock: thenBlock) ;
+		elseStatementBlock: (self statementBlock: elseBlock) ;
 		yourself
 ]
 
@@ -300,6 +320,67 @@ FASTFortranExporterVisitorTest >> testExternalStatement [
 		equals: 
 '      subroutine blah()
       external aVar
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: { self ifBlock: (self scalarVariable: 'bool') then: #() else:  #() }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      if (bool) then
+      end if
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testIfBlockStatementWithElseBlock [
+	| sub ifStmt |
+	sub := self subroutine: 'blah'.
+	ifStmt := self
+		ifBlock: (self scalarVariable: 'bool')
+		then: #()
+		else:  {  self writeStatement: { self characterLiteral: 'message' } }.
+	self entity: sub statementBlock: { ifStmt }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      if (bool) then
+      else
+      write(*,*) ''message''
+      end if
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
+	| sub ifStmt |
+	sub := self subroutine: 'blah'.
+	ifStmt := self
+		ifBlock: (self scalarVariable: 'bool')
+		then: {  self writeStatement: { self characterLiteral: 'message' } }
+		else:  #().
+	self entity: sub statementBlock: { ifStmt }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      if (bool) then
+      write(*,*) ''message''
+      end if
       end
 '
 ]
