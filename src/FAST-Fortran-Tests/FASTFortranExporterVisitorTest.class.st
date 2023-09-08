@@ -19,6 +19,14 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> assignementStatement: aName value: rhs [
+	^FASTFortranAssignmentStatement new
+		variable: (self scalarVariable: aName) ;
+		expression: rhs ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> callStatement: aName arguments: aCollection [
 	^FASTFortranCallStatement new
 		name: aName ;
@@ -70,6 +78,14 @@ FASTFortranExporterVisitorTest >> externalStatement: aName [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> functionCall: aName arguments: aCollection [
+	^FASTFortranFunctionCall new
+		name: aName ;
+		arguments: aCollection ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> implicitStatement [
 	^FASTFortranImplicitStatement new
 ]
@@ -84,6 +100,13 @@ FASTFortranExporterVisitorTest >> integerLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> integerType: dimension [
 	^FASTFortranIntegerType new
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> logicalLiteral: value [
+	^FASTFortranBooleanLiteral new
+		primitiveValue: value ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -135,6 +158,62 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		name: aName ;
 		statementBlock: (self statementBlock: #()) ;
 		yourself
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
+	| sub fctCall |
+	sub := self subroutine: 'blah'.
+	fctCall := self functionCall: 'fct' arguments: { self integerLiteral: '5' . self scalarVariable: 'b' }.
+	self
+		entity: sub
+		statementBlock: { self assignementStatement: 'a' value: fctCall }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      a = fct(5,b)
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testAssignementStatementLiteralValue [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				assignementStatement: 'aVar' value: (self logicalLiteral: '.true.') }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      aVar = .true.
+      end
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
+	| sub |
+	sub := self subroutine: 'blah'.
+	self
+		entity: sub
+		statementBlock: {
+			self
+				assignementStatement: 'a' value: (self scalarVariable: 'b') }.
+
+	self
+		assertExport: sub
+		equals: 
+'      subroutine blah()
+      a = b
+      end
+'
 ]
 
 { #category : #tests }

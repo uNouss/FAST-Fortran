@@ -39,6 +39,14 @@ FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
+
+	self sixSpaces.
+	super visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement.
+	self newLine
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
 
@@ -88,6 +96,18 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 		newLine
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunctionCall [
+
+	self << aFASTFortranFunctionCall name.
+	aFASTFortranFunctionCall arguments
+		ifNotEmpty: [
+			self << '('.
+			self visitFASTFortranTWithArguments: aFASTFortranFunctionCall.
+			self << ')'
+	]
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 
@@ -134,6 +154,14 @@ FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine
 	self visitFASTFortranTWithParameters: aFASTFortranSubroutine.
 	self newLine.
 	self visitFASTFortranTBehaviouralEntity: aFASTFortranSubroutine
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
+
+	aFASTFortranTAssignment variable accept: self.
+	self << ' = '.
+	aFASTFortranTAssignment expression accept: self
 ]
 
 { #category : #'visiting - traits' }

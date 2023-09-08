@@ -521,7 +521,9 @@ FASTFortranVisitor >> visitFASTFortranSubstring: aFASTFortranSubstring [
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
-	<generated>
+
+	aFASTFortranTAssignment variable accept: self.
+	aFASTFortranTAssignment expression accept: self.
 	self visitFASTFortranTExpression: aFASTFortranTAssignment.
 ]
 
