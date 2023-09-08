@@ -2,7 +2,8 @@ Class {
 	#name : #FASTFortranExporterVisitor,
 	#superclass : #FASTFortranVisitor,
 	#instVars : [
-		'stream'
+		'stream',
+		'indent'
 	],
 	#category : #'FAST-Fortran-Visitor'
 }
@@ -10,6 +11,18 @@ Class {
 { #category : #streaming }
 FASTFortranExporterVisitor >> << aString [
 	self stream << aString
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> indent [
+	indent := indent + 1
+]
+
+{ #category : #initialization }
+FASTFortranExporterVisitor >> initialize [
+	super initialize.
+
+	indent := 0
 ]
 
 { #category : #streaming }
@@ -31,12 +44,23 @@ FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> sixSpaces [
-	self << '      '
+	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
+
+	| nbSpaces |
+	nbSpaces := 6 + (indent * 2).
+	self << (String space repeat: nbSpaces)
+	
 ]
 
 { #category : #accessing }
 FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> unindent [
+	self assert: (indent > 0).
+	indent := indent - 1
 ]
 
 { #category : #'visiting - statements' }
@@ -118,14 +142,18 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 	self
 		<< ') then' ;
 		newLine.
+	self indent.
 	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	self unindent.
 	(aFASTFortranIfBlockStatement elseStatementBlock statements)
 		ifNotEmpty: [
 			self
 				sixSpaces ;
 				<< 'else' ;
 				newLine.
-			aFASTFortranIfBlockStatement elseStatementBlock accept: self
+			self indent.
+			aFASTFortranIfBlockStatement elseStatementBlock accept: self.
+			self unindent.
 	].
 	self
 		sixSpaces ;

@@ -358,7 +358,7 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithElseBlock [
 '      subroutine blah()
       if (bool) then
       else
-      write(*,*) ''message''
+        write(*,*) ''message''
       end if
       end
 '
@@ -379,7 +379,7 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
 		equals: 
 '      subroutine blah()
       if (bool) then
-      write(*,*) ''message''
+        write(*,*) ''message''
       end if
       end
 '
