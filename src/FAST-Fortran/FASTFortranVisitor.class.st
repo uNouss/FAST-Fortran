@@ -157,8 +157,10 @@ FASTFortranVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionS
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranDoStatement.
+	aFASTFortranDoStatement loopControl accept: self.
+	aFASTFortranDoStatement statementBlock accept: self
 ]
 
 { #category : #'visiting - statements' }
@@ -351,8 +353,11 @@ FASTFortranVisitor >> visitFASTFortranLogicalType: aFASTFortranLogicalType [
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
-	<generated>
+
 	self visitFASTFortranTExpression: aFASTFortranLoopControlExpression.
+	aFASTFortranLoopControlExpression init accept: self.
+	aFASTFortranLoopControlExpression increment accept: self.
+	aFASTFortranLoopControlExpression limit accept: self.
 ]
 
 { #category : #'visiting - statements' }

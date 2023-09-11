@@ -66,6 +66,14 @@ FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollect
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> doStatement: control statements: stmtBlock [
+	^FASTFortranDoStatement new
+		loopControl: control ;
+		statementBlock: (self statementBlock: stmtBlock) ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> entity: owner parameters: aCollection [
 	^owner
 		parameters: (self scalarVariables: aCollection) ;
@@ -132,6 +140,17 @@ FASTFortranExporterVisitorTest >> logicalLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> logicalType: dimension [
 	^FASTFortranLogicalType new
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> loopControlInit: init increment: incr limit: limit [
+	"incr is nil or a integerLiteral, limit is assumed to be a scalarVariable name"
+	| entity |
+	entity := FASTFortranLoopControlExpression new.
+	entity init: init.
+	incr ifNotNil: [ entity increment: (self integerLiteral: incr) ].
+	entity limit: (self scalarVariable: limit).
+	^entity
 ]
 
 { #category : #'entity creation' }
@@ -256,6 +275,42 @@ FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
 '
 ]
 
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDoStatement [
+	| stmt init |
+	self skip: 'init in control should be an expression, not a statement'.
+
+	init := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	stmt := self
+		doStatement: (self loopControlInit: init increment: '1' limit: 'max')
+		statements: #().
+
+	self
+		assertExport: stmt
+		equals: 
+'      do i=1, 1, max
+      end do
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
+	| stmt init |
+	self skip: 'init in control should be an expression, not a statement'.
+
+	init := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	stmt := self
+		doStatement: (self loopControlInit: init increment: nil limit: 'max')
+		statements: #().
+
+	self
+		assertExport: stmt
+		equals: 
+'      do i=1, max
+      end do
+'
+]
+
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testEmptySubroutineNoParameters [
 	| sub |
@@ -320,6 +375,27 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementEmptyBinaryCondition [
 		assertExport: stmt
 		equals: 
 '      if (a .gt. 0) then
+      end if
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testIfBlockStatementNested [
+	| stmt |
+	stmt := self
+		ifBlock: (self scalarVariable: 'bool1')
+		then: { self
+			ifBlock: (self scalarVariable: 'bool2')
+			then: #()
+			else: #() }
+		else: #().
+
+	self
+		assertExport: stmt
+		equals: 
+'      if (bool1) then
+        if (bool2) then
+        end if
       end if
 '
 ]

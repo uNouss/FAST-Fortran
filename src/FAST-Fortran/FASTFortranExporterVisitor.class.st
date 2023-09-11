@@ -124,6 +124,17 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
+
+	self
+		sixSpaces ;
+		<< 'do '.
+	aFASTFortranDoStatement loopControl accept: self.
+	self newLine.
+	aFASTFortranDoStatement statementBlock accept: self
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	self
 		sixSpaces ;
@@ -190,6 +201,21 @@ FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerTy
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
 	self << 'logical'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
+
+	aFASTFortranLoopControlExpression init accept: self.
+	aFASTFortranLoopControlExpression increment
+	ifNotNil: [ :incr |
+		self << ','.
+		incr accept: self ].
+	aFASTFortranLoopControlExpression limit
+	ifNotNil: [ :limit |
+		self << ','.
+		limit accept: self ].
+
 ]
 
 { #category : #visiting }
