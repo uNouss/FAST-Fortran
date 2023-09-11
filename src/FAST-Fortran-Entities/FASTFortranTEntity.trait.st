@@ -3,12 +3,8 @@ any entity
 "
 Trait {
 	#name : #FASTFortranTEntity,
-	#instVars : [
-		'#startPos => FMProperty',
-		'#endPos => FMProperty'
-	],
-	#traits : 'TEntityMetaLevelDependency',
-	#classTraits : 'TEntityMetaLevelDependency classTrait',
+	#traits : 'FASTTEntity + TEntityMetaLevelDependency',
+	#classTraits : 'FASTTEntity classTrait + TEntityMetaLevelDependency classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
