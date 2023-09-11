@@ -52,9 +52,12 @@ FASTFortranVisitor >> visitFASTFortranBackspaceStatement: aFASTFortranBackspaceS
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
-	<generated>
+
 	self visitFASTFortranTExpression: aFASTFortranBinaryExpression.
 	self visitFASTFortranTFortranBinaryExpression: aFASTFortranBinaryExpression.
+	aFASTFortranBinaryExpression left accept: self.
+	aFASTFortranBinaryExpression right accept: self.
+	
 ]
 
 { #category : #'visiting - programUnits' }
@@ -99,9 +102,8 @@ FASTFortranVisitor >> visitFASTFortranCloseStatement: aFASTFortranCloseStatement
 
 { #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranComment: aFASTFortranComment [
-	<generated>
+
 	self visitFASTFortranTComment: aFASTFortranComment.
-	self visitFASTFortranTEntity: aFASTFortranComment.
 ]
 
 { #category : #'visiting - statements' }
@@ -155,8 +157,10 @@ FASTFortranVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionS
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranDoStatement.
+	aFASTFortranDoStatement loopControl accept: self.
+	aFASTFortranDoStatement statementBlock accept: self
 ]
 
 { #category : #'visiting - statements' }
@@ -207,7 +211,7 @@ FASTFortranVisitor >> visitFASTFortranEndFileStatement: aFASTFortranEndFileState
 
 { #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranEntity: aFASTFortranEntity [
-	<generated>
+
 	self visitFASTFortranTEntity: aFASTFortranEntity.
 ]
 
@@ -294,8 +298,11 @@ FASTFortranVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArith
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfBlockStatement.
+	aFASTFortranIfBlockStatement condition accept: self.
+	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
 ]
 
 { #category : #'visiting - statements' }
@@ -346,8 +353,11 @@ FASTFortranVisitor >> visitFASTFortranLogicalType: aFASTFortranLogicalType [
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
-	<generated>
+
 	self visitFASTFortranTExpression: aFASTFortranLoopControlExpression.
+	aFASTFortranLoopControlExpression init accept: self.
+	aFASTFortranLoopControlExpression increment accept: self.
+	aFASTFortranLoopControlExpression limit accept: self.
 ]
 
 { #category : #'visiting - statements' }
@@ -420,13 +430,13 @@ FASTFortranVisitor >> visitFASTFortranProgramFile: aFASTFortranProgramFile [
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMain [
-	<generated>
+
+	self visitFASTFortranProgramUnit: aFASTFortranProgramMain
 ]
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
-	<generated>
-	self visitFASTFortranTEntity: aFASTFortranProgramUnit.
+
 	self visitFASTFortranTNamedBehaviouralEntity: aFASTFortranProgramUnit.
 	self visitFASTFortranTWithComments: aFASTFortranProgramUnit.
 ]
@@ -522,15 +532,20 @@ FASTFortranVisitor >> visitFASTFortranSubstring: aFASTFortranSubstring [
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
-	<generated>
+
+	aFASTFortranTAssignment variable accept: self.
+	aFASTFortranTAssignment expression accept: self.
 	self visitFASTFortranTExpression: aFASTFortranTAssignment.
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTBehaviouralEntity: aFASTFortranTBehaviouralEntity [
-	<generated>
+
 	self visitFASTFortranTScopableEntity: aFASTFortranTBehaviouralEntity.
 	self visitFASTFortranTWithParameters: aFASTFortranTBehaviouralEntity.
+	
+	aFASTFortranTBehaviouralEntity statementBlock accept: self
+
 ]
 
 { #category : #'visiting - traits' }
@@ -616,8 +631,7 @@ FASTFortranVisitor >> visitFASTFortranTNamedBehaviouralEntity: aFASTFortranTName
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTNamedEntity: aFASTFortranTNamedEntity [
-	<generated>
-	self visitFASTFortranTEntity: aFASTFortranTNamedEntity.
+
 ]
 
 { #category : #'visiting - traits' }
@@ -640,8 +654,7 @@ FASTFortranVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTReturnState
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTScopableEntity: aFASTFortranTScopableEntity [
-	<generated>
-	self visitFASTFortranTEntity: aFASTFortranTScopableEntity.
+
 ]
 
 { #category : #'visiting - traits' }
@@ -696,9 +709,10 @@ FASTFortranVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFo
 
 { #category : #'visiting - traits' }
 FASTFortranVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParameters [
+	"introducing #visitParameter:"
 
 	aFASTFortranTWithParameters parameters
-		do: [ :param | param accept: self ]
+		do: [ :param | self visitParameter: param ]
 
 ]
 
@@ -745,4 +759,11 @@ FASTFortranVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement
 	self visitFASTFortranTLabelledStatement: aFASTFortranWriteStatement.
 	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
+]
+
+{ #category : #'visiting - programUnits' }
+FASTFortranVisitor >> visitParameter: aFASTFortranScalarVariable [
+	"no special type for parameters, but worth having its own visit method
+	 (see #visitTWithParameters:)"
+	aFASTFortranScalarVariable accept: self
 ]

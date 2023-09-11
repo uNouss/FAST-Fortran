@@ -12,7 +12,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTAssignment classSide >> annotation [
 
 	<FMClass: #TAssignment super: #Object>

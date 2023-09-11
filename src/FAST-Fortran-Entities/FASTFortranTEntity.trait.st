@@ -12,7 +12,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranTEntity classSide >> annotation [
 
 	<FMClass: #TEntity super: #Object>
@@ -21,7 +21,7 @@ FASTFortranTEntity classSide >> annotation [
 	^ self
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 FASTFortranTEntity >> endPos [
 
 	<FMProperty: #endPos type: #Number>
@@ -29,13 +29,13 @@ FASTFortranTEntity >> endPos [
 	^ endPos
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 FASTFortranTEntity >> endPos: anObject [
 	<generated>
 	endPos := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 FASTFortranTEntity >> startPos [
 
 	<FMProperty: #startPos type: #Number>
@@ -43,7 +43,7 @@ FASTFortranTEntity >> startPos [
 	^ startPos
 ]
 
-{ #category : #accessing }
+{ #category : #'as yet unclassified' }
 FASTFortranTEntity >> startPos: anObject [
 	<generated>
 	startPos := anObject

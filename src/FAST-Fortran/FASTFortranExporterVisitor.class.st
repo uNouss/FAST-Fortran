@@ -2,7 +2,8 @@ Class {
 	#name : #FASTFortranExporterVisitor,
 	#superclass : #FASTFortranVisitor,
 	#instVars : [
-		'stream'
+		'stream',
+		'indent'
 	],
 	#category : #'FAST-Fortran-Visitor'
 }
@@ -10,6 +11,18 @@ Class {
 { #category : #streaming }
 FASTFortranExporterVisitor >> << aString [
 	self stream << aString
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> indent [
+	indent := indent + 1
+]
+
+{ #category : #initialization }
+FASTFortranExporterVisitor >> initialize [
+	super initialize.
+
+	indent := 0
 ]
 
 { #category : #streaming }
@@ -31,7 +44,12 @@ FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> sixSpaces [
-	self << '      '
+	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
+
+	| nbSpaces |
+	nbSpaces := 6 + (indent * 2).
+	self << (String space repeat: nbSpaces)
+	
 ]
 
 { #category : #accessing }
@@ -39,10 +57,53 @@ FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
 ]
 
+{ #category : #streaming }
+FASTFortranExporterVisitor >> unindent [
+	self assert: (indent > 0).
+	indent := indent - 1
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
+
+	self sixSpaces.
+	super visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement.
+	self newLine
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
 
 	self << '*'
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
+
+	aFASTFortranBinaryExpression left accept: self.
+	self
+		<< ' ' ;
+		<< aFASTFortranBinaryExpression operator ;
+		<< ' ' .
+	aFASTFortranBinaryExpression right accept: self.
+	
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
+
+	self
+		sixSpaces ;
+		<< 'call ' ;
+		<< aFASTFortranCallStatement name.
+		
+	aFASTFortranCallStatement arguments
+		ifNotEmpty: [
+			self << '('.
+			self visitFASTFortranTWithArguments: aFASTFortranCallStatement.
+			self << ')'
+	].
+	self newLine
 ]
 
 { #category : #'visiting - expressions' }
@@ -57,9 +118,20 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 	self << ' '.
 	aFASTFortranDeclarationStatement declarators
 		do: [ :decl |self << decl name ]
-		separatedBy: [ self << ', ' ].
+		separatedBy: [ self << ',' ].
 	self newLine
 		
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
+
+	self
+		sixSpaces ;
+		<< 'do '.
+	aFASTFortranDoStatement loopControl accept: self.
+	self newLine.
+	aFASTFortranDoStatement statementBlock accept: self
 ]
 
 { #category : #'visiting - statements' }
@@ -68,6 +140,47 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 		sixSpaces ;
 		<< 'external ' ;
 		<< aFASTFortranExternalStatement name ;
+		newLine
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunctionCall [
+
+	self << aFASTFortranFunctionCall name.
+	aFASTFortranFunctionCall arguments
+		ifNotEmpty: [
+			self << '('.
+			self visitFASTFortranTWithArguments: aFASTFortranFunctionCall.
+			self << ')'
+	]
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfBlockStatement condition accept: self.
+	self
+		<< ') then' ;
+		newLine.
+	self indent.
+	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	self unindent.
+	(aFASTFortranIfBlockStatement elseStatementBlock statements)
+		ifNotEmpty: [
+			self
+				sixSpaces ;
+				<< 'else' ;
+				newLine.
+			self indent.
+			aFASTFortranIfBlockStatement elseStatementBlock accept: self.
+			self unindent.
+	].
+	self
+		sixSpaces ;
+		<< 'end if' ;
 		newLine
 ]
 
@@ -90,6 +203,21 @@ FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
 	self << 'logical'
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
+
+	aFASTFortranLoopControlExpression init accept: self.
+	aFASTFortranLoopControlExpression increment
+	ifNotNil: [ :incr |
+		self << ','.
+		incr accept: self ].
+	aFASTFortranLoopControlExpression limit
+	ifNotNil: [ :limit |
+		self << ','.
+		limit accept: self ].
+
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 	(self rootEntitiesIn: aFASTFortranModel) do: [ :rootEntity |
@@ -103,6 +231,11 @@ FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalarVariable [
+	self << aFASTFortranScalarVariable name
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine [
 	self
@@ -112,6 +245,14 @@ FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine
 	self visitFASTFortranTWithParameters: aFASTFortranSubroutine.
 	self newLine.
 	self visitFASTFortranTBehaviouralEntity: aFASTFortranSubroutine
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
+
+	aFASTFortranTAssignment variable accept: self.
+	self << ' = '.
+	aFASTFortranTAssignment expression accept: self
 ]
 
 { #category : #'visiting - traits' }
@@ -138,11 +279,22 @@ FASTFortranExporterVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
 ]
 
 { #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTReturnStatement [
+
+	self
+		sixSpaces ;
+		<< 'return '.
+	aFASTFortranTReturnStatement expression
+		ifNotNil: [ :expr | expr accept: self ].
+	self newLine
+]
+
+{ #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
 
 	aFASTFortranTWithArguments arguments
 		do: [ :arg | arg accept: self ]
-		separatedBy: [ self << ', ' ]
+		separatedBy: [ self << ',' ]
 ]
 
 { #category : #'visiting - traits' }
@@ -159,7 +311,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << '('.
 	aFASTFortranTWithParameters parameters
 		do: [ :param | self << param name ]
-		separatedBy: [ self << ', ' ].
+		separatedBy: [ self << ',' ].
 	self << ')'.
 ]
 
@@ -172,4 +324,9 @@ FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteS
 	self << ' '.
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 	self newLine
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTTEntity: aFASTTEntity [
+	"all children visit are explicit, so don't do anything here"
 ]

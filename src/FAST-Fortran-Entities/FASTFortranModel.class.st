@@ -1,8 +1,8 @@
 Class {
 	#name : #FASTFortranModel,
 	#superclass : #MooseModel,
-	#traits : 'FASTFortranTEntityCreator + FASTTEntityCreator',
-	#classTraits : 'FASTFortranTEntityCreator classTrait + FASTTEntityCreator classTrait',
+	#traits : 'FASTFortranTEntityCreator',
+	#classTraits : 'FASTFortranTEntityCreator classTrait',
 	#category : #'FAST-Fortran-Entities-Model'
 }
 
@@ -12,7 +12,7 @@ FASTFortranModel class >> allSubmetamodelsPackagesNames [
 	^ #(#'Moose-Query' #'Famix-Traits' #'FAST-Core-Model')
 ]
 
-{ #category : #meta }
+{ #category : #'as yet unclassified' }
 FASTFortranModel class >> annotation [
 	<FMClass: #FASTFortranModel super: #MooseModel>
 	<package: #'FAST-Fortran-Entities'>
