@@ -187,101 +187,72 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		yourself
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
-	| sub fctCall |
-	sub := self subroutine: 'blah'.
-	fctCall := self functionCall: 'fct' arguments: { self integerLiteral: '5' . self scalarVariable: 'b' }.
-	self
-		entity: sub
-		statementBlock: { self assignementStatement: 'a' value: fctCall }.
+
+	| stmt |
+	stmt := self
+		assignementStatement: 'a' 
+		value: (self 
+			functionCall: 'fct'
+			arguments: {
+				self integerLiteral: '5' .
+				self scalarVariable: 'b' }).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      a = fct(5,b)
-      end
+'      a = fct(5,b)
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementStatementLiteralValue [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				assignementStatement: 'aVar' value: (self logicalLiteral: '.true.') }.
+	| stmt |
+	stmt := self assignementStatement: 'aVar' value: (self logicalLiteral: '.true.').
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      aVar = .true.
-      end
+'      aVar = .true.
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				assignementStatement: 'a' value: (self scalarVariable: 'b') }.
+	| stmt |
+	stmt := self assignementStatement: 'a' value: (self scalarVariable: 'b').
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      a = b
-      end
+'      a = b
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testCallStatementNoArgs [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				callStatement: 'subrtn' arguments: #().
-		}.
+	| stmt |
+	stmt := self callStatement: 'subrtn' arguments: #().
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      call subrtn
-      end
+'      call subrtn
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				callStatement: 'subrtn' arguments: {
-					self scalarVariable: 'a' .
-					self integerLiteral: '5' }
-		}.
+	| stmt |
+	stmt := self callStatement: 'subrtn' arguments: {
+		self scalarVariable: 'a' .
+		self integerLiteral: '5' }.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      call subrtn(a,5)
-      end
+'      call subrtn(a,5)
 '
 ]
 
@@ -314,252 +285,173 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testExternalStatement [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: { self externalStatement: 'aVar' }.
+	| stmt |
+	stmt := self externalStatement: 'aVar'.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      external aVar
-      end
+'      external aVar
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: { self ifBlock: (self scalarVariable: 'bool') then: #() else:  #() }.
+	| stmt |
+	stmt := self ifBlock: (self scalarVariable: 'bool') then: #() else: #().
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      if (bool) then
+'      if (bool) then
       end if
-      end
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementEmptyBinaryCondition [
-	| sub cond |
-	sub := self subroutine: 'blah'.
+	| stmt cond |
 	cond := self binary: '.gt.' left: 'a' right: '0'.
-	self
-		entity: sub
-		statementBlock: { self ifBlock: cond then: #() else:  #() }.
+	stmt := self ifBlock: cond then: #() else:  #().
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      if (a .gt. 0) then
+'      if (a .gt. 0) then
       end if
-      end
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementWithElseBlock [
-	| sub ifStmt |
-	sub := self subroutine: 'blah'.
-	ifStmt := self
+	| stmt |
+	stmt := self
 		ifBlock: (self scalarVariable: 'bool')
 		then: #()
 		else:  {  self writeStatement: { self characterLiteral: 'message' } }.
-	self entity: sub statementBlock: { ifStmt }.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      if (bool) then
+'      if (bool) then
       else
         write(*,*) ''message''
       end if
-      end
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
-	| sub ifStmt |
-	sub := self subroutine: 'blah'.
-	ifStmt := self
+	| stmt |
+	stmt := self
 		ifBlock: (self scalarVariable: 'bool')
 		then: {  self writeStatement: { self characterLiteral: 'message' } }
 		else:  #().
-	self entity: sub statementBlock: { ifStmt }.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      if (bool) then
+'      if (bool) then
         write(*,*) ''message''
       end if
-      end
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testImplicitStatement [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: { self implicitStatement }.
+	| stmt |
+	stmt := self implicitStatement.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      implicit none
-      end
+'      implicit none
 '
 ]
 
-{ #category : #tests }
-FASTFortranExporterVisitorTest >> testOneDeclarationCharcaterType [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self characterType: nil)
-				variables: #(r) }.
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: nil) variables: #(r).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      character r
-      end
+'      character r
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationLogicalType [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self logicalType: nil)
-				variables: #(r) }.
+	| stmt |
+	stmt := self declarationStatement: (self logicalType: nil) variables: #(r).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      logical r
-      end
+'      logical r
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationRealType [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self realType: nil)
-				variables: #(r) }.
+	| stmt |
+	stmt := self declarationStatement: (self realType: nil) variables: #(r).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      real r
-      end
+'      real r
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(i j) }.
+	| stmt |
+	stmt := self declarationStatement: (self integerType: nil) variables: #(i j).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      integer i,j
-      end
+'      integer i,j
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testReturnStatementEmpty [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: { self returnStatement: nil }.
+	| stmt |
+	stmt :=  self returnStatement: nil.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      return 
-      end
+'      return 
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testReturnStatementLiteralValue [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: { self returnStatement: (self realLiteral: '3.5') }.
+	| stmt |
+	stmt := self returnStatement: (self realLiteral: '3.5').
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      return 3.5
-      end
+'      return 3.5
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
-	| sub |
+	| stmt |
 	self skip: 'not implemented in FAST yet'.
 
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(i) .
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(j) }.
+	stmt := self declarationStatement: (self integerType: '5') variables: #(arr).
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
 '      subroutine blah()
       integer arr(5)
@@ -567,7 +459,7 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 	| sub |
 	sub := self subroutine: 'blah'.
@@ -591,23 +483,15 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 '
 ]
 
-{ #category : #tests }
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testWriteStatement [
-	| sub |
-	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				writeStatement: { self characterLiteral: 'message' }.
-		}.
+	| stmt |
+	stmt := self writeStatement: { self characterLiteral: 'message' }.
 
 	self
-		assertExport: sub
+		assertExport: stmt
 		equals: 
-'      subroutine blah()
-      write(*,*) ''message''
-      end
+'      write(*,*) ''message''
 '
 ]
 
