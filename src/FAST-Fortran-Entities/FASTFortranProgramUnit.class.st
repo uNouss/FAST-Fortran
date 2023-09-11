@@ -21,6 +21,12 @@ FASTFortranProgramUnit class >> annotation [
 	^ self
 ]
 
+{ #category : #'*FAST-Core-Model-Extension' }
+FASTFortranProgramUnit >> inspectionFASTDisplay [
+
+	^ (self class name allButFirst: 4) , self name
+]
+
 { #category : #accessing }
 FASTFortranProgramUnit >> parentProgramFile [
 	"Relation named: #parentProgramFile type: #FASTFortranProgramFile opposite: #programUnit"
