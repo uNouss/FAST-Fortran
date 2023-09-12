@@ -58,6 +58,13 @@ FASTFortranExporterVisitorTest >> characterType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> comment: text [
+	^FASTFortranComment new
+		content: text ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
 	^FASTFortranDeclarationStatement new
 		type: type ;
@@ -273,6 +280,18 @@ FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
 		equals: 
 '      call subrtn(a,5)
 '
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testComment [
+	| cmt |
+	cmt := self comment: 'This is a comment'.
+
+	self
+		assertExport: cmt
+		equals: 
+'CThis is a comment
+'.
 ]
 
 { #category : #'tests - statements' }

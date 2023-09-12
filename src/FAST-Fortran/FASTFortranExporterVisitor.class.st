@@ -274,6 +274,15 @@ FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLi
 ]
 
 { #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTComment: aFASTFortranTComment [
+
+	self
+		<< 'C' ;
+		<< aFASTFortranTComment content ;
+		newLine
+]
+
+{ #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
 	self << aFASTFortranTLiteral primitiveValue
 ]
