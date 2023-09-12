@@ -286,6 +286,30 @@ FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
+	"note: positions are approximate, all we need is that the assignement is after the comment"
+	| stmt cmt block |
+
+	stmt := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	stmt startPos: 34.
+	stmt endPos: 38.
+
+	cmt := self comment: ' comment before assignement'.
+	cmt startPos: 1.
+	cmt endPos: 26.
+
+	block := self statementBlock: { stmt }.
+	block addComment: cmt.
+
+	self
+		assertExport: block
+		equals: 
+'C comment before assignement
+      i = 1
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testCallStatementNoArgs [
 	| stmt |
 	stmt := self callStatement: 'subrtn' arguments: #().
@@ -585,17 +609,20 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
-	| sub |
+	| sub stmt |
 	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(i) .
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(j) }.
+
+	stmt := self
+		declarationStatement: (self integerType: nil)
+		variables: #(i).
+	sub statementBlock addStatement: stmt.
+
+	stmt := self
+		declarationStatement: (self integerType: nil)
+		variables: #(j).
+	stmt startPos: 11.
+	stmt endPos: 15.
+	sub statementBlock addStatement: stmt.
 
 	self
 		assertExport: sub

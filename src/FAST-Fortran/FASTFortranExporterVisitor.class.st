@@ -236,6 +236,16 @@ FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalar
 	self << aFASTFortranScalarVariable name
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
+	"must output statements and comments in the right order"
+
+	(SortedCollection sortBlock: [ :a :b | a startPos < b startPos ])
+		addAll: aFASTFortranStatementBlock statements	;
+		addAll: aFASTFortranStatementBlock comments	 ;
+		do: [ :each | each accept: self ]
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine [
 	self
