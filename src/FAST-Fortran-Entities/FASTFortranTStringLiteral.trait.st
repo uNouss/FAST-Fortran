@@ -8,7 +8,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTStringLiteral classSide >> annotation [
 
 	<FMClass: #TStringLiteral super: #Object>

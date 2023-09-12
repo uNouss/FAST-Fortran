@@ -12,19 +12,13 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranProgramUnit class >> annotation [
 
 	<FMClass: #ProgramUnit super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #'*FAST-Core-Model-Extension' }
-FASTFortranProgramUnit >> inspectionFASTDisplay [
-
-	^ (self class name allButFirst: 4) , self name
 ]
 
 { #category : #accessing }

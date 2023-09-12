@@ -4,16 +4,16 @@ a Fortran Unary Expression (arithmetic, logical, character)
 Class {
 	#name : #FASTFortranUnaryExpression,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression + FASTFortranTFortranUnaryExpression',
-	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTFortranUnaryExpression classTrait',
+	#traits : 'FASTFortranTExpression + FASTFortranTUnaryExpression',
+	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTUnaryExpression classTrait',
 	#instVars : [
-		'#operator => FMProperty',
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
+		'#operator => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranUnaryExpression class >> annotation [
 
 	<FMClass: #UnaryExpression super: #FASTFortranEntity>

@@ -8,7 +8,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTNumericalLiteral classSide >> annotation [
 
 	<FMClass: #TNumericalLiteral super: #Object>

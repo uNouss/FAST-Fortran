@@ -12,7 +12,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTNamedEntity classSide >> annotation [
 
 	<FMClass: #TNamedEntity super: #Object>

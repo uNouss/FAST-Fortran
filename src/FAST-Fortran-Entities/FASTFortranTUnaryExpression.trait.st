@@ -2,14 +2,14 @@
 I represent a fortran unary expression
 "
 Trait {
-	#name : #FASTFortranTFortranUnaryExpression,
+	#name : #FASTFortranTUnaryExpression,
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
 { #category : #meta }
-FASTFortranTFortranUnaryExpression classSide >> annotation [
+FASTFortranTUnaryExpression classSide >> annotation [
 
-	<FMClass: #TFortranUnaryExpression super: #Object>
+	<FMClass: #TUnaryExpression super: #Object>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

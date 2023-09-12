@@ -12,7 +12,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranComment class >> annotation [
 
 	<FMClass: #Comment super: #FASTFortranEntity>

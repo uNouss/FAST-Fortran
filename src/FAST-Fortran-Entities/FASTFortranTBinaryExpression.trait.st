@@ -2,14 +2,14 @@
 I represent a fortran binary expression
 "
 Trait {
-	#name : #FASTFortranTFortranBinaryExpression,
+	#name : #FASTFortranTBinaryExpression,
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
 { #category : #meta }
-FASTFortranTFortranBinaryExpression classSide >> annotation [
+FASTFortranTBinaryExpression classSide >> annotation [
 
-	<FMClass: #TFortranBinaryExpression super: #Object>
+	<FMClass: #TBinaryExpression super: #Object>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

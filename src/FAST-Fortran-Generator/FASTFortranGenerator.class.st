@@ -878,8 +878,8 @@ FASTFortranGenerator >> defineTraits [
 
 	tFortranLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
 	
-	tFortranBinaryExpression := builder newTraitNamed: #TFortranBinaryExpression comment: 'I represent a fortran binary expression'.
+	tFortranBinaryExpression := builder newTraitNamed: #TBinaryExpression comment: 'I represent a fortran binary expression'.
 	
-	tFortranUnaryExpression := builder newTraitNamed: #TFortranUnaryExpression comment: 'I represent a fortran unary expression'.
+	tFortranUnaryExpression := builder newTraitNamed: #TUnaryExpression comment: 'I represent a fortran unary expression'.
 	
 ]

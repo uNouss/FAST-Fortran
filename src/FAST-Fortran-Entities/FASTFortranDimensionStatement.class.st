@@ -9,7 +9,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranDimensionStatement class >> annotation [
 
 	<FMClass: #DimensionStatement super: #FASTFortranEntity>
