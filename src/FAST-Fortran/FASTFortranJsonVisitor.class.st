@@ -166,10 +166,12 @@ FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitComment: aCommentNode [
 
-	^FASTFortranComment new
+	| data |
+	data := super visitComment: aCommentNode.
+	^(self newEntity: FASTFortranComment atPosition: data first)
 		mooseModel: model ;
-		content:
-		  (super visitComment: aCommentNode) second
+		content: 'C' , data second ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -229,7 +231,7 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
-	^FASTFortranDeclarationStatement new
+	^(self newEntity: FASTFortranDeclarationStatement atPosition: data first)
 		mooseModel: model ;
 		type: data second;
 			"TODO clarify the need of attributes"
@@ -361,7 +363,7 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 	| data |
 	data := super visitFunctionStatement: aFunctionStatementNode.
 
-	^FASTFortranFunctionStatement new
+	^(self newEntity: FASTFortranFunctionStatement atPosition: data first)
 		mooseModel: model ;
 		name: data second name ;
 		arguments: data third ;
@@ -401,7 +403,7 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 
 	| data |
 	data := super visitGotoStatement: aGotoStatementNode.
-	^FASTFortranGoToStatement new
+	^(self newEntity: FASTFortranGoToStatement atPosition: data first)
 		mooseModel: model ;
 		flag: 'TODO: target = data second';
 		yourself
@@ -429,6 +431,8 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 	ifStmt := data third.
 	lastElse := data fourth.
 
+	self set: ifStmt startEnd: data first.
+
 	[ ifStmt elseStatementBlock isNil ]
 	whileFalse: [ ifStmt := ifStmt elseStatementBlock statements first ].
 	
@@ -444,7 +448,7 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
 	^ data second
-		  ifNil: [ FASTFortranImplicitStatement new
+		  ifNil: [ (self newEntity: FASTFortranImplicitStatement atPosition: data first)
 				mooseModel: model ;
 				yourself ]
 		  ifNotNil: [ self notYetImplemented ]
@@ -538,7 +542,7 @@ FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
 	| data |
 	data := super visitPrintStatement: aPrintStatementNode.
 
-	^FASTFortranPrintStatement new
+	^(self newEntity: FASTFortranPrintStatement atPosition: data first)
 		mooseModel: model ;
 		format: data second;
 		arguments: data third;
@@ -575,7 +579,7 @@ FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 
 	| data |
 	data := super visitReturnStatement: aReturnStatementNode.
-	^FASTFortranReturnStatement new
+	^(self newEntity: FASTFortranReturnStatement atPosition: data first)
 		mooseModel: model ;
 		yourself
 ]
@@ -711,7 +715,7 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	| data |
 	data := super visitWriteStatement: aWriteStatementNode.
 
-	^ FASTFortranWriteStatement new
+	^(self newEntity: FASTFortranWriteStatement atPosition: data first)
 		mooseModel: model ;
 		format: data second;
 		arguments: data third;

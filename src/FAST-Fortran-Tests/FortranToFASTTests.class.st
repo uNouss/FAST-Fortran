@@ -422,6 +422,23 @@ FortranToFASTTests >> testBlockData [
 
 ]
 
+{ #category : #tests }
+FortranToFASTTests >> testComment [
+
+	| result cmt |
+	fortranCode := '      integer function aFct()
+C comment in a function''s body
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"comment":" comment in a function''s body","span":"(2:1)-(2:30)","tag":"comment"}],"name":"afct","result":null,"span":"(1:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
+	result := self visitJsonCode.
+
+	cmt := result first statementBlock comments anyOne.
+	self assert: cmt content equals: 'C comment in a function''s body'.
+	self assert: cmt startPos equals: 31.
+	self assert: cmt endPos equals: 60.
+]
+
 { #category : #'tests-statement' }
 FortranToFASTTests >> testContinueStatement [
 
@@ -435,7 +452,8 @@ FortranToFASTTests >> testContinueStatement [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranContinueStatement.
-	self assert: stmt startPos equals: 29
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 36.
 ]
 
 { #category : #'tests-statement' }
@@ -457,6 +475,7 @@ FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 	self assert: stmt loopControl isNotNil.
 	self assert: stmt statementBlock statements isEmpty.
 	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 49.
 
 	control := stmt loopControl.
 	self assert: control class equals: FASTFortranLoopControlExpression.
@@ -495,6 +514,7 @@ C comment in loop
 	self assert: stmt loopControl isNotNil.
 	self assert: stmt statementBlock statements isEmpty.
 	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 67.
 
 	self assert: stmt statementBlock comments size equals: 1.
 ]
@@ -516,6 +536,7 @@ FortranToFASTTests >> testExternalStatement [
 	self assert: stmt class equals: FASTFortranExternalStatement.
 	self assert: stmt name equals: 'mypnt'.
 	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 39.
 
 ]
 
@@ -558,26 +579,9 @@ FortranToFASTTests >> testFunctionStatement [
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranFunctionStatement.
 	self assert: stmt name equals: 'add'.
-]
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 41.
 
-{ #category : #'tests-programUnit' }
-FortranToFASTTests >> testFunctionWithComment [
-
-	| result fct |
-	fortranCode := '      integer function aFct()
-C comment in a function''s body
-      end
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"comment":" comment in a function''s body","span":"(2:1)-(2:30)","tag":"comment"}],"name":"afct","result":null,"span":"(1:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
-	result := self visitJsonCode.
-
-	self assert: result isNotEmpty.
-	fct := result first.
-
-	self assert: fct class equals: FASTFortranFunction.
-	self assert: fct name equals: 'afct'.
-	self assert: fct statementBlock statements isEmpty.
-	self assert: fct statementBlock comments size equals: 1.
 ]
 
 { #category : #'tests-programUnit' }
@@ -734,6 +738,10 @@ FortranToFASTTests >> testIfEmpty [
 	self assert: conditional condition class equals: FASTFortranScalarVariable.
 	self assert: conditional condition name equals: 'a'.
 	self assert: conditional thenStatementBlock statements size equals: 0.
+
+	self assert: conditional startPos equals: 29.
+	self assert: conditional endPos equals: 55.
+
 ]
 
 { #category : #'tests-statement' }
@@ -809,7 +817,10 @@ FortranToFASTTests >> testImplicitNoneStatement [
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranImplicitStatement
+	self assert: stmt class equals: FASTFortranImplicitStatement.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 41.
+
 ]
 
 { #category : #'tests-programUnit' }
@@ -834,7 +845,7 @@ c23456789 123456789 123456789 123456789 123456789 123456789 12
 	
 	self assert: body comments size equals: 1.
 	self assert: body comments first class equals: FASTFortranComment.
-	self assert: body comments first content equals: '23456789 123456789 123456789 123456789 123456789 123456789 12'.
+	self assert: body comments first content equals: 'C23456789 123456789 123456789 123456789 123456789 123456789 12'.
 ]
 
 { #category : #'tests-programUnit' }
@@ -892,6 +903,9 @@ FortranToFASTTests >> testReturnStatementEmpty [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranReturnStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 33.
+
 
 ]
 
@@ -908,6 +922,9 @@ FortranToFASTTests >> testStatementAssignement [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 36.
+
 
 	self assert: stmt variable class equals: FASTFortranScalarVariable.
 	self assert: stmt variable name equals: 'c'.
@@ -916,7 +933,7 @@ FortranToFASTTests >> testStatementAssignement [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testStatementCallSubroutine [
 
-	| result body arg |
+	| result call arg |
 	fortranCode := '      PROGRAM TESTALT
        CALL RANK ( N, *8 )
       END 
@@ -926,17 +943,21 @@ FortranToFASTTests >> testStatementCallSubroutine [
 
 	self assert: result first class equals: FASTFortranProgramMain.
 
-	body := result first statementBlock statements.
-	self assert: body size equals: 1.
-	self assert: body first class equals: FASTFortranCallStatement.
-	self assert: body first name equals: 'rank'.
-	self assert: body first arguments size equals: 2.
+	self assert: result first statementBlock statements size equals: 1.
 
-	arg := body first arguments first.
+	call := result first statementBlock statements anyOne.
+	self assert: call class equals: FASTFortranCallStatement.
+	self assert: call name equals: 'rank'.
+	self assert: call arguments size equals: 2.
+	self assert: call startPos equals: 30.
+	self assert: call endPos equals: 48.
+
+
+	arg := call arguments first.
 	self assert: arg class equals: FASTFortranScalarVariable.
 	self assert: arg name equals: 'n'.
 
-	arg := body first arguments second.
+	arg := call arguments second.
 	self assert: arg class equals: FASTFortranIntegerLiteral.
 	self assert: arg primitiveValue equals: '8'.
 	self flag: 'what happened to "*" ("*8")?'
@@ -961,6 +982,9 @@ FortranToFASTTests >> testStatementCallWrite [
 
 	stmt := body first.
 	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 67.
+
 	self assert: stmt format size equals: 2.
 	stmt format do: [ :each |
 		self assert: each class equals: FASTFortranAsterisk
@@ -985,6 +1009,9 @@ FortranToFASTTests >> testStatementExit [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranExitStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 33.
+
 ]
 
 { #category : #'tests-statement' }
@@ -1002,6 +1029,9 @@ FortranToFASTTests >> testStatementGoto [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranGoToStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 37.
+
 ]
 
 { #category : #'tests-statement' }
@@ -1018,6 +1048,9 @@ FortranToFASTTests >> testStatementPrintMultipleVariables [
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranPrintStatement.
 	self assert: stmt format class equals: FASTFortranAsterisk.
+	self assert: stmt startPos equals: 36.
+	self assert: stmt endPos equals: 51.
+
 	
 	arguments := stmt arguments.
 	self assert: arguments size equals: 3.
@@ -1048,6 +1081,9 @@ FortranToFASTTests >> testStatementPrintOneVariable [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranPrintStatement.
+	self assert: stmt startPos equals: 36.
+	self assert: stmt endPos equals: 45.
+
 	self assert: stmt format class equals: FASTFortranAsterisk.
 	arguments := stmt arguments.
 	self assert: arguments size equals: 1.
@@ -1070,6 +1106,9 @@ FortranToFASTTests >> testStatementStop [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 33.
+
 	self assert: stmt displayArgument equals: nil.
 ]
 
@@ -1088,6 +1127,9 @@ FortranToFASTTests >> testStatementStopWithMessage [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 36.
+
 	self assert: stmt displayArgument class equals: FASTFortranIntegerLiteral .
 	self assert: stmt displayArgument primitiveValue equals: '10'
 ]
@@ -1145,7 +1187,7 @@ FortranToFASTTests >> testSubroutineWithParameters [
 	self assert: result first parameters size equals: 2.
 ]
 
-{ #category : #'tests-statement' }
+{ #category : #tests }
 FortranToFASTTests >> testTokenPosition [
 
 	| result stmnts stmt |
@@ -1187,6 +1229,9 @@ FortranToFASTTests >> testVariableDeclarationCharacter [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 45.
+
 	self assert: stmt type class equals: FASTFortranCharacterType.
 	self assert: stmt declarators size equals: 1.
 	
@@ -1210,6 +1255,9 @@ FortranToFASTTests >> testVariableDeclarationInteger [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 34.
+
 	self assert: stmt type class equals: FASTFortranIntegerType.
 	self assert: stmt declarators size equals: 1.
 	
@@ -1233,6 +1281,9 @@ FortranToFASTTests >> testVariableDeclarationLogical [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 34.
+
 	self assert: stmt type class equals: FASTFortranLogicalType.
 	self assert: stmt declarators size equals: 1.
 	
@@ -1256,6 +1307,9 @@ FortranToFASTTests >> testVariableDeclarationReal [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 31.
+
 	self assert: stmt type class equals: FASTFortranRealType.
 	self assert: stmt declarators size equals: 1.
 	
