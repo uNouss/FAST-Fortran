@@ -4,11 +4,11 @@ a Fortran Binary Expression (arithmetic, logical)
 Class {
 	#name : #FASTFortranBinaryExpression,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression + FASTFortranTFortranBinaryExpression',
-	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTFortranBinaryExpression classTrait',
+	#traits : 'FASTFortranTBinaryExpression + FASTFortranTExpression',
+	#classTraits : 'FASTFortranTBinaryExpression classTrait + FASTFortranTExpression classTrait',
 	#instVars : [
-		'#operator => FMProperty',
 		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
+		'#operator => FMProperty',
 		'#right => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
