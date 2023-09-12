@@ -35,7 +35,7 @@ FASTFortranExporterVisitor >> resetStream [
 	stream := nil
 ]
 
-{ #category : #visiting }
+{ #category : #accessing }
 FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 	^aFASTFortranModel entities select: [ :entity |
 		entity parents isEmpty
