@@ -11,7 +11,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTInvocation classSide >> annotation [
 
 	<FMClass: #TInvocation super: #Object>

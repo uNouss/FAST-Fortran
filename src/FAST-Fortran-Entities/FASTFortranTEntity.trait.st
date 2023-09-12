@@ -3,12 +3,16 @@ any entity
 "
 Trait {
 	#name : #FASTFortranTEntity,
-	#traits : 'FASTTEntity + TEntityMetaLevelDependency',
-	#classTraits : 'FASTTEntity classTrait + TEntityMetaLevelDependency classTrait',
+	#instVars : [
+		'#endPos => FMProperty',
+		'#startPos => FMProperty'
+	],
+	#traits : 'TEntityMetaLevelDependency',
+	#classTraits : 'TEntityMetaLevelDependency classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTEntity classSide >> annotation [
 
 	<FMClass: #TEntity super: #Object>
@@ -17,7 +21,7 @@ FASTFortranTEntity classSide >> annotation [
 	^ self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FASTFortranTEntity >> endPos [
 
 	<FMProperty: #endPos type: #Number>
@@ -25,13 +29,13 @@ FASTFortranTEntity >> endPos [
 	^ endPos
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FASTFortranTEntity >> endPos: anObject [
 	<generated>
 	endPos := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FASTFortranTEntity >> startPos [
 
 	<FMProperty: #startPos type: #Number>
@@ -39,7 +43,7 @@ FASTFortranTEntity >> startPos [
 	^ startPos
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FASTFortranTEntity >> startPos: anObject [
 	<generated>
 	startPos := anObject

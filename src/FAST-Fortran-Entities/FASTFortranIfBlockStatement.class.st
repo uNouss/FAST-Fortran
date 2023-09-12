@@ -14,7 +14,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranIfBlockStatement class >> annotation [
 
 	<FMClass: #IfBlockStatement super: #FASTFortranEntity>

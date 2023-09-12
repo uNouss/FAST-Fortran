@@ -16,7 +16,7 @@ Trait {
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranTLiteral classSide >> annotation [
 
 	<FMClass: #TLiteral super: #Object>

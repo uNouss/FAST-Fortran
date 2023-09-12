@@ -13,7 +13,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranUnaryExpression class >> annotation [
 
 	<FMClass: #UnaryExpression super: #FASTFortranEntity>

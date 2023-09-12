@@ -9,7 +9,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranDoublePrecisionLiteral class >> annotation [
 
 	<FMClass: #DoublePrecisionLiteral super: #FASTFortranEntity>

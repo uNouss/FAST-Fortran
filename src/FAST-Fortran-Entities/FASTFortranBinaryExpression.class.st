@@ -14,7 +14,7 @@ Class {
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #meta }
 FASTFortranBinaryExpression class >> annotation [
 
 	<FMClass: #BinaryExpression super: #FASTFortranEntity>
