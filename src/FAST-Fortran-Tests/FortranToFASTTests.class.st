@@ -1,12 +1,14 @@
 Class {
 	#name : #FortranToFASTTests,
-	#superclass : #FortranToFASTTestSetUp,
-	#instVars : [
-		'fortranCode',
-		'jsonCode'
-	],
+	#superclass : #AbstractJsonToFASTTests,
 	#category : #'FAST-Fortran-Tests-Visitor'
 }
+
+{ #category : #running }
+FortranToFASTTests >> jsonVisitor [
+
+	^ FASTFortranJsonVisitor
+]
 
 { #category : #'tests-expression' }
 FortranToFASTTests >> testAssignementBooleanLiteral [
@@ -1316,12 +1318,4 @@ FortranToFASTTests >> testVariableDeclarationReal [
 	var := stmt declarators first.
 	self assert: var class equals: FASTFortranScalarVariable.
 	self assert: var name equals: 'c'.
-]
-
-{ #category : #running }
-FortranToFASTTests >> visitJsonCode [
-	| visitor |
-	visitor := FASTFortranJsonVisitor new.
-	visitor initLineSizes: fortranCode.
-	^visitor visitProgramFile: (NeoJSONReader fromString: jsonCode)
 ]
