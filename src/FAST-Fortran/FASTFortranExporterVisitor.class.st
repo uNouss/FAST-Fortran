@@ -35,7 +35,7 @@ FASTFortranExporterVisitor >> resetStream [
 	stream := nil
 ]
 
-{ #category : #visiting }
+{ #category : #accessing }
 FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 	^aFASTFortranModel entities select: [ :entity |
 		entity parents isEmpty
@@ -236,6 +236,16 @@ FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalar
 	self << aFASTFortranScalarVariable name
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
+	"must output statements and comments in the right order"
+
+	(SortedCollection sortBlock: [ :a :b | a startPos < b startPos ])
+		addAll: aFASTFortranStatementBlock statements	;
+		addAll: aFASTFortranStatementBlock comments	 ;
+		do: [ :each | each accept: self ]
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranSubroutine: aFASTFortranSubroutine [
 	self
@@ -271,6 +281,15 @@ FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLi
 		<< '''' ;
 		<< aFASTFortranTLiteral primitiveValue ;
 		<< ''''
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTComment: aFASTFortranTComment [
+
+	self
+		<< 'C' ;
+		<< aFASTFortranTComment content ;
+		newLine
 ]
 
 { #category : #'visiting - traits' }

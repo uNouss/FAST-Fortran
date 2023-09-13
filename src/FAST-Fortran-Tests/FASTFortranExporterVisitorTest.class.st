@@ -20,9 +20,13 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> assignementStatement: aName value: rhs [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranAssignmentStatement new
 		variable: (self scalarVariable: aName) ;
 		expression: rhs ;
+		startPos: 1 ;
+		endPos: aName size + 3 ;
 		yourself
 ]
 
@@ -38,10 +42,14 @@ FASTFortranExporterVisitorTest >> binary: op left: lhsVar right: rhsVal [
 ]
 
 { #category : #'entity creation' }
-FASTFortranExporterVisitorTest >> callStatement: aName arguments: aCollection [
+FASTFortranExporterVisitorTest >> callStatement: aName arguments: aCollection [	
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranCallStatement new
 		name: aName ;
 		arguments: aCollection ;
+		startPos: 1 ;
+		endPos: aName size + 4 ;
 		yourself
 ]
 
@@ -58,18 +66,35 @@ FASTFortranExporterVisitorTest >> characterType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> comment: text [
+	^FASTFortranComment new
+		content: text asString ;
+		startPos: 1 ;
+		endPos: text asString size + 1 ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranDeclarationStatement new
 		type: type ;
 		declarators: (self scalarVariables: aCollection)  ;
+		startPos: 1 ;
+		endPos: 10 ;
 		yourself
 ]
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> doStatement: control statements: stmtBlock [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranDoStatement new
 		loopControl: control ;
 		statementBlock: (self statementBlock: stmtBlock) ;
+		startPos: 1 ;
+		endPos: 20 ;
 		yourself
 ]
 
@@ -81,26 +106,23 @@ FASTFortranExporterVisitorTest >> entity: owner parameters: aCollection [
 ]
 
 { #category : #'entity creation' }
-FASTFortranExporterVisitorTest >> entity: owner statementBlock: aCollection [
-	^owner
-		statementBlock: (FASTFortranStatementBlock new
-			statements: aCollection ;
-			yourself)
-		yourself
-]
-
-{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> externalStatement: aName [
 	^FASTFortranExternalStatement new
 		name: aName ;
+		startPos: 1 ;
+		endPos: 8 ;
 		yourself
 ]
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> functionCall: aName arguments: aCollection [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranFunctionCall new
 		name: aName ;
 		arguments: aCollection ;
+		startPos: 1 ;
+		endPos: aName size + 3 ;
 		yourself
 ]
 
@@ -116,6 +138,10 @@ FASTFortranExporterVisitorTest >> ifBlock: condition then: thenBlock else: elseB
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> implicitStatement [
 	^FASTFortranImplicitStatement new
+		startPos: 1 ;
+		endPos: 13 ;
+		yourself
+
 ]
 
 { #category : #'entity creation' }
@@ -167,8 +193,12 @@ FASTFortranExporterVisitorTest >> realType: dimension [
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> returnStatement: expression [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranReturnStatement new
 		expression: expression ;
+		startPos: 1 ;
+		endPos: 6 ;
 		yourself
 ]
 
@@ -195,14 +225,20 @@ FASTFortranExporterVisitorTest >> setUp [
 FASTFortranExporterVisitorTest >> statementBlock: aCollection [
 	^FASTFortranStatementBlock new
 		statements: aCollection ;
+		startPos: 1 ;
+		endPos: (aCollection ifNotEmpty: [ aCollection last endPos ] ifEmpty: [ 2 ]) ;
 		yourself
 ]
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> subroutine: aName [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranSubroutine new
 		name: aName ;
 		statementBlock: (self statementBlock: #()) ;
+		startPos: 1 ;
+		endPos: 50 ;
 		yourself
 ]
 
@@ -250,6 +286,30 @@ FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
+	"note: positions are approximate, all we need is that the assignement is after the comment"
+	| stmt cmt block |
+
+	stmt := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	stmt startPos: 34.
+	stmt endPos: 38.
+
+	cmt := self comment: ' comment before assignement'.
+	cmt startPos: 1.
+	cmt endPos: 26.
+
+	block := self statementBlock: { stmt }.
+	block addComment: cmt.
+
+	self
+		assertExport: block
+		equals: 
+'C comment before assignement
+      i = 1
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testCallStatementNoArgs [
 	| stmt |
 	stmt := self callStatement: 'subrtn' arguments: #().
@@ -273,6 +333,18 @@ FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
 		equals: 
 '      call subrtn(a,5)
 '
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testComment [
+	| cmt |
+	cmt := self comment: 'This is a comment'.
+
+	self
+		assertExport: cmt
+		equals: 
+'CThis is a comment
+'.
 ]
 
 { #category : #'tests - statements' }
@@ -537,17 +609,20 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
-	| sub |
+	| sub stmt |
 	sub := self subroutine: 'blah'.
-	self
-		entity: sub
-		statementBlock: {
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(i) .
-			self
-				declarationStatement: (self integerType: nil)
-				variables: #(j) }.
+
+	stmt := self
+		declarationStatement: (self integerType: nil)
+		variables: #(i).
+	sub statementBlock addStatement: stmt.
+
+	stmt := self
+		declarationStatement: (self integerType: nil)
+		variables: #(j).
+	stmt startPos: 11.
+	stmt endPos: 15.
+	sub statementBlock addStatement: stmt.
 
 	self
 		assertExport: sub
@@ -573,8 +648,12 @@ FASTFortranExporterVisitorTest >> testWriteStatement [
 
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> writeStatement: aCollection [
+	"end position is approximate, test should adjust if a real value is needed"
+
 	^FASTFortranWriteStatement new
 		format: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
 		arguments: aCollection ;
+		startPos: 1 ;
+		endPos: 30 ;
 		yourself
 ]
