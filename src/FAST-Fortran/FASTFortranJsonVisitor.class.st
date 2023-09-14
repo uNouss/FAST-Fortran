@@ -164,17 +164,6 @@ FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitComment: aCommentNode [
-
-	| data |
-	data := super visitComment: aCommentNode.
-	^(self newEntity: FASTFortranComment atPosition: data first)
-		mooseModel: model ;
-		content: 'C' , data second ;
-		yourself
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCommonStatement: aCommonStatementNode [
 	"creates common statement which defines a block of main memory storage so that different program units can share the same data without using arguments.
 
@@ -340,6 +329,17 @@ FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
 		   atPosition: data first)
 		  name: data second first name;
 		  yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitFortranComment: aCommentNode [
+
+	| data |
+	data := super visitFortranComment: aCommentNode.
+	^(self newEntity: FASTFortranComment atPosition: data first)
+		mooseModel: model ;
+		content: 'C' , data second ;
+		yourself
 ]
 
 { #category : #'visiting expression' }
