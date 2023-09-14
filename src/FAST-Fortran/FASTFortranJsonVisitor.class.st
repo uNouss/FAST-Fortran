@@ -55,6 +55,16 @@ FASTFortranJsonVisitor >> pointToPosition: lineColumn [
 ]
 
 { #category : #private }
+FASTFortranJsonVisitor >> putMembers: entities inBody: stmtBlock [
+
+	entities do: [ :each |
+		each isStatement
+			ifTrue: [ stmtBlock addStatement: each ]
+			ifFalse: [ stmtBlock addComment: each ]
+	]
+]
+
+{ #category : #private }
 FASTFortranJsonVisitor >> set: aFASTFortranNode startEnd: aPoint [
 
 	aFASTFortranNode
@@ -125,16 +135,14 @@ FASTFortranJsonVisitor >> visitBlock_data: aBlockDataNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitBody: aNode [
+
 	| data stmtBlock |
 	data := aNode 
 		ifNil: [ #() ]
 		ifNotNil: [ super visitBody: aNode ].
 
 	stmtBlock := FASTFortranStatementBlock new.
-	data do: [ :each |
-		each isStatement
-		ifTrue: [ stmtBlock addStatement: each ]
-		ifFalse: [ stmtBlock addComment: each ] ].
+	self putMembers: data inBody: stmtBlock.
 	
 	^stmtBlock 
 
