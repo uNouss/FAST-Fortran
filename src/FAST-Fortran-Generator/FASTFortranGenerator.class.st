@@ -461,8 +461,6 @@ FASTFortranGenerator >> defineHierarchy [
 	variable --|> tVariableEntity.
 	variableScalar --|> variable.
 	variableArray --|> variable.
-	binaryExpression --|> tExpression.
-	unaryExpression --|> tExpression.
 	loopControlExpression --|> tExpression.
 
 	substring --|> tExpression.
@@ -470,8 +468,8 @@ FASTFortranGenerator >> defineHierarchy [
 	record --|> tExpression.
 	structure --|> tExpression.
 	
-	binaryExpression --|> tFortranBinaryExpression.
-	unaryExpression --|> tFortranUnaryExpression.
+	binaryExpression --|> tBinaryExpression.
+	unaryExpression --|> tUnaryExpression.
 
 	complexConstant --|> tNumericalLiteral.
 	doubleComplexConstant --|> tNumericalLiteral.
@@ -877,9 +875,5 @@ FASTFortranGenerator >> defineTraits [
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
 	tFortranLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
-	
-	tFortranBinaryExpression := builder newTraitNamed: #TBinaryExpression comment: 'I represent a fortran binary expression'.
-	
-	tFortranUnaryExpression := builder newTraitNamed: #TUnaryExpression comment: 'I represent a fortran unary expression'.
 	
 ]
