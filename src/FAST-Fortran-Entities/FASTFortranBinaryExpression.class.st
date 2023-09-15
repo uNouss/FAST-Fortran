@@ -4,8 +4,8 @@ a Fortran Binary Expression (arithmetic, logical)
 Class {
 	#name : #FASTFortranBinaryExpression,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTBinaryExpression + FASTFortranTExpression',
-	#classTraits : 'FASTFortranTBinaryExpression classTrait + FASTFortranTExpression classTrait',
+	#traits : 'FASTFortranTBinaryExpression',
+	#classTraits : 'FASTFortranTBinaryExpression classTrait',
 	#instVars : [
 		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
 		'#operator => FMProperty',

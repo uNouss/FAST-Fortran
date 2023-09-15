@@ -4,8 +4,8 @@ a Fortran Unary Expression (arithmetic, logical, character)
 Class {
 	#name : #FASTFortranUnaryExpression,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression + FASTFortranTUnaryExpression',
-	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTUnaryExpression classTrait',
+	#traits : 'FASTFortranTUnaryExpression',
+	#classTraits : 'FASTFortranTUnaryExpression classTrait',
 	#instVars : [
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
 		'#operator => FMProperty'

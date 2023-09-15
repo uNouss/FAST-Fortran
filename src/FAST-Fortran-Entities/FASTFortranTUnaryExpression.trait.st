@@ -1,8 +1,10 @@
 "
-I represent a fortran unary expression
+A trait representing an unary expression of a node of a source code.
 "
 Trait {
 	#name : #FASTFortranTUnaryExpression,
+	#traits : 'FASTFortranTExpression',
+	#classTraits : 'FASTFortranTExpression classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 
