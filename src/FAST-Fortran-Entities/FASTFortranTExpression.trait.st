@@ -10,7 +10,7 @@ Trait {
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
 		'#parentExpression => FMOne type: #FASTFortranBinaryExpression opposite: #left',
 		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #condition',
-		'#assignementExpressionOwner => FMOne type: #FASTFortranAssignmentStatement opposite: #expression'
+		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',
@@ -69,7 +69,7 @@ FASTFortranTExpression >> assignedIn: anObject [
 
 { #category : #accessing }
 FASTFortranTExpression >> assignementExpressionOwner [
-	"Relation named: #assignementExpressionOwner type: #FASTFortranAssignmentStatement opposite: #expression"
+	"Relation named: #assignementExpressionOwner type: #FASTFortranFunctionStatement opposite: #expression"
 
 	<generated>
 	<FMComment: 'The AssignementExpression owner (if possible)'>

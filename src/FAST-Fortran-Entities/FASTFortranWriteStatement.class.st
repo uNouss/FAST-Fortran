@@ -4,8 +4,8 @@ I represent Fortran Write statement
 Class {
 	#name : #FASTFortranWriteStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement + FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait',
 	#instVars : [
 		'#format => FMProperty'
 	],

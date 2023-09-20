@@ -4,8 +4,8 @@ any entity
 Trait {
 	#name : #FASTFortranTEntity,
 	#instVars : [
-		'#endPos => FMProperty',
-		'#startPos => FMProperty'
+		'#startPos => FMProperty',
+		'#endPos => FMProperty'
 	],
 	#traits : 'TEntityMetaLevelDependency',
 	#classTraits : 'TEntityMetaLevelDependency classTrait',

@@ -662,11 +662,6 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
 			 'The owner of the format identifier').
 
-	((assignmentStatement property: #expression) comment:
-		 'Expression thats being assigned upon declaration to the var')
-	<>- ((tExpression property: #assignementExpressionOwner) comment:
-			 'The AssignementExpression owner (if possible)').
-
 	((functionStatement property: #expression) comment:
 		 'Expression thats being assigned upon declaration to the var')
 	<>- ((tExpression property: #assignementExpressionOwner) comment:

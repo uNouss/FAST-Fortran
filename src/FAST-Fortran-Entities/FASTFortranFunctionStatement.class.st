@@ -4,11 +4,11 @@ I represent a function statement - a function-like declaration, made in a single
 Class {
 	#name : #FASTFortranFunctionStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTLabelledStatement classTrait',
+	#traits : 'FASTFortranTLabelledStatement + FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTWithArguments classTrait',
 	#instVars : [
-		'#name => FMProperty',
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner',
+		'#name => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
