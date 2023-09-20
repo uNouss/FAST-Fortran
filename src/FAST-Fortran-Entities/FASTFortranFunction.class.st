@@ -4,8 +4,6 @@ I represent a Fortran Function
 Class {
 	#name : #FASTFortranFunction,
 	#superclass : #FASTFortranProcedure,
-	#traits : 'FASTFortranTWithParameters',
-	#classTraits : 'FASTFortranTWithParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
