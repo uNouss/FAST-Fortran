@@ -385,7 +385,8 @@ FASTFortranGenerator >> defineHierarchy [
 	super defineHierarchy.
 
 	programUnit --|> tEntity.
-	programUnit --|> tNamedBehaviouralEntity.
+	programUnit --|> tBehaviouralEntity.
+	programUnit --|> tNamedEntity.
 	subprogram --|> programUnit.
 	mainprogram --|> programUnit.
 	procedure --|> subprogram.
