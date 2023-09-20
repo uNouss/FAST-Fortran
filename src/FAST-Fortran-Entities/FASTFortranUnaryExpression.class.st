@@ -7,8 +7,8 @@ Class {
 	#traits : 'FASTFortranTUnaryExpression',
 	#classTraits : 'FASTFortranTUnaryExpression classTrait',
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
-		'#operator => FMProperty'
+		'#operator => FMProperty',
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
