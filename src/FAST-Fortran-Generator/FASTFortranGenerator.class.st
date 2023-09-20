@@ -491,10 +491,7 @@ FASTFortranGenerator >> defineHierarchy [
 	realType --|> type.
 
 	"TRAITS"
-	"TODO: check if a function and a subroutine has the same set of parameters and join the definiton to procedure --|> tWithParameters in this case."
-	function --|> tWithParameters.
-	subroutine --|> tWithParameters.
-
+	procedure --|> tWithParameters.
 	functionCall --|> tWithArguments.
 	functionStatement --|> tWithArguments.
 	callStatement --|> tWithArguments.

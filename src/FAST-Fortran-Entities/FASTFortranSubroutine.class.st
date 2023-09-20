@@ -4,8 +4,6 @@ The SUBROUTINE statement identifies a subprogram, a named program unit as a subr
 Class {
 	#name : #FASTFortranSubroutine,
 	#superclass : #FASTFortranProcedure,
-	#traits : 'FASTFortranTWithParameters',
-	#classTraits : 'FASTFortranTWithParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
