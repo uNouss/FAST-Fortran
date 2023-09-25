@@ -7,8 +7,8 @@ Class {
 	#traits : 'FASTFortranTExpression',
 	#classTraits : 'FASTFortranTExpression classTrait',
 	#instVars : [
-		'#init => FMProperty',
 		'#increment => FMProperty',
+		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison',
 		'#limit => FMProperty',
 		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl'
 	],
@@ -41,17 +41,25 @@ FASTFortranLoopControlExpression >> increment: anObject [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> init [
+	"Relation named: #init type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison"
 
-	<FMProperty: #init type: #String>
 	<generated>
-	<FMComment: 'Loop control initial value'>
+	<FMComment: 'initial assignment'>
 	^ init
 ]
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> init: anObject [
+
 	<generated>
 	init := anObject
+]
+
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> initGroup [
+	<generated>
+	<navigation: 'Init'>
+	^ MooseSpecializedGroup with: self init
 ]
 
 { #category : #accessing }
