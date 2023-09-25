@@ -98,7 +98,8 @@ Class {
 		'tFortranUnaryExpression',
 		'booleanConstant',
 		'characterConstant',
-		'statementBlock'
+		'statementBlock',
+		'assignmentExpression'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -154,6 +155,11 @@ FASTFortranGenerator >> defineData [
 		                        'I represent a declaration statement for one or many variables'.
 
 	"EXPRESSIONS"
+	
+	assignmentExpression := builder
+		                       newClassNamed: #AssignmentExpression
+		                       comment:
+		                       'I represent an assignment expression as a part of assignment statement'.
 
 	variable := builder
 		            newClassNamed: #Variable
@@ -444,13 +450,13 @@ FASTFortranGenerator >> defineHierarchy [
 
 
 	"DATA"
+	assignmentExpression --|> tExpression.
 	functionCall --|> tExpression.
 	variable --|> tExpression.
 	variable --|> tVariableEntity.
 	variableScalar --|> variable.
 	variableArray --|> variable.
 	loopControlExpression --|> tExpression.
-
 	substring --|> tExpression.
 	
 	binaryExpression --|> tBinaryExpression.
@@ -516,9 +522,6 @@ FASTFortranGenerator >> defineProperties [
 
 	(arrayDimensionDeclarator property: #ub type: #Number) comment:
 		'Upper bound'.
-
-	(loopControlExpression property: #init type: #String) comment:
-		'Loop control initial value'.
 
 	(loopControlExpression property: #increment type: #String) comment:
 		'Loop control increment value'.
@@ -589,6 +592,21 @@ FASTFortranGenerator >> defineRelations [
 	((unaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
+			
+	((assignmentExpression property: #leftPart) comment: 'assignee')
+	<>-
+	((variable property: #parentAssignmentExpression) comment:
+		 'Parent assignment expression').
+		
+	((assignmentExpression property: #rightPart) comment: 'assigned')
+	<>-
+	((variable property: #parentAssignmentExpression) comment:
+		 'Parent assignment expression').	
+			
+	((loopControlExpression property: #init) comment: 'initial assignment')
+	<>-
+	((assignmentExpression property: #parentLoopControlExpresison) comment:
+		 'Parent loop control expresison').	
 
 	((doStatement property: #loopControl) comment: 'loop control')
 	<>-

@@ -45,6 +45,13 @@ FASTFortranTEntityCreator >> newArrayVariable [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAssignmentExpression [
+
+	<generated>
+	^ self add: FASTFortranAssignmentExpression new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newAssignmentStatement [
 
 	<generated>
