@@ -207,19 +207,6 @@ FASTFortranGenerator >> defineData [
 		             newClassNamed: #Substring
 		             comment: 'I represent Fortran Substring'.
 
-	pointer := builder
-		           newClassNamed: #Pointer
-		           comment: 'I represent Fortran Pointer statement'.
-
-	record := builder
-		          newClassNamed: #Record
-		          comment: 'I represent Fortran Record statement'.
-
-	structure := builder
-		             newClassNamed: #Structure
-		             comment: 'I represent Fortran Structure statement'.
-
-
 	"CONSTANTS"
 
 	asterisk := builder
@@ -465,9 +452,6 @@ FASTFortranGenerator >> defineHierarchy [
 	loopControlExpression --|> tExpression.
 
 	substring --|> tExpression.
-	pointer --|> tExpression.
-	record --|> tExpression.
-	structure --|> tExpression.
 	
 	binaryExpression --|> tBinaryExpression.
 	unaryExpression --|> tUnaryExpression.
