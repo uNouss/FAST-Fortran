@@ -458,13 +458,6 @@ FASTFortranTEntityCreator >> newPauseStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newPointer [
-
-	<generated>
-	^ self add: FASTFortranPointer new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newPragmaStatement [
 
 	<generated>
@@ -528,13 +521,6 @@ FASTFortranTEntityCreator >> newRealType [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newRecord [
-
-	<generated>
-	^ self add: FASTFortranRecord new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newReturnStatement [
 
 	<generated>
@@ -581,13 +567,6 @@ FASTFortranTEntityCreator >> newStopStatement [
 
 	<generated>
 	^ self add: FASTFortranStopStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newStructure [
-
-	<generated>
-	^ self add: FASTFortranStructure new
 ]
 
 { #category : #'entity creation' }
