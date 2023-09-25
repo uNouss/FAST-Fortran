@@ -396,12 +396,6 @@ FASTFortranVisitor >> visitFASTFortranPauseStatement: aFASTFortranPauseStatement
 	self visitFASTFortranTLabelledStatement: aFASTFortranPauseStatement.
 ]
 
-{ #category : #'visiting - expressions' }
-FASTFortranVisitor >> visitFASTFortranPointer: aFASTFortranPointer [
-	<generated>
-	self visitFASTFortranTExpression: aFASTFortranPointer.
-]
-
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPragmaStatement: aFASTFortranPragmaStatement [
 	<generated>
@@ -458,12 +452,6 @@ FASTFortranVisitor >> visitFASTFortranRealType: aFASTFortranRealType [
 	<generated>
 ]
 
-{ #category : #'visiting - expressions' }
-FASTFortranVisitor >> visitFASTFortranRecord: aFASTFortranRecord [
-	<generated>
-	self visitFASTFortranTExpression: aFASTFortranRecord.
-]
-
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
 	<generated>
@@ -505,12 +493,6 @@ FASTFortranVisitor >> visitFASTFortranStaticStatement: aFASTFortranStaticStateme
 FASTFortranVisitor >> visitFASTFortranStopStatement: aFASTFortranStopStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranStopStatement.
-]
-
-{ #category : #'visiting - expressions' }
-FASTFortranVisitor >> visitFASTFortranStructure: aFASTFortranStructure [
-	<generated>
-	self visitFASTFortranTExpression: aFASTFortranStructure.
 ]
 
 { #category : #'visiting - programUnits' }
