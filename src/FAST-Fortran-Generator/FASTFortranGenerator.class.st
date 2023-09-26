@@ -529,10 +529,10 @@ FASTFortranGenerator >> defineProperties [
 	(loopControlExpression property: #limit type: #String) comment:
 		'Loop control limit value'.
 		
-	(binaryExpression property: #operator type: #String) comment:
+	(tBinaryExpression property: #operator type: #String) comment:
 		'Binary expression operator'.
 
-	(unaryExpression property: #operator type: #String) comment:
+	(tUnaryExpression property: #operator type: #String) comment:
 		'Unary expression operator'.
 	
 	"statements"
@@ -579,17 +579,17 @@ FASTFortranGenerator >> defineRelations [
 	((programUnit property: #parentProgramFile) comment:
 		 'Parent program file').
 
-	((binaryExpression property: #left) comment:
+	((tBinaryExpression property: #left) comment:
 		 'left part of a binary expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
 
-	((binaryExpression property: #right) comment:
+	((tBinaryExpression property: #right) comment:
 		 'left part of the expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
 
-	((unaryExpression property: #expression) comment: 'expression')
+	((tUnaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
 			
