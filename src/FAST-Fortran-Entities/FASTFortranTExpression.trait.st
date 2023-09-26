@@ -4,13 +4,13 @@ An abstract superclass representing an expression node of a source code.
 Trait {
 	#name : #FASTFortranTExpression,
 	#instVars : [
-		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
-		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#argumentOwner => FMOne type: #FASTFortranTWithArguments opposite: #arguments',
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
-		'#parentExpression => FMOne type: #FASTFortranBinaryExpression opposite: #left',
+		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
+		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
+		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
 		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #condition',
-		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression'
+		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',
@@ -119,7 +119,7 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 
 { #category : #accessing }
 FASTFortranTExpression >> parentExpression [
-	"Relation named: #parentExpression type: #FASTFortranBinaryExpression opposite: #left"
+	"Relation named: #parentExpression type: #FASTFortranTBinaryExpression opposite: #left"
 
 	<generated>
 	<FMComment: 'Parent expression (if possible)'>

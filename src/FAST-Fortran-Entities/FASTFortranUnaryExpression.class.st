@@ -6,10 +6,6 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#traits : 'FASTFortranTUnaryExpression',
 	#classTraits : 'FASTFortranTUnaryExpression classTrait',
-	#instVars : [
-		'#operator => FMProperty',
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
-	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -20,42 +16,4 @@ FASTFortranUnaryExpression class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranUnaryExpression >> expression [
-	"Relation named: #expression type: #FASTFortranTExpression opposite: #parentExpression"
-
-	<generated>
-	<FMComment: 'expression'>
-	^ expression
-]
-
-{ #category : #accessing }
-FASTFortranUnaryExpression >> expression: anObject [
-
-	<generated>
-	expression := anObject
-]
-
-{ #category : #navigation }
-FASTFortranUnaryExpression >> expressionGroup [
-	<generated>
-	<navigation: 'Expression'>
-	^ MooseSpecializedGroup with: self expression
-]
-
-{ #category : #accessing }
-FASTFortranUnaryExpression >> operator [
-
-	<FMProperty: #operator type: #String>
-	<generated>
-	<FMComment: 'Unary expression operator'>
-	^ operator
-]
-
-{ #category : #accessing }
-FASTFortranUnaryExpression >> operator: anObject [
-	<generated>
-	operator := anObject
 ]
