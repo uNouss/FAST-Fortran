@@ -526,6 +526,9 @@ FASTFortranGenerator >> defineProperties [
 	(comment property: #content type: #String) comment:
 		'Determines a content of a comment'.
 
+	(commonStatement property: #name type: #String) comment:
+		'Determines a Common block name, might be ommited'.
+
 	(externalStatement property: #name type: #String) comment:
 		'Name of external procedure, dummy procedure, or block data routine'.
 
@@ -580,7 +583,8 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((variable property: #parentAssignmentExpression) comment:
 			 'Parent assignment expression').
 
-	((commonStatement property: #variables) comment: 'List of variable names, array names, and array declarators ')
+	((commonStatement property: #variables) comment:
+		 'List of variable names, array names, and array declarators ')
 	<>- ((variable property: #parentCommonStatement) comment:
 			 'Parent common expression').
 
@@ -592,6 +596,10 @@ FASTFortranGenerator >> defineRelations [
 	((declarationStatement property: #type) comment: 'type')
 	<>-
 	((type property: #parentDeclaration) comment: 'Parent declaration').
+
+	((dimensionStatement property: #arrays) comment: 'Specifies the name and dimensions of the arrays')
+	<>-*
+	((type property: #parentDimensionStatement) comment: 'Parent dimension statement').
 
 	((doStatement property: #loopControl) comment: 'loop control')
 	<>-
