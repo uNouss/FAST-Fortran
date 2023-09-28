@@ -512,10 +512,7 @@ FASTFortranGenerator >> defineProperties [
 
 	super defineProperties.
 
-	"expressions"
-
-	(variable property: #name type: #String) comment:
-		'Determines the variable name'.
+	"sorted alphabetically, please keep the order"
 
 	(arrayDimensionDeclarator property: #lb type: #Number) comment:
 		'Lower bound'.
@@ -523,37 +520,26 @@ FASTFortranGenerator >> defineProperties [
 	(arrayDimensionDeclarator property: #ub type: #Number) comment:
 		'Upper bound'.
 
+	(callStatement property: #name type: #String) comment:
+		'Name of called entity (a subroutine)'.
+
+	(comment property: #content type: #String) comment:
+		'Determines a content of a comment'.
+
+	(externalStatement property: #name type: #String) comment:
+		'Name of external procedure, dummy procedure, or block data routine'.
+
+	(functionCall property: #name type: #String) comment:
+		'Name of called function'.
+
+	(functionStatement property: #name type: #String) comment:
+		'Name of a function statement'.
+
 	(loopControlExpression property: #increment type: #String) comment:
 		'Loop control increment value'.
 
 	(loopControlExpression property: #limit type: #String) comment:
 		'Loop control limit value'.
-		
-	(tBinaryExpression property: #operator type: #String) comment:
-		'Binary expression operator'.
-
-	(tUnaryExpression property: #operator type: #String) comment:
-		'Unary expression operator'.
-	
-	"statements"
-
-	(tStatement property: #label type: #String) comment:
-		'Determines the statement label which consists of 1 to 5 digits, with at least one nonzero'.
-
-	(externalStatement property: #name type: #String) comment:
-		'Name of external procedure, dummy procedure, or block data routine'.
-
-	(callStatement property: #name type: #String) comment:
-		'Name of called entity (a subroutine)'.
-		
-	(functionCall property: #name type: #String) comment:
-			 'Name of called function'.
-
-	(functionStatement property: #name type: #String) comment:
-		'Name of a function statement'.
-
-	(comment property: #content type: #String) comment:
-		'Determines a content of a comment'.
 
 	(returnStatement property: #alternateReturnLable type: #String)
 		comment: 'Optional. Expression of type INTEGER or REAL'.
@@ -561,11 +547,22 @@ FASTFortranGenerator >> defineProperties [
 	(stopStatement property: #displayArgument type: #String) comment:
 		'Optional. Displayed when the program stops. String of no more that 5 digits or a character constant'.
 
-	(writeStatement property: #format type: #String) comment:
-		'Format identifier. '.
+	(tBinaryExpression property: #operator type: #String) comment:
+		'Binary expression operator'.
 
-	"TYPES"
-	(type property: #size type: #Number) comment: 'a data size in bytes'
+	(tStatement property: #label type: #String) comment:
+		'Determines the statement label which consists of 1 to 5 digits, with at least one nonzero'.
+
+	(tUnaryExpression property: #operator type: #String) comment:
+		'Unary expression operator'.
+
+	(type property: #size type: #Number) comment: 'a data size in bytes'.
+
+	(variable property: #name type: #String) comment:
+		'Determines the variable name'.
+
+	(writeStatement property: #format type: #String) comment:
+		'Format identifier. '
 ]
 
 { #category : #definition }
@@ -573,11 +570,76 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
+	"sorted alphabetically, please keep the order"
+
+	((assignmentExpression property: #leftPart) comment: 'assignee')
+	<>- ((variable property: #parentAssignmentExpression) comment:
+			 'Parent assignment expression').
+
+	((assignmentExpression property: #rightPart) comment: 'assigned')
+	<>- ((variable property: #parentAssignmentExpression) comment:
+			 'Parent assignment expression').
+
+	((commonStatement property: #variables) comment: 'List of variable names, array names, and array declarators ')
+	<>- ((variable property: #parentCommonStatement) comment:
+			 'Parent common expression').
+
+	((declarationStatement property: #declarators) comment: 'declarators')
+	<>-*
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
+
+	((declarationStatement property: #type) comment: 'type')
+	<>-
+	((type property: #parentDeclaration) comment: 'Parent declaration').
+
+	((doStatement property: #loopControl) comment: 'loop control')
+	<>-
+	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
+
+	((doStatement property: #statementBlock) comment:
+		 'Statement block containing statements of the do body ')
+	<>- ((tStatementBlock property: #parentDoStatement) comment:
+			 'Parent do statement').
+
+	((functionStatement property: #expression) comment:
+		 'Expression thats being assigned upon declaration to the var')
+	<>- ((tExpression property: #assignementExpressionOwner) comment:
+			 'The AssignementExpression owner (if possible)').
+
+	((ifBlockStatement property: #thenStatementBlock) comment:
+		 'Statement block containing statements of then branch ')
+	<>-
+	((tStatementBlock property: #parentIfBlock) comment:
+		 'Parent if block').
+
+	((ifBlockStatement property: #elseStatementBlock) comment:
+		 'Statement block containing statements of else branch ')
+	<>-
+	((tStatementBlock property: #parentIfBlock) comment:
+		 'Parent if block').
+
+	((ifBlockStatement property: #condition) comment: 'Condition')
+	<>-
+	((tExpression property: #parentIfBlock) comment: 'Parent if block').
+
+	"((ifLogicalStatement property: #statement) comment:
+		 'Statement of the logical if')
+	<>- ((tStatement property: #parentIfBlock) comment: 'Parent if block').
+
+	((ifLogicalStatement property: #condition) comment: 'Condition')
+	<>-
+	((tExpression property: #parentIfBlock) comment: 'Parent if block')."
+
+	((loopControlExpression property: #init) comment:
+		 'initial assignment')
+	<>- ((assignmentExpression property: #parentLoopControlExpresison)
+			 comment: 'Parent loop control expresison').
+
 	((programFile property: #programUnit) comment:
 		 'Program Units in a program file')
-	<>-*
-	((programUnit property: #parentProgramFile) comment:
-		 'Parent program file').
+	<>-* ((programUnit property: #parentProgramFile) comment:
+			 'Parent program file').
 
 	((tBinaryExpression property: #left) comment:
 		 'left part of a binary expression')
@@ -592,81 +654,17 @@ FASTFortranGenerator >> defineRelations [
 	((tUnaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
-			
-	((assignmentExpression property: #leftPart) comment: 'assignee')
-	<>-
-	((variable property: #parentAssignmentExpression) comment:
-		 'Parent assignment expression').
-		
-	((assignmentExpression property: #rightPart) comment: 'assigned')
-	<>-
-	((variable property: #parentAssignmentExpression) comment:
-		 'Parent assignment expression').	
-			
-	((loopControlExpression property: #init) comment: 'initial assignment')
-	<>-
-	((assignmentExpression property: #parentLoopControlExpresison) comment:
-		 'Parent loop control expresison').	
 
-	((doStatement property: #loopControl) comment: 'loop control')
-	<>-
-	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
+	"The number of dimensions in an array is the number of dimension declarators. The minimum number of dimensions is one; the maximum is seven. For an assumed-size array, the last dimension can be an asterisk."
+	((variableArray property: #arrayDimensionDeclarator) comment:
+		 'An array dimension declarator specifies lower and upper dimension bounds of an array')
+	<>-* ((arrayDimensionDeclarator property: #parentArray) comment:
+			 'Parent array declaration').
 
-	((doStatement property: #statementBlock) comment:
-		 'Statement block containing statements of the do body ')
-	<>- ((tStatementBlock property: #parentDoStatement) comment:
-			 'Parent do statement').			
-
-	((ifBlockStatement property: #thenStatementBlock) comment:
-		 'Statement block containing statements of then branch ')
-	<>-
-	((tStatementBlock property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifBlockStatement property: #elseStatementBlock) comment:
-		 'Statement block containing statements of else branch ')
-	<>-
-	((tStatementBlock property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifBlockStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block').
-
-	"((ifLogicalStatement property: #statement) comment:
-		 'Statement of the logical if')
-	<>- ((tStatement property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifLogicalStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block')."
-
-	((declarationStatement property: #declarators) comment: 'declarators')
-	<>-*
-	((variable property: #parentDeclaration) comment:
-		 'Parent declaration').
-
-	((declarationStatement property: #type) comment: 'type')
-	<>-
-	((type property: #parentDeclaration) comment:
-		 'Parent declaration').
-		
-	
-	((variableArray property: #arrayDimensionDeclarator) comment: 'An array dimension declarator specifies  lower and upper dimension bounds of an array')
-	<>-
-	((arrayDimensionDeclarator property: #parentArray) comment:
-		 'Parent array declaration').		
-				
-
-	"TRAITS"
 	((tWithFormatIdentifier property: #format) comment:
 		 'format identifier')
 	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
-			 'The owner of the format identifier').
-
-	((functionStatement property: #expression) comment:
-		 'Expression thats being assigned upon declaration to the var')
-	<>- ((tExpression property: #assignementExpressionOwner) comment:
-			 'The AssignementExpression owner (if possible)').
-
+			 'The owner of the format identifier')
 ]
 
 { #category : #definition }
