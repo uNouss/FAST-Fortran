@@ -5,7 +5,7 @@ Class {
 	#name : #FASTFortranArrayVariable,
 	#superclass : #FASTFortranVariable,
 	#instVars : [
-		'#arrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimensionDeclarator opposite: #parentArray'
+		'#arrayDimensionDeclarator => FMMany type: #FASTFortranArrayDimensionDeclarator opposite: #parentArray'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -19,12 +19,19 @@ FASTFortranArrayVariable class >> annotation [
 	^ self
 ]
 
+{ #category : #adding }
+FASTFortranArrayVariable >> addArrayDimensionDeclarator: anObject [
+	<generated>
+	^ self arrayDimensionDeclarator add: anObject
+]
+
 { #category : #accessing }
 FASTFortranArrayVariable >> arrayDimensionDeclarator [
 	"Relation named: #arrayDimensionDeclarator type: #FASTFortranArrayDimensionDeclarator opposite: #parentArray"
 
 	<generated>
-	<FMComment: 'An array dimension declarator specifies  lower and upper dimension bounds of an array'>
+	<FMComment: 'An array dimension declarator specifies lower and upper dimension bounds of an array'>
+	<derived>
 	^ arrayDimensionDeclarator
 ]
 
@@ -32,12 +39,12 @@ FASTFortranArrayVariable >> arrayDimensionDeclarator [
 FASTFortranArrayVariable >> arrayDimensionDeclarator: anObject [
 
 	<generated>
-	arrayDimensionDeclarator := anObject
+	arrayDimensionDeclarator value: anObject
 ]
 
 { #category : #navigation }
 FASTFortranArrayVariable >> arrayDimensionDeclaratorGroup [
 	<generated>
 	<navigation: 'ArrayDimensionDeclarator'>
-	^ MooseSpecializedGroup with: self arrayDimensionDeclarator
+	^ MooseSpecializedGroup withAll: self arrayDimensionDeclarator asSet
 ]

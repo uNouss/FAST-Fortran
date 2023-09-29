@@ -1,5 +1,5 @@
 "
-I represent a declaration statement for one or many variables
+I represent a type declaration for one or many scalar variables or arrays
 "
 Class {
 	#name : #FASTFortranDeclarationStatement,
