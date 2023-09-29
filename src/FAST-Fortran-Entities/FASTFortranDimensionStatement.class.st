@@ -6,6 +6,9 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#traits : 'FASTFortranTLabelledStatement',
 	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#instVars : [
+		'#arrays => FMMany type: #FASTFortranType opposite: #parentDimensionStatement'
+	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -16,4 +19,34 @@ FASTFortranDimensionStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #adding }
+FASTFortranDimensionStatement >> addArray: anObject [
+	<generated>
+	^ self arrays add: anObject
+]
+
+{ #category : #accessing }
+FASTFortranDimensionStatement >> arrays [
+	"Relation named: #arrays type: #FASTFortranType opposite: #parentDimensionStatement"
+
+	<generated>
+	<FMComment: 'Specifies the name and dimensions of the arrays'>
+	<derived>
+	^ arrays
+]
+
+{ #category : #accessing }
+FASTFortranDimensionStatement >> arrays: anObject [
+
+	<generated>
+	arrays value: anObject
+]
+
+{ #category : #navigation }
+FASTFortranDimensionStatement >> arraysGroup [
+	<generated>
+	<navigation: 'Arrays'>
+	^ MooseSpecializedGroup withAll: self arrays asSet
 ]

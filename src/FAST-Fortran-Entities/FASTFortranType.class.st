@@ -5,8 +5,9 @@ Class {
 	#name : #FASTFortranType,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#size => FMProperty',
-		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #type'
+		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #type',
+		'#parentDimensionStatement => FMOne type: #FASTFortranDimensionStatement opposite: #arrays',
+		'#size => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -43,6 +44,30 @@ FASTFortranType >> parentDeclarationGroup [
 	<generated>
 	<navigation: 'ParentDeclaration'>
 	^ MooseSpecializedGroup with: self parentDeclaration
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentDimensionStatement [
+	"Relation named: #parentDimensionStatement type: #FASTFortranDimensionStatement opposite: #arrays"
+
+	<generated>
+	<FMComment: 'Parent dimension statement'>
+	<container>
+	^ parentDimensionStatement
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentDimensionStatement: anObject [
+
+	<generated>
+	parentDimensionStatement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranType >> parentDimensionStatementGroup [
+	<generated>
+	<navigation: 'ParentDimensionStatement'>
+	^ MooseSpecializedGroup with: self parentDimensionStatement
 ]
 
 { #category : #accessing }

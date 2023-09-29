@@ -6,8 +6,8 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#lb => FMProperty',
-		'#ub => FMProperty',
-		'#parentArray => FMOne type: #FASTFortranArrayVariable opposite: #arrayDimensionDeclarator'
+		'#parentArray => FMOne type: #FASTFortranArrayVariable opposite: #arrayDimensionDeclarator',
+		'#ub => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -43,7 +43,6 @@ FASTFortranArrayDimensionDeclarator >> parentArray [
 	<generated>
 	<FMComment: 'Parent array declaration'>
 	<container>
-	<derived>
 	^ parentArray
 ]
 
@@ -63,15 +62,23 @@ FASTFortranArrayDimensionDeclarator >> parentArrayGroup [
 
 { #category : #accessing }
 FASTFortranArrayDimensionDeclarator >> ub [
+	"Relation named: #ub type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator"
 
-	<FMProperty: #ub type: #Number>
 	<generated>
-	<FMComment: 'Upper bound'>
+	<FMComment: 'an upper bound of an array dimension'>
 	^ ub
 ]
 
 { #category : #accessing }
 FASTFortranArrayDimensionDeclarator >> ub: anObject [
+
 	<generated>
 	ub := anObject
+]
+
+{ #category : #navigation }
+FASTFortranArrayDimensionDeclarator >> ubGroup [
+	<generated>
+	<navigation: 'Ub'>
+	^ MooseSpecializedGroup with: self ub
 ]
