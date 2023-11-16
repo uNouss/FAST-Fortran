@@ -36,5 +36,5 @@ BaselineOfFASTFortran >> definePackages: spec [
 		package: 'FAST-Fortran-Generator' with: [ spec requires: #(FAST Esope) ] ;
 		package: 'FAST-Fortran-Entities' with: [ spec requires: #(FAST Esope) ];
 		package: 'FAST-Fortran-Visitors' with: [ spec requires: #('FAST-Fortran-Entities') ];
-		package: 'FAST-Fortran-Tests' with: [ spec requires: #('FAST-Fortran') ]
+		package: 'FAST-Fortran-Tests' with: [ spec requires: #('FAST-Fortran-Visitors') ]
 ]
