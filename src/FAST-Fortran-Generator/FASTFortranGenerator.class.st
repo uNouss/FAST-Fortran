@@ -486,6 +486,7 @@ FASTFortranGenerator >> defineHierarchy [
 	programUnit --|> tWithComments.
 
 	assignmentStatement --|> tAssignment.
+	assignmentExpression --|> tAssignment.
 	returnStatement --|> tReturnStatement.
 ]
 
@@ -564,14 +565,6 @@ FASTFortranGenerator >> defineRelations [
 	((arrayDimensionDeclarator property: #ub) comment: 'an upper bound of an array dimension')
 	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
-
-	((assignmentExpression property: #leftPart) comment: 'assignee')
-	<>- ((variable property: #parentAssignmentExpression) comment:
-			 'Parent assignment expression').
-
-	((assignmentExpression property: #rightPart) comment: 'assigned')
-	<>- ((variable property: #parentAssignmentExpression) comment:
-			 'Parent assignment expression').
 
 	((commonStatement property: #variables) comment:
 		 'List of variable names, array names, and array declarators ')

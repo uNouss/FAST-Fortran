@@ -6,8 +6,8 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#lb => FMProperty',
-		'#parentArray => FMOne type: #FASTFortranArrayVariable opposite: #arrayDimensionDeclarator',
-		'#ub => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator'
+		'#ub => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
+		'#parentArray => FMOne type: #FASTFortranArrayVariable opposite: #arrayDimensionDeclarator'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
