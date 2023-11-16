@@ -286,14 +286,19 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
 
-	| data |
+	| data assignementExpr |
 	data := super visitDo_spec: aDoSpecNode.
+
+	assignementExpr := FASTFortranAssignmentExpression new
+		variable: data second variable ;
+		expression: data second expression ;
+		yourself.
 
 	^ (self
 		   newEntity: FASTFortranLoopControlExpression
 		   atPosition: data first)
 		  flag: 'TODO: separate "init" into "controlVar" and "initValue" ';
-		  init: data second;
+		  init: assignementExpr;
 		  limit: data third;
 		  increment: data fourth;
 		  yourself
