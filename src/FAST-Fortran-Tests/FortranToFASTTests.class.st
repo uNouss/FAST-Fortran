@@ -486,7 +486,7 @@ FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 	self assert: control increment isNil.
 	self assert: control startPos equals: 29.
 
-	self assert: control init class equals: FASTFortranAssignmentStatement.
+	self assert: control init class equals: FASTFortranAssignmentExpression.
 	self assert: control init variable class equals: FASTFortranScalarVariable.
 	self assert: control init variable name equals: 'i'.
 

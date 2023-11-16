@@ -8,9 +8,9 @@ Class {
 	#classTraits : 'FASTFortranTExpression classTrait',
 	#instVars : [
 		'#increment => FMProperty',
-		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison',
 		'#limit => FMProperty',
-		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl'
+		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl',
+		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }

@@ -8,7 +8,6 @@ Class {
 	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
 		'#name => FMProperty',
-		'#parentAssignmentExpression => FMOne type: #FASTFortranAssignmentExpression opposite: #leftPart',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
 		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
@@ -37,31 +36,6 @@ FASTFortranVariable >> name [
 FASTFortranVariable >> name: anObject [
 	<generated>
 	name := anObject
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentAssignmentExpression [
-	"Relation named: #parentAssignmentExpression type: #FASTFortranAssignmentExpression opposite: #leftPart"
-
-	<generated>
-	<FMComment: 'Parent assignment expression'>
-	<container>
-	<derived>
-	^ parentAssignmentExpression
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentAssignmentExpression: anObject [
-
-	<generated>
-	parentAssignmentExpression := anObject
-]
-
-{ #category : #navigation }
-FASTFortranVariable >> parentAssignmentExpressionGroup [
-	<generated>
-	<navigation: 'ParentAssignmentExpression'>
-	^ MooseSpecializedGroup with: self parentAssignmentExpression
 ]
 
 { #category : #accessing }
