@@ -4,6 +4,9 @@ I represent a Fortran Function
 Class {
 	#name : #FASTFortranFunction,
 	#superclass : #FASTFortranProcedure,
+	#instVars : [
+		'#returnType => FMOne type: #FASTFortranType opposite: #typedFunctions'
+	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -14,4 +17,19 @@ FASTFortranFunction class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #accessing }
+FASTFortranFunction >> returnType [
+	"Relation named: #returnType type: #FASTFortranType opposite: #typedFunctions"
+
+	<generated>
+	^ returnType
+]
+
+{ #category : #accessing }
+FASTFortranFunction >> returnType: anObject [
+
+	<generated>
+	returnType := anObject
 ]
