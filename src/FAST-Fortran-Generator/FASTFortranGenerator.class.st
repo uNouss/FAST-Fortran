@@ -87,14 +87,15 @@ Class {
 		'unaryExpression',
 		'programFile',
 		'functionCall',
-		'tFortranLabelledStatement',
 		'booleanConstant',
 		'characterConstant',
 		'statementBlock',
 		'assignmentExpression',
 		'arrayVariableDeclaration',
 		'scalarVariableDeclaration',
-		'declarationStatement'
+		'declarationStatement',
+		'tConditionalStatement',
+		'tLabelledStatement'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -372,63 +373,65 @@ FASTFortranGenerator >> defineHierarchy [
 	"other entities"
 	comment --|> tEntity.
 	comment --|> tComment. 
-	tFortranLabelledStatement --|> tStatement.
-	declarationStatement --|> tFortranLabelledStatement.
+	tLabelledStatement --|> tStatement.
+	declarationStatement --|> tLabelledStatement.
 	statementBlock --|> tStatementBlock. 
 	statementBlock --|> tWithComments. 
 
 	"FORTRAN STATEMENTS"
-	assignmentStatement --|> tFortranLabelledStatement.
-	automaticStatement --|> tFortranLabelledStatement.
-	backspaceStatement --|> tFortranLabelledStatement.
-	callStatement --|> tFortranLabelledStatement.
-	closeStatement --|> tFortranLabelledStatement.
-	commonStatement --|> tFortranLabelledStatement.
-	continueStatement --|> tFortranLabelledStatement.
-	dataStatement --|> tFortranLabelledStatement.
-	decodeStatement --|> tFortranLabelledStatement.
-	encodeStatement --|> tFortranLabelledStatement.
-	dimensionStatement --|> tFortranLabelledStatement.
-	doStatement --|> tFortranLabelledStatement.
-	doWhileStatement --|> tFortranLabelledStatement.
-	elseStatement --|> tFortranLabelledStatement.
-	endFileStatement --|> tFortranLabelledStatement.
-	entryStatement --|> tFortranLabelledStatement.
-	equivalenceStatement --|> tFortranLabelledStatement.
-	externalStatement --|> tFortranLabelledStatement.
-	formatStatement --|> tFortranLabelledStatement.
-	functionStatement --|> tFortranLabelledStatement.
-	goToStatement --|> tFortranLabelledStatement.
-	goToAssignedStatement --|> tFortranLabelledStatement.
-	goToComputed --|> tFortranLabelledStatement.
-	goToUnconditional --|> tFortranLabelledStatement.
-	ifArithmeticStatement --|> tFortranLabelledStatement.
-	ifBlockStatement --|> tFortranLabelledStatement.
-	ifLogicalStatement --|> tFortranLabelledStatement.
-	implicitStatement --|> tFortranLabelledStatement.
-	includeStatement --|> tFortranLabelledStatement.
-	inquireStatement --|> tFortranLabelledStatement.
-	intrinsicStatement --|> tFortranLabelledStatement.
-	mapStatement --|> tFortranLabelledStatement.
-	nameListStatement --|> tFortranLabelledStatement.
-	openStatement --|> tFortranLabelledStatement.
-	optionsStatement --|> tFortranLabelledStatement.
-	parameterStatement --|> tFortranLabelledStatement.
-	pauseStatement --|> tFortranLabelledStatement.
-	pragmaStatement --|> tFortranLabelledStatement.
-	printStatement --|> tFortranLabelledStatement.
-	readStatement --|> tFortranLabelledStatement.
-	returnStatement --|> tFortranLabelledStatement.
-	rewindStatement --|> tFortranLabelledStatement.
-	saveStatement --|> tFortranLabelledStatement.
-	staticStatement --|> tFortranLabelledStatement.
-	stopStatement --|> tFortranLabelledStatement.
-	unionStatement --|> tFortranLabelledStatement.
-	virtualStatement --|> tFortranLabelledStatement.
-	volatileStatement --|> tFortranLabelledStatement.
-	writeStatement --|> tFortranLabelledStatement.
+	assignmentStatement --|> tLabelledStatement.
+	automaticStatement --|> tLabelledStatement.
+	backspaceStatement --|> tLabelledStatement.
+	callStatement --|> tLabelledStatement.
+	closeStatement --|> tLabelledStatement.
+	commonStatement --|> tLabelledStatement.
+	continueStatement --|> tLabelledStatement.
+	dataStatement --|> tLabelledStatement.
+	decodeStatement --|> tLabelledStatement.
+	encodeStatement --|> tLabelledStatement.
+	dimensionStatement --|> tLabelledStatement.
+	doStatement --|> tLabelledStatement.
+	doWhileStatement --|> tLabelledStatement.
+	elseStatement --|> tLabelledStatement.
+	endFileStatement --|> tLabelledStatement.
+	entryStatement --|> tLabelledStatement.
+	equivalenceStatement --|> tLabelledStatement.
+	externalStatement --|> tLabelledStatement.
+	formatStatement --|> tLabelledStatement.
+	functionStatement --|> tLabelledStatement.
+	goToStatement --|> tLabelledStatement.
+	goToAssignedStatement --|> tLabelledStatement.
+	goToComputed --|> tLabelledStatement.
+	goToUnconditional --|> tLabelledStatement.
+	ifArithmeticStatement --|> tLabelledStatement.
+	ifBlockStatement --|> tLabelledStatement.
+	ifBlockStatement --|> tConditionalStatement.
+	ifLogicalStatement --|> tLabelledStatement.
+	ifLogicalStatement --|> tConditionalStatement.
+	implicitStatement --|> tLabelledStatement.
+	includeStatement --|> tLabelledStatement.
+	inquireStatement --|> tLabelledStatement.
+	intrinsicStatement --|> tLabelledStatement.
+	mapStatement --|> tLabelledStatement.
+	nameListStatement --|> tLabelledStatement.
+	openStatement --|> tLabelledStatement.
+	optionsStatement --|> tLabelledStatement.
+	parameterStatement --|> tLabelledStatement.
+	pauseStatement --|> tLabelledStatement.
+	pragmaStatement --|> tLabelledStatement.
+	printStatement --|> tLabelledStatement.
+	readStatement --|> tLabelledStatement.
+	returnStatement --|> tLabelledStatement.
+	rewindStatement --|> tLabelledStatement.
+	saveStatement --|> tLabelledStatement.
+	staticStatement --|> tLabelledStatement.
+	stopStatement --|> tLabelledStatement.
+	unionStatement --|> tLabelledStatement.
+	virtualStatement --|> tLabelledStatement.
+	volatileStatement --|> tLabelledStatement.
+	writeStatement --|> tLabelledStatement.
 	"STATEMENT OUT OF STANDARD"
-	exitStatement --|> tFortranLabelledStatement.
+	exitStatement --|> tLabelledStatement.
 
 
 	"DATA"
@@ -599,6 +602,14 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((tExpression property: #assignementExpressionOwner) comment:
 			 'The AssignementExpression owner (if possible)').
 
+	((tConditionalStatement property: #condition) comment: 'Condition')
+	<>-
+	((tExpression property: #parentConditionalStatement) comment: 'Parent conditional statement (if-block, if-logical, ...)').
+
+	((ifLogicalStatement property: #statement) comment:
+		 'Statement of the logical if')
+	<>- ((tStatement property: #parentIfStatement) comment: 'Parent if statement').
+
 	((ifBlockStatement property: #thenStatementBlock) comment:
 		 'Statement block containing statements of then branch ')
 	<>-
@@ -610,18 +621,6 @@ FASTFortranGenerator >> defineRelations [
 	<>-
 	((tStatementBlock property: #parentIfBlock) comment:
 		 'Parent if block').
-
-	((ifBlockStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block').
-
-	"((ifLogicalStatement property: #statement) comment:
-		 'Statement of the logical if')
-	<>- ((tStatement property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifLogicalStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block')."
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
@@ -859,6 +858,8 @@ FASTFortranGenerator >> defineTraits [
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tFortranLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
+	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
+	
+	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
 	
 ]

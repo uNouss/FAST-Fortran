@@ -5,6 +5,7 @@ Trait {
 	#name : #FASTFortranTStatement,
 	#instVars : [
 		'#label => FMProperty',
+		'#parentIfStatement => FMOne type: #FASTFortranIfLogicalStatement opposite: #statement',
 		'#statementContainer => FMOne type: #FASTFortranTStatementBlock opposite: #statements'
 	],
 	#traits : 'FASTFortranTEntity',
@@ -41,6 +42,31 @@ FASTFortranTStatement >> label [
 FASTFortranTStatement >> label: anObject [
 	<generated>
 	label := anObject
+]
+
+{ #category : #accessing }
+FASTFortranTStatement >> parentIfStatement [
+	"Relation named: #parentIfStatement type: #FASTFortranIfLogicalStatement opposite: #statement"
+
+	<generated>
+	<FMComment: 'Parent if statement'>
+	<container>
+	<derived>
+	^ parentIfStatement
+]
+
+{ #category : #accessing }
+FASTFortranTStatement >> parentIfStatement: anObject [
+
+	<generated>
+	parentIfStatement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTStatement >> parentIfStatementGroup [
+	<generated>
+	<navigation: 'ParentIfStatement'>
+	^ MooseSpecializedGroup with: self parentIfStatement
 ]
 
 { #category : #accessing }

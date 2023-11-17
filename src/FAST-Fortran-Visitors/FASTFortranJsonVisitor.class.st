@@ -464,6 +464,21 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitIf_logicalStatement: anIfNode [
+
+	"self visitJsonMap: anIfNode keys: #( span condition statement )"
+	
+	| data |
+	data := super visitIf_logicalStatement: anIfNode.
+
+	^(self newEntity: FASTFortranIfLogicalStatement atPosition: data first)
+		mooseModel: model ;
+		condition: data second;
+		statement: data third ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 	"If 'items' is nil, correspond to the statement 'implicit none'"
 

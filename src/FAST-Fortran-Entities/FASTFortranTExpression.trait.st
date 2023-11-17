@@ -8,8 +8,8 @@ Trait {
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
+		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
-		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #condition',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression'
 	],
 	#traits : 'FASTFortranTEntity',
@@ -118,6 +118,31 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 ]
 
 { #category : #accessing }
+FASTFortranTExpression >> parentConditionalStatement [
+	"Relation named: #parentConditionalStatement type: #FASTFortranTConditionalStatement opposite: #condition"
+
+	<generated>
+	<FMComment: 'Parent conditional statement (if-block, if-logical, ...)'>
+	<container>
+	<derived>
+	^ parentConditionalStatement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentConditionalStatement: anObject [
+
+	<generated>
+	parentConditionalStatement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentConditionalStatementGroup [
+	<generated>
+	<navigation: 'ParentConditionalStatement'>
+	^ MooseSpecializedGroup with: self parentConditionalStatement
+]
+
+{ #category : #accessing }
 FASTFortranTExpression >> parentExpression [
 	"Relation named: #parentExpression type: #FASTFortranTBinaryExpression opposite: #left"
 
@@ -140,31 +165,6 @@ FASTFortranTExpression >> parentExpressionGroup [
 	<generated>
 	<navigation: 'ParentExpression'>
 	^ MooseSpecializedGroup with: self parentExpression
-]
-
-{ #category : #accessing }
-FASTFortranTExpression >> parentIfBlock [
-	"Relation named: #parentIfBlock type: #FASTFortranIfBlockStatement opposite: #condition"
-
-	<generated>
-	<FMComment: 'Parent if block'>
-	<container>
-	<derived>
-	^ parentIfBlock
-]
-
-{ #category : #accessing }
-FASTFortranTExpression >> parentIfBlock: anObject [
-
-	<generated>
-	parentIfBlock := anObject
-]
-
-{ #category : #navigation }
-FASTFortranTExpression >> parentIfBlockGroup [
-	<generated>
-	<navigation: 'ParentIfBlock'>
-	^ MooseSpecializedGroup with: self parentIfBlock
 ]
 
 { #category : #accessing }

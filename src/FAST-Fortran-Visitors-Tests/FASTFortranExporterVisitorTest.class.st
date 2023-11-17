@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'visitor'
 	],
-	#category : #'FAST-Fortran-Tests-Visitor'
+	#category : #'FAST-Fortran-Visitors-Tests-Visitor'
 }
 
 { #category : #running }
