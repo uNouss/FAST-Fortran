@@ -4,8 +4,11 @@ The logical IF statement executes one single statement, or does not execute it, 
 Class {
 	#name : #FASTFortranIfLogicalStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#traits : 'FASTFortranTConditionalStatement + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
+	#instVars : [
+		'#statement => FMOne type: #FASTFortranTStatement opposite: #parentIfStatement'
+	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -16,4 +19,27 @@ FASTFortranIfLogicalStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #accessing }
+FASTFortranIfLogicalStatement >> statement [
+	"Relation named: #statement type: #FASTFortranTStatement opposite: #parentIfStatement"
+
+	<generated>
+	<FMComment: 'Statement of the logical if'>
+	^ statement
+]
+
+{ #category : #accessing }
+FASTFortranIfLogicalStatement >> statement: anObject [
+
+	<generated>
+	statement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranIfLogicalStatement >> statementGroup [
+	<generated>
+	<navigation: 'Statement'>
+	^ MooseSpecializedGroup with: self statement
 ]

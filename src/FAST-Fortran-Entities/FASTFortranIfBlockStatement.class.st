@@ -4,12 +4,11 @@ I represent Fortran If (BLock) statement
 Class {
 	#name : #FASTFortranIfBlockStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#traits : 'FASTFortranTConditionalStatement + FASTFortranTLabelledStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#condition => FMOne type: #FASTFortranTExpression opposite: #parentIfBlock'
+		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -21,29 +20,6 @@ FASTFortranIfBlockStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranIfBlockStatement >> condition [
-	"Relation named: #condition type: #FASTFortranTExpression opposite: #parentIfBlock"
-
-	<generated>
-	<FMComment: 'Condition'>
-	^ condition
-]
-
-{ #category : #accessing }
-FASTFortranIfBlockStatement >> condition: anObject [
-
-	<generated>
-	condition := anObject
-]
-
-{ #category : #navigation }
-FASTFortranIfBlockStatement >> conditionGroup [
-	<generated>
-	<navigation: 'Condition'>
-	^ MooseSpecializedGroup with: self condition
 ]
 
 { #category : #accessing }
