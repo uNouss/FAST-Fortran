@@ -508,6 +508,21 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testIfLogicalStatementEmpty [
+	| stmt |
+	stmt := FASTFortranIfLogicalStatement new
+		condition: (self scalarVariable: 'bool') ;
+		statement: FASTFortranReturnStatement new ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      if (bool) return 
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testImplicitStatement [
 	| stmt |
 	stmt := self implicitStatement.

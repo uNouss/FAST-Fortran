@@ -185,6 +185,21 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
+
+	| tmp |
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfLogicalStatement condition accept: self.
+	self << ') '.
+	tmp := indent.
+	indent := -3.
+	aFASTFortranIfLogicalStatement statement accept: self.
+	indent := tmp
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 
 	self
