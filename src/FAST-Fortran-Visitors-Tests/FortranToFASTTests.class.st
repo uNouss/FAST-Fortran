@@ -883,6 +883,28 @@ FortranToFASTTests >> testImplicitNoneStatement [
 
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testLogicalIfEmpty [
+
+	| result conditional |
+	fortranCode := '      PROGRAM MYPROG
+       IF ( A .eq. 5 ) RETURN
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"FastTmp/tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"condition":{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"a","tag":"variable"}},"op":{"tag":"eq"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},"span":"(2:8)-(2:29)","statement":{"anno":[],"span":"(2:24)-(2:29)","tag":"return","target":null},"tag":"if_logical"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	conditional := result first statementBlock statements first.
+	self assert: conditional class equals: FASTFortranIfLogicalStatement.
+	self assert: conditional condition class equals: FASTFortranScalarVariable.
+	self assert: conditional condition name equals: 'a'.
+	self assert: conditional thenStatementBlock statements size equals: 0.
+
+	self assert: conditional startPos equals: 29.
+	self assert: conditional endPos equals: 55.
+
+]
+
 { #category : #'tests-programUnit' }
 FortranToFASTTests >> testMainProgram [
 	| result body |
