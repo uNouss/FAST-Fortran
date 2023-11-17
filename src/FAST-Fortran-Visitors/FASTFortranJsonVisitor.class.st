@@ -423,11 +423,20 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitGt: aGreaterthanOperatorNode [
+FASTFortranJsonVisitor >> visitGt: anOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: (super visitGt: aGreaterthanOperatorNode);
+		operator: (super visitGt: anOperatorNode);
+		yourself
+]
+
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitGte: anOperatorNode [
+
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitGte: anOperatorNode);
 		yourself
 ]
 
@@ -507,6 +516,15 @@ FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
 		operator: (super visitLt: anLessthanOperatorNode);
+		yourself
+]
+
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitLte: anOperatorNode [
+
+	^FASTFortranBinaryExpression new
+		mooseModel: model ;
+		operator: (super visitLte: anOperatorNode);
 		yourself
 ]
 
