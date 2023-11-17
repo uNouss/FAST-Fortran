@@ -27,7 +27,7 @@ FASTFortranExporterVisitor >> initialize [
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> newLine [
-	self stream cr
+	self stream lf
 ]
 
 { #category : #accessing }
