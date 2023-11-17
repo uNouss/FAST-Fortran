@@ -1,7 +1,7 @@
 Class {
 	#name : #FortranToFASTTests,
 	#superclass : #AbstractJsonToFASTTests,
-	#category : #'FAST-Fortran-Tests-Visitor'
+	#category : #'FAST-Fortran-Visitors-Tests-Visitor'
 }
 
 { #category : #running }
@@ -296,6 +296,35 @@ FortranToFASTTests >> testBinaryExpressionGtSymbol [
 ]
 
 { #category : #'tests-expression' }
+FortranToFASTTests >> testBinaryExpressionGteKeyword [
+	
+	| result asnmt expr |
+	fortranCode := '      PROGRAM MYPROG
+       IF ( 5 .ge. 6 ) THEN
+       END IF
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"FastTmp/tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"gte"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
+
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
+	self assert: expr operator equals: '.ge.'.
+	self assert: expr startPos equals: 34.
+
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
+	self assert: expr right startPos equals: 41.
+]
+
+{ #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionLtKeyword [
 	
 	| result asnmt expr |
@@ -352,6 +381,35 @@ FortranToFASTTests >> testBinaryExpressionLtSymbol [
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
 	self assert: expr right primitiveValue equals: '6'.
 	self assert: expr right startPos equals: 38
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTTests >> testBinaryExpressionLteKeyword [
+	
+	| result asnmt expr |
+	fortranCode := '      PROGRAM MYPROG
+       IF ( 5 .LE. 6 ) THEN
+       END IF
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"lte"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
+
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
+	self assert: expr operator equals: '.le.'.
+	self assert: expr startPos equals: 34.
+
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
+	self assert: expr right startPos equals: 41.
 ]
 
 { #category : #'tests-expression' }
