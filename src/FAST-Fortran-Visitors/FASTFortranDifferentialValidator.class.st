@@ -8,9 +8,8 @@ Class {
 }
 
 { #category : #utilities }
-FASTFortranDifferentialValidator >> getASTFromString: stream [
-
-	^importer getFASTFor: stream
+FASTFortranDifferentialValidator >> getASTFromString: string [
+	^importer getFASTFor: string
 ]
 
 { #category : #utilities }
@@ -29,9 +28,9 @@ FASTFortranDifferentialValidator >> initialize [
 
 { #category : #testing }
 FASTFortranDifferentialValidator >> isSourceFile: aFileReference [
-	"dummy test"
+	"for lack of a better idea"
 
-	^aFileReference extension = 'f'
+	^ #(f FOR) includes: aFileReference extension
 ]
 
 { #category : #utilities }
