@@ -517,6 +517,34 @@ FortranToFASTTests >> testContinueStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDeclarationStatement [
+
+	| result stmt declarator |
+	fortranCode := '      program main
+      integer i
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"FastTmp/tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:15)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:15)-(2:15)","type":"scalar","variable":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"i","tag":"variable"}}}],"span":"(2:15)-(2:15)"},"span":"(2:7)-(2:15)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 34.
+
+	self assert: stmt declarators size equals: 1.
+	declarator := stmt declarators anyOne.
+	self assert: declarator class equals: FASTFortranScalarVariable.
+	self assert: declarator name equals: 'i'.
+	self assert: declarator startPos equals: 34.
+
+	self assert: stmt type class equals: FASTFortranIntegerType.
+	self assert: stmt type startPos equals: 26.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 
 	| result stmt control |
