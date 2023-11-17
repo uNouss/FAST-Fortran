@@ -27,7 +27,7 @@ FASTFortranExporterVisitor >> initialize [
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> newLine [
-	self stream lf
+	self stream cr
 ]
 
 { #category : #accessing }
@@ -182,6 +182,21 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 		sixSpaces ;
 		<< 'end if' ;
 		newLine
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
+
+	| tmp |
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfLogicalStatement condition accept: self.
+	self << ') '.
+	tmp := indent.
+	indent := -3.
+	aFASTFortranIfLogicalStatement statement accept: self.
+	indent := tmp
 ]
 
 { #category : #'visiting - statements' }

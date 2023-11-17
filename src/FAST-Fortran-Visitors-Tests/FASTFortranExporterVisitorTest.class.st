@@ -518,7 +518,7 @@ FASTFortranExporterVisitorTest >> testIfLogicalStatementEmpty [
 	self
 		assertExport: stmt
 		equals: 
-'      if (bool) return
+'      if (bool) return 
 '
 ]
 
