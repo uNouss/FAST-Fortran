@@ -14,8 +14,9 @@ FASTFortranDifferentialValidator >> getASTFromString: string [
 
 { #category : #utilities }
 FASTFortranDifferentialValidator >> getTopLevelNodes: model [
+	"the model is actually a collection of AST (and their should be only one actually)"
 
-	^model allWithSubTypesOf: FamixF77ProgramUnit 
+	^model
 ]
 
 { #category : #initialization }
@@ -36,5 +37,9 @@ FASTFortranDifferentialValidator >> isSourceFile: aFileReference [
 { #category : #utilities }
 FASTFortranDifferentialValidator >> reExportAST: ast [
 
-	^ast accept: FASTFortranExporterVisitor new
+	| visitor |
+	visitor := FASTFortranExporterVisitor new.
+
+	ast accept: visitor.
+	^visitor stream contents
 ]
