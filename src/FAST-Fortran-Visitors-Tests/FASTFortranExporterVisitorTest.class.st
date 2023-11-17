@@ -520,6 +520,22 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testMainProgram [
+	| node |
+	node := FASTFortranProgramMain new
+		name: 'BLAH' ;
+		statementBlock: FASTFortranStatementBlock new
+		yourself.
+
+	self
+		assertExport: node
+		equals: 
+'     program BLAH
+      end
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 	| stmt |
 	stmt := self declarationStatement: (self characterType: nil) variables: #(r).
