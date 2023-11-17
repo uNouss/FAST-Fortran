@@ -646,8 +646,10 @@ FortranToFASTTests >> testFunctionNoParameter [
 	self assert: fct parameters isEmpty.
 	self assert: fct statementBlock statements isEmpty.
 	self assert: fct startPos equals: 7.
-	"self assert: fct returnType class equals: FASTFortranType.
-	self assert: fct returnType name equals: 'integer'."
+
+	self assert: fct returnType class equals: FASTFortranIntegerType.
+	self assert: fct returnType startPos equals: 7.
+	
 
 ]
 
