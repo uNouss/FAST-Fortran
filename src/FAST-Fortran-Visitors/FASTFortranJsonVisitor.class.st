@@ -248,11 +248,9 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
-	^FASTFortranScalarVariable new
-		mooseModel: model ;
+	^(self newEntity: FASTFortranScalarVariable atPosition: data first)
 		name: data second;
 		yourself
-	"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 ]
 
 { #category : #'visiting statement' }
@@ -710,7 +708,10 @@ FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitType: aTypeNode [
 
-	^ (super visitType: aTypeNode) second
+	| data |
+	data := super visitType: aTypeNode.
+	self set: data second startEnd: data first.
+	^data second
 ]
 
 { #category : #'visiting expression' }
