@@ -229,7 +229,6 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
 	^(self newEntity: FASTFortranDeclarationStatement atPosition: data first)
-		mooseModel: model ;
 		type: data second;
 			"TODO clarify the need of attributes"
 		  "attributes: data third;"
@@ -249,11 +248,9 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
-	^FASTFortranScalarVariable new
-		mooseModel: model ;
+	^(self newEntity: FASTFortranScalarVariable atPosition: data first)
 		name: data second;
 		yourself
-	"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 ]
 
 { #category : #'visiting statement' }
@@ -350,7 +347,6 @@ FASTFortranJsonVisitor >> visitFortranComment: aCommentNode [
 	| data |
 	data := super visitFortranComment: aCommentNode.
 	^(self newEntity: FASTFortranComment atPosition: data first)
-		mooseModel: model ;
 		content: 'C' , data second ;
 		yourself
 ]
@@ -377,7 +373,6 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 	data := super visitFunctionStatement: aFunctionStatementNode.
 
 	^(self newEntity: FASTFortranFunctionStatement atPosition: data first)
-		mooseModel: model ;
 		name: data second name ;
 		arguments: data third ;
 		expression: data fourth ;
@@ -417,7 +412,6 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	| data |
 	data := super visitGotoStatement: aGotoStatementNode.
 	^(self newEntity: FASTFortranGoToStatement atPosition: data first)
-		mooseModel: model ;
 		flag: 'TODO: target = data second';
 		yourself
 ]
@@ -472,7 +466,6 @@ FASTFortranJsonVisitor >> visitIf_logicalStatement: anIfNode [
 	data := super visitIf_logicalStatement: anIfNode.
 
 	^(self newEntity: FASTFortranIfLogicalStatement atPosition: data first)
-		mooseModel: model ;
 		condition: data second;
 		statement: data third ;
 		yourself
@@ -485,9 +478,7 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
 	^ data second
-		  ifNil: [ (self newEntity: FASTFortranImplicitStatement atPosition: data first)
-				mooseModel: model ;
-				yourself ]
+		  ifNil: [ self newEntity: FASTFortranImplicitStatement atPosition: data first ]
 		  ifNotNil: [ self notYetImplemented ]
 ]
 
@@ -589,7 +580,6 @@ FASTFortranJsonVisitor >> visitPrintStatement: aPrintStatementNode [
 	data := super visitPrintStatement: aPrintStatementNode.
 
 	^(self newEntity: FASTFortranPrintStatement atPosition: data first)
-		mooseModel: model ;
 		format: data second;
 		arguments: data third;
 		yourself
@@ -625,9 +615,7 @@ FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 
 	| data |
 	data := super visitReturnStatement: aReturnStatementNode.
-	^(self newEntity: FASTFortranReturnStatement atPosition: data first)
-		mooseModel: model ;
-		yourself
+	^self newEntity: FASTFortranReturnStatement atPosition: data first
 ]
 
 { #category : #'visiting statement' }
@@ -720,7 +708,10 @@ FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitType: aTypeNode [
 
-	^ (super visitType: aTypeNode) second
+	| data |
+	data := super visitType: aTypeNode.
+	self set: data second startEnd: data first.
+	^data second
 ]
 
 { #category : #'visiting expression' }
@@ -762,7 +753,6 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	data := super visitWriteStatement: aWriteStatementNode.
 
 	^(self newEntity: FASTFortranWriteStatement atPosition: data first)
-		mooseModel: model ;
 		format: data second;
 		arguments: data third;
 		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
