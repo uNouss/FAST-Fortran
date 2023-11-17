@@ -226,6 +226,17 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 	^self stream
 ]
 
+{ #category : #'visiting - programUnits' }
+FASTFortranExporterVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMain [
+
+	self
+		sixSpaces ;
+		<< 'program ' ;
+		<< aFASTFortranProgramMain name.
+	self newLine.
+	self visitFASTFortranTBehaviouralEntity: aFASTFortranProgramMain
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'

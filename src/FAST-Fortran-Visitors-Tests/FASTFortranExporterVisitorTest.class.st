@@ -530,7 +530,7 @@ FASTFortranExporterVisitorTest >> testMainProgram [
 	self
 		assertExport: node
 		equals: 
-'     program BLAH
+'      program BLAH
       end
 '
 ]
