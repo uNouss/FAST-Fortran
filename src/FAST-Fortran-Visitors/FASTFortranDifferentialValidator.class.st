@@ -36,10 +36,10 @@ FASTFortranDifferentialValidator >> isSourceFile: aFileReference [
 
 { #category : #utilities }
 FASTFortranDifferentialValidator >> reExportAST: ast [
-
+	"Note: need to convert cr -> lf because importer uses NeoJson that does not like cr"
 	| visitor |
 	visitor := FASTFortranExporterVisitor new.
 
 	ast accept: visitor.
-	^visitor stream contents
+	^visitor stream contents replaceAllRegex: String cr with: String lf
 ]
