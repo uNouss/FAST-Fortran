@@ -547,6 +547,19 @@ FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 		yourself
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitMessage: aMessageNode [
+	"STOP or PAUSE message: kept as a simple string
+	+ small hack to differentiate integer values from Strings"
+
+	| data |
+	data := super visitMessage: aMessageNode.
+
+	data ifNil: [ ^nil ].
+	(data isKindOf: FASTFortranIntegerLiteral) ifTrue: [ ^data primitiveValue ].
+	^'''' , data primitiveValue , ''''
+]
+
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMiFilename: aString [
 
@@ -571,6 +584,17 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 		mooseModel: model ;
 		operator: (super visitMultiplication: aMultiplicationOperatorNode) ;
 		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitPauseStatement: aPauseStatementNode [
+
+	| data |
+	data := super visitStopStatement: aPauseStatementNode.
+
+	^ (self newEntity: FASTFortranPauseStatement atPosition: data first)
+		  displayArgument: data second ;
+		  yourself
 ]
 
 { #category : #'visiting statement' }

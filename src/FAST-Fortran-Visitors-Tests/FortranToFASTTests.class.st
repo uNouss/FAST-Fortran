@@ -10,6 +10,27 @@ FortranToFASTTests >> jsonVisitor [
 	^ FASTFortranJsonVisitor
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testAssignement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+          c = 1
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:11)-(2:15)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 36.
+
+
+	self assert: stmt variable class equals: FASTFortranScalarVariable.
+	self assert: stmt variable name equals: 'c'.
+]
+
 { #category : #'tests-expression' }
 FortranToFASTTests >> testAssignementBooleanLiteral [
 
@@ -482,6 +503,70 @@ FortranToFASTTests >> testBlockData [
 
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testCallSubroutine [
+
+	| result call arg |
+	fortranCode := '      PROGRAM TESTALT
+       CALL RANK ( N, *8 )
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:26)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"n","tag":"variable"}},"tag":"expr"},"name":null,"span":"(2:20)-(2:20)"},{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:23)-(2:24)","tag":"return_spec","target":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["8",null],"tag":"integer"}}},"tag":"expr"},"name":null,"span":"(2:23)-(2:24)"}],"span":"(2:18)-(2:26)"},"function":{"anno":[],"span":"(2:13)-(2:16)","tag":"value","value":{"contents":"rank","tag":"variable"}},"span":"(2:8)-(2:26)","tag":"call"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	call := result first statementBlock statements anyOne.
+	self assert: call class equals: FASTFortranCallStatement.
+	self assert: call name equals: 'rank'.
+	self assert: call arguments size equals: 2.
+	self assert: call startPos equals: 30.
+	self assert: call endPos equals: 48.
+
+
+	arg := call arguments first.
+	self assert: arg class equals: FASTFortranScalarVariable.
+	self assert: arg name equals: 'n'.
+
+	arg := call arguments second.
+	self assert: arg class equals: FASTFortranIntegerLiteral.
+	self assert: arg primitiveValue equals: '8'.
+	self flag: 'what happened to "*" ("*8")?'
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testCallWrite [
+
+	| result body stmt |
+	fortranCode := '      PROGRAM TESTALT
+       WRITE (*,*) "OK - Normal Return [n=0]"
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:45)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:45)","tag":"value","value":{"contents":"OK - Normal Return [n=0]","tag":"string"}}],"span":"(2:20)-(2:45)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:15)-(2:15)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:17)-(2:17)"}],"span":"(2:14)-(2:18)"},"span":"(2:8)-(2:45)","tag":"write"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first class equals: FASTFortranProgramMain.
+
+	body := result first statementBlock statements.
+	self assert: body size equals: 1.
+
+	stmt := body first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 67.
+
+	self assert: stmt format size equals: 2.
+	stmt format do: [ :each |
+		self assert: each class equals: FASTFortranAsterisk
+	].
+
+	self assert: stmt arguments size equals: 1.
+
+]
+
 { #category : #tests }
 FortranToFASTTests >> testComment [
 
@@ -608,6 +693,26 @@ C comment in loop
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testExit [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+       exit
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"span":"(2:8)-(2:11)","tag":"exit","var":null},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranExitStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 33.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testExternalStatement [
 
 	| result stmt |
@@ -726,6 +831,26 @@ FortranToFASTTests >> testFunctionWithStatement [
 	self assert: fct startPos equals: 7.
 	"self assert: fct returnType class equals: FASTFortranType.
 	self assert: fct returnType name equals: 'integer'."
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testGoto [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+       GOTO 100
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:15)","statement":{"anno":[],"span":"(2:8)-(2:15)","tag":"goto","target":{"anno":[],"span":"(2:13)-(2:15)","tag":"value","value":{"contents":["100",null],"tag":"integer"}}},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranGoToStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 37.
 
 ]
 
@@ -1006,151 +1131,70 @@ FortranToFASTTests >> testMainProgramEmpty [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testReturnStatementEmpty [
+FortranToFASTTests >> testPauseStatementEmpty [
 
 	| stmt result |
 	fortranCode := '      PROGRAM MYPROG
-      return
+      pause
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"span":"(2:7)-(2:12)","tag":"return","target":null},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:7)-(2:11)","tag":"pause"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranReturnStatement.
+	self assert: stmt class equals: FASTFortranPauseStatement.
 	self assert: stmt startPos equals: 28.
-	self assert: stmt endPos equals: 33.
+	self assert: stmt endPos equals: 32.
+
+	self assert: stmt displayArgument equals: nil
 
 
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testStatementAssignement [
+FortranToFASTTests >> testPauseStatementWithInteger [
 
-	| result stmt |
+	| stmt result |
 	fortranCode := '      PROGRAM MYPROG
-          c = 1
+      pause 1
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:11)-(2:15)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:13)","statement":{"anno":[],"message":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:7)-(2:13)","tag":"pause"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranAssignmentStatement.
-	self assert: stmt startPos equals: 32.
-	self assert: stmt endPos equals: 36.
+	self assert: stmt class equals: FASTFortranPauseStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 34.
 
+	self assert: stmt displayArgument equals: '1'
 
-	self assert: stmt variable class equals: FASTFortranScalarVariable.
-	self assert: stmt variable name equals: 'c'.
-]
-
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testStatementCallSubroutine [
-
-	| result call arg |
-	fortranCode := '      PROGRAM TESTALT
-       CALL RANK ( N, *8 )
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:26)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"n","tag":"variable"}},"tag":"expr"},"name":null,"span":"(2:20)-(2:20)"},{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:23)-(2:24)","tag":"return_spec","target":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["8",null],"tag":"integer"}}},"tag":"expr"},"name":null,"span":"(2:23)-(2:24)"}],"span":"(2:18)-(2:26)"},"function":{"anno":[],"span":"(2:13)-(2:16)","tag":"value","value":{"contents":"rank","tag":"variable"}},"span":"(2:8)-(2:26)","tag":"call"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first class equals: FASTFortranProgramMain.
-
-	self assert: result first statementBlock statements size equals: 1.
-
-	call := result first statementBlock statements anyOne.
-	self assert: call class equals: FASTFortranCallStatement.
-	self assert: call name equals: 'rank'.
-	self assert: call arguments size equals: 2.
-	self assert: call startPos equals: 30.
-	self assert: call endPos equals: 48.
-
-
-	arg := call arguments first.
-	self assert: arg class equals: FASTFortranScalarVariable.
-	self assert: arg name equals: 'n'.
-
-	arg := call arguments second.
-	self assert: arg class equals: FASTFortranIntegerLiteral.
-	self assert: arg primitiveValue equals: '8'.
-	self flag: 'what happened to "*" ("*8")?'
 
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testStatementCallWrite [
+FortranToFASTTests >> testPauseStatementWithString [
 
-	| result body stmt |
-	fortranCode := '      PROGRAM TESTALT
-       WRITE (*,*) "OK - Normal Return [n=0]"
-      END 
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop ''error''
+      END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:45)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:45)","tag":"value","value":{"contents":"OK - Normal Return [n=0]","tag":"string"}}],"span":"(2:20)-(2:45)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:15)-(2:15)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:17)-(2:17)"}],"span":"(2:14)-(2:18)"},"span":"(2:8)-(2:45)","tag":"write"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:18)","statement":{"anno":[],"message":{"anno":[],"span":"(2:12)-(2:18)","tag":"value","value":{"contents":"error","tag":"string"}},"span":"(2:7)-(2:18)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
-
-	self assert: result first class equals: FASTFortranProgramMain.
-
-	body := result first statementBlock statements.
-	self assert: body size equals: 1.
-
-	stmt := body first.
-	self assert: stmt class equals: FASTFortranWriteStatement.
-	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 67.
-
-	self assert: stmt format size equals: 2.
-	stmt format do: [ :each |
-		self assert: each class equals: FASTFortranAsterisk
-	].
-
-	self assert: stmt arguments size equals: 1.
-
-]
-
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testStatementExit [
-
-	| result stmt |
-	fortranCode := '      PROGRAM TESTALT
-       exit
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"span":"(2:8)-(2:11)","tag":"exit","var":null},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first statementBlock statements size equals: 1.
-
-	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranExitStatement.
-	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 33.
-
-]
-
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testStatementGoto [
-
-	| result stmt |
-	fortranCode := '      PROGRAM TESTALT
-       GOTO 100
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:15)","statement":{"anno":[],"span":"(2:8)-(2:15)","tag":"goto","target":{"anno":[],"span":"(2:13)-(2:15)","tag":"value","value":{"contents":["100",null],"tag":"integer"}}},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranGoToStatement.
-	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 37.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 39.
+
+	self assert: stmt displayArgument equals: '''error'''
+
 
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testStatementPrintMultipleVariables [
+FortranToFASTTests >> testPrintMultipleVariables [
 
 	| stmt result  var arguments |
 	fortranCode := '      subroutine mysub (msg)
@@ -1184,7 +1228,7 @@ FortranToFASTTests >> testStatementPrintMultipleVariables [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testStatementPrintOneVariable [
+FortranToFASTTests >> testPrintOneVariable [
 
 	| stmt result arguments |
 	fortranCode := '      subroutine mysub (msg)
@@ -1207,46 +1251,22 @@ FortranToFASTTests >> testStatementPrintOneVariable [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testStatementStop [
+FortranToFASTTests >> testReturnStatementEmpty [
 
-	| result stmt |
-	fortranCode := '      PROGRAM TESTALT
-       STOP
-      END 
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      return
+      END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"span":"(2:7)-(2:12)","tag":"return","target":null},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	self assert: result first statementBlock statements size equals: 1.
-
-	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranStopStatement.
-	self assert: stmt startPos equals: 30.
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranReturnStatement.
+	self assert: stmt startPos equals: 28.
 	self assert: stmt endPos equals: 33.
 
-	self assert: stmt displayArgument equals: nil.
-]
 
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testStatementStopWithMessage [
-
-	| result stmt |
-	fortranCode := '      PROGRAM TESTALT
-       STOP 10
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:14)","statement":{"anno":[],"message":{"anno":[],"span":"(2:13)-(2:14)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:8)-(2:14)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first statementBlock statements size equals: 1.
-
-	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranStopStatement.
-	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 36.
-
-	self assert: stmt displayArgument class equals: FASTFortranIntegerLiteral .
-	self assert: stmt displayArgument primitiveValue equals: '10'
 ]
 
 { #category : #'tests-statement' }
@@ -1266,6 +1286,48 @@ FortranToFASTTests >> testStatementWithLabel [
 	self assert: stmt class equals: FASTFortranStopStatement.
 	self assert: stmt label class equals: FASTFortranIntegerLiteral.
 	self assert: stmt label primitiveValue equals: '10'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testStopStatementEmpty [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:10)","statement":{"anno":[],"message":null,"span":"(2:7)-(2:10)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 31.
+
+	self assert: stmt displayArgument equals: nil
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testStopStatementWithInteger [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop 1
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"message":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:7)-(2:12)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 33.
+
+	self assert: stmt displayArgument equals: '1'
+
+
 ]
 
 { #category : #'tests-programUnit' }

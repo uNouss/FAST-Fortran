@@ -537,6 +537,9 @@ FASTFortranGenerator >> defineProperties [
 	(returnStatement property: #alternateReturnLable type: #String)
 		comment: 'Optional. Expression of type INTEGER or REAL'.
 
+	(pauseStatement property: #displayArgument type: #String) comment:
+		'Optional. Displayed when the program pauses. String of no more that 5 digits or a character constant'.
+
 	(stopStatement property: #displayArgument type: #String) comment:
 		'Optional. Displayed when the program stops. String of no more that 5 digits or a character constant'.
 
