@@ -1131,6 +1131,69 @@ FortranToFASTTests >> testMainProgramEmpty [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testPauseStatementEmpty [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      pause
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:7)-(2:11)","tag":"pause"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranPauseStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 32.
+
+	self assert: stmt displayArgument equals: nil
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testPauseStatementWithInteger [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      pause 1
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:13)","statement":{"anno":[],"message":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:7)-(2:13)","tag":"pause"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranPauseStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 34.
+
+	self assert: stmt displayArgument equals: '1'
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testPauseStatementWithString [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop ''error''
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:18)","statement":{"anno":[],"message":{"anno":[],"span":"(2:12)-(2:18)","tag":"value","value":{"contents":"error","tag":"string"}},"span":"(2:7)-(2:18)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 39.
+
+	self assert: stmt displayArgument equals: '''error'''
+
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testPrintMultipleVariables [
 
 	| stmt result  var arguments |
@@ -1223,6 +1286,48 @@ FortranToFASTTests >> testStatementWithLabel [
 	self assert: stmt class equals: FASTFortranStopStatement.
 	self assert: stmt label class equals: FASTFortranIntegerLiteral.
 	self assert: stmt label primitiveValue equals: '10'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testStopStatementEmpty [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:10)","statement":{"anno":[],"message":null,"span":"(2:7)-(2:10)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 31.
+
+	self assert: stmt displayArgument equals: nil
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testStopStatementWithInteger [
+
+	| stmt result |
+	fortranCode := '      PROGRAM MYPROG
+      stop 1
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:12)","statement":{"anno":[],"message":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:7)-(2:12)","tag":"stop"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 33.
+
+	self assert: stmt displayArgument equals: '1'
+
+
 ]
 
 { #category : #'tests-programUnit' }
