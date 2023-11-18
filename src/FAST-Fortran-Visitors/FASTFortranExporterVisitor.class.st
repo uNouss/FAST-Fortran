@@ -250,6 +250,17 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 	^self stream
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranPauseStatement: aFASTFortranPausetStatement [
+
+	self
+		sixSpaces ;
+		<< 'pause '.
+	aFASTFortranPausetStatement displayArgument
+		ifNotNil: [ :message | self << message ].
+	self newLine
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMain [
 
@@ -283,6 +294,17 @@ FASTFortranExporterVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatem
 		do: [ :each | each accept: self ].
 
 	self unindent
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranStopStatement: aFASTFortranStoptStatement [
+
+	self
+		sixSpaces ;
+		<< 'stop '.
+	aFASTFortranStoptStatement displayArgument
+		ifNotNil: [ :message | self << message ].
+	self newLine
 ]
 
 { #category : #'visiting - programUnits' }
