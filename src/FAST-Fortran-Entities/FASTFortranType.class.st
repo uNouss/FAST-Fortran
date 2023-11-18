@@ -5,9 +5,10 @@ Class {
 	#name : #FASTFortranType,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#size => FMProperty',
 		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #type',
-		'#parentDimensionStatement => FMOne type: #FASTFortranDimensionStatement opposite: #arrays'
+		'#parentDimensionStatement => FMOne type: #FASTFortranDimensionStatement opposite: #arrays',
+		'#size => FMProperty',
+		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -19,6 +20,12 @@ FASTFortranType class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #adding }
+FASTFortranType >> addTypedFunction: anObject [
+	<generated>
+	^ self typedFunctions add: anObject
 ]
 
 { #category : #accessing }
@@ -83,4 +90,20 @@ FASTFortranType >> size [
 FASTFortranType >> size: anObject [
 	<generated>
 	size := anObject
+]
+
+{ #category : #accessing }
+FASTFortranType >> typedFunctions [
+	"Relation named: #typedFunctions type: #FASTFortranFunction opposite: #returnType"
+
+	<generated>
+	<derived>
+	^ typedFunctions
+]
+
+{ #category : #accessing }
+FASTFortranType >> typedFunctions: anObject [
+
+	<generated>
+	typedFunctions value: anObject
 ]

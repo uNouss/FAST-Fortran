@@ -387,7 +387,7 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 	data := super visitFunctionWithBlocks: aFunctionNode.
 	^(self newEntity: FASTFortranFunction atPosition: data first)
 		name: data second ;
-		flag: 'need to set return type' ;
+		returnType: data third ;
 		parameters: data fourth ;
 		statementBlock: data fifth ;
 		yourself

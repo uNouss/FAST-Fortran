@@ -596,6 +596,8 @@ FASTFortranGenerator >> defineRelations [
 		 'Statement block containing statements of the do body ')
 	<>- ((tStatementBlock property: #parentDoStatement) comment:
 			 'Parent do statement').
+	(function property: #returnType)
+	*- (type property: #typedFunctions).
 
 	((functionStatement property: #expression) comment:
 		 'Expression thats being assigned upon declaration to the var')

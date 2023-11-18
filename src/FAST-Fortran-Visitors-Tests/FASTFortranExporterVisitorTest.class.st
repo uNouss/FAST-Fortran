@@ -127,6 +127,18 @@ FASTFortranExporterVisitorTest >> functionCall: aName arguments: aCollection [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> functionDeclaration: aName [
+	"end position is approximate, test should adjust if a real value is needed"
+
+	^FASTFortranFunction new
+		name: aName ;
+		returnType: FASTFortranRealType new ;
+		parameters: {  } ;
+		statementBlock: FASTFortranStatementBlock new
+		yourself.
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> ifBlock: condition then: thenBlock else: elseBlock [
 	^FASTFortranIfBlockStatement new
 		condition: condition ;
@@ -305,7 +317,7 @@ FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 		assertExport: block
 		equals: 
 'C comment before assignement
-      i = 1
+        i = 1
 '
 ]
 
@@ -421,6 +433,50 @@ FASTFortranExporterVisitorTest >> testExternalStatement [
 		assertExport: stmt
 		equals: 
 '      external aVar
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testFunctionNoParameterNoStatement [
+	| node |
+	node := self functionDeclaration: 'BLAH'.
+
+	self
+		assertExport: node
+		equals: 
+'      real function BLAH()
+      end
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testFunctionNoParameterWithStatement [
+	| node stmt |
+	stmt := self returnStatement: (self scalarVariable: 'i').
+
+	node := self functionDeclaration: 'BLAH'.
+	node statementBlock: (self statementBlock: { stmt }).
+
+	self
+		assertExport: node
+		equals: 
+'      real function BLAH()
+        return i
+      end
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
+	| node |
+	node := self functionDeclaration: 'BLAH'.
+	self entity: node parameters: #(i j).
+
+	self
+		assertExport: node
+		equals: 
+'      real function BLAH(i,j)
+      end
 '
 ]
 
@@ -659,8 +715,8 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 		assertExport: sub
 		equals: 
 '      subroutine blah()
-      integer i
-      integer j
+        integer i
+        integer j
       end
 '
 ]

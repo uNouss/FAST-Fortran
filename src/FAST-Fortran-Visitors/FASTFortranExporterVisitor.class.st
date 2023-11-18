@@ -143,6 +143,19 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 		newLine
 ]
 
+{ #category : #'visiting - programUnits' }
+FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
+
+	self sixSpaces.
+	aFASTFortranFunction returnType accept: self.
+	self
+		<< ' function ' ;
+		<< aFASTFortranFunction name.
+	self visitFASTFortranTWithParameters: aFASTFortranFunction.
+	self newLine.
+	self visitFASTFortranTBehaviouralEntity: aFASTFortranFunction
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunctionCall [
 
@@ -165,18 +178,14 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 	self
 		<< ') then' ;
 		newLine.
-	self indent.
 	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
-	self unindent.
 	(aFASTFortranIfBlockStatement elseStatementBlock statements)
 		ifNotEmpty: [
 			self
 				sixSpaces ;
 				<< 'else' ;
 				newLine.
-			self indent.
 			aFASTFortranIfBlockStatement elseStatementBlock accept: self.
-			self unindent.
 	].
 	self
 		sixSpaces ;
@@ -266,10 +275,14 @@ FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalar
 FASTFortranExporterVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
 	"must output statements and comments in the right order"
 
+	self indent.
+	
 	(SortedCollection sortBlock: [ :a :b | a startPos < b startPos ])
 		addAll: aFASTFortranStatementBlock statements	;
 		addAll: aFASTFortranStatementBlock comments	 ;
-		do: [ :each | each accept: self ]
+		do: [ :each | each accept: self ].
+
+	self unindent
 ]
 
 { #category : #'visiting - programUnits' }
