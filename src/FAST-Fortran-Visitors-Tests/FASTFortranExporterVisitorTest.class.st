@@ -655,6 +655,46 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testPauseStatementEmpty [
+	| stmt |
+	stmt := FASTFortranPauseStatement new.
+
+	self
+		assertExport: stmt
+		equals: 
+'      pause 
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testPauseStatementWithInteger [
+	| stmt |
+	stmt := FASTFortranPauseStatement new
+		displayArgument: '1' ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      pause 1
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testPauseStatementWithString [
+	| stmt |
+	stmt := FASTFortranPauseStatement new
+		displayArgument: '''error''' ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      pause ''error''
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testReturnStatementEmpty [
 	| stmt |
 	stmt :=  self returnStatement: nil.
@@ -675,6 +715,46 @@ FASTFortranExporterVisitorTest >> testReturnStatementLiteralValue [
 		assertExport: stmt
 		equals: 
 '      return 3.5
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testStopStatementEmpty [
+	| stmt |
+	stmt := FASTFortranStopStatement new.
+
+	self
+		assertExport: stmt
+		equals: 
+'      stop 
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testStopStatementWithInteger [
+	| stmt |
+	stmt := FASTFortranStopStatement new
+		displayArgument: '1' ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      stop 1
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testStopStatementWithString [
+	| stmt |
+	stmt := FASTFortranStopStatement new
+		displayArgument: '''error''' ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      stop ''error''
 '
 ]
 
