@@ -699,12 +699,10 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 	| data |
 	data := super visitSubroutine: aSubroutineNode.
 
-	^FASTFortranSubroutine new
-		mooseModel: model ;
+	^(self newEntity: FASTFortranSubroutine atPosition: data first)
 		name: data second;
 		parameters: data third;
 		statementBlock: data fourth;
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		yourself
 ]
 
