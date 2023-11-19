@@ -147,9 +147,13 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 
 	self sixSpaces.
-	aFASTFortranFunction returnType accept: self.
+	aFASTFortranFunction returnType
+		ifNotNil: [ :returnType |
+			returnType accept: self.
+			self << Character space
+		].
 	self
-		<< ' function ' ;
+		<< 'function ' ;
 		<< aFASTFortranFunction name.
 	self visitFASTFortranTWithParameters: aFASTFortranFunction.
 	self newLine.
