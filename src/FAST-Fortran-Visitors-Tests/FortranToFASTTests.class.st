@@ -818,7 +818,7 @@ FortranToFASTTests >> testFunctionWithStatement [
       return 1
       end
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[],"name":"afct","result":null,"span":"(1:7)-(2:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:14)","statement":{"anno":[],"span":"(2:7)-(2:14)","tag":"return","target":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["1",null],"tag":"integer"}}},"tag":"statement"}],"name":"afct","result":null,"span":"(1:7)-(3:9)","subprograms":null,"tag":"function","type":{"anno":[],"base_type":"integer","selector":null,"span":"(1:7)-(1:13)"}}]}'.
 	result := self visitJsonCode.
 
 	self assert: result isNotEmpty.
@@ -827,11 +827,13 @@ FortranToFASTTests >> testFunctionWithStatement [
 	self assert: fct class equals: FASTFortranFunction.
 	self assert: fct name equals: 'afct'.
 	self assert: fct parameters isEmpty.
-	self assert: fct statementBlock statements isEmpty.
 	self assert: fct startPos equals: 7.
-	"self assert: fct returnType class equals: FASTFortranType.
-	self assert: fct returnType name equals: 'integer'."
 
+	self assert: fct statementBlock statements size equals: 1.
+	self assert: fct statementBlock startPos equals: 31.
+	self assert: fct statementBlock endPos equals: 46.
+
+	self assert: fct returnType class equals: FASTFortranIntegerType.
 ]
 
 { #category : #'tests-statement' }
@@ -1354,7 +1356,7 @@ FortranToFASTTests >> testSubroutineEmpty [
 { #category : #'tests-programUnit' }
 FortranToFASTTests >> testSubroutineWithParameters [
 
-	| result rtn |
+	| result rtn param |
 	fortranCode := '      SUBROUTINE SIMPLESUBROUTINE( a, b)
       END
 '.
@@ -1367,10 +1369,23 @@ FortranToFASTTests >> testSubroutineWithParameters [
 	self assert: rtn class equals: FASTFortranSubroutine.
 	self assert: rtn name equals: 'simplesubroutine'.
 
-	self assert: rtn parameters size equals: 2.
+	self assert: rtn statementBlock class equals: FASTFortranStatementBlock.
+	self assert: rtn statementBlock statements size equals: 0.
+	self assert: rtn statementBlock startPos equals: 42.
 
 	self assert: rtn startPos equals: 7.
 	self assert: rtn endPos equals: 50.
+	
+	self assert: rtn parameters size equals: 2.
+
+	param := rtn parameters first.
+	self assert: param name equals: 'a'.
+	self assert: param startPos equals: 36.
+
+	param := rtn parameters second.
+	self assert: param name equals: 'b'.
+	self assert: param startPos equals: 39.
+
 ]
 
 { #category : #tests }
