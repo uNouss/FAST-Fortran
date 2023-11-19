@@ -1333,7 +1333,7 @@ FortranToFASTTests >> testStopStatementWithInteger [
 { #category : #'tests-programUnit' }
 FortranToFASTTests >> testSubroutineEmpty [
 
-	| result |
+	| result rtn |
 	fortranCode := '      SUBROUTINE RANK
       end
 '.
@@ -1342,26 +1342,35 @@ FortranToFASTTests >> testSubroutineEmpty [
 	
 	self assert: result isCollection.
 	self assert: result size equals: 1.
-	self assert: result first class equals: FASTFortranSubroutine.
-	self assert: result first parameters isEmpty.
-	self assert: result first statementBlock statements isEmpty
+
+	rtn := result anyOne.
+	self assert: rtn class equals: FASTFortranSubroutine.
+	self assert: rtn parameters isEmpty.
+	self assert: rtn statementBlock statements isEmpty.
+	self assert: rtn startPos equals: 7.
+	self assert: rtn endPos equals: 31
 ]
 
 { #category : #'tests-programUnit' }
 FortranToFASTTests >> testSubroutineWithParameters [
 
-	| result |
-	fortranCode := '      SUBROUTINE RANK( A, B)
-      end
+	| result rtn |
+	fortranCode := '      SUBROUTINE SIMPLESUBROUTINE( a, b)
+      END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:24)-(1:24)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(1:27)-(1:27)","tag":"value","value":{"contents":"b","tag":"variable"}}],"span":"(1:24)-(1:27)"},"blocks":[],"name":"rank","options":[null,null],"span":"(1:7)-(2:9)","subprograms":null,"tag":"subroutine"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:36)-(1:36)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(1:39)-(1:39)","tag":"value","value":{"contents":"b","tag":"variable"}}],"span":"(1:36)-(1:39)"},"blocks":[],"name":"simplesubroutine","options":[null,null],"span":"(1:7)-(2:9)","subprograms":null,"tag":"subroutine"}]}'.
 	result := self visitJsonCode.
 	
 	self assert: result isCollection.
-	self assert: result size equals: 1.
-	self assert: result first class equals: FASTFortranSubroutine.
-	self assert: result first name equals: 'rank'.
-	self assert: result first parameters size equals: 2.
+
+	rtn := result anyOne.
+	self assert: rtn class equals: FASTFortranSubroutine.
+	self assert: rtn name equals: 'simplesubroutine'.
+
+	self assert: rtn parameters size equals: 2.
+
+	self assert: rtn startPos equals: 7.
+	self assert: rtn endPos equals: 50.
 ]
 
 { #category : #tests }
