@@ -466,6 +466,20 @@ FASTFortranExporterVisitorTest >> testFunctionNoParameterWithStatement [
 '
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testFunctionNoReturnType [
+	| fct |
+	fct := self functionDeclaration: 'blah'.
+	fct returnType: nil.
+
+	self
+		assertExport: fct
+		equals: 
+'      function blah()
+      end
+'
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
 	| node |
