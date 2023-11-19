@@ -65,11 +65,30 @@ FASTFortranJsonVisitor >> putMembers: entities inBody: stmtBlock [
 ]
 
 { #category : #private }
-FASTFortranJsonVisitor >> set: aFASTFortranNode startEnd: aPoint [
+FASTFortranJsonVisitor >> set: aFASTFortranNode startEnd: startEndPoints [
 
 	aFASTFortranNode
-		startPos: (self pointToPosition: aPoint first);
-		endPos: (self pointToPosition: aPoint second) - 1
+		startPos: (self pointToPosition: startEndPoints first);
+		endPos: (self pointToPosition: startEndPoints second) - 1
+]
+
+{ #category : #private }
+FASTFortranJsonVisitor >> setBodyPosition: aProgramUnit fromProgramUnitPosition: startEndPoints [
+
+	"sets a reasonnable start/end position for a statementBlock:
+	 - startPos = first character of parent node second line (first line + 1)
+	 - endPos = first character of parent node last line
+	(note: set:startEnd: substract 1 to end position so we give it the 2nd character of this line)"
+
+	| body bodyStartEnd |
+	body := aProgramUnit statementBlock.
+	
+	bodyStartEnd := {
+		startEndPoints first x +1 @ 1 .
+		startEndPoints second x @ 2
+	}.
+	self set: body startEnd: bodyStartEnd
+
 ]
 
 { #category : #'visiting expression' }
@@ -383,14 +402,19 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 	"^self visitJsonMap: aFunctionNode keys: #(span name type arguments blocks result subprograms)"
 
-	| data |
+	| data function headerEndPos |
 	data := super visitFunctionWithBlocks: aFunctionNode.
-	^(self newEntity: FASTFortranFunction atPosition: data first)
+
+	function := (self newEntity: FASTFortranFunction atPosition: data first)
 		name: data second ;
 		returnType: data third ;
 		parameters: data fourth ;
 		statementBlock: data fifth ;
-		yourself
+		yourself.
+
+	self setBodyPosition: function fromProgramUnitPosition: data first.
+
+	^function
 ]
 
 { #category : #'visiting statement' }
@@ -537,14 +561,17 @@ FASTFortranJsonVisitor >> visitLte: anOperatorNode [
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 
-	| data |
+	| data main |
 	data := super visitMain: aMainProgramNode.
 
-	^ FASTFortranProgramMain new
-		mooseModel: model ;
+	main := (self newEntity: FASTFortranProgramMain atPosition: data first)
 		name: data second;
 		statementBlock: data third ;
-		yourself
+		yourself.
+
+	self setBodyPosition: main fromProgramUnitPosition: data first.
+
+	^main
 ]
 
 { #category : #'visiting expression' }
@@ -696,14 +723,18 @@ FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 
-	| data |
+	| data routine |
 	data := super visitSubroutine: aSubroutineNode.
 
-	^(self newEntity: FASTFortranSubroutine atPosition: data first)
+	routine := (self newEntity: FASTFortranSubroutine atPosition: data first)
 		name: data second;
 		parameters: data third;
 		statementBlock: data fourth;
-		yourself
+		yourself.
+
+	self setBodyPosition: routine fromProgramUnitPosition: data first.
+
+	^routine
 ]
 
 { #category : #'visiting expression' }
