@@ -527,6 +527,8 @@ FASTFortranGenerator >> defineProperties [
 	(externalStatement property: #name type: #String) comment:
 		'Name of external procedure, dummy procedure, or block data routine'.
 
+	(formatStatement property: #formatDescription type: #String).
+
 	(functionCall property: #name type: #String) comment:
 		'Name of called function'.
 
