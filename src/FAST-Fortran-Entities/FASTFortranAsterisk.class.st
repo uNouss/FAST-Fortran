@@ -4,8 +4,8 @@ I represent an Asterisk Character Literal (Constant) that is often used as a for
 Class {
 	#name : #FASTFortranAsterisk,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTFormatIdentifier + FASTFortranTNumericalLiteral',
-	#classTraits : 'FASTFortranTFormatIdentifier classTrait + FASTFortranTNumericalLiteral classTrait',
+	#traits : 'FASTFortranTEntryStatement + FASTFortranTFormatIdentifier + FASTFortranTNumericalLiteral',
+	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTFormatIdentifier classTrait + FASTFortranTNumericalLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

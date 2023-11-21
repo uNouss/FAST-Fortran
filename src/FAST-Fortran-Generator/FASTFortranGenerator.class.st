@@ -95,7 +95,8 @@ Class {
 		'scalarVariableDeclaration',
 		'declarationStatement',
 		'tConditionalStatement',
-		'tLabelledStatement'
+		'tLabelledStatement',
+		'tEntryArgument'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -395,6 +396,7 @@ FASTFortranGenerator >> defineHierarchy [
 	elseStatement --|> tLabelledStatement.
 	endFileStatement --|> tLabelledStatement.
 	entryStatement --|> tLabelledStatement.
+	entryStatement --|> tNamedEntity.
 	equivalenceStatement --|> tLabelledStatement.
 	externalStatement --|> tLabelledStatement.
 	formatStatement --|> tLabelledStatement.
@@ -439,6 +441,7 @@ FASTFortranGenerator >> defineHierarchy [
 	functionCall --|> tExpression.
 	variable --|> tExpression.
 	variable --|> tVariableEntity.
+	variable --|> tEntryArgument.
 	scalarVariableDeclaration --|> variable.
 	arrayVariableDeclaration --|> variable.
 	loopControlExpression --|> tExpression.
@@ -453,6 +456,7 @@ FASTFortranGenerator >> defineHierarchy [
 	integerConstant --|> tNumericalLiteral.
 	realConstant --|> tNumericalLiteral.
 	asterisk --|> tNumericalLiteral.
+	asterisk --|> tEntryArgument.
 	ampersand --|> tCharacterLiteral.
 	characterConstant --|> tCharacterLiteral.
 	booleanConstant --|> tBooleanLiteral.
@@ -566,8 +570,6 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
-	"sorted alphabetically, please keep the order"
-	
 	((arrayDimensionDeclarator property: #ub) comment: 'an upper bound of an array dimension')
 	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
@@ -599,6 +601,10 @@ FASTFortranGenerator >> defineRelations [
 		 'Statement block containing statements of the do body ')
 	<>- ((tStatementBlock property: #parentDoStatement) comment:
 			 'Parent do statement').
+
+	(entryStatement property: #entryArguments)
+	<>-* (tEntryArgument property: #entryStatement).
+
 	(function property: #returnType)
 	*- (type property: #typedFunctions).
 
@@ -859,12 +865,14 @@ FASTFortranGenerator >> defineStatements [
 FASTFortranGenerator >> defineTraits [
 
 	super defineTraits.
-	
+
+	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
+
+	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
+
+	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
+
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
-	
-	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
-	
 ]

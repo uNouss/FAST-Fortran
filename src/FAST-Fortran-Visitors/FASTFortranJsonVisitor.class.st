@@ -320,6 +320,20 @@ FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
 		  yourself
 ]
 
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitEntryStatement: anEntryNode [
+	"#(span name args return)"
+
+	| data |
+	data := super visitEntryStatement: anEntryNode.
+
+	^ (self newEntity: FASTFortranEntryStatement atPosition: data first)
+		name: data second name ;
+		entryArguments: data third ;
+		yourself
+	
+]
+
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 

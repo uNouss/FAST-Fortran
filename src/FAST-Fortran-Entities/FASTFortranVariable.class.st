@@ -4,8 +4,8 @@ an abstract Fortran Variable, could be an array or a scalar
 Class {
 	#name : #FASTFortranVariable,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression + FASTFortranTVariableEntity',
-	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
+	#traits : 'FASTFortranTEntryStatement + FASTFortranTExpression + FASTFortranTVariableEntity',
+	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
 		'#name => FMProperty',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
