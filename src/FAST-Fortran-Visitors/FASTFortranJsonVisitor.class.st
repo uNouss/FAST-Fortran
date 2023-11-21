@@ -95,7 +95,7 @@ FASTFortranJsonVisitor >> setBodyPosition: aProgramUnit fromProgramUnitPosition:
 FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
 
 	^FASTFortranBinaryExpression new
-		operator: (super visitAddition: anAdditionOperatorNode);
+		operator: '+' ;
 		mooseModel: model ;
 		yourself
 ]
@@ -283,7 +283,7 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: (super visitDivision: aDivisionOperatorNode);
+		operator: '/' ;
 		yourself
 ]
 
@@ -358,7 +358,7 @@ FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: (super visitExponentiation: aExponentiationOperatorNode);
+		operator: '**' ;
 		yourself
 ]
 
@@ -623,7 +623,7 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: (super visitMultiplication: aMultiplicationOperatorNode) ;
+		operator: '*' ;
 		yourself
 ]
 
@@ -768,7 +768,7 @@ FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: (super visitSubtraction: aSubtractionOperatorNode);
+		operator: '-';
 		yourself
 ]
 
