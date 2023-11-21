@@ -425,6 +425,22 @@ FASTFortranExporterVisitorTest >> testEmptySubroutineTwoParameters [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testEntryStatement [
+
+	| stmt |
+	stmt := FASTFortranEntryStatement new
+		name: 'XYZ' ;
+		entryArguments: { self scalarVariable: 'ABC' . FASTFortranAsterisk new } ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals:
+'      entry XYZ(ABC,*)
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testExternalStatement [
 	| stmt |
 	stmt := self externalStatement: 'aVar'.
