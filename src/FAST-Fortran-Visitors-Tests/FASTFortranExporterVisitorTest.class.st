@@ -386,6 +386,19 @@ FASTFortranExporterVisitorTest >> testComment [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testContinueStatement [
+	| cmt |
+	cmt := FASTFortranContinueStatement new
+		label: (self integerLiteral: '110').
+
+	self
+		assertExport: cmt
+		equals: 
+'110   continue
+'.
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatement [
 	| stmt init |
 	self skip: 'init in control should be an expression, not a statement'.

@@ -46,10 +46,14 @@ FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 FASTFortranExporterVisitor >> sixSpaces [
 	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
 
-	| nbSpaces |
-	nbSpaces := 6 + (indent * 2).
-	self << (String space repeat: nbSpaces)
+	self upToSixSpaces: 0
 	
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> spaces: number [
+
+	self << (String space repeat: number)
 ]
 
 { #category : #accessing }
@@ -58,9 +62,25 @@ FASTFortranExporterVisitor >> stream [
 ]
 
 { #category : #streaming }
+FASTFortranExporterVisitor >> streamPosition [
+
+	^self stream position
+]
+
+{ #category : #streaming }
 FASTFortranExporterVisitor >> unindent [
 	self assert: (indent > 0).
 	indent := indent - 1
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
+	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
+
+	| nbSpaces |
+	nbSpaces := 6 + (indent * 2) - preceedingSize.
+	self spaces: nbSpaces
+	
 ]
 
 { #category : #'visiting - expressions' }
@@ -127,6 +147,19 @@ FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallSta
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 	self << 'character'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
+
+	| lineStart |
+	lineStart := self streamPosition.
+	aFASTFortranContinueStatement label accept: self.
+	
+	self
+		upToSixSpaces: (self streamPosition - lineStart) ;
+		<< 'continue' ;
+		newLine
 ]
 
 { #category : #'visiting - statements' }
