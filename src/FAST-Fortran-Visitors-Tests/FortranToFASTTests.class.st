@@ -613,7 +613,7 @@ FortranToFASTTests >> testDataStatement [
 	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt class equals: FASTFortranDataStatement.
 	self assert: stmt loopControl isNotNil.
 	self assert: stmt statementBlock statements isEmpty.
 	self assert: stmt startPos equals: 26.
