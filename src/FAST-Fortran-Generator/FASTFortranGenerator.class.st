@@ -96,7 +96,8 @@ Class {
 		'declarationStatement',
 		'tConditionalStatement',
 		'tLabelledStatement',
-		'tEntryArgument'
+		'tEntryArgument',
+		'dataGroup'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -579,6 +580,19 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((variable property: #parentCommonStatement) comment:
 			 'Parent common expression').
 
+	(dataGroup property: #dataVariables)
+	-* (variable property: #parentDataStatement).
+
+	(dataGroup property: #dataConstants)
+	-* (tExpression property: #parentDataStatement).
+
+	dataStatement <>-* dataGroup.
+
+	((declarationStatement property: #declarators) comment: 'declarators')
+	<>-*
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
+
 	((declarationStatement property: #declarators) comment: 'declarators')
 	<>-*
 	((variable property: #parentDeclaration) comment:
@@ -705,7 +719,10 @@ FASTFortranGenerator >> defineStatements [
 		                     'I represent Fortran Continue statement'.
 	dataStatement := builder
 		                 newClassNamed: #DataStatement
-		                 comment: 'I represent FortranData statement'.
+		                 comment: 'I represent a Fortran Data statement'.
+	dataGroup := builder
+		                 newClassNamed: #DataGroup
+		                 comment: 'I represent a Fortran Data group in a Data statement'.
 	decodeStatement := builder
 		                   newClassNamed: #DecodeStatement
 		                   comment: 'I represent Fortran Decode statement'.

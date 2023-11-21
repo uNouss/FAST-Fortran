@@ -242,6 +242,32 @@ FASTFortranJsonVisitor >> visitContinueStatement: aContinueStatementNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitDataGroup: aDataGroup [
+
+	| data |
+	data :=  super visitDataGroup: aDataGroup.
+
+	^(self newEntity: FASTFortranDataGroup  atPosition: data first)
+		dataVariables: data second ;
+		dataConstants: data third ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitDataStatement: aDataStatement [
+
+	| data stmt |
+	data :=  super visitDataStatement: aDataStatement.
+
+	"error in #span of dataStatement in the exported Json"
+	stmt := self newEntity: FASTFortranDataStatement atPosition: data first.
+	stmt dataGroups: data second.
+	stmt endPos: (stmt dataGroups last endPos).
+	
+	^stmt
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 
 	| data |
@@ -392,11 +418,8 @@ FASTFortranJsonVisitor >> visitFunctionAsValue: aFunctionNode [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitFunctionParameters: aParameterList [
-	| data |
-	data := super visitFunctionParameters: aParameterList.
-	^data
-		ifEmpty: [ data ]
-		ifNotEmpty: [ data second ]
+
+	^ super visitFunctionParameters: aParameterList
 ]
 
 { #category : #'visiting statement' }

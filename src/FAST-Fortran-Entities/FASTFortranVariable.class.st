@@ -9,6 +9,7 @@ Class {
 	#instVars : [
 		'#name => FMProperty',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
+		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataVariables',
 		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -61,6 +62,21 @@ FASTFortranVariable >> parentCommonStatementGroup [
 	<generated>
 	<navigation: 'ParentCommonStatement'>
 	^ MooseSpecializedGroup with: self parentCommonStatement
+]
+
+{ #category : #accessing }
+FASTFortranVariable >> parentDataStatement [
+	"Relation named: #parentDataStatement type: #FASTFortranDataGroup opposite: #dataVariables"
+
+	<generated>
+	^ parentDataStatement
+]
+
+{ #category : #accessing }
+FASTFortranVariable >> parentDataStatement: anObject [
+
+	<generated>
+	parentDataStatement := anObject
 ]
 
 { #category : #accessing }

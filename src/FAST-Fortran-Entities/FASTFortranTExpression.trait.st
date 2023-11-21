@@ -9,6 +9,7 @@ Trait {
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
+		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression'
 	],
@@ -140,6 +141,21 @@ FASTFortranTExpression >> parentConditionalStatementGroup [
 	<generated>
 	<navigation: 'ParentConditionalStatement'>
 	^ MooseSpecializedGroup with: self parentConditionalStatement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentDataStatement [
+	"Relation named: #parentDataStatement type: #FASTFortranDataGroup opposite: #dataConstants"
+
+	<generated>
+	^ parentDataStatement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentDataStatement: anObject [
+
+	<generated>
+	parentDataStatement := anObject
 ]
 
 { #category : #accessing }

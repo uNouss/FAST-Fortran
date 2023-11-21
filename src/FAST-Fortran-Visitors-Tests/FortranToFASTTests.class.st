@@ -602,6 +602,50 @@ FortranToFASTTests >> testContinueStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDataStatement [
+
+	| result stmt dataGroup |
+	fortranCode := '      program simplemain
+      DATA chaine1, chaine2  /''Blah'' , ''Deux'' / , chaine3 / ''Encore'' /
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:47)","statement":{"anno":[],"data_groups":{"anno":[],"list":[{"anno":[],"initializers":{"anno":[],"list":[{"anno":[],"span":"(2:31)-(2:36)","tag":"value","value":{"contents":"Blah","tag":"string"}},{"anno":[],"span":"(2:40)-(2:45)","tag":"value","value":{"contents":"Deux","tag":"string"}}],"span":"(2:31)-(2:45)"},"names":{"anno":[],"list":[{"anno":[],"span":"(2:12)-(2:18)","tag":"value","value":{"contents":"chaine1","tag":"variable"}},{"anno":[],"span":"(2:21)-(2:27)","tag":"value","value":{"contents":"chaine2","tag":"variable"}}],"span":"(2:12)-(2:27)"},"span":"(2:12)-(2:47)"},{"anno":[],"initializers":{"anno":[],"list":[{"anno":[],"span":"(2:61)-(2:68)","tag":"value","value":{"contents":"Encore","tag":"string"}}],"span":"(2:61)-(2:68)"},"names":{"anno":[],"list":[{"anno":[],"span":"(2:51)-(2:57)","tag":"value","value":{"contents":"chaine3","tag":"variable"}}],"span":"(2:51)-(2:57)"},"span":"(2:51)-(2:70)"}],"span":"(2:12)-(2:70)"},"span":"(2:7)-(2:47)","tag":"data"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDataStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 95.
+
+	self assert: stmt dataGroups size equals: 2.
+
+	dataGroup := stmt dataGroups first.
+	self assert: dataGroup dataVariables size equals: 2.
+	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup dataVariables first name equals: 'chaine1'.
+	self assert: dataGroup dataVariables first startPos equals: 37.
+
+	self assert: dataGroup dataConstants size equals: 2.
+	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
+	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
+	self assert: dataGroup dataConstants first startPos equals: 56.
+
+	dataGroup := stmt dataGroups second.
+	self assert: dataGroup dataVariables size equals: 1.
+	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup dataVariables first name equals: 'chaine3'.
+	self assert: dataGroup dataVariables first startPos equals: 76.
+
+	self assert: dataGroup dataConstants size equals: 1.
+	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
+	self assert: dataGroup dataConstants first primitiveValue equals: 'Encore'.
+	self assert: dataGroup dataConstants first startPos equals: 86.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testDeclarationStatement [
 
 	| result stmt declarator |

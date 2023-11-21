@@ -171,6 +171,13 @@ FASTFortranTEntityCreator >> newContinueStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newDataGroup [
+
+	<generated>
+	^ self add: FASTFortranDataGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newDataStatement [
 
 	<generated>
