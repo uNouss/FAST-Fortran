@@ -7,7 +7,6 @@ Class {
 	#traits : 'FASTFortranTLabelledStatement',
 	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
-		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
 		'#type => FMOne type: #FASTFortranType opposite: #parentDeclaration'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -20,36 +19,6 @@ FASTFortranDeclarationStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranDeclarationStatement >> addDeclarator: anObject [
-	<generated>
-	^ self declarators add: anObject
-]
-
-{ #category : #accessing }
-FASTFortranDeclarationStatement >> declarators [
-	"Relation named: #declarators type: #FASTFortranVariable opposite: #parentDeclaration"
-
-	<generated>
-	<FMComment: 'declarators'>
-	<derived>
-	^ declarators
-]
-
-{ #category : #accessing }
-FASTFortranDeclarationStatement >> declarators: anObject [
-
-	<generated>
-	declarators value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranDeclarationStatement >> declaratorsGroup [
-	<generated>
-	<navigation: 'Declarators'>
-	^ MooseSpecializedGroup withAll: self declarators asSet
 ]
 
 { #category : #accessing }
