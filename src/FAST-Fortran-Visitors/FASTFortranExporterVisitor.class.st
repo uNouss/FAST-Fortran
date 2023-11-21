@@ -46,15 +46,25 @@ FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 FASTFortranExporterVisitor >> sixSpaces [
 	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
 
-	| nbSpaces |
-	nbSpaces := 6 + (indent * 2).
-	self << (String space repeat: nbSpaces)
+	self upToSixSpaces: 0
 	
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> spaces: number [
+
+	self << (String space repeat: number)
 ]
 
 { #category : #accessing }
 FASTFortranExporterVisitor >> stream [
 	^stream ifNil: [ stream := WriteStream on: '' ]
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> streamPosition [
+
+	^self stream position
 ]
 
 { #category : #streaming }
