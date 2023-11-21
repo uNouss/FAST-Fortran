@@ -207,6 +207,20 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 		newLine
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranFormatStatement: aFASTFortranFormatStatement [
+
+	| lineStart |
+	lineStart := self streamPosition.
+	aFASTFortranFormatStatement label accept: self.
+	
+	self
+		upToSixSpaces: (self streamPosition - lineStart) ;
+		<< 'format ' ;
+		<< aFASTFortranFormatStatement formatDescription ;
+		newLine
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 

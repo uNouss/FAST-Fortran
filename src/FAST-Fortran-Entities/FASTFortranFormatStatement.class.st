@@ -6,6 +6,9 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#traits : 'FASTFortranTFormatIdentifier + FASTFortranTLabelledStatement',
 	#classTraits : 'FASTFortranTFormatIdentifier classTrait + FASTFortranTLabelledStatement classTrait',
+	#instVars : [
+		'#formatDescription => FMProperty'
+	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -16,4 +19,18 @@ FASTFortranFormatStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #accessing }
+FASTFortranFormatStatement >> formatDescription [
+
+	<FMProperty: #formatDescription type: #String>
+	<generated>
+	^ formatDescription
+]
+
+{ #category : #accessing }
+FASTFortranFormatStatement >> formatDescription: anObject [
+	<generated>
+	formatDescription := anObject
 ]
