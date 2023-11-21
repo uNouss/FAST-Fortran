@@ -116,9 +116,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortran
 	self sixSpaces.
 	aFASTFortranDeclarationStatement type accept: self.
 	self << ' '.
-	aFASTFortranDeclarationStatement declarators
-		do: [ :decl |self << decl name ]
-		separatedBy: [ self << ',' ].
+	self visitNodeListSeparatedByCommas: aFASTFortranDeclarationStatement declarators.
 	self newLine
 		
 ]
@@ -376,26 +374,20 @@ FASTFortranExporterVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTRet
 { #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithArguments [
 
-	aFASTFortranTWithArguments arguments
-		do: [ :arg | arg accept: self ]
-		separatedBy: [ self << ',' ]
+	self visitNodeListSeparatedByCommas: aFASTFortranTWithArguments arguments
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
 	self << '('.
-	aFASTFortranTWithFormatIdentifier format
-		do: [ :fmt | fmt accept: self ]
-		separatedBy: [ self << ',' ].
+	self visitNodeListSeparatedByCommas: aFASTFortranTWithFormatIdentifier format.
 	self << ')'.
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParameters [
 	self << '('.
-	aFASTFortranTWithParameters parameters
-		do: [ :param | self << param name ]
-		separatedBy: [ self << ',' ].
+	self visitNodeListSeparatedByCommas: aFASTFortranTWithParameters parameters.
 	self << ')'.
 ]
 
@@ -413,4 +405,12 @@ FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteS
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTTEntity: aFASTTEntity [
 	"all children visit are explicit, so don't do anything here"
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitNodeListSeparatedByCommas: aCollection [
+
+	aCollection
+		do: [ :node | node accept: self ]
+		separatedBy: [ self << ',' ]
 ]
