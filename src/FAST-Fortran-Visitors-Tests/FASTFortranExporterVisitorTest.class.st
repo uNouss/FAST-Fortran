@@ -298,6 +298,19 @@ FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testBinaryExpression [
+	| expr |
+	expr := FASTFortranBinaryExpression new
+		left: (self scalarVariable: 'a') ;
+		operator: '+' ;
+		right: (self integerLiteral: '5').
+
+	self
+		assertExport: expr
+		equals: 'a + 5'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 	"note: positions are approximate, all we need is that the assignement is after the comment"
 	| stmt cmt block |
@@ -318,6 +331,19 @@ FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 		equals: 
 'C comment before assignement
         i = 1
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testCallStatementExpressionArg [
+	| stmt |
+	stmt := self callStatement: 'subrtn' arguments: {
+		self binary: '*' left: 'a' right: '5' }.
+
+	self
+		assertExport: stmt
+		equals: 
+'      call subrtn(a * 5)
 '
 ]
 

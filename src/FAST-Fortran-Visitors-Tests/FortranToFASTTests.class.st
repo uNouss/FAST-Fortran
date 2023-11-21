@@ -165,7 +165,7 @@ FortranToFASTTests >> testBinaryExpressionAddition [
 	
 	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'addition'.
+	self assert: expr operator equals: '+'.
 	self assert: expr startPos equals: 33.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -191,7 +191,7 @@ FortranToFASTTests >> testBinaryExpressionDivision [
 
 	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'division'.
+	self assert: expr operator equals: '/'.
 	self assert: expr startPos equals: 33.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -246,7 +246,7 @@ FortranToFASTTests >> testBinaryExpressionExponentiation [
 
 	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'exponentiation'.
+	self assert: expr operator equals: '**'.
 	self assert: expr startPos equals: 33.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -449,7 +449,7 @@ FortranToFASTTests >> testBinaryExpressionMultiplication [
 
 	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'multiplication'.
+	self assert: expr operator equals: '*'.
 	self assert: expr startPos equals: 33.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
@@ -460,14 +460,14 @@ FortranToFASTTests >> testBinaryExpressionMultiplication [
 ]
 
 { #category : #'tests-expression' }
-FortranToFASTTests >> testBinaryExpressionSubtraction [
+FortranToFASTTests >> testBinaryExpressionSubstraction [
 
 	| result asnmt expr |
 	fortranCode := '      PROGRAM MYPROG
-       i = 5 - 6
+       i = 5 / 6
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"subtraction"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"division"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	asnmt := result first statementBlock statements first.
@@ -475,7 +475,7 @@ FortranToFASTTests >> testBinaryExpressionSubtraction [
 
 	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: 'subtraction'.
+	self assert: expr operator equals: '/'.
 	self assert: expr startPos equals: 33.
 
 	self assert: expr left class equals: FASTFortranIntegerLiteral.
