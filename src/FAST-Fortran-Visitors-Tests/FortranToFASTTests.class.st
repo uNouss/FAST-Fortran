@@ -711,7 +711,15 @@ FortranToFASTTests >> testEntryStatement [
 	self assert: stmt startPos equals: 31.
 	self assert: stmt endPos equals: 46.
 
-	self assert: stmt entryArguments size equals: 2
+	self assert: stmt entryArguments size equals: 2.
+
+	self assert: stmt entryArguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt entryArguments first name equals: 'abc'.
+	self assert: stmt entryArguments first startPos equals: 41.
+
+	self assert: stmt entryArguments second class equals: FASTFortranAsterisk.
+	self assert: stmt entryArguments second startPos equals: 45.
+
 ]
 
 { #category : #'tests-statement' }
