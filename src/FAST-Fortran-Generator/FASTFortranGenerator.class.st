@@ -585,6 +585,11 @@ FASTFortranGenerator >> defineRelations [
 	(dataStatement property: #dataConstants)
 	-* (tExpression property: #parentDataStatement).
 
+	((declarationStatement property: #declarators) comment: 'declarators')
+	<>-*
+	((variable property: #parentDeclaration) comment:
+		 'Parent declaration').
+
 	((declarationStatement property: #type) comment: 'type')
 	<>-
 	((type property: #parentDeclaration) comment: 'Parent declaration').
