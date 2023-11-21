@@ -707,9 +707,11 @@ FortranToFASTTests >> testEntryStatement [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranEntryStatement.
+	self assert: stmt name equals: 'xyz'.
 	self assert: stmt startPos equals: 31.
 	self assert: stmt endPos equals: 46.
 
+	self assert: stmt entryArguments size equals: 2
 ]
 
 { #category : #'tests-statement' }
