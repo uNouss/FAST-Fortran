@@ -63,6 +63,24 @@ FASTFortranExporterVisitor >> unindent [
 	indent := indent - 1
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitAddition: aBinaryExpressionNode [
+
+	self << '+'
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitDivision: aBinaryExpressionNode [
+
+	self << '/'
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitExponentiation: aBinaryExpressionNode [
+
+	self << '**'
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
@@ -422,10 +440,22 @@ FASTFortranExporterVisitor >> visitFASTTEntity: aFASTTEntity [
 	"all children visit are explicit, so don't do anything here"
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitMultiplication: aBinaryExpressionNode [
+
+	self << '*'
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitNodeListSeparatedByCommas: aCollection [
 
 	aCollection
 		do: [ :node | node accept: self ]
 		separatedBy: [ self << ',' ]
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitSubtraction: aBinaryExpressionNode [
+
+	self << '-'
 ]
