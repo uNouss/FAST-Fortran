@@ -456,6 +456,7 @@ FASTFortranGenerator >> defineHierarchy [
 	integerConstant --|> tNumericalLiteral.
 	realConstant --|> tNumericalLiteral.
 	asterisk --|> tNumericalLiteral.
+	asterisk --|> tEntryArgument.
 	ampersand --|> tCharacterLiteral.
 	characterConstant --|> tCharacterLiteral.
 	booleanConstant --|> tBooleanLiteral.
