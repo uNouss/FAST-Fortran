@@ -1,5 +1,5 @@
 "
-I represent FortranData statement
+I represent a Fortran Data statement
 "
 Class {
 	#name : #FASTFortranDataStatement,
@@ -7,8 +7,7 @@ Class {
 	#traits : 'FASTFortranTLabelledStatement',
 	#classTraits : 'FASTFortranTLabelledStatement classTrait',
 	#instVars : [
-		'#dataConstants => FMMany type: #FASTFortranTExpression opposite: #parentDataStatement',
-		'#dataVariables => FMMany type: #FASTFortranVariable opposite: #parentDataStatement'
+		'#dataGroups => FMMany type: #FASTFortranDataGroup opposite: #dataStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -23,45 +22,30 @@ FASTFortranDataStatement class >> annotation [
 ]
 
 { #category : #adding }
-FASTFortranDataStatement >> addDataConstant: anObject [
+FASTFortranDataStatement >> addDataGroup: anObject [
 	<generated>
-	^ self dataConstants add: anObject
-]
-
-{ #category : #adding }
-FASTFortranDataStatement >> addDataVariable: anObject [
-	<generated>
-	^ self dataVariables add: anObject
+	^ self dataGroups add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranDataStatement >> dataConstants [
-	"Relation named: #dataConstants type: #FASTFortranTExpression opposite: #parentDataStatement"
+FASTFortranDataStatement >> dataGroups [
+	"Relation named: #dataGroups type: #FASTFortranDataGroup opposite: #dataStatement"
 
 	<generated>
 	<derived>
-	^ dataConstants
+	^ dataGroups
 ]
 
 { #category : #accessing }
-FASTFortranDataStatement >> dataConstants: anObject [
+FASTFortranDataStatement >> dataGroups: anObject [
 
 	<generated>
-	dataConstants value: anObject
+	dataGroups value: anObject
 ]
 
-{ #category : #accessing }
-FASTFortranDataStatement >> dataVariables [
-	"Relation named: #dataVariables type: #FASTFortranVariable opposite: #parentDataStatement"
-
+{ #category : #navigation }
+FASTFortranDataStatement >> dataGroupsGroup [
 	<generated>
-	<derived>
-	^ dataVariables
-]
-
-{ #category : #accessing }
-FASTFortranDataStatement >> dataVariables: anObject [
-
-	<generated>
-	dataVariables value: anObject
+	<navigation: 'DataGroups'>
+	^ MooseSpecializedGroup withAll: self dataGroups asSet
 ]

@@ -9,7 +9,7 @@ Trait {
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
-		'#parentDataStatement => FMOne type: #FASTFortranDataStatement opposite: #dataConstants',
+		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression'
 	],
@@ -145,7 +145,7 @@ FASTFortranTExpression >> parentConditionalStatementGroup [
 
 { #category : #accessing }
 FASTFortranTExpression >> parentDataStatement [
-	"Relation named: #parentDataStatement type: #FASTFortranDataStatement opposite: #dataConstants"
+	"Relation named: #parentDataStatement type: #FASTFortranDataGroup opposite: #dataConstants"
 
 	<generated>
 	^ parentDataStatement

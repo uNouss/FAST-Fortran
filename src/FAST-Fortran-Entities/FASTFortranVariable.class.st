@@ -9,7 +9,7 @@ Class {
 	#instVars : [
 		'#name => FMProperty',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
-		'#parentDataStatement => FMOne type: #FASTFortranDataStatement opposite: #dataVariables',
+		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataVariables',
 		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -66,7 +66,7 @@ FASTFortranVariable >> parentCommonStatementGroup [
 
 { #category : #accessing }
 FASTFortranVariable >> parentDataStatement [
-	"Relation named: #parentDataStatement type: #FASTFortranDataStatement opposite: #dataVariables"
+	"Relation named: #parentDataStatement type: #FASTFortranDataGroup opposite: #dataVariables"
 
 	<generated>
 	^ parentDataStatement
