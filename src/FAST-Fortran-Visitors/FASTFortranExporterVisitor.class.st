@@ -133,6 +133,21 @@ FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStateme
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatementNode [
+
+	self
+		sixSpaces ;
+		<< 'entry ' ;
+		<< aFASTFortranEntryStatementNode name ;
+		<< '('.
+	self visitNodeListSeparatedByCommas: aFASTFortranEntryStatementNode entryArguments.
+	self
+		<< ')' ;
+		newLine.
+
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	self
 		sixSpaces ;
