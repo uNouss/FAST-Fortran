@@ -401,6 +401,17 @@ FASTFortranJsonVisitor >> visitExternalStatement: anExternalStatementNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitFormatStatement: aFormatStatement [
+
+	| data |
+	data := super visitFormatStatement: aFormatStatement.
+
+	^(self newEntity: FASTFortranFormatStatement atPosition: data first)
+		formatDescription: data second ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitFortranComment: aCommentNode [
 
 	| data |
