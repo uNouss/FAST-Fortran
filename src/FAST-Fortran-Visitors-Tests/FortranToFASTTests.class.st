@@ -693,6 +693,26 @@ C comment in loop
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testEntryStatement [
+
+	| result stmt |
+	fortranCode := '      SUBROUTINE SUBRTN
+      ENTRY XYZ(ABC,*)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"args":{"anno":[],"list":[{"anno":[],"span":"(2:17)-(2:19)","tag":"value","value":{"contents":"abc","tag":"variable"}},{"anno":[],"span":"(2:21)-(2:21)","tag":"value","value":{"tag":"star"}}],"span":"(2:16)-(2:22)"},"name":{"anno":[],"span":"(2:13)-(2:15)","tag":"value","value":{"contents":"xyz","tag":"variable"}},"return":null,"span":"(2:7)-(2:22)","tag":"entry"},"tag":"statement"}],"name":"subrtn","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranEntryStatement.
+	self assert: stmt startPos equals: 31.
+	self assert: stmt endPos equals: 46.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testExit [
 
 	| result stmt |
