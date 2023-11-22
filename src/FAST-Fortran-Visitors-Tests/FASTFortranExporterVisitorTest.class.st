@@ -410,15 +410,13 @@ FASTFortranExporterVisitorTest >> testComment72Characters [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testContinueStatement [
 	| cmt |
-	cmt := FASTFortranFormatStatement new
-		formatDescription: '(/8x)' ;
-		label: (self integerLiteral: '110') ;
-		yourself.
+	cmt := FASTFortranContinueStatement new
+		label: (self integerLiteral: '110').
 
 	self
 		assertExport: cmt
 		equals: 
-'110   format (/8x)
+'110   continue
 '.
 ]
 
