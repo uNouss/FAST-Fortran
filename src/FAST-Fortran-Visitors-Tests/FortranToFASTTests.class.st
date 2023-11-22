@@ -972,21 +972,21 @@ FortranToFASTTests >> testIfArithmetic [
 	self assert: conditional startPos equals: 31.
 	self assert: conditional endPos equals: 49.
 
-	self assert: conditional expression class equals: FASTFortranScalarVariable.
-	self assert: conditional expression name equals: 'a'.
-	self assert: conditional expression startPos equals: 36.
+	self assert: conditional condition class equals: FASTFortranScalarVariable.
+	self assert: conditional condition name equals: 'a'.
+	self assert: conditional condition startPos equals: 36.
 
-	self assert: conditional lessBranch class equals: FASTFortranIntegerLiteral.
-	self assert: conditional lessBranch primitiveValue equals: '10'.
-	self assert: conditional lessBranch startPos equals: 40.
+	self assert: conditional lessLabel class equals: FASTFortranIntegerLiteral.
+	self assert: conditional lessLabel primitiveValue equals: '10'.
+	self assert: conditional lessLabel startPos equals: 40.
 
-	self assert: conditional equalBranch class equals: FASTFortranIntegerLiteral.
-	self assert: conditional equalBranch primitiveValue equals: '20'.
-	self assert: conditional equalBranch startPos equals: 44.
+	self assert: conditional equalLabel class equals: FASTFortranIntegerLiteral.
+	self assert: conditional equalLabel primitiveValue equals: '20'.
+	self assert: conditional equalLabel startPos equals: 44.
 
-	self assert: conditional moreBranch class equals: FASTFortranIntegerLiteral.
-	self assert: conditional moreBranch primitiveValue equals: '30'.
-	self assert: conditional moreBranch startPos equals: 48
+	self assert: conditional moreLabel class equals: FASTFortranIntegerLiteral.
+	self assert: conditional moreLabel primitiveValue equals: '30'.
+	self assert: conditional moreLabel startPos equals: 48
 ]
 
 { #category : #'tests-statement' }
