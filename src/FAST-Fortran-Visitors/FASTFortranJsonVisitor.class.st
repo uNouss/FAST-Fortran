@@ -843,6 +843,19 @@ FASTFortranJsonVisitor >> visitType: aTypeNode [
 ]
 
 { #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitUnary: aUnaryNode [
+	"span op expression"
+
+	| data |
+	data := super visitUnary: aUnaryNode.
+
+	^(self newEntity: FASTFortranUnaryExpression atPosition: data first)
+		operator: (data second operator) ;
+		expression: data third ;
+		yourself
+]
+
+{ #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitValue: aValueNode [
 
 	| data val |
