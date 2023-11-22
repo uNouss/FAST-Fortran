@@ -3,14 +3,29 @@ Class {
 	#superclass : #FASTFortranVisitor,
 	#instVars : [
 		'stream',
-		'indent'
+		'indent',
+		'column'
 	],
 	#category : #'FAST-Fortran-Visitors-Visitor'
 }
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> << aString [
-	self stream << aString
+
+	((column + aString size) > 72)
+		ifTrue: [ self continuationLine ].
+
+	self stream << aString.
+	column := column + aString size
+]
+
+{ #category : #streaming }
+FASTFortranExporterVisitor >> continuationLine [
+
+	self
+		newLine ;
+		spaces: 5 ;
+		<< '* '
 ]
 
 { #category : #streaming }
@@ -22,12 +37,15 @@ FASTFortranExporterVisitor >> indent [
 FASTFortranExporterVisitor >> initialize [
 	super initialize.
 
-	indent := 0
+	indent := 0.
+	column := 0
 ]
 
 { #category : #streaming }
 FASTFortranExporterVisitor >> newLine [
-	self stream cr
+
+	self stream cr.
+	column := 0
 ]
 
 { #category : #accessing }
@@ -210,7 +228,7 @@ FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 	aFASTFortranFunction returnType
 		ifNotNil: [ :returnType |
 			returnType accept: self.
-			self << Character space
+			self spaces: 1
 		].
 	self
 		<< 'function ' ;
@@ -434,7 +452,6 @@ FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLi
 FASTFortranExporterVisitor >> visitFASTFortranTComment: aFASTFortranTComment [
 
 	self
-		<< 'C' ;
 		<< aFASTFortranTComment content ;
 		newLine
 ]
