@@ -228,7 +228,7 @@ FASTFortranExporterVisitor >> visitFASTFortranFunction: aFASTFortranFunction [
 	aFASTFortranFunction returnType
 		ifNotNil: [ :returnType |
 			returnType accept: self.
-			self << Character space
+			self spaces: 1
 		].
 	self
 		<< 'function ' ;

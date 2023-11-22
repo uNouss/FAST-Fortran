@@ -395,6 +395,18 @@ FASTFortranExporterVisitorTest >> testComment [
 '.
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testComment72Characters [
+	| cmt |
+	cmt := self comment: 'C 3456789 123456789 123456789 123456789 123456789 123456789 123456789 12'.
+
+	self
+		assertExport: cmt
+		equals: 
+'C 3456789 123456789 123456789 123456789 123456789 123456789 123456789 12
+'.
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testContinueStatement [
 	| cmt |
