@@ -329,7 +329,7 @@ FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 	stmt startPos: 34.
 	stmt endPos: 38.
 
-	cmt := self comment: ' comment before assignement'.
+	cmt := self comment: 'C comment before assignement'.
 	cmt startPos: 1.
 	cmt endPos: 26.
 
@@ -386,12 +386,12 @@ FASTFortranExporterVisitorTest >> testCallStatementWithArgs [
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testComment [
 	| cmt |
-	cmt := self comment: 'This is a comment'.
+	cmt := self comment: 'C This is a comment'.
 
 	self
 		assertExport: cmt
 		equals: 
-'CThis is a comment
+'C This is a comment
 '.
 ]
 

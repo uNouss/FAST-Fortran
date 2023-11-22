@@ -452,7 +452,6 @@ FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLi
 FASTFortranExporterVisitor >> visitFASTFortranTComment: aFASTFortranTComment [
 
 	self
-		<< 'C' ;
 		<< aFASTFortranTComment content ;
 		newLine
 ]
