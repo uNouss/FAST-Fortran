@@ -163,6 +163,26 @@ FASTFortranExporterVisitor >> visitFASTFortranContinueStatement: aFASTFortranCon
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
+
+	self
+		visitNodeListSeparatedByCommas: aFASTFortranDataGroup dataVariables ;
+		<< ' /' ;
+		visitNodeListSeparatedByCommas: aFASTFortranDataGroup dataConstants ;
+		<< '/ '
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
+
+	self
+		sixSpaces ;
+		<< 'data ' ;
+		visitNodeListSeparatedByCommas: aFASTFortranDataStatement dataGroups ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
 	self sixSpaces.
 	aFASTFortranDeclarationStatement type accept: self.
