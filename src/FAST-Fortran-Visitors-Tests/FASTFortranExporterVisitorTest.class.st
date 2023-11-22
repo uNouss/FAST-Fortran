@@ -421,6 +421,30 @@ FASTFortranExporterVisitorTest >> testContinueStatement [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDataStatement [
+
+	| stmt |
+
+	stmt := FASTFortranDataStatement new
+		dataGroups: {
+			FASTFortranDataGroup new
+				dataVariables: (self scalarVariables: #(a b)) ;
+				dataConstants: { self characterLiteral: 'un' . self characterLiteral: 'deux' }
+			.
+			FASTFortranDataGroup new
+				dataVariables: (self scalarVariables: #(c)) ;
+				dataConstants: { self characterLiteral: 'trois' }
+		} ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      data a, b / ''un'', ''deux'' / , c / ''trois'' /
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatement [
 	| stmt init |
 	self skip: 'init in control should be an expression, not a statement'.
