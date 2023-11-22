@@ -370,18 +370,6 @@ FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitEqualLabel: aLabelReference [
-	| data |
-	data := super visitJsonElement: aLabelReference.
-
-	^FASTFortranLabelReference new
-		label: data primitiveValue ;
-		startPos: data startPos ;
-		endPos: data endPos ;
-		yourself
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 
 	| data |
@@ -500,18 +488,6 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitGreaterLabel: aLabelReference [
-	| data |
-	data := super visitJsonElement: aLabelReference.
-
-	^FASTFortranLabelReference new
-		label: data primitiveValue ;
-		startPos: data startPos ;
-		endPos: data endPos ;
-		yourself
-]
-
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitGt: anOperatorNode [
 
@@ -611,7 +587,7 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitLessLabel: aLabelReference [
+FASTFortranJsonVisitor >> visitLabelReference: aLabelReference [
 	| data |
 	data := super visitJsonElement: aLabelReference.
 
