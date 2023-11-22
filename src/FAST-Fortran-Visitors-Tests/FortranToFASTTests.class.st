@@ -985,9 +985,9 @@ FortranToFASTTests >> testGoto [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranGoToStatement.
+	self assert: stmt label equals: '100'.
 	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 37.
-
+	self assert: stmt endPos equals: 37
 ]
 
 { #category : #'tests-statement' }
