@@ -688,6 +688,20 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 '
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testLongLine [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: nil) variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
+
+	self
+		assertExport: stmt
+		equals: 
+'      character abc1,abc2,abc3,abc4,abc5,abc6,abc7,abc8,abc9,abc10,abc11
+     * ,abc12,abc13,abc14,abc15,abc16,abc17,abc18,abc19,abc20,abc21,
+     * abc22,abc23,abc24,abc25
+'
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testMainProgram [
 	| node |
