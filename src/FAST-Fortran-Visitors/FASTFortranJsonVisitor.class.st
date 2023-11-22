@@ -22,6 +22,19 @@ FASTFortranJsonVisitor >> initialize [
 	lineSizes := #(  )
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> invertLiteral: aFASTFortranLiteral class: class [
+
+	| number |
+	number := class readFrom: aFASTFortranLiteral primitiveValue.
+	number := number * -1.
+	aFASTFortranLiteral primitiveValue: number asString.
+
+	aFASTFortranLiteral startPos: aFASTFortranLiteral startPos - 1.
+
+	^aFASTFortranLiteral
+]
+
 { #category : #accessing }
 FASTFortranJsonVisitor >> model [
 
@@ -844,10 +857,19 @@ FASTFortranJsonVisitor >> visitType: aTypeNode [
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitUnary: aUnaryNode [
-	"span op expression"
+	"possible negative number, if so invert it and forget about the unaryOperator"
 
 	| data |
 	data := super visitUnary: aUnaryNode.
+
+	(data third class = FASTFortranIntegerLiteral)
+		ifTrue: [
+			^self invertLiteral: data third class: Integer.
+		].
+	(data third class = FASTFortranRealLiteral)
+		ifTrue: [
+			^self invertLiteral: data third class: Float.
+		].
 
 	^(self newEntity: FASTFortranUnaryExpression atPosition: data first)
 		operator: (data second operator) ;
