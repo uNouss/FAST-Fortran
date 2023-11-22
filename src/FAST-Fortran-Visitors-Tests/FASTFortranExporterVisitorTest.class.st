@@ -410,15 +410,13 @@ FASTFortranExporterVisitorTest >> testComment72Characters [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testContinueStatement [
 	| cmt |
-	cmt := FASTFortranFormatStatement new
-		formatDescription: '(/8x)' ;
-		label: (self integerLiteral: '110') ;
-		yourself.
+	cmt := FASTFortranContinueStatement new
+		label: (self integerLiteral: '110').
 
 	self
 		assertExport: cmt
 		equals: 
-'110   format (/8x)
+'110   continue
 '.
 ]
 
@@ -513,6 +511,21 @@ FASTFortranExporterVisitorTest >> testExternalStatement [
 		equals: 
 '      external aVar
 '
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testFormatStatement [
+	| stmt |
+	stmt := FASTFortranFormatStatement new
+		formatDescription: '(/8x)' ;
+		label: (self integerLiteral: '110') ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'110   format (/8x)
+'.
 ]
 
 { #category : #'tests - statements' }
@@ -698,6 +711,24 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 		equals: 
 '      implicit none
 '
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testLongFormatLine [
+
+	| stmt |
+
+	stmt := FASTFortranFormatStatement new
+		formatDescription: '(1h,//36hxabs-(156)intrinsicfunctions--//11x,26habs,iabs(absolutevalue)//20hsubsetref.-15.3)' ;
+		label: (self integerLiteral: '110') ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'110   format (1h,//36hxabs-(156)intrinsicfunctions--//11x,26habs,
+     * iabs(absolutevalue)//20hsubsetref.-15.3)
+'.
 ]
 
 { #category : #tests }

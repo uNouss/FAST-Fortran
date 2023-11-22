@@ -216,9 +216,14 @@ FASTFortranExporterVisitor >> visitFASTFortranFormatStatement: aFASTFortranForma
 	
 	self
 		upToSixSpaces: (self streamPosition - lineStart) ;
-		<< 'format ' ;
-		<< aFASTFortranFormatStatement formatDescription ;
-		newLine
+		<< 'format '.
+
+	"splitting the format string on comma because the importer gathers everything in a sometimes
+	 long line"
+	($, split: aFASTFortranFormatStatement formatDescription) 
+		do: [ :string | self << string ]
+		separatedBy: [ self << ',' ].
+	self newLine
 ]
 
 { #category : #'visiting - programUnits' }
