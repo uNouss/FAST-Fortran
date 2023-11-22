@@ -530,6 +530,21 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitIf_arithmeticStatement: anIfArithmeticStatement [ 
+	"span expression less equal greater"
+	
+	| data |
+	data := super visitIf_arithmeticStatement: anIfArithmeticStatement.
+	
+	^(self newEntity: FASTFortranIfArithmeticStatement atPosition: data first)
+		condition: data second ;
+		lessLabel: data third ;
+		equalLabel: data fourth ;
+		greaterLabel: data fifth ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIf_logicalStatement: anIfNode [
 
 	"self visitJsonMap: anIfNode keys: #( span condition statement )"
@@ -568,6 +583,18 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 	^FASTFortranIntegerLiteral new
 		mooseModel: model ;
 		primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitLabelReference: aLabelReference [
+	| data |
+	data := super visitJsonElement: aLabelReference.
+
+	^FASTFortranLabelReference new
+		label: data primitiveValue ;
+		startPos: data startPos ;
+		endPos: data endPos ;
 		yourself
 ]
 

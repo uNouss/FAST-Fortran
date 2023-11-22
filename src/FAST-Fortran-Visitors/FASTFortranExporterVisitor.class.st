@@ -83,24 +83,6 @@ FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 	
 ]
 
-{ #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitAddition: aBinaryExpressionNode [
-
-	self << '+'
-]
-
-{ #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitDivision: aBinaryExpressionNode [
-
-	self << '/'
-]
-
-{ #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitExponentiation: aBinaryExpressionNode [
-
-	self << '**'
-]
-
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
@@ -251,6 +233,22 @@ FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunction
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatementNode [
+
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfArithmeticStatementNode condition accept: self.
+	self << ') '.
+	aFASTFortranIfArithmeticStatementNode lessLabel accept: self.
+	self << ', '.
+	aFASTFortranIfArithmeticStatementNode equalLabel accept: self.
+	self << ', '.
+	aFASTFortranIfArithmeticStatementNode greaterLabel accept: self.
+	self newLine.
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 
 	self
@@ -302,6 +300,12 @@ FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImp
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
 	self << 'integer'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelReference [
+
+	self << aFASTFortranLabelReference label
 ]
 
 { #category : #'visiting - expressions' }
@@ -487,22 +491,10 @@ FASTFortranExporterVisitor >> visitFASTTEntity: aFASTTEntity [
 	"all children visit are explicit, so don't do anything here"
 ]
 
-{ #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitMultiplication: aBinaryExpressionNode [
-
-	self << '*'
-]
-
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitNodeListSeparatedByCommas: aCollection [
 
 	aCollection
 		do: [ :node | node accept: self ]
 		separatedBy: [ self << ',' ]
-]
-
-{ #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitSubtraction: aBinaryExpressionNode [
-
-	self << '-'
 ]

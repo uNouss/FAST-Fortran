@@ -169,6 +169,16 @@ FASTFortranExporterVisitorTest >> integerType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> labelReference: aString [
+
+	^FASTFortranLabelReference new
+		label: aString ;
+		startPos: 1 ;
+		endPos: aString size ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> logicalLiteral: value [
 	^FASTFortranBooleanLiteral new
 		primitiveValue: value ;
@@ -548,6 +558,23 @@ FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
 		equals: 
 '      real function BLAH(i,j)
       end
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testIfArithmeticStatement [
+	| stmt |
+
+	stmt := FASTFortranIfArithmeticStatement new
+		condition: (self scalarVariable: 'a') ;
+		lessLabel:    (self labelReference: '10') ;
+		equalLabel:   (self labelReference: '20') ;
+		greaterLabel: (self labelReference: '30').
+
+	self
+		assertExport: stmt
+		equals: 
+'      if (a) 10, 20, 30
 '
 ]
 

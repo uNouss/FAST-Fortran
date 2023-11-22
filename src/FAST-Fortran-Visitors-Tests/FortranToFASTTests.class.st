@@ -957,6 +957,39 @@ FortranToFASTTests >> testGoto [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testIfArithmetic [
+
+	| result conditional |
+	fortranCode := '      PROGRAM MYPROG
+         IF ( A ) 10, 20, 30
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:10)-(2:28)","statement":{"anno":[],"equal":{"anno":[],"span":"(2:23)-(2:24)","tag":"value","value":{"contents":["20",null],"tag":"integer"}},"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"a","tag":"variable"}},"greater":{"anno":[],"span":"(2:27)-(2:28)","tag":"value","value":{"contents":["30",null],"tag":"integer"}},"less":{"anno":[],"span":"(2:19)-(2:20)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:10)-(2:28)","tag":"if_arithmetic"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	conditional := result first statementBlock statements first.
+	self assert: conditional class equals: FASTFortranIfArithmeticStatement.
+	self assert: conditional startPos equals: 31.
+	self assert: conditional endPos equals: 49.
+
+	self assert: conditional condition class equals: FASTFortranScalarVariable.
+	self assert: conditional condition name equals: 'a'.
+	self assert: conditional condition startPos equals: 36.
+
+	self assert: conditional lessLabel class equals: FASTFortranLabelReference.
+	self assert: conditional lessLabel label equals: '10'.
+	self assert: conditional lessLabel startPos equals: 40.
+
+	self assert: conditional equalLabel class equals: FASTFortranLabelReference.
+	self assert: conditional equalLabel label equals: '20'.
+	self assert: conditional equalLabel startPos equals: 44.
+
+	self assert: conditional greaterLabel class equals: FASTFortranLabelReference.
+	self assert: conditional greaterLabel label equals: '30'.
+	self assert: conditional greaterLabel startPos equals: 48
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testIfElseIf [
 
 	| result conditional |
