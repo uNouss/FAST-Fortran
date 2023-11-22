@@ -664,7 +664,7 @@ FASTFortranGenerator >> defineRelations [
 	(ifArithmeticStatement property: #equalLabel)
 	<>- (labelReference property: #parentIfArithmeticEqualBranch).
 
-	(ifArithmeticStatement property: #moreLabel)
+	(ifArithmeticStatement property: #greaterLabel)
 	<>- (labelReference property: #parentIfArithmeticMoreBranch).
 
 	((loopControlExpression property: #init) comment:
