@@ -347,6 +347,11 @@ FASTFortranVisitor >> visitFASTFortranIntrinsicStatement: aFASTFortranIntrinsicS
 ]
 
 { #category : #'visiting - expressions' }
+FASTFortranVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelReference [
+
+]
+
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranLogicalType: aFASTFortranLogicalType [
 	<generated>
 ]
