@@ -738,6 +738,30 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 ]
 
 { #category : #tests }
+FASTFortranExporterVisitorTest >> testLongDataStatementLine [
+
+	| stmt |
+
+	stmt := FASTFortranDataStatement new
+		dataGroups: {
+			FASTFortranDataGroup new
+				dataVariables: (self scalarVariables: #(abcde fghijk lmnopq)) ;
+				dataConstants: {
+					self characterLiteral: '---------------' .
+					self characterLiteral: '---------------' .
+					self characterLiteral: '---------------' }
+		} ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      data abcde,fghijk,lmnopq /''---------------'',''---------------'',
+     * ''---------------''/ 
+'
+]
+
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testLongFormatLine [
 
 	| stmt |

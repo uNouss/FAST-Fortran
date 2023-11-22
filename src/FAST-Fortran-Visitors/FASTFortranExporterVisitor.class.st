@@ -467,10 +467,11 @@ FASTFortranExporterVisitor >> visitFASTFortranTBehaviouralEntity: aFASTFortranTB
 
 { #category : #'visiting - traits' }
 FASTFortranExporterVisitor >> visitFASTFortranTCharacterLiteral: aFASTFortranTLiteral [
-	self
-		<< '''' ;
-		<< aFASTFortranTLiteral primitiveValue ;
-		<< ''''
+	"note: the ' are part of the text, cannot split line on them"
+
+	| text |
+	text := '''' , aFASTFortranTLiteral primitiveValue , ''''.
+	self << text
 ]
 
 { #category : #'visiting - traits' }
