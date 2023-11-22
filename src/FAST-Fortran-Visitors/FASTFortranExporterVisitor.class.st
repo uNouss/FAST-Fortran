@@ -233,6 +233,22 @@ FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunction
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatementNode [
+
+	self
+		sixSpaces ;
+		<< 'if ('.
+	aFASTFortranIfArithmeticStatementNode condition accept: self.
+	self << ') '.
+	aFASTFortranIfArithmeticStatementNode lessLabel accept: self.
+	self << ', '.
+	aFASTFortranIfArithmeticStatementNode equalLabel accept: self.
+	self << ', '.
+	aFASTFortranIfArithmeticStatementNode greaterLabel accept: self.
+	self newLine.
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 
 	self
@@ -284,6 +300,12 @@ FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImp
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
 	self << 'integer'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelReference [
+
+	self << aFASTFortranLabelReference label
 ]
 
 { #category : #'visiting - expressions' }
