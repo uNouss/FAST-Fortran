@@ -8,8 +8,8 @@ Class {
 	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
 	#instVars : [
 		'#equalLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticEqualBranch',
-		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch',
-		'#moreLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch'
+		'#greaterLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch',
+		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -46,6 +46,28 @@ FASTFortranIfArithmeticStatement >> equalLabelGroup [
 ]
 
 { #category : #accessing }
+FASTFortranIfArithmeticStatement >> greaterLabel [
+	"Relation named: #greaterLabel type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch"
+
+	<generated>
+	^ greaterLabel
+]
+
+{ #category : #accessing }
+FASTFortranIfArithmeticStatement >> greaterLabel: anObject [
+
+	<generated>
+	greaterLabel := anObject
+]
+
+{ #category : #navigation }
+FASTFortranIfArithmeticStatement >> greaterLabelGroup [
+	<generated>
+	<navigation: 'GreaterLabel'>
+	^ MooseSpecializedGroup with: self greaterLabel
+]
+
+{ #category : #accessing }
 FASTFortranIfArithmeticStatement >> lessLabel [
 	"Relation named: #lessLabel type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch"
 
@@ -65,26 +87,4 @@ FASTFortranIfArithmeticStatement >> lessLabelGroup [
 	<generated>
 	<navigation: 'LessLabel'>
 	^ MooseSpecializedGroup with: self lessLabel
-]
-
-{ #category : #accessing }
-FASTFortranIfArithmeticStatement >> moreLabel [
-	"Relation named: #moreLabel type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch"
-
-	<generated>
-	^ moreLabel
-]
-
-{ #category : #accessing }
-FASTFortranIfArithmeticStatement >> moreLabel: anObject [
-
-	<generated>
-	moreLabel := anObject
-]
-
-{ #category : #navigation }
-FASTFortranIfArithmeticStatement >> moreLabelGroup [
-	<generated>
-	<navigation: 'MoreLabel'>
-	^ MooseSpecializedGroup with: self moreLabel
 ]

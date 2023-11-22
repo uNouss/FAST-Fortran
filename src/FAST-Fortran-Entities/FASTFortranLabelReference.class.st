@@ -7,9 +7,9 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#label => FMProperty',
-		'#parentIfArithmeticLessBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #lessLabel',
 		'#parentIfArithmeticEqualBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #equalLabel',
-		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #moreLabel'
+		'#parentIfArithmeticLessBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #lessLabel',
+		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -88,7 +88,7 @@ FASTFortranLabelReference >> parentIfArithmeticLessBranchGroup [
 
 { #category : #accessing }
 FASTFortranLabelReference >> parentIfArithmeticMoreBranch [
-	"Relation named: #parentIfArithmeticMoreBranch type: #FASTFortranIfArithmeticStatement opposite: #moreLabel"
+	"Relation named: #parentIfArithmeticMoreBranch type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel"
 
 	<generated>
 	<container>
