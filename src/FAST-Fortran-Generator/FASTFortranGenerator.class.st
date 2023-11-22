@@ -97,7 +97,8 @@ Class {
 		'tConditionalStatement',
 		'tLabelledStatement',
 		'tEntryArgument',
-		'dataGroup'
+		'dataGroup',
+		'labelReference'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -241,6 +242,11 @@ f77 allows the BYTE type as an array index, just as it allows the REAL type, but
 			               'I represent Fortran Integer statement. The integer data type, INTEGER, holds a signed integer.
 The default size for INTEGER with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be
 changed by compiling with certain special options.'.
+
+	labelReference := builder
+		newClassNamed: #LabelReference
+		comment: 'I represent a reference to a Fortran label, like in a GoTo statement.
+I contain the value of the label referred to'.
 
 	logicalType := builder
 		               newClassNamed: #LogicalType
@@ -407,6 +413,7 @@ FASTFortranGenerator >> defineHierarchy [
 	goToComputed --|> tLabelledStatement.
 	goToUnconditional --|> tLabelledStatement.
 	ifArithmeticStatement --|> tLabelledStatement.
+	ifArithmeticStatement --|> tConditionalStatement.
 	ifBlockStatement --|> tLabelledStatement.
 	ifBlockStatement --|> tConditionalStatement.
 	ifLogicalStatement --|> tLabelledStatement.
@@ -535,6 +542,8 @@ FASTFortranGenerator >> defineProperties [
 	(functionStatement property: #name type: #String) comment:
 		'Name of a function statement'.
 
+	(labelReference property: #label type: #String) comment: 'The value of the label. The value is an integer literal, stored in a String'.
+
 	(loopControlExpression property: #increment type: #String) comment:
 		'Loop control increment value'.
 
@@ -648,6 +657,15 @@ FASTFortranGenerator >> defineRelations [
 	<>-
 	((tStatementBlock property: #parentIfBlock) comment:
 		 'Parent if block').
+
+	(ifArithmeticStatement property: #lessLabel)
+	<>- (labelReference property: #parentIfArithmeticLessBranch).
+
+	(ifArithmeticStatement property: #equalLabel)
+	<>- (labelReference property: #parentIfArithmeticEqualBranch).
+
+	(ifArithmeticStatement property: #moreLabel)
+	<>- (labelReference property: #parentIfArithmeticMoreBranch).
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
