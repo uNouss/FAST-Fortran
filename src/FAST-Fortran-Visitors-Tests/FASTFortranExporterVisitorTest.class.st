@@ -440,7 +440,7 @@ FASTFortranExporterVisitorTest >> testDataStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      data a, b / ''un'', ''deux'' / , c / ''trois'' /
+'      data a,b /''un'',''deux''/ ,c /''trois''/ 
 '
 ]
 
