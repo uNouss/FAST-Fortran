@@ -101,7 +101,10 @@ Class {
 		'abstractLiteral',
 		'scalarVariable',
 		'arrayVariable',
-		'variableDeclarationStatement'
+		'variableDeclarationStatement',
+		'tWithDeclarators',
+		'tVariableDeclarator',
+		'variableDeclarator'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -292,6 +295,11 @@ I contain the value of the label referred to'.
 		            comment:
 		            'an abstract Fortran Variable, could be an array or a scalar'.
 
+	variableDeclarator := builder
+		            newClassNamed: #VariableDeclarator
+		            comment:
+		            'Part of a variable declaration: name of the variable + optional initial value'.
+
 	unaryExpression := builder
 		                   newClassNamed: #UnaryExpression
 		                   comment:
@@ -412,7 +420,6 @@ FASTFortranGenerator >> defineHierarchy [
 	commonStatement --|> abstractStatement.
 	continueStatement --|> abstractStatement.
 	dataStatement --|> abstractStatement.
-	variableDeclarationStatement --|> abstractStatement.
 	decodeStatement --|> abstractStatement.
 	encodeStatement --|> abstractStatement.
 	exitStatement --|> abstractStatement.
@@ -461,6 +468,8 @@ FASTFortranGenerator >> defineHierarchy [
 	staticStatement --|> abstractStatement.
 	stopStatement --|> abstractStatement.
 	unionStatement --|> abstractStatement.
+	variableDeclarationStatement --|> abstractStatement.
+	variableDeclarationStatement --|> tWithDeclarators.
 	virtualStatement --|> abstractStatement.
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
@@ -479,6 +488,7 @@ FASTFortranGenerator >> defineHierarchy [
 	arrayVariable --|> variable.
 	loopControlExpression --|> abstractExpression.
 	substring --|> abstractExpression.
+	variableDeclarator --|> tVariableDeclarator.
 	
 	binaryExpression --|> abstractExpression.
 	binaryExpression --|> tBinaryExpression.
@@ -610,16 +620,18 @@ FASTFortranGenerator >> defineRelations [
 	-* (tExpression property: #parentDataStatement).
 
 	dataStatement <>-* dataGroup.
+	
+	((tWithDeclarators property: #declarators) comment: 'variables declared')
+	<>-* (tVariableDeclarator property: #parentDeclaration).
 
-	((variableDeclarationStatement property: #declarators) comment: 'declarators')
-	<>-*
-	((variable property: #parentDeclaration) comment:
-		 'Parent declaration').
+	((tVariableDeclarator property: #expression) comment:
+		 'Expression assigned to the variable declared')
+	<>- (tExpression property: #variableDeclaratorOwner) .
 
-	((variableDeclarationStatement property: #declarators) comment: 'declarators')
-	<>-*
-	((variable property: #parentDeclaration) comment:
-		 'Parent declaration').
+	((tVariableDeclarator property: #variable) comment:
+		 'The variable that is being declared')
+	<>- ((variable property: #parentDeclarator) 
+			comment: 'The declaration of this variable').
 
 	((variableDeclarationStatement property: #type) comment: 'type')
 	<>-
@@ -930,11 +942,16 @@ FASTFortranGenerator >> defineTraits [
 
 	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
 
+	tVariableDeclarator := builder newTraitNamed: #TVariableDeclarator comment: 'I represent a variable declarator: variable declared + optional initial value'.
+
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
+
+	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
 	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
 
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
-	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
+
+	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
 ]
