@@ -31,7 +31,7 @@ FASTFortranDifferentialValidator >> initialize [
 FASTFortranDifferentialValidator >> isSourceFile: aFileReference [
 	"for lack of a better idea"
 
-	^ #(f FOR) includes: aFileReference extension
+	^ #(f F FOR) includes: aFileReference extension
 ]
 
 { #category : #utilities }
