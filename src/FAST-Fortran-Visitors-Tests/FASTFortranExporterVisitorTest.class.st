@@ -614,13 +614,13 @@ FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
 FASTFortranExporterVisitorTest >> testGotoStatement [
 	| stmt |
 	stmt := FASTFortranGoToStatement new
-		label: 110 ;
+		label: (self labelReference: '110') ;
 		yourself.
 
 	self
 		assertExport: stmt
 		equals: 
-'      goto 100
+'      goto 110
 '.
 ]
 
