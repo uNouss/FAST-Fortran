@@ -402,6 +402,7 @@ FASTFortranGenerator >> defineHierarchy [
 	"FORTRAN STATEMENTS"
 	abstractStatement --|> tStatement.
 	abstractStatement --|> tLabelledStatement.
+	acceptStatement  --|> tStatement.
 	assignmentStatement --|> abstractStatement.
 	assignmentStatement --|> tAssignment.
 	automaticStatement --|> abstractStatement.
@@ -485,21 +486,21 @@ FASTFortranGenerator >> defineHierarchy [
 	unaryExpression --|> tUnaryExpression.
 
 	abstractLiteral --|> abstractExpression.
-	complexConstant --|> abstractExpression.
+	complexConstant --|> abstractLiteral.
 	complexConstant --|> tNumericalLiteral.
-	doubleComplexConstant --|> abstractExpression.
+	doubleComplexConstant --|> abstractLiteral.
 	doubleComplexConstant --|> tNumericalLiteral.
-	doublePrecisionConstant --|> abstractExpression.
+	doublePrecisionConstant --|> abstractLiteral.
 	doublePrecisionConstant --|> tNumericalLiteral.
-	integerConstant --|> abstractExpression.
+	integerConstant --|> abstractLiteral.
 	integerConstant --|> tNumericalLiteral.
-	realConstant --|> abstractExpression.
+	realConstant --|> abstractLiteral.
 	realConstant --|> tNumericalLiteral.
-	ampersand --|> abstractExpression.
+	ampersand --|> abstractLiteral.
 	ampersand --|> tCharacterLiteral.
-	characterConstant --|> abstractExpression.
+	characterConstant --|> abstractLiteral.
 	characterConstant --|> tCharacterLiteral.
-	booleanConstant --|> abstractExpression.
+	booleanConstant --|> abstractLiteral.
 	booleanConstant --|> tBooleanLiteral.
 
 	byteType --|> type.
