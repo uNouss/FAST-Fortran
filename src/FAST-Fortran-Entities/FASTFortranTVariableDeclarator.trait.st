@@ -4,9 +4,9 @@ I represent a variable declarator: variable declared + optional initial value
 Trait {
 	#name : #FASTFortranTVariableDeclarator,
 	#instVars : [
-		'#parentDeclaration => FMOne type: #FASTFortranTWithDeclarators opposite: #declarators',
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #variableDeclaratorOwner',
-		'#variable => FMOne type: #FASTFortranVariable opposite: #parentDeclarator'
+		'#parentDeclaration => FMOne type: #FASTFortranTWithDeclarators opposite: #declarators',
+		'#variable => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -68,23 +68,15 @@ FASTFortranTVariableDeclarator >> parentDeclarationGroup [
 
 { #category : #accessing }
 FASTFortranTVariableDeclarator >> variable [
-	"Relation named: #variable type: #FASTFortranVariable opposite: #parentDeclarator"
 
+	<FMProperty: #variable type: #String>
 	<generated>
-	<FMComment: 'The variable that is being declared'>
+	<FMComment: 'The name of the variable being declared'>
 	^ variable
 ]
 
 { #category : #accessing }
 FASTFortranTVariableDeclarator >> variable: anObject [
-
 	<generated>
 	variable := anObject
-]
-
-{ #category : #navigation }
-FASTFortranTVariableDeclarator >> variableGroup [
-	<generated>
-	<navigation: 'Variable'>
-	^ MooseSpecializedGroup with: self variable
 ]
