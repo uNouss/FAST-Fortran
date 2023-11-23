@@ -4,6 +4,8 @@ I represent Fortran accept statement
 Class {
 	#name : #FASTFortranAcceptStatement,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTStatement',
+	#classTraits : 'FASTFortranTStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

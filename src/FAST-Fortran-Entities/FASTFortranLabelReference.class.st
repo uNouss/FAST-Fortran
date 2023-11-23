@@ -8,8 +8,8 @@ Class {
 	#instVars : [
 		'#label => FMProperty',
 		'#parentGotoStatement => FMOne type: #FASTFortranGoToStatement opposite: #label',
-		'#parentIfArithmeticEqualBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #equalLabel',
 		'#parentIfArithmeticLessBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #lessLabel',
+		'#parentIfArithmeticEqualBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #equalLabel',
 		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'

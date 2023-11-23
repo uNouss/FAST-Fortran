@@ -7,8 +7,8 @@ Class {
 	#traits : 'FASTFortranTWithArguments',
 	#classTraits : 'FASTFortranTWithArguments classTrait',
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner',
-		'#name => FMProperty'
+		'#name => FMProperty',
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }

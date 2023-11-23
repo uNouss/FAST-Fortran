@@ -7,8 +7,8 @@ Class {
 	#traits : 'FASTFortranTConditionalStatement',
 	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
-		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
+		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
+		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }

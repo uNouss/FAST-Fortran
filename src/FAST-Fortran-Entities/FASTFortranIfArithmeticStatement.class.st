@@ -7,9 +7,9 @@ Class {
 	#traits : 'FASTFortranTConditionalStatement',
 	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
+		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch',
 		'#equalLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticEqualBranch',
-		'#greaterLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch',
-		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch'
+		'#greaterLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
