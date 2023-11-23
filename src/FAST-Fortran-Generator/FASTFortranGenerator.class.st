@@ -454,6 +454,7 @@ FASTFortranGenerator >> defineHierarchy [
 	openStatement --|> abstractStatement.
 	optionsStatement --|> abstractStatement.
 	parameterStatement --|> abstractStatement.
+	parameterStatement --|> tWithDeclarators.
 	pauseStatement --|> abstractStatement.
 	pragmaStatement --|> abstractStatement.
 	printStatement --|> abstractStatement.
