@@ -286,7 +286,7 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
-	^(self newEntity: FASTFortranDeclarationStatement atPosition: data first)
+	^(self newEntity: FASTFortranVariableDeclarationStatement atPosition: data first)
 		type: data second;
 			"TODO clarify the need of attributes"
 		  "attributes: data third;"
@@ -297,7 +297,6 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
 
-	self flag: 'TODO: deal with the other keys in the map'.
 	^ (super visitDeclarator: aDeclaratorNode) last
 ]
 
@@ -306,8 +305,10 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
-	^(self newEntity: FASTFortranScalarVariable atPosition: data first)
-		name: data second;
+
+	^(self newEntity: FASTFortranVariableDeclarator atPosition: data first)
+		variable: data second ;
+		expression: data third ;
 		yourself
 ]
 

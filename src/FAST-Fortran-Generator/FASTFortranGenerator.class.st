@@ -595,6 +595,8 @@ FASTFortranGenerator >> defineProperties [
 	(variable property: #name type: #String) comment:
 		'Determines the variable name'.
 
+	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
+
 	(writeStatement property: #format type: #String) comment:
 		'Format identifier. '
 ]
@@ -627,11 +629,6 @@ FASTFortranGenerator >> defineRelations [
 	((tVariableDeclarator property: #expression) comment:
 		 'Expression assigned to the variable declared')
 	<>- (tExpression property: #variableDeclaratorOwner) .
-
-	((tVariableDeclarator property: #variable) comment:
-		 'The variable that is being declared')
-	<>- ((variable property: #parentDeclarator) 
-			comment: 'The declaration of this variable').
 
 	((variableDeclarationStatement property: #type) comment: 'type')
 	<>-

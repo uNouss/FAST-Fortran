@@ -697,14 +697,14 @@ FortranToFASTTests >> testDeclarationStatement [
 	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranDeclarationStatement.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 34.
 
 	self assert: stmt declarators size equals: 1.
 	declarator := stmt declarators anyOne.
-	self assert: declarator class equals: FASTFortranScalarVariable.
-	self assert: declarator name equals: 'i'.
+	self assert: declarator class equals: FASTFortranVariableDeclarator.
+	self assert: declarator variable name equals: 'i'.
 	self assert: declarator startPos equals: 34.
 
 	self assert: stmt type class equals: FASTFortranIntegerType.
