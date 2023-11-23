@@ -206,13 +206,6 @@ FASTFortranTEntityCreator >> newDataStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newDeclarationStatement [
-
-	<generated>
-	^ self add: FASTFortranDeclarationStatement new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newDecodeStatement [
 
 	<generated>
@@ -658,6 +651,13 @@ FASTFortranTEntityCreator >> newVariable [
 
 	<generated>
 	^ self add: FASTFortranVariable new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarationStatement [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarationStatement new
 ]
 
 { #category : #'entity creation' }

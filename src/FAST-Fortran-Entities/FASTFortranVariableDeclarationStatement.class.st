@@ -2,7 +2,7 @@
 I represent a type declaration for one or many scalar variables or arrays
 "
 Class {
-	#name : #FASTFortranDeclarationStatement,
+	#name : #FASTFortranVariableDeclarationStatement,
 	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
@@ -12,22 +12,22 @@ Class {
 }
 
 { #category : #meta }
-FASTFortranDeclarationStatement class >> annotation [
+FASTFortranVariableDeclarationStatement class >> annotation [
 
-	<FMClass: #DeclarationStatement super: #FASTFortranAbstractStatement>
+	<FMClass: #VariableDeclarationStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
 ]
 
 { #category : #adding }
-FASTFortranDeclarationStatement >> addDeclarator: anObject [
+FASTFortranVariableDeclarationStatement >> addDeclarator: anObject [
 	<generated>
 	^ self declarators add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranDeclarationStatement >> declarators [
+FASTFortranVariableDeclarationStatement >> declarators [
 	"Relation named: #declarators type: #FASTFortranVariable opposite: #parentDeclaration"
 
 	<generated>
@@ -37,21 +37,21 @@ FASTFortranDeclarationStatement >> declarators [
 ]
 
 { #category : #accessing }
-FASTFortranDeclarationStatement >> declarators: anObject [
+FASTFortranVariableDeclarationStatement >> declarators: anObject [
 
 	<generated>
 	declarators value: anObject
 ]
 
 { #category : #navigation }
-FASTFortranDeclarationStatement >> declaratorsGroup [
+FASTFortranVariableDeclarationStatement >> declaratorsGroup [
 	<generated>
 	<navigation: 'Declarators'>
 	^ MooseSpecializedGroup withAll: self declarators asSet
 ]
 
 { #category : #accessing }
-FASTFortranDeclarationStatement >> type [
+FASTFortranVariableDeclarationStatement >> type [
 	"Relation named: #type type: #FASTFortranType opposite: #parentDeclaration"
 
 	<generated>
@@ -60,14 +60,14 @@ FASTFortranDeclarationStatement >> type [
 ]
 
 { #category : #accessing }
-FASTFortranDeclarationStatement >> type: anObject [
+FASTFortranVariableDeclarationStatement >> type: anObject [
 
 	<generated>
 	type := anObject
 ]
 
 { #category : #navigation }
-FASTFortranDeclarationStatement >> typeGroup [
+FASTFortranVariableDeclarationStatement >> typeGroup [
 	<generated>
 	<navigation: 'Type'>
 	^ MooseSpecializedGroup with: self type
