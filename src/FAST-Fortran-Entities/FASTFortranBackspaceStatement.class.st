@@ -3,16 +3,14 @@ I represent Fortran Backspace statement
 "
 Class {
 	#name : #FASTFortranBackspaceStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranBackspaceStatement class >> annotation [
 
-	<FMClass: #BackspaceStatement super: #FASTFortranEntity>
+	<FMClass: #BackspaceStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

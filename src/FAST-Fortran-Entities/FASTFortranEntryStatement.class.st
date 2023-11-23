@@ -3,9 +3,9 @@ I represent Fortran Entry statement
 "
 Class {
 	#name : #FASTFortranEntryStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement + FASTFortranTNamedEntity',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTNamedEntity classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTNamedEntity',
+	#classTraits : 'FASTFortranTNamedEntity classTrait',
 	#instVars : [
 		'#entryArguments => FMMany type: #FASTFortranTEntryStatement opposite: #entryStatement'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranEntryStatement class >> annotation [
 
-	<FMClass: #EntryStatement super: #FASTFortranEntity>
+	<FMClass: #EntryStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

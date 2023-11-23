@@ -3,14 +3,12 @@ a Fortran Loop Control Expression
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression',
-	#classTraits : 'FASTFortranTExpression classTrait',
+	#superclass : #FASTFortranAbstractExpression,
 	#instVars : [
 		'#increment => FMProperty',
+		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison',
 		'#limit => FMProperty',
-		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl',
-		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison'
+		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -18,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranLoopControlExpression class >> annotation [
 
-	<FMClass: #LoopControlExpression super: #FASTFortranEntity>
+	<FMClass: #LoopControlExpression super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

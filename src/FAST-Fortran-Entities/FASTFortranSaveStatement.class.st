@@ -3,16 +3,14 @@ I represent Fortran Save statement
 "
 Class {
 	#name : #FASTFortranSaveStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranSaveStatement class >> annotation [
 
-	<FMClass: #SaveStatement super: #FASTFortranEntity>
+	<FMClass: #SaveStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

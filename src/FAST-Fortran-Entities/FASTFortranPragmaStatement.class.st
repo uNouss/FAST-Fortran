@@ -3,16 +3,14 @@ I represent Fortran Pragma statement
 "
 Class {
 	#name : #FASTFortranPragmaStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranPragmaStatement class >> annotation [
 
-	<FMClass: #PragmaStatement super: #FASTFortranEntity>
+	<FMClass: #PragmaStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

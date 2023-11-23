@@ -3,12 +3,12 @@ I represent Fortran If (BLock) statement
 "
 Class {
 	#name : #FASTFortranIfBlockStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTConditionalStatement + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTConditionalStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
-		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
+		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
+		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -16,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranIfBlockStatement class >> annotation [
 
-	<FMClass: #IfBlockStatement super: #FASTFortranEntity>
+	<FMClass: #IfBlockStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

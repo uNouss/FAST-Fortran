@@ -3,16 +3,14 @@ I represent Fortran Go To (Computed) statement
 "
 Class {
 	#name : #FASTFortranGoToComputedStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranGoToComputedStatement class >> annotation [
 
-	<FMClass: #GoToComputedStatement super: #FASTFortranEntity>
+	<FMClass: #GoToComputedStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

@@ -3,7 +3,7 @@ I represent Fortran Character Literal (Constant) statement
 "
 Class {
 	#name : #FASTFortranCharacterLiteral,
-	#superclass : #FASTFortranEntity,
+	#superclass : #FASTFortranAbstractExpression,
 	#traits : 'FASTFortranTCharacterLiteral',
 	#classTraits : 'FASTFortranTCharacterLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -12,7 +12,7 @@ Class {
 { #category : #meta }
 FASTFortranCharacterLiteral class >> annotation [
 
-	<FMClass: #CharacterLiteral super: #FASTFortranEntity>
+	<FMClass: #CharacterLiteral super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

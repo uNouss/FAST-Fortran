@@ -3,9 +3,9 @@ I represent Fortran Format statement
 "
 Class {
 	#name : #FASTFortranFormatStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTFormatIdentifier + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTFormatIdentifier classTrait + FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTFormatIdentifier',
+	#classTraits : 'FASTFortranTFormatIdentifier classTrait',
 	#instVars : [
 		'#formatDescription => FMProperty'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranFormatStatement class >> annotation [
 
-	<FMClass: #FormatStatement super: #FASTFortranEntity>
+	<FMClass: #FormatStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

@@ -3,8 +3,6 @@ I represent a fortran statement with a label
 "
 Trait {
 	#name : #FASTFortranTLabelledStatement,
-	#traits : 'FASTFortranTStatement',
-	#classTraits : 'FASTFortranTStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 

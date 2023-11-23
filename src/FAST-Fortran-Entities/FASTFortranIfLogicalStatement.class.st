@@ -3,9 +3,9 @@ The logical IF statement executes one single statement, or does not execute it, 
 "
 Class {
 	#name : #FASTFortranIfLogicalStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTConditionalStatement + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTConditionalStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
 		'#statement => FMOne type: #FASTFortranTStatement opposite: #parentIfStatement'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranIfLogicalStatement class >> annotation [
 
-	<FMClass: #IfLogicalStatement super: #FASTFortranEntity>
+	<FMClass: #IfLogicalStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

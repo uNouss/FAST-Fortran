@@ -3,7 +3,7 @@ I represent Fortran Arithmetic Integer Literal (Constant) statement
 "
 Class {
 	#name : #FASTFortranIntegerLiteral,
-	#superclass : #FASTFortranEntity,
+	#superclass : #FASTFortranAbstractExpression,
 	#traits : 'FASTFortranTNumericalLiteral',
 	#classTraits : 'FASTFortranTNumericalLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -12,7 +12,7 @@ Class {
 { #category : #meta }
 FASTFortranIntegerLiteral class >> annotation [
 
-	<FMClass: #IntegerLiteral super: #FASTFortranEntity>
+	<FMClass: #IntegerLiteral super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

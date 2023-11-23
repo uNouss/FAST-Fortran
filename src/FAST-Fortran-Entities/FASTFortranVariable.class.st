@@ -3,13 +3,12 @@ an abstract Fortran Variable, could be an array or a scalar
 "
 Class {
 	#name : #FASTFortranVariable,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTEntryStatement + FASTFortranTExpression + FASTFortranTVariableEntity',
-	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
+	#superclass : #FASTFortranAbstractExpression,
+	#traits : 'FASTFortranTEntryStatement + FASTFortranTVariableEntity',
+	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
 		'#name => FMProperty',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
-		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataVariables',
 		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -18,7 +17,7 @@ Class {
 { #category : #meta }
 FASTFortranVariable class >> annotation [
 
-	<FMClass: #Variable super: #FASTFortranEntity>
+	<FMClass: #Variable super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

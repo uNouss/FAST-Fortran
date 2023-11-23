@@ -3,9 +3,7 @@ I represent a type declaration for one or many scalar variables or arrays
 "
 Class {
 	#name : #FASTFortranDeclarationStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
 		'#type => FMOne type: #FASTFortranType opposite: #parentDeclaration'
@@ -16,7 +14,7 @@ Class {
 { #category : #meta }
 FASTFortranDeclarationStatement class >> annotation [
 
-	<FMClass: #DeclarationStatement super: #FASTFortranEntity>
+	<FMClass: #DeclarationStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

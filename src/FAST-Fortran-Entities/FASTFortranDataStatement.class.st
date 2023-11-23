@@ -3,9 +3,7 @@ I represent a Fortran Data statement
 "
 Class {
 	#name : #FASTFortranDataStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#dataGroups => FMMany type: #FASTFortranDataGroup opposite: #dataStatement'
 	],
@@ -15,7 +13,7 @@ Class {
 { #category : #meta }
 FASTFortranDataStatement class >> annotation [
 
-	<FMClass: #DataStatement super: #FASTFortranEntity>
+	<FMClass: #DataStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

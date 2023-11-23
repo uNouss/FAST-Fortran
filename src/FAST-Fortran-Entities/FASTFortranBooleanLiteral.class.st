@@ -3,7 +3,7 @@ I represent Fortran Boolean Literal (Constant) statement
 "
 Class {
 	#name : #FASTFortranBooleanLiteral,
-	#superclass : #FASTFortranEntity,
+	#superclass : #FASTFortranAbstractExpression,
 	#traits : 'FASTFortranTBooleanLiteral',
 	#classTraits : 'FASTFortranTBooleanLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -12,7 +12,7 @@ Class {
 { #category : #meta }
 FASTFortranBooleanLiteral class >> annotation [
 
-	<FMClass: #BooleanLiteral super: #FASTFortranEntity>
+	<FMClass: #BooleanLiteral super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

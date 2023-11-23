@@ -3,9 +3,9 @@ a Fortran Return Statement
 "
 Class {
 	#name : #FASTFortranReturnStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement + FASTFortranTReturnStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTReturnStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTReturnStatement',
+	#classTraits : 'FASTFortranTReturnStatement classTrait',
 	#instVars : [
 		'#alternateReturnLable => FMProperty'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranReturnStatement class >> annotation [
 
-	<FMClass: #ReturnStatement super: #FASTFortranEntity>
+	<FMClass: #ReturnStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

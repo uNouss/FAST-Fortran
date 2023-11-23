@@ -3,16 +3,14 @@ I represent Fortran Read statement
 "
 Class {
 	#name : #FASTFortranReadStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranReadStatement class >> annotation [
 
-	<FMClass: #ReadStatement super: #FASTFortranEntity>
+	<FMClass: #ReadStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
