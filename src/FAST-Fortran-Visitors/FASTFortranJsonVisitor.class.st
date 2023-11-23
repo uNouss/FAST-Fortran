@@ -308,7 +308,6 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	^(self newEntity: FASTFortranVariableDeclarator atPosition: data first)
 		variable: data second ;
-		expression: data third ;
 		yourself
 ]
 
