@@ -3,9 +3,7 @@ I represent Fortran Common statement
 "
 Class {
 	#name : #FASTFortranCommonStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#name => FMProperty',
 		'#variables => FMOne type: #FASTFortranVariable opposite: #parentCommonStatement'
@@ -16,7 +14,7 @@ Class {
 { #category : #meta }
 FASTFortranCommonStatement class >> annotation [
 
-	<FMClass: #CommonStatement super: #FASTFortranEntity>
+	<FMClass: #CommonStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

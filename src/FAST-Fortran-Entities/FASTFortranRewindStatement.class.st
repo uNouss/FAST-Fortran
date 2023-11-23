@@ -3,16 +3,14 @@ I represent Fortran Rewind statement
 "
 Class {
 	#name : #FASTFortranRewindStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranRewindStatement class >> annotation [
 
-	<FMClass: #RewindStatement super: #FASTFortranEntity>
+	<FMClass: #RewindStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

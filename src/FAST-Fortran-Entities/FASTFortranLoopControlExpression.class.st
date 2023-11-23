@@ -3,9 +3,7 @@ a Fortran Loop Control Expression
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression',
-	#classTraits : 'FASTFortranTExpression classTrait',
+	#superclass : #FASTFortranAbstractExpression,
 	#instVars : [
 		'#increment => FMProperty',
 		'#limit => FMProperty',
@@ -18,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranLoopControlExpression class >> annotation [
 
-	<FMClass: #LoopControlExpression super: #FASTFortranEntity>
+	<FMClass: #LoopControlExpression super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

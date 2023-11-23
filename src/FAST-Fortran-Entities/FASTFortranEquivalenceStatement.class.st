@@ -3,16 +3,14 @@ I represent Fortran Equivalence statement
 "
 Class {
 	#name : #FASTFortranEquivalenceStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranEquivalenceStatement class >> annotation [
 
-	<FMClass: #EquivalenceStatement super: #FASTFortranEntity>
+	<FMClass: #EquivalenceStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

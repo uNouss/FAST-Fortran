@@ -286,7 +286,7 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	| data |
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
-	^(self newEntity: FASTFortranDeclarationStatement atPosition: data first)
+	^(self newEntity: FASTFortranVariableDeclarationStatement atPosition: data first)
 		type: data second;
 			"TODO clarify the need of attributes"
 		  "attributes: data third;"
@@ -297,8 +297,15 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
 
-	self flag: 'TODO: deal with the other keys in the map'.
-	^ (super visitDeclarator: aDeclaratorNode) last
+	| data declarator |
+	data := super visitDeclarator: aDeclaratorNode.
+
+	declarator := data fourth.
+	data second ifNotNil: [ :initialization |
+		declarator expression: initialization
+	].
+
+	^declarator
 ]
 
 { #category : #'visiting statement' }
@@ -306,8 +313,9 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
 	data := super visitDeclaratorVariable: aDeclaratorVariableNode.
-	^(self newEntity: FASTFortranScalarVariable atPosition: data first)
-		name: data second;
+
+	^(self newEntity: FASTFortranVariableDeclarator atPosition: data first)
+		variable: data second ;
 		yourself
 ]
 
@@ -705,6 +713,17 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
 		operator: '*' ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitParameterStatement: aParameterStatementNode [ 
+
+	| data |
+	data := super visitParameterStatement: aParameterStatementNode.
+
+	^(self newEntity: FASTFortranParameterStatement atPosition: data first)
+		declarators: data second ;
 		yourself
 ]
 

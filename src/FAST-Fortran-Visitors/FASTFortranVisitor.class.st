@@ -136,14 +136,6 @@ FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
-
-	self visitFASTFortranTLabelledStatement: aFASTFortranDeclarationStatement.
-	aFASTFortranDeclarationStatement type accept: self.
-	aFASTFortranDeclarationStatement declarators do: [:decl | decl accept: self]
-]
-
-{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDecodeStatement: aFASTFortranDecodeStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDecodeStatement.
@@ -726,6 +718,22 @@ FASTFortranVisitor >> visitFASTFortranVariable: aFASTFortranVariable [
 	<generated>
 	self visitFASTFortranTExpression: aFASTFortranVariable.
 	self visitFASTFortranTVariableEntity: aFASTFortranVariable.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortranVariableDeclarationStatement [
+
+	self visitFASTFortranTLabelledStatement: aFASTFortranVariableDeclarationStatement.
+	aFASTFortranVariableDeclarationStatement type accept: self.
+	aFASTFortranVariableDeclarationStatement declarators do: [:decl | decl accept: self]
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
+
+	^aFASTFortranVariableDeclarator expression
+		ifNotNil: [ :expression | expression accept: self ]
+		ifNil: [ nil ]
 ]
 
 { #category : #'visiting - statements' }

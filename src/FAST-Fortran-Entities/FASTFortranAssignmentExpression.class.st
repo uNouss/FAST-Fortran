@@ -3,9 +3,9 @@ I represent an assignment expression as a part of assignment statement
 "
 Class {
 	#name : #FASTFortranAssignmentExpression,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTAssignment + FASTFortranTExpression',
-	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTExpression classTrait',
+	#superclass : #FASTFortranAbstractExpression,
+	#traits : 'FASTFortranTAssignment',
+	#classTraits : 'FASTFortranTAssignment classTrait',
 	#instVars : [
 		'#parentLoopControlExpresison => FMOne type: #FASTFortranLoopControlExpression opposite: #init'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranAssignmentExpression class >> annotation [
 
-	<FMClass: #AssignmentExpression super: #FASTFortranEntity>
+	<FMClass: #AssignmentExpression super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

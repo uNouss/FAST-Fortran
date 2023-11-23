@@ -3,16 +3,14 @@ I represent Fortran Open statement
 "
 Class {
 	#name : #FASTFortranOpenStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranOpenStatement class >> annotation [
 
-	<FMClass: #OpenStatement super: #FASTFortranEntity>
+	<FMClass: #OpenStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

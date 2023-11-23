@@ -3,14 +3,12 @@ an abstract Fortran Variable, could be an array or a scalar
 "
 Class {
 	#name : #FASTFortranVariable,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTEntryStatement + FASTFortranTExpression + FASTFortranTVariableEntity',
-	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTExpression classTrait + FASTFortranTVariableEntity classTrait',
+	#superclass : #FASTFortranAbstractExpression,
+	#traits : 'FASTFortranTEntryStatement + FASTFortranTVariableEntity',
+	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
 		'#name => FMProperty',
-		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables',
-		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataVariables',
-		'#parentDeclaration => FMOne type: #FASTFortranDeclarationStatement opposite: #declarators'
+		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -18,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranVariable class >> annotation [
 
-	<FMClass: #Variable super: #FASTFortranEntity>
+	<FMClass: #Variable super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -77,28 +75,4 @@ FASTFortranVariable >> parentDataStatement: anObject [
 
 	<generated>
 	parentDataStatement := anObject
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentDeclaration [
-	"Relation named: #parentDeclaration type: #FASTFortranDeclarationStatement opposite: #declarators"
-
-	<generated>
-	<FMComment: 'Parent declaration'>
-	<container>
-	^ parentDeclaration
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentDeclaration: anObject [
-
-	<generated>
-	parentDeclaration := anObject
-]
-
-{ #category : #navigation }
-FASTFortranVariable >> parentDeclarationGroup [
-	<generated>
-	<navigation: 'ParentDeclaration'>
-	^ MooseSpecializedGroup with: self parentDeclaration
 ]

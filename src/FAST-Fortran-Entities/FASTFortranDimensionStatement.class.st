@@ -3,9 +3,7 @@ I represent FortranDimension statement
 "
 Class {
 	#name : #FASTFortranDimensionStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#arrays => FMMany type: #FASTFortranType opposite: #parentDimensionStatement'
 	],
@@ -15,7 +13,7 @@ Class {
 { #category : #meta }
 FASTFortranDimensionStatement class >> annotation [
 
-	<FMClass: #DimensionStatement super: #FASTFortranEntity>
+	<FMClass: #DimensionStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

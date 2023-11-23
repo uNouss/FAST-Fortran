@@ -3,9 +3,9 @@ I represent Fortran Call statement
 "
 Class {
 	#name : #FASTFortranCallStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement + FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTWithArguments classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTWithArguments classTrait',
 	#instVars : [
 		'#name => FMProperty'
 	],
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranCallStatement class >> annotation [
 
-	<FMClass: #CallStatement super: #FASTFortranEntity>
+	<FMClass: #CallStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

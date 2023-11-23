@@ -3,16 +3,14 @@ I represent Fortran Else statement
 "
 Class {
 	#name : #FASTFortranElseStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranElseStatement class >> annotation [
 
-	<FMClass: #ElseStatement super: #FASTFortranEntity>
+	<FMClass: #ElseStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

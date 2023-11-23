@@ -3,16 +3,14 @@ I represent Fortran Union statement
 "
 Class {
 	#name : #FASTFortranUnionStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranUnionStatement class >> annotation [
 
-	<FMClass: #UnionStatement super: #FASTFortranEntity>
+	<FMClass: #UnionStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

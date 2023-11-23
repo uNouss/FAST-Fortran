@@ -183,16 +183,6 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
-	self sixSpaces.
-	aFASTFortranDeclarationStatement type accept: self.
-	self << ' '.
-	self visitNodeListSeparatedByCommas: aFASTFortranDeclarationStatement declarators.
-	self newLine
-		
-]
-
-{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	self
@@ -390,6 +380,17 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
+
+	self
+		sixSpaces ;
+		<< 'parameter (' ;
+		visitNodeListSeparatedByCommas: aFASTFortranParameterStatement declarators ;
+		<< ')' ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranPauseStatement: aFASTFortranPausetStatement [
 
 	self
@@ -526,6 +527,28 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << '('.
 	self visitNodeListSeparatedByCommas: aFASTFortranTWithParameters parameters.
 	self << ')'.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortranVariableDeclarationStatement [
+	self sixSpaces.
+	aFASTFortranVariableDeclarationStatement type accept: self.
+	self << ' '.
+	self visitNodeListSeparatedByCommas: aFASTFortranVariableDeclarationStatement declarators.
+	self newLine
+		
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
+
+	self << aFASTFortranVariableDeclarator variable.
+	aFASTFortranVariableDeclarator expression
+		ifNotNil: [ :expression |
+			self <<'='.
+			expression accept: self
+		]
+
 ]
 
 { #category : #'visiting - statements' }

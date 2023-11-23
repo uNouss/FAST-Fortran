@@ -3,13 +3,13 @@ I represent Fortran If (Arithmetic) statement
 "
 Class {
 	#name : #FASTFortranIfArithmeticStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTConditionalStatement + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTConditionalStatement classTrait + FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTConditionalStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
+		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch',
 		'#equalLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticEqualBranch',
-		'#greaterLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch',
-		'#lessLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticLessBranch'
+		'#greaterLabel => FMOne type: #FASTFortranLabelReference opposite: #parentIfArithmeticMoreBranch'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -17,7 +17,7 @@ Class {
 { #category : #meta }
 FASTFortranIfArithmeticStatement class >> annotation [
 
-	<FMClass: #IfArithmeticStatement super: #FASTFortranEntity>
+	<FMClass: #IfArithmeticStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

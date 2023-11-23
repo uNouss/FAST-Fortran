@@ -3,9 +3,7 @@ I represent Fortran External statement
 "
 Class {
 	#name : #FASTFortranExternalStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#name => FMProperty'
 	],
@@ -15,7 +13,7 @@ Class {
 { #category : #meta }
 FASTFortranExternalStatement class >> annotation [
 
-	<FMClass: #ExternalStatement super: #FASTFortranEntity>
+	<FMClass: #ExternalStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

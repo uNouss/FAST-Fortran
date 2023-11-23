@@ -3,16 +3,14 @@ I represent Fortran Implicit statement
 "
 Class {
 	#name : #FASTFortranImplicitStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranImplicitStatement class >> annotation [
 
-	<FMClass: #ImplicitStatement super: #FASTFortranEntity>
+	<FMClass: #ImplicitStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

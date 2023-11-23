@@ -3,16 +3,14 @@ I represent Fortran Encode statement
 "
 Class {
 	#name : #FASTFortranEncodeStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranEncodeStatement class >> annotation [
 
-	<FMClass: #EncodeStatement super: #FASTFortranEntity>
+	<FMClass: #EncodeStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

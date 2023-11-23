@@ -3,16 +3,14 @@ I represent Fortran Go To( Assigned) statement
 "
 Class {
 	#name : #FASTFortranGoToAssignedStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranGoToAssignedStatement class >> annotation [
 
-	<FMClass: #GoToAssignedStatement super: #FASTFortranEntity>
+	<FMClass: #GoToAssignedStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

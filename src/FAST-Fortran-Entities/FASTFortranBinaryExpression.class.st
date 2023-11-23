@@ -3,7 +3,7 @@ a Fortran Binary Expression (arithmetic, logical)
 "
 Class {
 	#name : #FASTFortranBinaryExpression,
-	#superclass : #FASTFortranEntity,
+	#superclass : #FASTFortranAbstractExpression,
 	#traits : 'FASTFortranTBinaryExpression',
 	#classTraits : 'FASTFortranTBinaryExpression classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -12,7 +12,7 @@ Class {
 { #category : #meta }
 FASTFortranBinaryExpression class >> annotation [
 
-	<FMClass: #BinaryExpression super: #FASTFortranEntity>
+	<FMClass: #BinaryExpression super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

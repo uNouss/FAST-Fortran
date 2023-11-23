@@ -3,9 +3,9 @@ I represent a function statement - a function-like declaration, made in a single
 "
 Class {
 	#name : #FASTFortranFunctionStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement + FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTWithArguments classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTWithArguments classTrait',
 	#instVars : [
 		'#name => FMProperty',
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
@@ -16,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranFunctionStatement class >> annotation [
 
-	<FMClass: #FunctionStatement super: #FASTFortranEntity>
+	<FMClass: #FunctionStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

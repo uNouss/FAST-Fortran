@@ -3,9 +3,7 @@ I represent Fortran Do statement
 "
 Class {
 	#name : #FASTFortranDoStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
 		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentDoStatement'
@@ -16,7 +14,7 @@ Class {
 { #category : #meta }
 FASTFortranDoStatement class >> annotation [
 
-	<FMClass: #DoStatement super: #FASTFortranEntity>
+	<FMClass: #DoStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

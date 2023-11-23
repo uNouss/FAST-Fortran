@@ -78,9 +78,9 @@ FASTFortranExporterVisitorTest >> comment: text [
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
 	"end position is approximate, test should adjust if a real value is needed"
 
-	^FASTFortranDeclarationStatement new
+	^FASTFortranVariableDeclarationStatement new
 		type: type ;
-		declarators: (self scalarVariables: aCollection)  ;
+		declarators: (self variableDeclarators: aCollection)  ;
 		startPos: 1 ;
 		endPos: 10 ;
 		yourself
@@ -886,14 +886,16 @@ FASTFortranExporterVisitorTest >> testPauseStatementEmpty [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testPauseStatementWithInteger [
 	| stmt |
-	stmt := FASTFortranPauseStatement new
-		displayArgument: '1' ;
+	stmt := FASTFortranParameterStatement new
+		declarators: (self variableDeclarators: #(pi msg)) ;
 		yourself.
+	stmt declarators first expression: (self realLiteral: '3.14159').
+	stmt declarators second expression: (self characterLiteral: 'hello').
 
 	self
 		assertExport: stmt
 		equals: 
-'      pause 1
+'      parameter (pi=3.14159,msg=''hello'')
 '
 ]
 
@@ -1028,6 +1030,18 @@ FASTFortranExporterVisitorTest >> testWriteStatement [
 		equals: 
 '      write(*,*) ''message''
 '
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> variableDeclarator: aName [
+	^FASTFortranVariableDeclarator new
+		variable: aName ;
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> variableDeclarators: aCollectionOfString [
+	^aCollectionOfString collect: [ :aString | self variableDeclarator: aString ]
 ]
 
 { #category : #'entity creation' }

@@ -17,6 +17,27 @@ FASTFortranTEntityCreator classSide >> annotation [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractExpression [
+
+	<generated>
+	^ self add: FASTFortranAbstractExpression new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractLiteral [
+
+	<generated>
+	^ self add: FASTFortranAbstractLiteral new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractStatement [
+
+	<generated>
+	^ self add: FASTFortranAbstractStatement new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newAcceptStatement [
 
 	<generated>
@@ -182,13 +203,6 @@ FASTFortranTEntityCreator >> newDataStatement [
 
 	<generated>
 	^ self add: FASTFortranDataStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newDeclarationStatement [
-
-	<generated>
-	^ self add: FASTFortranDeclarationStatement new
 ]
 
 { #category : #'entity creation' }
@@ -637,6 +651,20 @@ FASTFortranTEntityCreator >> newVariable [
 
 	<generated>
 	^ self add: FASTFortranVariable new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarationStatement [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarationStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarator [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarator new
 ]
 
 { #category : #'entity creation' }
