@@ -4,6 +4,8 @@ I represent Fortran Parameter statement
 Class {
 	#name : #FASTFortranParameterStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithDeclarators',
+	#classTraits : 'FASTFortranTWithDeclarators classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
