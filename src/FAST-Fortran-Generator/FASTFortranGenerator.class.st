@@ -91,9 +91,6 @@ Class {
 		'characterConstant',
 		'statementBlock',
 		'assignmentExpression',
-		'arrayVariableDeclaration',
-		'scalarVariableDeclaration',
-		'declarationStatement',
 		'tConditionalStatement',
 		'tLabelledStatement',
 		'tEntryArgument',
@@ -101,7 +98,10 @@ Class {
 		'labelReference',
 		'abstractStatement',
 		'abstractExpression',
-		'abstractLiteral'
+		'abstractLiteral',
+		'scalarVariable',
+		'arrayVariable',
+		'variableDeclarationStatement'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -165,7 +165,7 @@ FASTFortranGenerator >> defineData [
 		                            comment:
 		                            'I represent Fortran Array dimension declaration'.
 
-	arrayVariableDeclaration := builder
+	arrayVariable := builder
 		                            newClassNamed: #ArrayVariable
 		                            comment:
 		                            'an array Fortran Variable, used in declarations'.
@@ -274,7 +274,7 @@ I contain the value of the label referred to'.
 		            comment:
 		            'I represent Fortran Real statement. A real datum is an approximation of a real number. The real data type, REAL, which usually has the synonym, REAL*4, holds one real datum.The usual default size for a REAL item with no size specified is 4 bytes, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.A REAL element has a sign bit, an 8-bit exponent, and a 23-bit fraction. These REAL elements in f77 conform to the IEEE standard.'.
 
-	scalarVariableDeclaration := builder
+	scalarVariable := builder
 		                             newClassNamed: #ScalarVariable
 		                             comment:
 		                             'a scalar Fortran Variable, used in declarations'.
@@ -412,7 +412,7 @@ FASTFortranGenerator >> defineHierarchy [
 	commonStatement --|> abstractStatement.
 	continueStatement --|> abstractStatement.
 	dataStatement --|> abstractStatement.
-	declarationStatement --|> abstractStatement.
+	variableDeclarationStatement --|> abstractStatement.
 	decodeStatement --|> abstractStatement.
 	encodeStatement --|> abstractStatement.
 	exitStatement --|> abstractStatement.
@@ -475,8 +475,8 @@ FASTFortranGenerator >> defineHierarchy [
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
-	scalarVariableDeclaration --|> variable.
-	arrayVariableDeclaration --|> variable.
+	scalarVariable --|> variable.
+	arrayVariable --|> variable.
 	loopControlExpression --|> abstractExpression.
 	substring --|> abstractExpression.
 	
@@ -611,17 +611,17 @@ FASTFortranGenerator >> defineRelations [
 
 	dataStatement <>-* dataGroup.
 
-	((declarationStatement property: #declarators) comment: 'declarators')
+	((variableDeclarationStatement property: #declarators) comment: 'declarators')
 	<>-*
 	((variable property: #parentDeclaration) comment:
 		 'Parent declaration').
 
-	((declarationStatement property: #declarators) comment: 'declarators')
+	((variableDeclarationStatement property: #declarators) comment: 'declarators')
 	<>-*
 	((variable property: #parentDeclaration) comment:
 		 'Parent declaration').
 
-	((declarationStatement property: #type) comment: 'type')
+	((variableDeclarationStatement property: #type) comment: 'type')
 	<>-
 	((type property: #parentDeclaration) comment: 'Parent declaration').
 
@@ -707,7 +707,7 @@ FASTFortranGenerator >> defineRelations [
 			 'Parent expression (if possible)').
 
 	"The number of dimensions in an array is the number of dimension declarators. The minimum number of dimensions is one; the maximum is seven. For an assumed-size array, the last dimension can be an asterisk."
-	((arrayVariableDeclaration property: #arrayDimensionDeclarator) comment:
+	((arrayVariable property: #arrayDimensionDeclarator) comment:
 		 'An array dimension declarator specifies lower and upper dimension bounds of an array')
 	<>-* ((arrayDimensionDeclarator property: #parentArray) comment:
 			 'Parent array declaration').
@@ -759,11 +759,6 @@ FASTFortranGenerator >> defineStatements [
 	dataStatement := builder
 		                 newClassNamed: #DataStatement
 		                 comment: 'I represent a Fortran Data statement'.
-
-	declarationStatement := builder
-		                   newClassNamed: #DeclarationStatement
-		                   comment:
-		                   'I represent a type declaration for one or many scalar variables or arrays'.	
 
 	dataGroup := builder
 		                 newClassNamed: #DataGroup
@@ -906,13 +901,18 @@ FASTFortranGenerator >> defineStatements [
 	unionStatement := builder
 		                  newClassNamed: #UnionStatement
 		                  comment: 'I represent Fortran Union statement'.
+
+	variableDeclarationStatement := builder
+		                   newClassNamed: #VariableDeclarationStatement
+		                   comment:
+		                   'I represent a type declaration for one or many scalar variables or arrays'.	
+
 	virtualStatement := builder
 		                    newClassNamed: #VirtualStatement
 		                    comment: 'I represent Fortran Virtual statement'.
 	volatileStatement := builder
 		                     newClassNamed: #VolatileStatement
-		                     comment:
-		                     'I represent Fortran Volatile statement'.
+		                     comment: 'I represent Fortran Volatile statement'.
 	writeStatement := builder
 		                  newClassNamed: #WriteStatement
 		                  comment: 'I represent Fortran Write statement'.
