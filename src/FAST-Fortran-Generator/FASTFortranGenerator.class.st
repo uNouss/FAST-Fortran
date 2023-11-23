@@ -98,7 +98,10 @@ Class {
 		'tLabelledStatement',
 		'tEntryArgument',
 		'dataGroup',
-		'labelReference'
+		'labelReference',
+		'abstractStatement',
+		'abstractExpression',
+		'abstractLiteral'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -143,6 +146,14 @@ FASTFortranGenerator >> defineClasses [
 { #category : #definition }
 FASTFortranGenerator >> defineData [
 	"sorted alphabetically, please keep the order"
+
+	abstractExpression := builder
+		                   newClassNamed: #AbstractExpression
+		                   comment: 'I am the super class of all Fortran expressions'.
+
+	abstractLiteral := builder
+		                   newClassNamed: #AbstractLiteral
+		                   comment: 'I am the super class of all Fortran Literals'.
 
 	ampersand := builder
 		             newClassNamed: #Ampersand
@@ -205,11 +216,6 @@ f77 allows the BYTE type as an array index, just as it allows the REAL type, but
 		               newClassNamed: #ComplexType
 		               comment:
 		               'I represent Fortran Complex statement. A complex datum is an approximation of a complex number. The complex data type, COMPLEX, which defaults to a synonym for COMPLEX*8, is a pair of REAL*4 values that represent a complex number. The first element represents the real part and the second represents the imaginary part.The default size for a COMPLEX item (no size specified) is 8 bytes. The default alignment is on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options'.
-		
-	declarationStatement := builder
-		                   newClassNamed: #DeclarationStatement
-		                   comment:
-		                   'I represent a type declaration for one or many scalar variables or arrays'.	
 
 	doubleComplexConstant := builder
 		                         newClassNamed: #DoubleComplexLiteral
@@ -378,95 +384,122 @@ FASTFortranGenerator >> defineHierarchy [
 	function --|> procedure.
 	subroutine --|> procedure.
 
+	programFile --|> tWithComments.
+	programUnit --|> tWithComments.
+
+	"TRAITS"
+	procedure --|> tWithParameters.
+	functionCall --|> tWithArguments.
+	functionStatement --|> tWithArguments.
+	callStatement --|> tWithArguments.
+	printStatement --|> tWithArguments.
+	writeStatement --|> tWithArguments.
+
 	"other entities"
 	comment --|> tEntity.
 	comment --|> tComment. 
-	tLabelledStatement --|> tStatement.
-	declarationStatement --|> tLabelledStatement.
-	statementBlock --|> tStatementBlock. 
-	statementBlock --|> tWithComments. 
 
 	"FORTRAN STATEMENTS"
-	assignmentStatement --|> tLabelledStatement.
-	automaticStatement --|> tLabelledStatement.
-	backspaceStatement --|> tLabelledStatement.
-	callStatement --|> tLabelledStatement.
-	closeStatement --|> tLabelledStatement.
-	commonStatement --|> tLabelledStatement.
-	continueStatement --|> tLabelledStatement.
-	dataStatement --|> tLabelledStatement.
-	decodeStatement --|> tLabelledStatement.
-	encodeStatement --|> tLabelledStatement.
-	dimensionStatement --|> tLabelledStatement.
-	doStatement --|> tLabelledStatement.
-	doWhileStatement --|> tLabelledStatement.
-	elseStatement --|> tLabelledStatement.
-	endFileStatement --|> tLabelledStatement.
-	entryStatement --|> tLabelledStatement.
+	abstractStatement --|> tStatement.
+	abstractStatement --|> tLabelledStatement.
+	assignmentStatement --|> abstractStatement.
+	assignmentStatement --|> tAssignment.
+	automaticStatement --|> abstractStatement.
+	backspaceStatement --|> abstractStatement.
+	callStatement --|> abstractStatement.
+	closeStatement --|> abstractStatement.
+	commonStatement --|> abstractStatement.
+	continueStatement --|> abstractStatement.
+	dataStatement --|> abstractStatement.
+	declarationStatement --|> abstractStatement.
+	decodeStatement --|> abstractStatement.
+	encodeStatement --|> abstractStatement.
+	exitStatement --|> abstractStatement.
+	dimensionStatement --|> abstractStatement.
+	doStatement --|> abstractStatement.
+	doWhileStatement --|> abstractStatement.
+	elseStatement --|> abstractStatement.
+	endFileStatement --|> abstractStatement.
+	entryStatement --|> abstractStatement.
 	entryStatement --|> tNamedEntity.
-	equivalenceStatement --|> tLabelledStatement.
-	externalStatement --|> tLabelledStatement.
-	formatStatement --|> tLabelledStatement.
-	functionStatement --|> tLabelledStatement.
-	goToStatement --|> tLabelledStatement.
-	goToAssignedStatement --|> tLabelledStatement.
-	goToComputed --|> tLabelledStatement.
-	goToUnconditional --|> tLabelledStatement.
-	ifArithmeticStatement --|> tLabelledStatement.
+	equivalenceStatement --|> abstractStatement.
+	externalStatement --|> abstractStatement.
+	formatStatement --|> abstractStatement.
+	formatStatement --|> tFormatIdentifier.
+	functionStatement --|> abstractStatement.
+	goToStatement --|> abstractStatement.
+	goToAssignedStatement --|> abstractStatement.
+	goToComputed --|> abstractStatement.
+	goToUnconditional --|> abstractStatement.
+	ifArithmeticStatement --|> abstractStatement.
 	ifArithmeticStatement --|> tConditionalStatement.
-	ifBlockStatement --|> tLabelledStatement.
+	ifBlockStatement --|> abstractStatement.
 	ifBlockStatement --|> tConditionalStatement.
-	ifLogicalStatement --|> tLabelledStatement.
+	ifLogicalStatement --|> abstractStatement.
 	ifLogicalStatement --|> tConditionalStatement.
-	implicitStatement --|> tLabelledStatement.
-	includeStatement --|> tLabelledStatement.
-	inquireStatement --|> tLabelledStatement.
-	intrinsicStatement --|> tLabelledStatement.
-	mapStatement --|> tLabelledStatement.
-	nameListStatement --|> tLabelledStatement.
-	openStatement --|> tLabelledStatement.
-	optionsStatement --|> tLabelledStatement.
-	parameterStatement --|> tLabelledStatement.
-	pauseStatement --|> tLabelledStatement.
-	pragmaStatement --|> tLabelledStatement.
-	printStatement --|> tLabelledStatement.
-	readStatement --|> tLabelledStatement.
-	returnStatement --|> tLabelledStatement.
-	rewindStatement --|> tLabelledStatement.
-	saveStatement --|> tLabelledStatement.
-	staticStatement --|> tLabelledStatement.
-	stopStatement --|> tLabelledStatement.
-	unionStatement --|> tLabelledStatement.
-	virtualStatement --|> tLabelledStatement.
-	volatileStatement --|> tLabelledStatement.
-	writeStatement --|> tLabelledStatement.
-	"STATEMENT OUT OF STANDARD"
-	exitStatement --|> tLabelledStatement.
+	implicitStatement --|> abstractStatement.
+	includeStatement --|> abstractStatement.
+	inquireStatement --|> abstractStatement.
+	intrinsicStatement --|> abstractStatement.
+	mapStatement --|> abstractStatement.
+	nameListStatement --|> abstractStatement.
+	openStatement --|> abstractStatement.
+	optionsStatement --|> abstractStatement.
+	parameterStatement --|> abstractStatement.
+	pauseStatement --|> abstractStatement.
+	pragmaStatement --|> abstractStatement.
+	printStatement --|> abstractStatement.
+	printStatement --|> tWithFormatIdentifier.
+	readStatement --|> abstractStatement.
+	returnStatement --|> abstractStatement.
+	returnStatement --|> tReturnStatement.
+	rewindStatement --|> abstractStatement.
+	saveStatement --|> abstractStatement.
+	statementBlock --|> tStatementBlock. 
+	statementBlock --|> tWithComments. 
+	staticStatement --|> abstractStatement.
+	stopStatement --|> abstractStatement.
+	unionStatement --|> abstractStatement.
+	virtualStatement --|> abstractStatement.
+	volatileStatement --|> abstractStatement.
+	writeStatement --|> abstractStatement.
+	writeStatement --|> tWithFormatIdentifier.
 
 
 	"DATA"
-	assignmentExpression --|> tExpression.
-	functionCall --|> tExpression.
-	variable --|> tExpression.
+	abstractExpression --|> tExpression.
+	assignmentExpression --|> abstractExpression.
+	assignmentExpression --|> tAssignment.
+	functionCall --|> abstractExpression.
+	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
 	scalarVariableDeclaration --|> variable.
 	arrayVariableDeclaration --|> variable.
-	loopControlExpression --|> tExpression.
-	substring --|> tExpression.
+	loopControlExpression --|> abstractExpression.
+	substring --|> abstractExpression.
 	
+	binaryExpression --|> abstractExpression.
 	binaryExpression --|> tBinaryExpression.
+	unaryExpression --|> abstractExpression.
 	unaryExpression --|> tUnaryExpression.
 
+	abstractLiteral --|> abstractExpression.
+	complexConstant --|> abstractExpression.
 	complexConstant --|> tNumericalLiteral.
+	doubleComplexConstant --|> abstractExpression.
 	doubleComplexConstant --|> tNumericalLiteral.
+	doublePrecisionConstant --|> abstractExpression.
 	doublePrecisionConstant --|> tNumericalLiteral.
+	integerConstant --|> abstractExpression.
 	integerConstant --|> tNumericalLiteral.
+	realConstant --|> abstractExpression.
 	realConstant --|> tNumericalLiteral.
-	asterisk --|> tNumericalLiteral.
-	asterisk --|> tEntryArgument.
+	ampersand --|> abstractExpression.
 	ampersand --|> tCharacterLiteral.
+	characterConstant --|> abstractExpression.
 	characterConstant --|> tCharacterLiteral.
+	booleanConstant --|> abstractExpression.
 	booleanConstant --|> tBooleanLiteral.
 
 	byteType --|> type.
@@ -478,31 +511,9 @@ FASTFortranGenerator >> defineHierarchy [
 	logicalType --|> type.
 	realType --|> type.
 
-	"TRAITS"
-	procedure --|> tWithParameters.
-	functionCall --|> tWithArguments.
-	functionStatement --|> tWithArguments.
-	callStatement --|> tWithArguments.
-	printStatement --|> tWithArguments.
-	writeStatement --|> tWithArguments.
-
-	"TODO: also as an argument may serve 
-		- an intrinsic function permitted to be passed as an argument
-		- an external function name
-		- an alternate return specifier, * or &,followed by a statement number."
-
-	printStatement --|> tWithFormatIdentifier.
-	writeStatement --|> tWithFormatIdentifier.
-
-	formatStatement --|> tFormatIdentifier.
+	asterisk --|> tNumericalLiteral.
+	asterisk --|> tEntryArgument.
 	asterisk --|> tFormatIdentifier.
-
-	programFile --|> tWithComments.
-	programUnit --|> tWithComments.
-
-	assignmentStatement --|> tAssignment.
-	assignmentExpression --|> tAssignment.
-	returnStatement --|> tReturnStatement.
 ]
 
 { #category : #definition }
@@ -710,6 +721,10 @@ FASTFortranGenerator >> defineRelations [
 FASTFortranGenerator >> defineStatements [
 	"A statement consists of zero or more key words, symbolic names, literal constants, statement labels, operators, and special characters."
 
+	abstractStatement := builder
+		                   newClassNamed: #AbstractStatement
+		                   comment: 'I am the super class of all Fortran statements'.
+
 	acceptStatement := builder
 		                   newClassNamed: #AcceptStatement
 		                   comment: 'I represent Fortran accept statement'.
@@ -743,6 +758,12 @@ FASTFortranGenerator >> defineStatements [
 	dataStatement := builder
 		                 newClassNamed: #DataStatement
 		                 comment: 'I represent a Fortran Data statement'.
+
+	declarationStatement := builder
+		                   newClassNamed: #DeclarationStatement
+		                   comment:
+		                   'I represent a type declaration for one or many scalar variables or arrays'.	
+
 	dataGroup := builder
 		                 newClassNamed: #DataGroup
 		                 comment: 'I represent a Fortran Data group in a Data statement'.
