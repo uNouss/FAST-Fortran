@@ -494,10 +494,17 @@ FASTFortranJsonVisitor >> visitFunction_call: aFunctionCallNode [
 FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	"so far only unconditional case is processed"
 
-	| data |
+	| data label |
 	data := super visitGotoStatement: aGotoStatementNode.
+
+	label := FASTFortranLabelReference new
+		label: data second primitiveValue ;
+		startPos: data second startPos ;
+		endPos: data second endPos ;
+		yourself.
+ 
 	^(self newEntity: FASTFortranGoToStatement atPosition: data first)
-		flag: 'TODO: target = data second';
+		label: label ;
 		yourself
 ]
 

@@ -638,6 +638,9 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((tExpression property: #assignementExpressionOwner) comment:
 			 'The AssignementExpression owner (if possible)').
 
+	(goToStatement property: #label)
+	<>- (labelReference property: #parentGotoStatement).
+
 	((tConditionalStatement property: #condition) comment: 'Condition')
 	<>-
 	((tExpression property: #parentConditionalStatement) comment: 'Parent conditional statement (if-block, if-logical, ...)').

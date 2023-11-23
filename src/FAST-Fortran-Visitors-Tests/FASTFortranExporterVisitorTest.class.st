@@ -611,6 +611,20 @@ FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testGotoStatement [
+	| stmt |
+	stmt := FASTFortranGoToStatement new
+		label: (self labelReference: '110') ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      goto 110
+'.
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfArithmeticStatement [
 	| stmt |
 

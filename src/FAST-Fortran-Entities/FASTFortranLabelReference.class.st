@@ -7,6 +7,7 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#label => FMProperty',
+		'#parentGotoStatement => FMOne type: #FASTFortranGoToStatement opposite: #label',
 		'#parentIfArithmeticEqualBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #equalLabel',
 		'#parentIfArithmeticLessBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #lessLabel',
 		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel'
@@ -36,6 +37,30 @@ FASTFortranLabelReference >> label [
 FASTFortranLabelReference >> label: anObject [
 	<generated>
 	label := anObject
+]
+
+{ #category : #accessing }
+FASTFortranLabelReference >> parentGotoStatement [
+	"Relation named: #parentGotoStatement type: #FASTFortranGoToStatement opposite: #label"
+
+	<generated>
+	<container>
+	<derived>
+	^ parentGotoStatement
+]
+
+{ #category : #accessing }
+FASTFortranLabelReference >> parentGotoStatement: anObject [
+
+	<generated>
+	parentGotoStatement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranLabelReference >> parentGotoStatementGroup [
+	<generated>
+	<navigation: 'ParentGotoStatement'>
+	^ MooseSpecializedGroup with: self parentGotoStatement
 ]
 
 { #category : #accessing }
