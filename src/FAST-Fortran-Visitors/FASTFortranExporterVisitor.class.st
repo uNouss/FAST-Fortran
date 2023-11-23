@@ -183,16 +183,6 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranExporterVisitor >> visitFASTFortranDeclarationStatement: aFASTFortranDeclarationStatement [
-	self sixSpaces.
-	aFASTFortranDeclarationStatement type accept: self.
-	self << ' '.
-	self visitNodeListSeparatedByCommas: aFASTFortranDeclarationStatement declarators.
-	self newLine
-		
-]
-
-{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	self
@@ -526,6 +516,16 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << '('.
 	self visitNodeListSeparatedByCommas: aFASTFortranTWithParameters parameters.
 	self << ')'.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortranVariableDeclarationStatement [
+	self sixSpaces.
+	aFASTFortranVariableDeclarationStatement type accept: self.
+	self << ' '.
+	self visitNodeListSeparatedByCommas: aFASTFortranVariableDeclarationStatement declarators.
+	self newLine
+		
 ]
 
 { #category : #'visiting - statements' }
