@@ -78,7 +78,7 @@ FASTFortranExporterVisitorTest >> comment: text [
 FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollection [
 	"end position is approximate, test should adjust if a real value is needed"
 
-	^FASTFortranDeclarationStatement new
+	^FASTFortranVariableDeclarationStatement new
 		type: type ;
 		declarators: (self scalarVariables: aCollection)  ;
 		startPos: 1 ;
