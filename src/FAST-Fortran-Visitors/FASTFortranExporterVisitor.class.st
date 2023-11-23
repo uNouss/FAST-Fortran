@@ -529,6 +529,18 @@ FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFAS
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
+
+	self << aFASTFortranVariableDeclarator variable.
+	aFASTFortranVariableDeclarator expression
+		ifNotNil: [ :expression |
+			self <<'='.
+			expression accept: self
+		]
+
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
 	self
 		sixSpaces ;

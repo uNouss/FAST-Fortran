@@ -80,7 +80,7 @@ FASTFortranExporterVisitorTest >> declarationStatement: type variables: aCollect
 
 	^FASTFortranVariableDeclarationStatement new
 		type: type ;
-		declarators: (self scalarVariables: aCollection)  ;
+		declarators: (self variableDeclarators: aCollection)  ;
 		startPos: 1 ;
 		endPos: 10 ;
 		yourself
@@ -1028,6 +1028,18 @@ FASTFortranExporterVisitorTest >> testWriteStatement [
 		equals: 
 '      write(*,*) ''message''
 '
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> variableDeclarator: aName [
+	^FASTFortranVariableDeclarator new
+		variable: aName ;
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> variableDeclarators: aCollectionOfString [
+	^aCollectionOfString collect: [ :aString | self variableDeclarator: aString ]
 ]
 
 { #category : #'entity creation' }

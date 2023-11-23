@@ -729,6 +729,14 @@ FASTFortranVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortran
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
+
+	^aFASTFortranVariableDeclarator expression
+		ifNotNil: [ :expression | expression accept: self ]
+		ifNil: [ nil ]
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVirtualStatement: aFASTFortranVirtualStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranVirtualStatement.
