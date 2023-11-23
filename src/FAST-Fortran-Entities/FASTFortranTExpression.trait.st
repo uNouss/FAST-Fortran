@@ -11,7 +11,8 @@ Trait {
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
-		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression'
+		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
+		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',
@@ -206,4 +207,28 @@ FASTFortranTExpression >> returnOwnerGroup [
 	<generated>
 	<navigation: 'ReturnOwner'>
 	^ MooseSpecializedGroup with: self returnOwner
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> variableDeclaratorOwner [
+	"Relation named: #variableDeclaratorOwner type: #FASTFortranTVariableDeclarator opposite: #expression"
+
+	<generated>
+	<container>
+	<derived>
+	^ variableDeclaratorOwner
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> variableDeclaratorOwner: anObject [
+
+	<generated>
+	variableDeclaratorOwner := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> variableDeclaratorOwnerGroup [
+	<generated>
+	<navigation: 'VariableDeclaratorOwner'>
+	^ MooseSpecializedGroup with: self variableDeclaratorOwner
 ]

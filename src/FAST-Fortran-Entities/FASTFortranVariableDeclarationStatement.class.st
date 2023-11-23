@@ -4,8 +4,9 @@ I represent a type declaration for one or many scalar variables or arrays
 Class {
 	#name : #FASTFortranVariableDeclarationStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithDeclarators',
+	#classTraits : 'FASTFortranTWithDeclarators classTrait',
 	#instVars : [
-		'#declarators => FMMany type: #FASTFortranVariable opposite: #parentDeclaration',
 		'#type => FMOne type: #FASTFortranType opposite: #parentDeclaration'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -18,36 +19,6 @@ FASTFortranVariableDeclarationStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranVariableDeclarationStatement >> addDeclarator: anObject [
-	<generated>
-	^ self declarators add: anObject
-]
-
-{ #category : #accessing }
-FASTFortranVariableDeclarationStatement >> declarators [
-	"Relation named: #declarators type: #FASTFortranVariable opposite: #parentDeclaration"
-
-	<generated>
-	<FMComment: 'declarators'>
-	<derived>
-	^ declarators
-]
-
-{ #category : #accessing }
-FASTFortranVariableDeclarationStatement >> declarators: anObject [
-
-	<generated>
-	declarators value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranVariableDeclarationStatement >> declaratorsGroup [
-	<generated>
-	<navigation: 'Declarators'>
-	^ MooseSpecializedGroup withAll: self declarators asSet
 ]
 
 { #category : #accessing }

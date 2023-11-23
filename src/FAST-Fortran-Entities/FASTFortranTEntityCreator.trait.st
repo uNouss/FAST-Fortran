@@ -661,6 +661,13 @@ FASTFortranTEntityCreator >> newVariableDeclarationStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarator [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarator new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newVirtualStatement [
 
 	<generated>
