@@ -1323,6 +1323,28 @@ FortranToFASTTests >> testParameterStatement [
 	self assert: stmt endPos equals: 73.
 	
 	self assert: stmt declarators size equals: 3.
+
+	var := stmt declarators first.
+	self assert: var class equals: FASTFortranVariableDeclarator.
+	self assert: var variable equals: 'pi'.
+	self assert: var expression class equals: FASTFortranRealLiteral.
+	self assert: var expression primitiveValue equals: '3.141593'.
+	self assert: var startPos equals: 37.
+
+	var := stmt declarators second.
+	self assert: var class equals: FASTFortranVariableDeclarator.
+	self assert: var variable equals: 'text'.
+	self assert: var expression class equals: FASTFortranCharacterLiteral.
+	self assert: var expression primitiveValue equals: 'Header'.
+	self assert: var startPos equals: 50.
+
+	var := stmt declarators third.
+	self assert: var class equals: FASTFortranVariableDeclarator.
+	self assert: var variable equals: 't'.
+	self assert: var expression class equals: FASTFortranBooleanLiteral.
+	self assert: var expression primitiveValue equals: '.true.'.
+	self assert: var startPos equals: 65.
+
 ]
 
 { #category : #'tests-statement' }

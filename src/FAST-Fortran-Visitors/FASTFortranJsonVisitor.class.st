@@ -297,7 +297,15 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
 
-	^ (super visitDeclarator: aDeclaratorNode) last
+	| data declarator |
+	data := super visitDeclarator: aDeclaratorNode.
+
+	declarator := data fourth.
+	data second ifNotNil: [ :initialization |
+		declarator expression: initialization
+	].
+
+	^declarator
 ]
 
 { #category : #'visiting statement' }
@@ -705,6 +713,17 @@ FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
 		operator: '*' ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitParameterStatement: aParameterStatementNode [ 
+
+	| data |
+	data := super visitParameterStatement: aParameterStatementNode.
+
+	^(self newEntity: FASTFortranParameterStatement atPosition: data first)
+		declarators: data second ;
 		yourself
 ]
 
