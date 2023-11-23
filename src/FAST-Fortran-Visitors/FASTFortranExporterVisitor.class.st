@@ -380,6 +380,17 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
+
+	self
+		sixSpaces ;
+		<< 'parameter (' ;
+		visitNodeListSeparatedByCommas: aFASTFortranParameterStatement declarators ;
+		<< ')' ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranPauseStatement: aFASTFortranPausetStatement [
 
 	self

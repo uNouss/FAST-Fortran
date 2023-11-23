@@ -886,14 +886,16 @@ FASTFortranExporterVisitorTest >> testPauseStatementEmpty [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testPauseStatementWithInteger [
 	| stmt |
-	stmt := FASTFortranPauseStatement new
-		displayArgument: '1' ;
+	stmt := FASTFortranParameterStatement new
+		declarators: (self variableDeclarators: #(pi msg)) ;
 		yourself.
+	stmt declarators first expression: (self realLiteral: '3.14159').
+	stmt declarators second expression: (self characterLiteral: 'hello').
 
 	self
 		assertExport: stmt
 		equals: 
-'      pause 1
+'      parameter (pi=3.14159,msg=''hello'')
 '
 ]
 
