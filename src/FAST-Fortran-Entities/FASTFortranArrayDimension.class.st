@@ -5,9 +5,9 @@ Class {
 	#name : #FASTFortranArrayDimension,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
+		'#upperBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
 		'#lowerBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
-		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions',
-		'#upperBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator'
+		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
