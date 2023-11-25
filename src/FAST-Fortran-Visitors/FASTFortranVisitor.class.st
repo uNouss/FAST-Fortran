@@ -16,11 +16,19 @@ FASTFortranVisitor >> visitFASTFortranAmpersand: aFASTFortranAmpersand [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranArrayBound: aFASTFortranArrayBound [
+
+	^aFASTFortranArrayBound
+		ifNil: [ nil ]
+		ifNotNil: [ aFASTFortranArrayBound accept: self ]
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
 
 	^{
-		(aFASTFortranArrayDimension at: #lower) accept: self .
-		(aFASTFortranArrayDimension at: #upper) accept: self
+		self visitFASTFortranArrayBound: aFASTFortranArrayDimension lowerBound .
+		self visitFASTFortranArrayBound: aFASTFortranArrayDimension upperBound
 	}
 ]
 

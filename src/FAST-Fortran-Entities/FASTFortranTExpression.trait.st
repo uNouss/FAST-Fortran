@@ -8,6 +8,7 @@ Trait {
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
+		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimension opposite: #upperBound',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
@@ -117,6 +118,31 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 	<generated>
 	<navigation: 'ExpressionStatementOwner'>
 	^ MooseSpecializedGroup with: self expressionStatementOwner
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentArrayDimensionDeclarator [
+	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayDimension opposite: #upperBound"
+
+	<generated>
+	<FMComment: 'Parent array dimension declarator'>
+	<container>
+	<derived>
+	^ parentArrayDimensionDeclarator
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentArrayDimensionDeclarator: anObject [
+
+	<generated>
+	parentArrayDimensionDeclarator := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentArrayDimensionDeclaratorGroup [
+	<generated>
+	<navigation: 'ParentArrayDimensionDeclarator'>
+	^ MooseSpecializedGroup with: self parentArrayDimensionDeclarator
 ]
 
 { #category : #accessing }

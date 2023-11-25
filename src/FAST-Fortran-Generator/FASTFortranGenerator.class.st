@@ -599,11 +599,11 @@ FASTFortranGenerator >> defineRelations [
 	super defineRelations.
 
 	((arrayDimension property: #upperBound) comment: 'An upper bound of an array dimension')
-	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
+	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
 
 	((arrayDimension property: #lowerBound) comment: 'A lower bound of an array dimension')
-	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
+	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
 
 	((variableDeclarator property: #dimensions) comment: 'Possible dimensions in case this is an array declaration')

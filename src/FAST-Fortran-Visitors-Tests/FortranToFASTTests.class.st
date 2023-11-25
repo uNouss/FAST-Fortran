@@ -85,6 +85,30 @@ FortranToFASTTests >> testArrayDeclarationMultipleDimensions [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testArrayDeclarationVariableBound [
+	
+	| result stmt declarator |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(max)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:21)","upper":{"anno":[],"span":"(2:19)-(2:21)","tag":"value","value":{"contents":"max","tag":"variable"}}}],"span":"(2:19)-(2:21)"},"initial":null,"length":null,"span":"(2:15)-(2:22)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:22)"},"span":"(2:7)-(2:22)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt declarators size equals: 1.
+
+	declarator := stmt declarators first.
+	self assert: declarator variable equals: 'arr'.
+	self assert: declarator dimensions size equals: 1.
+	self assert: declarator dimensions first class equals: FASTFortranArrayDimension. 
+	self assert: declarator dimensions first lowerBound equals: nil. 
+	self assert: declarator dimensions first upperBound class equals: FASTFortranScalarVariable.
+	self assert: declarator dimensions first upperBound name equals: 'max'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testAssignement [
 
 	| result stmt |
