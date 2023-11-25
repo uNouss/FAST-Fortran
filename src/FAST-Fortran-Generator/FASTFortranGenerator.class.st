@@ -3,7 +3,6 @@ Class {
 	#superclass : #FASTMetamodelGenerator,
 	#instVars : [
 		'acceptStatement',
-		'arrayDimensionDeclarator',
 		'assignmentStatement',
 		'automaticStatement',
 		'backspaceStatement',
@@ -104,7 +103,8 @@ Class {
 		'variableDeclarationStatement',
 		'tWithDeclarators',
 		'tVariableDeclarator',
-		'variableDeclarator'
+		'variableDeclarator',
+		'arrayDimension'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -163,10 +163,10 @@ FASTFortranGenerator >> defineData [
 		             comment:
 		             'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
 
-	arrayDimensionDeclarator := builder
-		                            newClassNamed: #ArrayDimensionDeclarator
+	arrayDimension := builder
+		                            newClassNamed: #ArrayDimension
 		                            comment:
-		                            'I represent Fortran Array dimension declaration'.
+		                            'I represent an array lower/upper bounds declaration'.
 
 	arrayVariable := builder
 		                            newClassNamed: #ArrayVariable
@@ -533,15 +533,6 @@ FASTFortranGenerator >> defineProperties [
 
 	super defineProperties.
 
-	"sorted alphabetically, please keep the order"
-
-	(arrayDimensionDeclarator property: #lb type: #Number) comment:
-		'Lower bound'.
-
-	"Since adjustable arrays may have an asterisk as the last upper bound, we reflect it in relations method by having ub be of tNumericalLiteral"
-	"(arrayDimensionDeclarator property: #ub type: #Number) comment:
-		'Upper bound'."
-
 	(callStatement property: #name type: #String) comment:
 		'Name of called entity (a subroutine)'.
 
@@ -607,9 +598,17 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
-	((arrayDimensionDeclarator property: #ub) comment: 'an upper bound of an array dimension')
+	((arrayDimension property: #upperBound) comment: 'An upper bound of an array dimension')
 	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
+
+	((arrayDimension property: #lowerBound) comment: 'A lower bound of an array dimension')
+	<>- ((tNumericalLiteral property: #parentArrayDimensionDeclarator) comment:
+			 'Parent array dimension declarator').
+
+	((variableDeclarator property: #dimensions) comment: 'Possible dimensions in case this is an array declaration')
+	<>-* ((arrayDimension property: #parentVariableDeclarator)
+			comment: 'The variable declarator I am part of').
 
 	((commonStatement property: #variables) comment:
 		 'List of variable names, array names, and array declarators ')
@@ -634,11 +633,6 @@ FASTFortranGenerator >> defineRelations [
 	((variableDeclarationStatement property: #type) comment: 'type')
 	<>-
 	((type property: #parentDeclaration) comment: 'Parent declaration').
-
-	((dimensionStatement property: #arrays) comment:
-		 'Specifies the name and dimensions of the arrays')
-	<>-* ((type property: #parentDimensionStatement) comment:
-			 'Parent dimension statement').
 
 	((doStatement property: #loopControl) comment: 'loop control')
 	<>-
@@ -715,12 +709,6 @@ FASTFortranGenerator >> defineRelations [
 	((tUnaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
-
-	"The number of dimensions in an array is the number of dimension declarators. The minimum number of dimensions is one; the maximum is seven. For an assumed-size array, the last dimension can be an asterisk."
-	((arrayVariable property: #arrayDimensionDeclarator) comment:
-		 'An array dimension declarator specifies lower and upper dimension bounds of an array')
-	<>-* ((arrayDimensionDeclarator property: #parentArray) comment:
-			 'Parent array declaration').
 
 	((tWithFormatIdentifier property: #format) comment:
 		 'format identifier')
