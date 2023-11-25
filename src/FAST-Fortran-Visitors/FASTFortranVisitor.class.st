@@ -16,8 +16,12 @@ FASTFortranVisitor >> visitFASTFortranAmpersand: aFASTFortranAmpersand [
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranVisitor >> visitFASTFortranArrayDimensionDeclarator: aFASTFortranArrayDimensionDeclarator [
-	<generated>
+FASTFortranVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
+
+	^{
+		(aFASTFortranArrayDimension at: #lower) accept: self .
+		(aFASTFortranArrayDimension at: #upper) accept: self
+	}
 ]
 
 { #category : #'visiting - expressions' }
