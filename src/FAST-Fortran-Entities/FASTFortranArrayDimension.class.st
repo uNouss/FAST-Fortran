@@ -5,9 +5,9 @@ Class {
 	#name : #FASTFortranArrayDimension,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#upperBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
-		'#lowerBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
-		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions'
+		'#lowerBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator',
+		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions',
+		'#upperBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -23,7 +23,7 @@ FASTFortranArrayDimension class >> annotation [
 
 { #category : #accessing }
 FASTFortranArrayDimension >> lowerBound [
-	"Relation named: #lowerBound type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator"
+	"Relation named: #lowerBound type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator"
 
 	<generated>
 	<FMComment: 'A lower bound of an array dimension'>
@@ -70,7 +70,7 @@ FASTFortranArrayDimension >> parentVariableDeclaratorGroup [
 
 { #category : #accessing }
 FASTFortranArrayDimension >> upperBound [
-	"Relation named: #upperBound type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator"
+	"Relation named: #upperBound type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator"
 
 	<generated>
 	<FMComment: 'An upper bound of an array dimension'>
