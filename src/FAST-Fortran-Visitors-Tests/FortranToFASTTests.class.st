@@ -10,6 +10,25 @@ FortranToFASTTests >> jsonVisitor [
 	^ FASTFortranJsonVisitor
 ]
 
+{ #category : #'tests-expression' }
+FortranToFASTTests >> testArrayDeclaration [
+	
+	| result stmt declarator |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(10)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:21)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:20)","upper":{"anno":[],"span":"(2:19)-(2:20)","tag":"value","value":{"contents":["10",null],"tag":"integer"}}}],"span":"(2:19)-(2:20)"},"initial":null,"length":null,"span":"(2:15)-(2:21)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:21)"},"span":"(2:7)-(2:21)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt declarators size equals: 1.
+
+	declarator := stmt declarators first.
+	self assert: declarator variable equals: 'arr'
+]
+
 { #category : #'tests-statement' }
 FortranToFASTTests >> testAssignement [
 
