@@ -10,7 +10,7 @@ FortranToFASTTests >> jsonVisitor [
 	^ FASTFortranJsonVisitor
 ]
 
-{ #category : #'tests-expression' }
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testArrayDeclaration [
 	
 	| result stmt declarator |
@@ -32,6 +32,56 @@ FortranToFASTTests >> testArrayDeclaration [
 	self assert: declarator dimensions first lowerBound equals: nil. 
 	self assert: declarator dimensions first upperBound class equals: FASTFortranIntegerLiteral.
 	self assert: declarator dimensions first upperBound primitiveValue equals: '10'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testArrayDeclarationImplicitLower [
+	
+	| result stmt declarator |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(-5:5)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:23)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"expression":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"minus"},"span":"(2:19)-(2:20)","tag":"unary"},"span":"(2:19)-(2:22)","upper":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":["5",null],"tag":"integer"}}}],"span":"(2:19)-(2:22)"},"initial":null,"length":null,"span":"(2:15)-(2:23)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:23)"},"span":"(2:7)-(2:23)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt declarators size equals: 1.
+
+	declarator := stmt declarators first.
+	self assert: declarator variable equals: 'arr'.
+	self assert: declarator dimensions size equals: 1.
+	self assert: declarator dimensions first lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: declarator dimensions first lowerBound primitiveValue equals: '-5'.
+	self assert: declarator dimensions first upperBound class equals: FASTFortranIntegerLiteral.
+	self assert: declarator dimensions first upperBound primitiveValue equals: '5'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testArrayDeclarationMultipleDimensions [
+	
+	| result stmt declarator |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(1:10 , 0:5)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:29)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:19)-(2:22)","upper":{"anno":[],"span":"(2:21)-(2:22)","tag":"value","value":{"contents":["10",null],"tag":"integer"}}},{"anno":[],"lower":{"anno":[],"span":"(2:26)-(2:26)","tag":"value","value":{"contents":["0",null],"tag":"integer"}},"span":"(2:26)-(2:28)","upper":{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":["5",null],"tag":"integer"}}}],"span":"(2:19)-(2:28)"},"initial":null,"length":null,"span":"(2:15)-(2:29)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:29)"},"span":"(2:7)-(2:29)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt declarators size equals: 1.
+
+	declarator := stmt declarators first.
+	self assert: declarator variable equals: 'arr'.
+	self assert: declarator dimensions size equals: 2.
+
+	self assert: declarator dimensions first lowerBound primitiveValue equals: '1'.
+	self assert: declarator dimensions first upperBound primitiveValue equals: '10'.
+
+	self assert: declarator dimensions second lowerBound primitiveValue equals: '0'.
+	self assert: declarator dimensions second upperBound primitiveValue equals: '5'.
 ]
 
 { #category : #'tests-statement' }
