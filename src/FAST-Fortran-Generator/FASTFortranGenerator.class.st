@@ -533,15 +533,6 @@ FASTFortranGenerator >> defineProperties [
 
 	super defineProperties.
 
-	"sorted alphabetically, please keep the order"
-
-	(arrayDimension property: #lb type: #Number) comment:
-		'Lower bound'.
-
-	"Since adjustable arrays may have an asterisk as the last upper bound, we reflect it in relations method by having ub be of tNumericalLiteral"
-	"(arrayDimensionDeclarator property: #ub type: #Number) comment:
-		'Upper bound'."
-
 	(callStatement property: #name type: #String) comment:
 		'Name of called entity (a subroutine)'.
 

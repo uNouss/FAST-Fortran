@@ -5,10 +5,9 @@ Class {
 	#name : #FASTFortranArrayDimension,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#lb => FMProperty',
-		'#upperBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
 		'#lowerBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator',
-		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions'
+		'#parentVariableDeclarator => FMOne type: #FASTFortranVariableDeclarator opposite: #dimensions',
+		'#upperBound => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentArrayDimensionDeclarator'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -20,21 +19,6 @@ FASTFortranArrayDimension class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranArrayDimension >> lb [
-
-	<FMProperty: #lb type: #Number>
-	<generated>
-	<FMComment: 'Lower bound'>
-	^ lb
-]
-
-{ #category : #accessing }
-FASTFortranArrayDimension >> lb: anObject [
-	<generated>
-	lb := anObject
 ]
 
 { #category : #accessing }
