@@ -126,6 +126,18 @@ FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitArrayDeclarationDim: arrayDeclarationDim [
+
+	| data |
+	data := super visitArrayDeclarationDim: arrayDeclarationDim.
+
+	^(self newEntity: FASTFortranArrayDimension atPosition: data first)
+		lowerBound: data second ;
+		upperBound: data third ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitAssign_expression: anAssignExpressionNode [
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
 
