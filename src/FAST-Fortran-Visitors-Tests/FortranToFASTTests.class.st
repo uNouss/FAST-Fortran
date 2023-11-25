@@ -708,7 +708,7 @@ FortranToFASTTests >> testDataStatement [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testDeclarationStatement [
+FortranToFASTTests >> testDeclarationIntegerWithInitializer [
 
 	| result stmt declarator |
 	fortranCode := '      program main

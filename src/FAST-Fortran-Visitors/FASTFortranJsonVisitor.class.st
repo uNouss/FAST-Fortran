@@ -308,14 +308,14 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
+	"#(span initial length dims variable)"
 
 	| data declarator |
 	data := super visitDeclarator: aDeclaratorNode.
 
-	declarator := data fourth.
-	data second ifNotNil: [ :initialization |
-		declarator expression: initialization
-	].
+	declarator := data fifth.
+	data second ifNotNil: [ :initialization | declarator expression: initialization ].
+	data fourth ifNotNil: [ :dimensions | declarator dimensions: dimensions ].
 
 	^declarator
 ]
