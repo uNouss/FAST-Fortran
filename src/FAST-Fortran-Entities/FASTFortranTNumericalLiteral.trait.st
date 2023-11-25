@@ -4,7 +4,7 @@ A numerical literal
 Trait {
 	#name : #FASTFortranTNumericalLiteral,
 	#instVars : [
-		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimensionDeclarator opposite: #ub'
+		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimension opposite: #upperBound'
 	],
 	#traits : 'FASTFortranTLiteral',
 	#classTraits : 'FASTFortranTLiteral classTrait',
@@ -22,7 +22,7 @@ FASTFortranTNumericalLiteral classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTNumericalLiteral >> parentArrayDimensionDeclarator [
-	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayDimensionDeclarator opposite: #ub"
+	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayDimension opposite: #upperBound"
 
 	<generated>
 	<FMComment: 'Parent array dimension declarator'>

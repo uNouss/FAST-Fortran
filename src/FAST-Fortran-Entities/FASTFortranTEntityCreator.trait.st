@@ -52,10 +52,10 @@ FASTFortranTEntityCreator >> newAmpersand [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArrayDimensionDeclarator [
+FASTFortranTEntityCreator >> newArrayDimension [
 
 	<generated>
-	^ self add: FASTFortranArrayDimensionDeclarator new
+	^ self add: FASTFortranArrayDimension new
 ]
 
 { #category : #'entity creation' }
