@@ -114,6 +114,15 @@ FASTFortranExporterVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayD
 
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVariable [
+
+	self
+		<< aFASTFortranArrayVariable name ;
+		<< '(' ;
+		<< ')'
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 

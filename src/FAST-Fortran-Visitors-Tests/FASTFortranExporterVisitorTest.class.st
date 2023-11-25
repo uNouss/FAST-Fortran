@@ -322,6 +322,18 @@ FASTFortranExporterVisitorTest >> testArrayDeclarationMultipleDimensions [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testArrayVariable [
+	| stmt |
+	stmt := FASTFortranArrayVariable new
+		name: 'arr'.
+
+	self
+		assertExport: stmt
+		equals: 
+'arr()'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
 
 	| stmt |
