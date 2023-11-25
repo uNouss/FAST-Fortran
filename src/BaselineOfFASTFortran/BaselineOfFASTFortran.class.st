@@ -20,7 +20,7 @@ BaselineOfFASTFortran >> defineDependencies: spec [
 	spec
 		baseline: 'FAST'
 		with: [ spec
-				loads: #('default');
+				loads: #('tools');
 				repository: 'github://moosetechnology/FAST:v2/src' ] ;
 
 	baseline: 'Esope'
