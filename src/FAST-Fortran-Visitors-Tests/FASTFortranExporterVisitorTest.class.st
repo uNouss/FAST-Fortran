@@ -10,6 +10,26 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Tests-Visitor'
 }
 
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollection [
+
+	| declarator |
+	declarator := self variableDeclarator: variable.
+	declarator dimensions:
+		(aCollection collect: [ :dim |
+			FASTFortranArrayDimension new
+				lowerBound: (dim first ifNotNil: [ self integerLiteral: dim first ]) ;
+				upperBound: (dim second ifNotNil: [ self integerLiteral: dim second ])
+		]).
+
+	^FASTFortranVariableDeclarationStatement new
+		type: (self integerType: nil) ;
+		declarators: { declarator } ;
+		startPos: 1 ;
+		endPos: 10 ;
+		yourself
+]
+
 { #category : #running }
 FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString [
 	| generated |
@@ -262,6 +282,43 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		startPos: 1 ;
 		endPos: 50 ;
 		yourself
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testArrayDeclaration [
+	| stmt |
+	stmt := self arrayDeclaration: 'v' dimensions: #( #('1' '10') ).
+
+	self
+		assertExport: stmt
+		equals: 
+'      integer v(1:10)
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testArrayDeclarationImplicitLowerBound [
+	| stmt |
+	stmt := self arrayDeclaration: 'v' dimensions: #( #('1' '10') ).
+	stmt declarators first dimensions first lowerBound: nil.
+
+	self
+		assertExport: stmt
+		equals: 
+'      integer v(10)
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testArrayDeclarationMultipleDimensions [
+	| stmt |
+	stmt := self arrayDeclaration: 'v' dimensions: #( #('1' '10') #('-10' '-1') ).
+
+	self
+		assertExport: stmt
+		equals: 
+'      integer v(1:10,-10:-1)
+'
 ]
 
 { #category : #'tests - statements' }
@@ -974,22 +1031,6 @@ FASTFortranExporterVisitorTest >> testStopStatementWithString [
 		assertExport: stmt
 		equals: 
 '      stop ''error''
-'
-]
-
-{ #category : #'tests - statements' }
-FASTFortranExporterVisitorTest >> testTwoDeclarationsArray [
-	| stmt |
-	self skip: 'not implemented in FAST yet'.
-
-	stmt := self declarationStatement: (self integerType: '5') variables: #(arr).
-
-	self
-		assertExport: stmt
-		equals: 
-'      subroutine blah()
-      integer arr(5)
-      end
 '
 ]
 

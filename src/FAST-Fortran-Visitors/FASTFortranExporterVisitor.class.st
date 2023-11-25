@@ -102,6 +102,19 @@ FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
+
+	(aFASTFortranArrayDimension lowerBound)
+		ifNotNil: [ :lb |
+			self
+				visitFASTFortranArrayBound: lb	;
+				<< ':'
+		].
+	self visitFASTFortranArrayBound: aFASTFortranArrayDimension upperBound
+
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
 	self sixSpaces.
@@ -543,6 +556,14 @@ FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFAS
 FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
 
 	self << aFASTFortranVariableDeclarator variable.
+
+	aFASTFortranVariableDeclarator dimensions
+		ifNotEmpty: [ :dimensions |
+			self << '('.
+			self visitNodeListSeparatedByCommas: dimensions.
+			self << ')'.
+		].
+
 	aFASTFortranVariableDeclarator expression
 		ifNotNil: [ :expression |
 			self <<'='.
