@@ -501,7 +501,7 @@ FASTFortranExporterVisitorTest >> testCommonStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      common a,b /otherGrp/ c,d 
+'      common a,b /otherGrp/ c,d
 '
 ]
 
