@@ -119,6 +119,12 @@ FASTFortranVisitor >> visitFASTFortranComment: aFASTFortranComment [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
+
+	aFASTFortranCommonGroup variables do: [ :var | var accept: self ].
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranCommonStatement.
