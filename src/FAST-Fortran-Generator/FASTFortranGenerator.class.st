@@ -171,7 +171,7 @@ FASTFortranGenerator >> defineData [
 	arrayVariable := builder
 		                            newClassNamed: #ArrayVariable
 		                            comment:
-		                            'an array Fortran Variable, used in declarations'.
+		                            'An array Fortran Variable, accessed in the code'.
 
 	assignmentExpression := builder
 		                        newClassNamed: #AssignmentExpression
@@ -609,6 +609,9 @@ FASTFortranGenerator >> defineRelations [
 	((variableDeclarator property: #dimensions) comment: 'Possible dimensions in case this is an array declaration')
 	<>-* ((arrayDimension property: #parentVariableDeclarator)
 			comment: 'The variable declarator I am part of').
+
+	((arrayVariable property: #indices) comment: 'Indices used in the array access')
+	-* ((tExpression property: #parentArrayExpression) comment: 'an ArrayVariable expression of which I am an indice').
 
 	((commonStatement property: #variables) comment:
 		 'List of variable names, array names, and array declarators ')
