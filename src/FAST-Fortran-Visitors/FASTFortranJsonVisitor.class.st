@@ -223,7 +223,7 @@ FASTFortranJsonVisitor >> visitCommonGroup: aCommonGroupNode [
 	data := super visitCommonGroup: aCommonGroupNode.
 
 	^(self newEntity: FASTFortranCommonGroup atPosition: data first)
-		name: data second ;
+		name: (data second ifNil: [ nil ] ifNotNil: [ :groupName | groupName second]) ;
 		variables: data third ;
 		yourself
 ]
@@ -239,7 +239,9 @@ nlist: List of variable names, array names, and array declarators  "
 	| data |
 	data := super visitCommonStatement: aCommonStatementNode.
 
-	^ self newEntity: FASTFortranCommonStatement atPosition: data first
+	^(self newEntity: FASTFortranCommonStatement atPosition: data first)
+		groups: data second ;
+		yourself
 ]
 
 { #category : #'visiting statement' }

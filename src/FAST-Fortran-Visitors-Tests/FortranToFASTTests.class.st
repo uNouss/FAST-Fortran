@@ -743,7 +743,7 @@ C comment in a function''s body
 { #category : #'tests-statement' }
 FortranToFASTTests >> testCommonStatementMultipleGroups [
 
-	| result stmt dataGroup |
+	| result stmt commonGroup |
 	fortranCode := '      program simplemain
       COMMON / name1 / var1, var2 / name2 / var3, var4
       end
@@ -754,40 +754,26 @@ FortranToFASTTests >> testCommonStatementMultipleGroups [
 	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranDataStatement.
+	self assert: stmt class equals: FASTFortranCommonStatement.
 	self assert: stmt startPos equals: 32.
-	self assert: stmt endPos equals: 95.
+	self assert: stmt endPos equals: 78.
 
-	self assert: stmt dataGroups size equals: 2.
+	self assert: stmt groups size equals: 2.
 
-	dataGroup := stmt dataGroups first.
-	self assert: dataGroup dataVariables size equals: 2.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine1'.
-	self assert: dataGroup dataVariables first startPos equals: 37.
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: 'name1'.
+	self assert: commonGroup variables size equals: 2.
 
-	self assert: dataGroup dataConstants size equals: 2.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
-	self assert: dataGroup dataConstants first startPos equals: 56.
-
-	dataGroup := stmt dataGroups second.
-	self assert: dataGroup dataVariables size equals: 1.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine3'.
-	self assert: dataGroup dataVariables first startPos equals: 76.
-
-	self assert: dataGroup dataConstants size equals: 1.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Encore'.
-	self assert: dataGroup dataConstants first startPos equals: 86.
+	commonGroup := stmt groups second.
+	self assert: commonGroup name equals: 'name2'.
+	self assert: commonGroup variables size equals: 2.
 
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testCommonStatementNamed [
 
-	| result stmt dataGroup |
+	| result stmt commonGroup |
 	fortranCode := '      program simplemain
       COMMON / name / var1, var2
       end
@@ -798,40 +784,24 @@ FortranToFASTTests >> testCommonStatementNamed [
 	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranDataStatement.
+	self assert: stmt class equals: FASTFortranCommonStatement.
 	self assert: stmt startPos equals: 32.
-	self assert: stmt endPos equals: 95.
+	self assert: stmt endPos equals: 57.
 
-	self assert: stmt dataGroups size equals: 2.
+	self assert: stmt groups size equals: 1.
 
-	dataGroup := stmt dataGroups first.
-	self assert: dataGroup dataVariables size equals: 2.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine1'.
-	self assert: dataGroup dataVariables first startPos equals: 37.
-
-	self assert: dataGroup dataConstants size equals: 2.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
-	self assert: dataGroup dataConstants first startPos equals: 56.
-
-	dataGroup := stmt dataGroups second.
-	self assert: dataGroup dataVariables size equals: 1.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine3'.
-	self assert: dataGroup dataVariables first startPos equals: 76.
-
-	self assert: dataGroup dataConstants size equals: 1.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Encore'.
-	self assert: dataGroup dataConstants first startPos equals: 86.
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: 'name'.
+	self assert: commonGroup variables size equals: 2.
+	self assert: commonGroup variables first startPos equals: 48.
+	self assert: commonGroup variables second startPos equals: 54.
 
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testCommonStatementNoName [
 
-	| result stmt dataGroup |
+	| result stmt commonGroup |
 	fortranCode := '      program simplemain
       COMMON var1, var2
       end
@@ -846,29 +816,19 @@ FortranToFASTTests >> testCommonStatementNoName [
 	self assert: stmt startPos equals: 32.
 	self assert: stmt endPos equals: 48.
 
-	self assert: stmt dataGroups size equals: 2.
+	self assert: stmt groups size equals: 1.
 
-	dataGroup := stmt dataGroups first.
-	self assert: dataGroup dataVariables size equals: 2.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine1'.
-	self assert: dataGroup dataVariables first startPos equals: 37.
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: nil.
+	self assert: commonGroup variables size equals: 2.
 
-	self assert: dataGroup dataConstants size equals: 2.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
-	self assert: dataGroup dataConstants first startPos equals: 56.
+	self assert: commonGroup variables first class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup variables first variable equals: 'var1'.
+	self assert: commonGroup variables first startPos equals: 39.
 
-	dataGroup := stmt dataGroups second.
-	self assert: dataGroup dataVariables size equals: 1.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine3'.
-	self assert: dataGroup dataVariables first startPos equals: 76.
-
-	self assert: dataGroup dataConstants size equals: 1.
-	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
-	self assert: dataGroup dataConstants first primitiveValue equals: 'Encore'.
-	self assert: dataGroup dataConstants first startPos equals: 86.
+	self assert: commonGroup variables second class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup variables second variable equals: 'var2'.
+	self assert: commonGroup variables second startPos equals: 45.
 
 ]
 
