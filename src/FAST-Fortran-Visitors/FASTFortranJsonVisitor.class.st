@@ -220,9 +220,12 @@ FASTFortranJsonVisitor >> visitCommonGroup: aCommonGroupNode [
 	"#(span name varList)"
 
 	| data |
-	^data := super visitCommonGroup: aCommonGroupNode.
+	data := super visitCommonGroup: aCommonGroupNode.
 
-
+	^(self newEntity: FASTFortranCommonGroup atPosition: data first)
+		name: data second ;
+		variables: data third ;
+		yourself
 ]
 
 { #category : #'visiting statement' }

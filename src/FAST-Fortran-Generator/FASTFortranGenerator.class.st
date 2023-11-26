@@ -620,7 +620,7 @@ FASTFortranGenerator >> defineRelations [
 
 	((commonGroup property: #variables) comment:
 		 'List of variable name in this commonGroup')
-	<>-* ((variable property: #parentCommonGroup) comment:
+	<>-* ((variableDeclarator property: #parentCommonGroup) comment:
 			 'Parent common group').
 
 	((commonStatement property: #groups) comment:
