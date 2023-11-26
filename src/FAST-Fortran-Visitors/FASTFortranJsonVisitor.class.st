@@ -216,6 +216,16 @@ FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitCommonGroup: aCommonGroupNode [
+	"#(span name varList)"
+
+	| data |
+	^data := super visitCommonGroup: aCommonGroupNode.
+
+
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCommonStatement: aCommonStatementNode [
 	"creates common statement which defines a block of main memory storage so that different program units can share the same data without using arguments.
 
@@ -225,6 +235,7 @@ nlist: List of variable names, array names, and array declarators  "
 
 	| data |
 	data := super visitCommonStatement: aCommonStatementNode.
+
 	^ self newEntity: FASTFortranCommonStatement atPosition: data first
 ]
 
