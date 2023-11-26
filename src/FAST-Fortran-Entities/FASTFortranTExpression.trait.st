@@ -9,6 +9,7 @@ Trait {
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
 		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimension opposite: #upperBound',
+		'#parentArrayExpression => FMOne type: #FASTFortranArrayVariable opposite: #indices',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
@@ -143,6 +144,22 @@ FASTFortranTExpression >> parentArrayDimensionDeclaratorGroup [
 	<generated>
 	<navigation: 'ParentArrayDimensionDeclarator'>
 	^ MooseSpecializedGroup with: self parentArrayDimensionDeclarator
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentArrayExpression [
+	"Relation named: #parentArrayExpression type: #FASTFortranArrayVariable opposite: #indices"
+
+	<generated>
+	<FMComment: 'an ArrayVariable expression of which I am an indice'>
+	^ parentArrayExpression
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentArrayExpression: anObject [
+
+	<generated>
+	parentArrayExpression := anObject
 ]
 
 { #category : #accessing }
