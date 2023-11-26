@@ -486,6 +486,7 @@ FASTFortranGenerator >> defineHierarchy [
 	abstractExpression --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
+	commonGroup  --|> tWithDeclarators.
 	functionCall --|> abstractExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
@@ -617,11 +618,6 @@ FASTFortranGenerator >> defineRelations [
 
 	((arrayVariable property: #indices) comment: 'Indices used in the array access')
 	-* ((tExpression property: #parentArrayExpression) comment: 'an ArrayVariable expression of which I am an indice').
-
-	((commonGroup property: #variables) comment:
-		 'List of variable name in this commonGroup')
-	<>-* ((variableDeclarator property: #parentCommonGroup) comment:
-			 'Parent common group').
 
 	((commonStatement property: #groups) comment:
 		 'List common groups in this common statement')
