@@ -709,7 +709,10 @@ FASTFortranVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWithParamete
 
 { #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranType: aFASTFortranType [
-	<generated>
+
+	^aFASTFortranType size
+		ifNil: [ nil ]
+		ifNotNil: [ :length | length accept: self ]
 ]
 
 { #category : #'visiting - expressions' }
