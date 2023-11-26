@@ -166,9 +166,10 @@ FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallSta
 	self newLine
 ]
 
-{ #category : #'visiting - expressions' }
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
-	self << 'character'
+	self << 'character'.
+	self visitFASTFortranType: aFASTFortranType
 ]
 
 { #category : #'visiting - statements' }
@@ -364,7 +365,8 @@ FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImp
 
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
-	self << 'integer'
+	self << 'integer'.
+	self visitFASTFortranType: aFASTFortranIntegerType
 ]
 
 { #category : #'visiting - statements' }
@@ -375,7 +377,8 @@ FASTFortranExporterVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelR
 
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
-	self << 'logical'
+	self << 'logical'.
+	self visitFASTFortranType: aFASTFortranType
 ]
 
 { #category : #'visiting - statements' }
@@ -436,7 +439,8 @@ FASTFortranExporterVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMa
 
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
-	self << 'real'
+	self << 'real'.
+	self visitFASTFortranType: aFASTFortranType
 ]
 
 { #category : #'visiting - expressions' }
@@ -549,6 +553,15 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << '('.
 	self visitNodeListSeparatedByCommas: aFASTFortranTWithParameters parameters.
 	self << ')'.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
+
+	aFASTFortranType size ifNotNil: [ :length |
+		self << '*'.
+		super visitFASTFortranType: aFASTFortranType
+	]
 ]
 
 { #category : #'visiting - statements' }
