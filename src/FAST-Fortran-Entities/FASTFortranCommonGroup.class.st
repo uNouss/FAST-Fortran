@@ -4,9 +4,10 @@ I represent Common group inside a Common statement
 Class {
 	#name : #FASTFortranCommonGroup,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTWithDeclarators',
+	#classTraits : 'FASTFortranTWithDeclarators classTrait',
 	#instVars : [
 		'#name => FMProperty',
-		'#variables => FMMany type: #FASTFortranVariableDeclarator opposite: #parentCommonGroup',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #groups'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -19,12 +20,6 @@ FASTFortranCommonGroup class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranCommonGroup >> addVariable: anObject [
-	<generated>
-	^ self variables add: anObject
 ]
 
 { #category : #accessing }
@@ -64,28 +59,4 @@ FASTFortranCommonGroup >> parentCommonStatementGroup [
 	<generated>
 	<navigation: 'ParentCommonStatement'>
 	^ MooseSpecializedGroup with: self parentCommonStatement
-]
-
-{ #category : #accessing }
-FASTFortranCommonGroup >> variables [
-	"Relation named: #variables type: #FASTFortranVariableDeclarator opposite: #parentCommonGroup"
-
-	<generated>
-	<FMComment: 'List of variable name in this commonGroup'>
-	<derived>
-	^ variables
-]
-
-{ #category : #accessing }
-FASTFortranCommonGroup >> variables: anObject [
-
-	<generated>
-	variables value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranCommonGroup >> variablesGroup [
-	<generated>
-	<navigation: 'Variables'>
-	^ MooseSpecializedGroup withAll: self variables asSet
 ]
