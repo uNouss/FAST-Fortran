@@ -869,9 +869,9 @@ FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
 	| data |
 	data := super visitSubscript: aSubscriptNode.
 
-	^FASTFortranArrayVariable new
-		mooseModel: model ;
-		name: data second name;
+	^(self newEntity: FASTFortranArrayVariable atPosition: data first)
+		name: data second name ;
+		indices: (data third collect: #second) ;
 		yourself
 ]
 
