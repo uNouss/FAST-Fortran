@@ -83,6 +83,8 @@ FASTFortranExporterVisitorTest >> characterLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> characterType: dimension [
 	^FASTFortranCharacterType new
+		size: dimension ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -186,6 +188,8 @@ FASTFortranExporterVisitorTest >> integerLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> integerType: dimension [
 	^FASTFortranIntegerType new
+		size: dimension ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -231,6 +235,8 @@ FASTFortranExporterVisitorTest >> realLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> realType: dimension [
 	^FASTFortranRealType new
+		size: dimension ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -937,6 +943,18 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 		assertExport: stmt
 		equals: 
 '      integer i,j
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationcharacterTypeWithSize [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: (self integerLiteral: '10')) variables: #(str).
+
+	self
+		assertExport: stmt
+		equals: 
+'      character*10 str
 '
 ]
 
