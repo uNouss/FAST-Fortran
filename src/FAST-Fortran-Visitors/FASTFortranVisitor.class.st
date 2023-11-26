@@ -148,6 +148,13 @@ FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueSta
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
+
+	aFASTFortranDataGroup dataVariables do: [ :var | var accept: self ].
+	aFASTFortranDataGroup dataConstants do: [ :const | const accept: self ].
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranDataStatement.
