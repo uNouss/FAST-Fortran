@@ -224,7 +224,7 @@ FASTFortranJsonVisitor >> visitCommonGroup: aCommonGroupNode [
 
 	^(self newEntity: FASTFortranCommonGroup atPosition: data first)
 		name: (data second ifNil: [ nil ] ifNotNil: [ :groupName | groupName second]) ;
-		variables: data third ;
+		declarators: data third ;
 		yourself
 ]
 

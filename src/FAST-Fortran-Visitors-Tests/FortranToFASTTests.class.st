@@ -762,11 +762,11 @@ FortranToFASTTests >> testCommonStatementMultipleGroups [
 
 	commonGroup := stmt groups first.
 	self assert: commonGroup name equals: 'name1'.
-	self assert: commonGroup variables size equals: 2.
+	self assert: commonGroup declarators size equals: 2.
 
 	commonGroup := stmt groups second.
 	self assert: commonGroup name equals: 'name2'.
-	self assert: commonGroup variables size equals: 2.
+	self assert: commonGroup declarators size equals: 2.
 
 ]
 
@@ -792,9 +792,9 @@ FortranToFASTTests >> testCommonStatementNamed [
 
 	commonGroup := stmt groups first.
 	self assert: commonGroup name equals: 'name'.
-	self assert: commonGroup variables size equals: 2.
-	self assert: commonGroup variables first startPos equals: 48.
-	self assert: commonGroup variables second startPos equals: 54.
+	self assert: commonGroup declarators size equals: 2.
+	self assert: commonGroup declarators first startPos equals: 48.
+	self assert: commonGroup declarators second startPos equals: 54.
 
 ]
 
@@ -820,15 +820,15 @@ FortranToFASTTests >> testCommonStatementNoName [
 
 	commonGroup := stmt groups first.
 	self assert: commonGroup name equals: nil.
-	self assert: commonGroup variables size equals: 2.
+	self assert: commonGroup declarators size equals: 2.
 
-	self assert: commonGroup variables first class equals: FASTFortranVariableDeclarator.
-	self assert: commonGroup variables first variable equals: 'var1'.
-	self assert: commonGroup variables first startPos equals: 39.
+	self assert: commonGroup declarators first class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup declarators first variable equals: 'var1'.
+	self assert: commonGroup declarators first startPos equals: 39.
 
-	self assert: commonGroup variables second class equals: FASTFortranVariableDeclarator.
-	self assert: commonGroup variables second variable equals: 'var2'.
-	self assert: commonGroup variables second startPos equals: 45.
+	self assert: commonGroup declarators second class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup declarators second variable equals: 'var2'.
+	self assert: commonGroup declarators second startPos equals: 45.
 
 ]
 
