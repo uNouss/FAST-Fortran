@@ -6,7 +6,7 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#name => FMProperty',
-		'#variables => FMMany type: #FASTFortranVariable opposite: #parentCommonGroup',
+		'#variables => FMMany type: #FASTFortranVariableDeclarator opposite: #parentCommonGroup',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #groups'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -68,7 +68,7 @@ FASTFortranCommonGroup >> parentCommonStatementGroup [
 
 { #category : #accessing }
 FASTFortranCommonGroup >> variables [
-	"Relation named: #variables type: #FASTFortranVariable opposite: #parentCommonGroup"
+	"Relation named: #variables type: #FASTFortranVariableDeclarator opposite: #parentCommonGroup"
 
 	<generated>
 	<FMComment: 'List of variable name in this commonGroup'>

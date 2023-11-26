@@ -7,7 +7,8 @@ Class {
 	#traits : 'FASTFortranTVariableDeclarator',
 	#classTraits : 'FASTFortranTVariableDeclarator classTrait',
 	#instVars : [
-		'#dimensions => FMMany type: #FASTFortranArrayDimension opposite: #parentVariableDeclarator'
+		'#dimensions => FMMany type: #FASTFortranArrayDimension opposite: #parentVariableDeclarator',
+		'#parentCommonGroup => FMOne type: #FASTFortranCommonGroup opposite: #variables'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -49,4 +50,28 @@ FASTFortranVariableDeclarator >> dimensionsGroup [
 	<generated>
 	<navigation: 'Dimensions'>
 	^ MooseSpecializedGroup withAll: self dimensions asSet
+]
+
+{ #category : #accessing }
+FASTFortranVariableDeclarator >> parentCommonGroup [
+	"Relation named: #parentCommonGroup type: #FASTFortranCommonGroup opposite: #variables"
+
+	<generated>
+	<FMComment: 'Parent common group'>
+	<container>
+	^ parentCommonGroup
+]
+
+{ #category : #accessing }
+FASTFortranVariableDeclarator >> parentCommonGroup: anObject [
+
+	<generated>
+	parentCommonGroup := anObject
+]
+
+{ #category : #navigation }
+FASTFortranVariableDeclarator >> parentCommonGroupGroup [
+	<generated>
+	<navigation: 'ParentCommonGroup'>
+	^ MooseSpecializedGroup with: self parentCommonGroup
 ]
