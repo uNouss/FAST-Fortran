@@ -802,6 +802,15 @@ FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
 ]
 
 { #category : #visiting }
+FASTFortranJsonVisitor >> visitSelector: aSelectorNode [
+	"#(span kind length)"
+
+	^(super visitSelector: aSelectorNode)
+		ifNil: [ nil]
+		ifNotNil: [ :data | data third ]
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitStar: anObject [
 
 	^FASTFortranAsterisk new
@@ -889,7 +898,11 @@ FASTFortranJsonVisitor >> visitType: aTypeNode [
 
 	| data |
 	data := super visitType: aTypeNode.
-	self set: data second startEnd: data first.
+	self
+		set: data second
+		startEnd: data first.
+	data second size: data third.
+
 	^data second
 ]
 
