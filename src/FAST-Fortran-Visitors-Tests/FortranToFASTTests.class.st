@@ -1771,8 +1771,10 @@ FortranToFASTTests >> testVariableDeclarationCharacter [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt type class equals: FASTFortranCharacterType.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
+	self assert: stmt type size primitiveValue equals: '40'.
+
 	self assert: stmt declarators size equals: 1.
-	
 	var := stmt declarators first.
 	self assert: var variable equals: 'astring'.
 ]
