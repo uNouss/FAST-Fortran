@@ -164,6 +164,13 @@ FASTFortranTEntityCreator >> newComment [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newCommonGroup [
+
+	<generated>
+	^ self add: FASTFortranCommonGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newCommonStatement [
 
 	<generated>

@@ -7,8 +7,7 @@ Class {
 	#traits : 'FASTFortranTEntryStatement + FASTFortranTVariableEntity',
 	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
-		'#name => FMProperty',
-		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #variables'
+		'#name => FMProperty'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -35,31 +34,6 @@ FASTFortranVariable >> name [
 FASTFortranVariable >> name: anObject [
 	<generated>
 	name := anObject
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentCommonStatement [
-	"Relation named: #parentCommonStatement type: #FASTFortranCommonStatement opposite: #variables"
-
-	<generated>
-	<FMComment: 'Parent common expression'>
-	<container>
-	<derived>
-	^ parentCommonStatement
-]
-
-{ #category : #accessing }
-FASTFortranVariable >> parentCommonStatement: anObject [
-
-	<generated>
-	parentCommonStatement := anObject
-]
-
-{ #category : #navigation }
-FASTFortranVariable >> parentCommonStatementGroup [
-	<generated>
-	<navigation: 'ParentCommonStatement'>
-	^ MooseSpecializedGroup with: self parentCommonStatement
 ]
 
 { #category : #accessing }

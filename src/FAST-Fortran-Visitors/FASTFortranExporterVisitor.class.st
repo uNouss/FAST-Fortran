@@ -173,6 +173,32 @@ FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
+
+	aFASTFortranCommonGroup name
+		ifNotNil: [ :name |
+			self
+				<< ' /' ;
+				<< name ;
+				<< '/'
+		].
+
+	self
+		<< ' ' ;
+		visitNodeListSeparatedByCommas: aFASTFortranCommonGroup declarators
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
+
+	self
+		sixSpaces ;
+		<< 'common'.
+		aFASTFortranCommonStatement groups do: [ :commonGroup | commonGroup accept: self ].
+		self newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
 
 	| lineStart |

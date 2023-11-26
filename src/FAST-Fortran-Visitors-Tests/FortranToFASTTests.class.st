@@ -741,6 +741,98 @@ C comment in a function''s body
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testCommonStatementMultipleGroups [
+
+	| result stmt commonGroup |
+	fortranCode := '      program simplemain
+      COMMON / name1 / var1, var2 / name2 / var3, var4
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:53)","statement":{"anno":[],"common_groups":{"anno":[],"list":[{"anno":[],"name":{"anno":[],"span":"(2:13)-(2:21)","tag":"value","value":{"contents":"name1","tag":"variable"}},"span":"(2:13)-(2:32)","vars":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:23)-(2:26)","type":"scalar","variable":{"anno":[],"span":"(2:23)-(2:26)","tag":"value","value":{"contents":"var1","tag":"variable"}}},{"anno":[],"initial":null,"length":null,"span":"(2:29)-(2:32)","type":"scalar","variable":{"anno":[],"span":"(2:29)-(2:32)","tag":"value","value":{"contents":"var2","tag":"variable"}}}],"span":"(2:23)-(2:32)"}},{"anno":[],"name":{"anno":[],"span":"(2:34)-(2:42)","tag":"value","value":{"contents":"name2","tag":"variable"}},"span":"(2:34)-(2:53)","vars":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:44)-(2:47)","type":"scalar","variable":{"anno":[],"span":"(2:44)-(2:47)","tag":"value","value":{"contents":"var3","tag":"variable"}}},{"anno":[],"initial":null,"length":null,"span":"(2:50)-(2:53)","type":"scalar","variable":{"anno":[],"span":"(2:50)-(2:53)","tag":"value","value":{"contents":"var4","tag":"variable"}}}],"span":"(2:44)-(2:53)"}}],"span":"(2:13)-(2:53)"},"span":"(2:7)-(2:53)","tag":"common"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranCommonStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 78.
+
+	self assert: stmt groups size equals: 2.
+
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: 'name1'.
+	self assert: commonGroup declarators size equals: 2.
+
+	commonGroup := stmt groups second.
+	self assert: commonGroup name equals: 'name2'.
+	self assert: commonGroup declarators size equals: 2.
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testCommonStatementNamed [
+
+	| result stmt commonGroup |
+	fortranCode := '      program simplemain
+      COMMON / name / var1, var2
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:32)","statement":{"anno":[],"common_groups":{"anno":[],"list":[{"anno":[],"name":{"anno":[],"span":"(2:14)-(2:21)","tag":"value","value":{"contents":"name","tag":"variable"}},"span":"(2:14)-(2:32)","vars":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:23)-(2:26)","type":"scalar","variable":{"anno":[],"span":"(2:23)-(2:26)","tag":"value","value":{"contents":"var1","tag":"variable"}}},{"anno":[],"initial":null,"length":null,"span":"(2:29)-(2:32)","type":"scalar","variable":{"anno":[],"span":"(2:29)-(2:32)","tag":"value","value":{"contents":"var2","tag":"variable"}}}],"span":"(2:23)-(2:32)"}}],"span":"(2:14)-(2:32)"},"span":"(2:7)-(2:32)","tag":"common"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranCommonStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 57.
+
+	self assert: stmt groups size equals: 1.
+
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: 'name'.
+	self assert: commonGroup declarators size equals: 2.
+	self assert: commonGroup declarators first startPos equals: 48.
+	self assert: commonGroup declarators second startPos equals: 54.
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testCommonStatementNoName [
+
+	| result stmt commonGroup |
+	fortranCode := '      program simplemain
+      COMMON var1, var2
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:23)","statement":{"anno":[],"common_groups":{"anno":[],"list":[{"anno":[],"name":null,"span":"(2:14)-(2:23)","vars":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:14)-(2:17)","type":"scalar","variable":{"anno":[],"span":"(2:14)-(2:17)","tag":"value","value":{"contents":"var1","tag":"variable"}}},{"anno":[],"initial":null,"length":null,"span":"(2:20)-(2:23)","type":"scalar","variable":{"anno":[],"span":"(2:20)-(2:23)","tag":"value","value":{"contents":"var2","tag":"variable"}}}],"span":"(2:14)-(2:23)"}}],"span":"(2:14)-(2:23)"},"span":"(2:7)-(2:23)","tag":"common"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranCommonStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 48.
+
+	self assert: stmt groups size equals: 1.
+
+	commonGroup := stmt groups first.
+	self assert: commonGroup name equals: nil.
+	self assert: commonGroup declarators size equals: 2.
+
+	self assert: commonGroup declarators first class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup declarators first variable equals: 'var1'.
+	self assert: commonGroup declarators first startPos equals: 39.
+
+	self assert: commonGroup declarators second class equals: FASTFortranVariableDeclarator.
+	self assert: commonGroup declarators second variable equals: 'var2'.
+	self assert: commonGroup declarators second startPos equals: 45.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testContinueStatement [
 
 	| result stmt |

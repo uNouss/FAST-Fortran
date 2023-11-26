@@ -119,6 +119,12 @@ FASTFortranVisitor >> visitFASTFortranComment: aFASTFortranComment [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
+
+	aFASTFortranCommonGroup variables do: [ :var | var accept: self ].
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranCommonStatement.
@@ -139,6 +145,13 @@ FASTFortranVisitor >> visitFASTFortranComplexType: aFASTFortranComplexType [
 FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranContinueStatement.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
+
+	aFASTFortranDataGroup dataVariables do: [ :var | var accept: self ].
+	aFASTFortranDataGroup dataConstants do: [ :const | const accept: self ].
 ]
 
 { #category : #'visiting - statements' }

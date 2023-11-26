@@ -5,8 +5,7 @@ Class {
 	#name : #FASTFortranCommonStatement,
 	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
-		'#name => FMProperty',
-		'#variables => FMOne type: #FASTFortranVariable opposite: #parentCommonStatement'
+		'#groups => FMMany type: #FASTFortranCommonGroup opposite: #parentCommonStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -20,40 +19,32 @@ FASTFortranCommonStatement class >> annotation [
 	^ self
 ]
 
-{ #category : #accessing }
-FASTFortranCommonStatement >> name [
-
-	<FMProperty: #name type: #String>
+{ #category : #adding }
+FASTFortranCommonStatement >> addGroup: anObject [
 	<generated>
-	<FMComment: 'Determines a Common block name, might be ommited'>
-	^ name
+	^ self groups add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranCommonStatement >> name: anObject [
+FASTFortranCommonStatement >> groups [
+	"Relation named: #groups type: #FASTFortranCommonGroup opposite: #parentCommonStatement"
+
 	<generated>
-	name := anObject
+	<FMComment: 'List common groups in this common statement'>
+	<derived>
+	^ groups
 ]
 
 { #category : #accessing }
-FASTFortranCommonStatement >> variables [
-	"Relation named: #variables type: #FASTFortranVariable opposite: #parentCommonStatement"
+FASTFortranCommonStatement >> groups: anObject [
 
 	<generated>
-	<FMComment: 'List of variable names, array names, and array declarators '>
-	^ variables
-]
-
-{ #category : #accessing }
-FASTFortranCommonStatement >> variables: anObject [
-
-	<generated>
-	variables := anObject
+	groups value: anObject
 ]
 
 { #category : #navigation }
-FASTFortranCommonStatement >> variablesGroup [
+FASTFortranCommonStatement >> groupsGroup [
 	<generated>
-	<navigation: 'Variables'>
-	^ MooseSpecializedGroup with: self variables
+	<navigation: 'Groups'>
+	^ MooseSpecializedGroup withAll: self groups asSet
 ]

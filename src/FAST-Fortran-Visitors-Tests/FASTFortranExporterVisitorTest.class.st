@@ -483,6 +483,29 @@ FASTFortranExporterVisitorTest >> testComment72Characters [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testCommonStatement [
+
+	| stmt |
+
+	stmt := FASTFortranCommonStatement new
+		groups: {
+			FASTFortranCommonGroup new
+				declarators: (self variableDeclarators: #(a b))
+			.
+			FASTFortranCommonGroup new
+				name: 'otherGrp' ;
+				declarators: (self variableDeclarators: #(c d))
+		} ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      common a,b /otherGrp/ c,d
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testContinueStatement [
 	| cmt |
 	cmt := FASTFortranContinueStatement new

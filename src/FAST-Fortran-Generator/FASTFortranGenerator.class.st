@@ -104,7 +104,8 @@ Class {
 		'tWithDeclarators',
 		'tVariableDeclarator',
 		'variableDeclarator',
-		'arrayDimension'
+		'arrayDimension',
+		'commonGroup'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -209,6 +210,10 @@ f77 allows the BYTE type as an array index, just as it allows the REAL type, but
 		                 newClassNamed: #CharacterType
 		                 comment:
 		                 'I represent Fortran Character statement. The character data type, CHARACTER, which has the synonym, CHARACTER*1, holds one character. The character is enclosed in apostrophes ('') or quotes (""). @ Allowing quotes ("") is nonstandard; if you compile with the -xl option, quotes mean something else, and you must use apostrophes to enclose a string. The data of type CHARACTER is always unsigned. A CHARACTER item occupies 1 byte (8 bits) of storage and is aligned on 1-byte boundaries.'.
+
+	commonGroup := builder
+		                   newClassNamed: #CommonGroup
+		                   comment: 'I represent Common group inside a Common statement'.
 
 	complexConstant := builder
 		                   newClassNamed: #ComplexLiteral
@@ -481,6 +486,7 @@ FASTFortranGenerator >> defineHierarchy [
 	abstractExpression --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
+	commonGroup  --|> tWithDeclarators.
 	functionCall --|> abstractExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
@@ -542,8 +548,8 @@ FASTFortranGenerator >> defineProperties [
 	(comment property: #content type: #String) comment:
 		'Determines a content of a comment'.
 
-	(commonStatement property: #name type: #String) comment:
-		'Determines a Common block name, might be ommited'.
+	(commonGroup property: #name type: #String) comment:
+		'The name of this Common group, might be ommited'.
 
 	(externalStatement property: #name type: #String) comment:
 		'Name of external procedure, dummy procedure, or block data routine'.
@@ -613,10 +619,10 @@ FASTFortranGenerator >> defineRelations [
 	((arrayVariable property: #indices) comment: 'Indices used in the array access')
 	-* ((tExpression property: #parentArrayExpression) comment: 'an ArrayVariable expression of which I am an indice').
 
-	((commonStatement property: #variables) comment:
-		 'List of variable names, array names, and array declarators ')
-	<>- ((variable property: #parentCommonStatement) comment:
-			 'Parent common expression').
+	((commonStatement property: #groups) comment:
+		 'List common groups in this common statement')
+	<>-* ((commonGroup property: #parentCommonStatement) comment:
+			 'Parent common statement I belong to').
 
 	(dataGroup property: #dataVariables)
 	-* (variable property: #parentDataStatement).
