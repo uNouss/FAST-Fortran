@@ -11,6 +11,30 @@ FortranToFASTTests >> jsonVisitor [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testArrayAccess [
+	
+	| result stmt arrayAccess |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(10)
+		v = arr(1,i)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:21)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:20)","upper":{"anno":[],"span":"(2:19)-(2:20)","tag":"value","value":{"contents":["10",null],"tag":"integer"}}}],"span":"(2:19)-(2:20)"},"initial":null,"length":null,"span":"(2:15)-(2:21)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:21)"},"span":"(2:7)-(2:21)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"},{"anno":[],"label":null,"span":"(3:7)-(3:18)","statement":{"anno":[],"expression":{"anno":[],"expression":{"anno":[],"span":"(3:11)-(3:13)","tag":"value","value":{"contents":"arr","tag":"variable"}},"indices":{"anno":[],"list":[{"anno":[],"index":{"anno":[],"span":"(3:15)-(3:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"name":null,"span":"(3:15)-(3:15)","tag":"single"},{"anno":[],"index":{"anno":[],"span":"(3:17)-(3:17)","tag":"value","value":{"contents":"i","tag":"variable"}},"name":null,"span":"(3:17)-(3:17)","tag":"single"}],"span":"(3:15)-(3:17)"},"span":"(3:11)-(3:18)","tag":"subscript"},"span":"(3:7)-(3:18)","tag":"assign_expression","target":{"anno":[],"span":"(3:7)-(3:7)","tag":"value","value":{"contents":"v","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements second.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+
+	arrayAccess := stmt expression.
+	self assert: arrayAccess class equals: FASTFortranArrayVariable.
+	self assert: arrayAccess name equals: 'arr'.
+	self assert: arrayAccess indices size equals: 2.
+
+	self assert: arrayAccess indices first class equals: FASTFortranIntegerLiteral.
+	self assert: arrayAccess indices second class equals: FASTFortranScalarVariable.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testArrayDeclaration [
 	
 	| result stmt declarator |
