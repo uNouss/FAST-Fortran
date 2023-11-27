@@ -1912,6 +1912,29 @@ FortranToFASTTests >> testVariableDeclarationInteger [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testVariableDeclarationIntegerWithLength [
+
+	| result stmt |
+	fortranCode := '      program main
+      integer*8 i
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:17)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:17)-(2:17)","type":"scalar","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"i","tag":"variable"}}}],"span":"(2:17)-(2:17)"},"span":"(2:7)-(2:17)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":{"anno":[],"kind":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["8",null],"tag":"integer"}},"length":null,"span":"(2:14)-(2:15)"},"span":"(2:7)-(2:15)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+
+	self assert: stmt type class equals: FASTFortranIntegerType.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
+	self assert: stmt type size primitiveValue equals: '8'.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testVariableDeclarationLogical [
 
 	| result stmt var |
@@ -1959,4 +1982,31 @@ FortranToFASTTests >> testVariableDeclarationReal [
 	
 	var := stmt declarators first.
 	self assert: var variable equals: 'c'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testVariableDeclarationWithLength [
+
+	| result stmt var |
+	fortranCode := '      program main
+      character var*10, str*(n)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:26)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:20)-(2:26)","type":"scalar","variable":{"anno":[],"span":"(2:20)-(2:26)","tag":"value","value":{"contents":"astring","tag":"variable"}}}],"span":"(2:20)-(2:26)"},"span":"(2:7)-(2:26)","tag":"declaration","type":{"anno":[],"base_type":"character","selector":{"anno":[],"kind":null,"length":{"anno":[],"span":"(2:17)-(2:18)","tag":"value","value":{"contents":["40",null],"tag":"integer"}},"span":"(2:16)-(2:18)"},"span":"(2:7)-(2:18)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 45.
+
+	self assert: stmt type class equals: FASTFortranCharacterType.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
+	self assert: stmt type size primitiveValue equals: '40'.
+
+	self assert: stmt declarators size equals: 1.
+	var := stmt declarators first.
+	self assert: var variable equals: 'astring'.
 ]
