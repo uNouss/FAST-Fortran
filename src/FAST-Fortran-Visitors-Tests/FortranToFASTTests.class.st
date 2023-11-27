@@ -59,6 +59,36 @@ FortranToFASTTests >> testArrayDeclaration [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testArrayDeclarationDimensionsWithOperation [
+	
+	| result stmt declarator |
+	fortranCode := '      PROGRAM MYPROG
+      integer arr(0:max-1)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:26)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":["0",null],"tag":"integer"}},"span":"(2:19)-(2:25)","upper":{"anno":[],"left":{"anno":[],"span":"(2:21)-(2:23)","tag":"value","value":{"contents":"max","tag":"variable"}},"op":{"tag":"subtraction"},"right":{"anno":[],"span":"(2:25)-(2:25)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:21)-(2:25)","tag":"binary"}}],"span":"(2:19)-(2:25)"},"initial":null,"length":null,"span":"(2:15)-(2:26)","type":"array","variable":{"anno":[],"span":"(2:15)-(2:17)","tag":"value","value":{"contents":"arr","tag":"variable"}}}],"span":"(2:15)-(2:26)"},"span":"(2:7)-(2:26)","tag":"declaration","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:7)-(2:13)"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+	
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt declarators size equals: 1.
+
+	declarator := stmt declarators first.
+
+	self assert: declarator dimensions first lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: declarator dimensions first lowerBound primitiveValue equals: '0'.
+
+	self assert: declarator dimensions first upperBound class equals: FASTFortranBinaryExpression.
+	self assert: declarator dimensions first upperBound left class equals: FASTFortranScalarVariable.
+	self assert: declarator dimensions first upperBound left name equals: 'max'.
+
+	self assert: declarator dimensions first upperBound operator equals: '-'.
+
+	self assert: declarator dimensions first upperBound right class equals: FASTFortranIntegerLiteral.
+	self assert: declarator dimensions first upperBound right primitiveValue equals: '1'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testArrayDeclarationImplicitLower [
 	
 	| result stmt declarator |
@@ -304,30 +334,6 @@ FortranToFASTTests >> testAssignementStringLiteral [
 	self assert: stmt expression class equals: FASTFortranCharacterLiteral.
 	self assert: stmt expression primitiveValue equals: 'once upon a time'.
 	self assert: stmt expression startPos equals: 36.
-
-]
-
-{ #category : #'tests-expression' }
-FortranToFASTTests >> testBinaryExpressionAddition [
-	
-	| result asnmt expr |
-	fortranCode := '      PROGRAM MYPROG
-       i = -i
-      END
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:13)","statement":{"anno":[],"expression":{"anno":[],"expression":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"i","tag":"variable"}},"op":{"tag":"minus"},"span":"(2:12)-(2:13)","tag":"unary"},"span":"(2:8)-(2:13)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	asnmt := result first statementBlock statements first.
-	self assert: asnmt class equals: FASTFortranAssignmentStatement.	
-	
-	expr := asnmt expression.
-	self assert: expr class equals: FASTFortranUnaryExpression.
-	self assert: expr operator equals: '-'.
-	self assert: expr startPos equals: 33.
-
-	self assert: expr expression class equals: FASTFortranScalarVariable.
-	self assert: expr expression name equals: 'i'.
 
 ]
 
@@ -646,28 +652,53 @@ FortranToFASTTests >> testBinaryExpressionNeKeyword [
 
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionSubstraction [
-
-	| result asnmt expr |
+	
+	| result expr |
 	fortranCode := '      PROGRAM MYPROG
-       i = 5 / 6
+       i = max-1
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"division"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:16)","statement":{"anno":[],"expression":{"anno":[],"left":{"anno":[],"span":"(2:12)-(2:14)","tag":"value","value":{"contents":"max","tag":"variable"}},"op":{"tag":"subtraction"},"right":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:12)-(2:16)","tag":"binary"},"span":"(2:8)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
-	asnmt := result first statementBlock statements first.
-	self assert: asnmt class equals: FASTFortranAssignmentStatement.
+	expr := result first statementBlock statements first expression.
 
-	expr := asnmt expression.
 	self assert: expr class equals: FASTFortranBinaryExpression.
-	self assert: expr operator equals: '/'.
+	self assert: expr operator equals: '-'.
 	self assert: expr startPos equals: 33.
 
-	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left class equals: FASTFortranScalarVariable.
+	self assert: expr left name equals: 'max'.
 	self assert: expr left startPos equals: 33.
 
 	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '1'.
 	self assert: expr right startPos equals: 37.
+
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTTests >> testBinaryExpressionUnaryMinus [
+	
+	| result asnmt expr |
+	fortranCode := '      PROGRAM MYPROG
+       i = -i
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:13)","statement":{"anno":[],"expression":{"anno":[],"expression":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"i","tag":"variable"}},"op":{"tag":"minus"},"span":"(2:12)-(2:13)","tag":"unary"},"span":"(2:8)-(2:13)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranAssignmentStatement.	
+	
+	expr := asnmt expression.
+	self assert: expr class equals: FASTFortranUnaryExpression.
+	self assert: expr operator equals: '-'.
+	self assert: expr startPos equals: 33.
+
+	self assert: expr expression class equals: FASTFortranScalarVariable.
+	self assert: expr expression name equals: 'i'.
+
 ]
 
 { #category : #'tests-programUnit' }

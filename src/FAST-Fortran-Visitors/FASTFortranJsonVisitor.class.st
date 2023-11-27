@@ -869,11 +869,7 @@ FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
 
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: '-';
-		yourself
+	^'-'
 ]
 
 { #category : #visiting }
