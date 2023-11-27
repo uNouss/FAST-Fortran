@@ -404,13 +404,13 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 		<< ') then' ;
 		newLine.
 	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
-	(aFASTFortranIfBlockStatement elseStatementBlock statements)
-		ifNotEmpty: [
+	(aFASTFortranIfBlockStatement elseStatementBlock)
+		ifNotNil: [ :statementBlock |
 			self
 				sixSpaces ;
 				<< 'else' ;
 				newLine.
-			aFASTFortranIfBlockStatement elseStatementBlock accept: self.
+			statementBlock accept: self.
 	].
 	self
 		sixSpaces ;
