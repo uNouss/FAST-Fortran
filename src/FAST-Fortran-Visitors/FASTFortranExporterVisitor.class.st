@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'stream',
 		'indent',
-		'column'
+		'column',
+		'breakLongCommentLines',
+		'breakLongLines'
 	],
 	#category : #'FAST-Fortran-Visitors-Visitor'
 }
@@ -13,19 +15,62 @@ Class {
 FASTFortranExporterVisitor >> << aString [
 
 	((column + aString size) > 72)
-		ifTrue: [ self continuationLine ].
+		ifTrue: [ self continuationLine: aString ].
 
 	self stream << aString.
 	column := column + aString size
 ]
 
+{ #category : #accessing }
+FASTFortranExporterVisitor >> breakLongCommentLines: aBoolean [
+
+	breakLongCommentLines := aBoolean
+]
+
+{ #category : #accessing }
+FASTFortranExporterVisitor >> breakLongLines: aBoolean [
+
+	breakLongLines := aBoolean.
+	breakLongLines ifFalse: [ self breakLongCommentLines: false ]
+]
+
 { #category : #streaming }
-FASTFortranExporterVisitor >> continuationLine [
+FASTFortranExporterVisitor >> continuationLine: line [
+
+	breakLongLines ifFalse: [ ^self ].
+
+	breakLongCommentLines ifFalse: [
+			(self isComment: line) ifTrue: [ ^self ]
+		].
 
 	self
 		newLine ;
 		spaces: 5 ;
-		<< '* '
+		<< '& '
+]
+
+{ #category : #settings }
+FASTFortranExporterVisitor >> doBreakLongCommentLines [
+
+	self breakLongCommentLines: true
+]
+
+{ #category : #settings }
+FASTFortranExporterVisitor >> doBreakLongLines [
+
+	self breakLongLines: true
+]
+
+{ #category : #settings }
+FASTFortranExporterVisitor >> dontBreakLongCommentLines [
+
+	self breakLongCommentLines: false
+]
+
+{ #category : #settings }
+FASTFortranExporterVisitor >> dontBreakLongLines [
+
+	self breakLongLines: false
 ]
 
 { #category : #streaming }
@@ -38,7 +83,15 @@ FASTFortranExporterVisitor >> initialize [
 	super initialize.
 
 	indent := 0.
-	column := 0
+	column := 0.
+	breakLongLines := true.
+	breakLongCommentLines := false
+]
+
+{ #category : #testing }
+FASTFortranExporterVisitor >> isComment: aLine [
+
+	^( #($c $C $*) includes: aLine first) and: [ column = 0 ]
 ]
 
 { #category : #streaming }

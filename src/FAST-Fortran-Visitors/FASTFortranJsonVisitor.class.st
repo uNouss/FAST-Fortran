@@ -108,6 +108,8 @@ FASTFortranJsonVisitor >> setBodyPosition: aProgramUnit fromProgramUnitPosition:
 	| body bodyStartEnd |
 	body := aProgramUnit statementBlock.
 	
+	body ifNil: [ ^nil ].
+	
 	bodyStartEnd := {
 		startEndPoints first x +1 @ 1 .
 		startEndPoints second x @ 2
@@ -595,8 +597,10 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 
 	[ ifStmt elseStatementBlock isNil ]
 	whileFalse: [ ifStmt := ifStmt elseStatementBlock statements first ].
-	
-	ifStmt elseStatementBlock: data fourth.
+
+	ifStmt elseStatementBlock:  ((data fourth statements , data fourth comments)
+		ifEmpty: [ nil ]
+		ifNotEmpty: [ data fourth ]).
 
 	^ data third
 ]
