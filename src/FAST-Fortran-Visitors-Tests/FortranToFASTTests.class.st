@@ -616,6 +616,35 @@ FortranToFASTTests >> testBinaryExpressionMultiplication [
 ]
 
 { #category : #'tests-expression' }
+FortranToFASTTests >> testBinaryExpressionNeKeyword [
+	
+	| result asnmt expr |
+	fortranCode := '      PROGRAM MYPROG
+       IF ( 5 .ne. 6 ) THEN
+       END IF
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":null,"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"op":{"tag":"ne"},"right":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["6",null],"tag":"integer"}},"span":"(2:13)-(2:20)","tag":"binary"},[]]],"end_label":null,"label":null,"name":null,"span":"(2:8)-(3:13)","tag":"if"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	asnmt := result first statementBlock statements first.
+	self assert: asnmt class equals: FASTFortranIfBlockStatement.
+
+	expr := asnmt condition.
+	self assert: expr class equals: FASTFortranBinaryExpression.
+	self assert: expr operator equals: '.ne.'.
+	self assert: expr startPos equals: 34.
+
+	self assert: expr left class equals: FASTFortranIntegerLiteral.
+	self assert: expr left primitiveValue equals: '5'.
+	self assert: expr left startPos equals: 34.
+
+	self assert: expr right class equals: FASTFortranIntegerLiteral.
+	self assert: expr right primitiveValue equals: '6'.
+	self assert: expr right startPos equals: 41.
+]
+
+{ #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionSubstraction [
 
 	| result asnmt expr |
