@@ -396,6 +396,19 @@ FASTFortranExporterVisitorTest >> testBinaryExpression [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testBinaryExpressionNe [
+	| expr |
+	expr := FASTFortranBinaryExpression new
+		left: (self scalarVariable: 'a') ;
+		operator: '.ne.' ;
+		right: (self integerLiteral: '5').
+
+	self
+		assertExport: expr
+		equals: 'a .ne. 5'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 	"note: positions are approximate, all we need is that the assignement is after the comment"
 	| stmt cmt block |

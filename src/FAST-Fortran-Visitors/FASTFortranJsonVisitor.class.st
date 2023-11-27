@@ -22,7 +22,7 @@ FASTFortranJsonVisitor >> initialize [
 	lineSizes := #(  )
 ]
 
-{ #category : #'visiting expression' }
+{ #category : #private }
 FASTFortranJsonVisitor >> invertLiteral: aFASTFortranLiteral class: class [
 
 	| number |
@@ -121,10 +121,7 @@ FASTFortranJsonVisitor >> setBodyPosition: aProgramUnit fromProgramUnitPosition:
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitAddition: anAdditionOperatorNode [
 
-	^FASTFortranBinaryExpression new
-		operator: '+' ;
-		mooseModel: model ;
-		yourself
+	^'+'
 ]
 
 { #category : #'visiting prog-unit' }
@@ -375,10 +372,7 @@ FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: '/' ;
-		yourself
+	^'/'
 ]
 
 { #category : #'visiting statement' }
@@ -428,15 +422,6 @@ FASTFortranJsonVisitor >> visitEntryStatement: anEntryNode [
 	
 ]
 
-{ #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitEq: anEqualtoOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitEq: anEqualtoOperatorNode);
-		yourself
-]
-
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 
@@ -450,10 +435,7 @@ FASTFortranJsonVisitor >> visitExitStatement: anExitNode [
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitExponentiation: aExponentiationOperatorNode [
 
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: '**' ;
-		yourself
+	^'**'
 ]
 
 { #category : #'visiting statement' }
@@ -560,24 +542,6 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
  
 	^(self newEntity: FASTFortranGoToStatement atPosition: data first)
 		label: label ;
-		yourself
-]
-
-{ #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitGt: anOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitGt: anOperatorNode);
-		yourself
-]
-
-{ #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitGte: anOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitGte: anOperatorNode);
 		yourself
 ]
 
@@ -691,24 +655,6 @@ FASTFortranJsonVisitor >> visitLogicalLiteralValue: aLogicalLiteralValue [
 		yourself
 ]
 
-{ #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitLt: anLessthanOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitLt: anLessthanOperatorNode);
-		yourself
-]
-
-{ #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitLte: anOperatorNode [
-
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitLte: anOperatorNode);
-		yourself
-]
-
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
 	"#(span name blocks subprograms)"
@@ -748,20 +694,17 @@ FASTFortranJsonVisitor >> visitMiFilename: aString [
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitMinus: aMinusOperatorNode [
+FASTFortranJsonVisitor >> visitMultiplication: anOperatorNode [
 
-	^FASTFortranBinaryExpression new
-		mooseModel: model ;
-		operator: (super visitMinus: aMinusOperatorNode);
-		yourself
+	^'*'
 ]
 
 { #category : #'visiting expression' }
-FASTFortranJsonVisitor >> visitMultiplication: aMultiplicationOperatorNode [
+FASTFortranJsonVisitor >> visitOp: anOperatorNode [
 
 	^FASTFortranBinaryExpression new
 		mooseModel: model ;
-		operator: '*' ;
+		operator: (super visitOp: anOperatorNode);
 		yourself
 ]
 
@@ -953,14 +896,13 @@ FASTFortranJsonVisitor >> visitUnary: aUnaryNode [
 	| data |
 	data := super visitUnary: aUnaryNode.
 
-	(data third class = FASTFortranIntegerLiteral)
-		ifTrue: [
-			^self invertLiteral: data third class: Integer.
-		].
-	(data third class = FASTFortranRealLiteral)
-		ifTrue: [
-			^self invertLiteral: data third class: Float.
-		].
+	(data second operator = '-')
+	ifTrue: [
+		(data third class = FASTFortranIntegerLiteral)
+			ifTrue: [ ^self invertLiteral: data third class: Integer ].
+		(data third class = FASTFortranRealLiteral)
+			ifTrue: [ ^self invertLiteral: data third class: Float ]
+	].
 
 	^(self newEntity: FASTFortranUnaryExpression atPosition: data first)
 		operator: (data second operator) ;
