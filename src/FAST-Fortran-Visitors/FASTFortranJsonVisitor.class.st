@@ -707,6 +707,7 @@ FASTFortranJsonVisitor >> visitLte: anOperatorNode [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitMain: aMainProgramNode [
+	"#(span name blocks subprograms)"
 
 	| data main |
 	data := super visitMain: aMainProgramNode.
