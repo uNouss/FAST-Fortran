@@ -37,6 +37,8 @@ FASTFortranExporterVisitor >> breakLongLines: aBoolean [
 { #category : #streaming }
 FASTFortranExporterVisitor >> continuationLine: line [
 
+	breakLongLines ifFalse: [ ^self ].
+
 	breakLongCommentLines ifFalse: [
 			(self isComment: line) ifTrue: [ ^self ]
 		].

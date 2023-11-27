@@ -869,7 +869,7 @@ FASTFortranExporterVisitorTest >> testLongDataStatementLine [
 		assertExport: stmt
 		equals: 
 '      data abcde,fghijk,lmnopq /''---------------'',''---------------'',
-     * ''---------------''/ 
+     & ''---------------''/ 
 '
 ]
 
@@ -887,7 +887,7 @@ FASTFortranExporterVisitorTest >> testLongFormatLine [
 		assertExport: stmt
 		equals: 
 '110   format (1h,//36hxabs-(156)intrinsicfunctions--//11x,26habs,
-     * iabs(absolutevalue)//20hsubsetref.-15.3)
+     & iabs(absolutevalue)//20hsubsetref.-15.3)
 '.
 ]
 
@@ -900,8 +900,22 @@ FASTFortranExporterVisitorTest >> testLongLine [
 		assertExport: stmt
 		equals: 
 '      character abc1,abc2,abc3,abc4,abc5,abc6,abc7,abc8,abc9,abc10,abc11
-     * ,abc12,abc13,abc14,abc15,abc16,abc17,abc18,abc19,abc20,abc21,
-     * abc22,abc23,abc24,abc25
+     & ,abc12,abc13,abc14,abc15,abc16,abc17,abc18,abc19,abc20,abc21,
+     & abc22,abc23,abc24,abc25
+'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testLongLineDontBreak [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: nil) variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
+
+	visitor dontBreakLongLines.
+
+	self
+		assertExport: stmt
+		equals: 
+'      character abc1,abc2,abc3,abc4,abc5,abc6,abc7,abc8,abc9,abc10,abc11,abc12,abc13,abc14,abc15,abc16,abc17,abc18,abc19,abc20,abc21,abc22,abc23,abc24,abc25
 '
 ]
 
