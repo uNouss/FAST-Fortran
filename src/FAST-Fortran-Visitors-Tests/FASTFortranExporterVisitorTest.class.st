@@ -165,7 +165,7 @@ FASTFortranExporterVisitorTest >> ifBlock: condition then: thenBlock else: elseB
 	^FASTFortranIfBlockStatement new
 		condition: condition ;
 		thenStatementBlock: (self statementBlock: thenBlock) ;
-		elseStatementBlock: (self statementBlock: elseBlock) ;
+		elseStatementBlock: (elseBlock ifNil: [ nil ] ifNotNil: [self statementBlock: elseBlock]) ;
 		yourself
 ]
 
@@ -742,7 +742,7 @@ FASTFortranExporterVisitorTest >> testIfArithmeticStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
 	| stmt |
-	stmt := self ifBlock: (self scalarVariable: 'bool') then: #() else: #().
+	stmt := self ifBlock: (self scalarVariable: 'bool') then: #() else: nil.
 
 	self
 		assertExport: stmt
@@ -756,7 +756,7 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
 FASTFortranExporterVisitorTest >> testIfBlockStatementEmptyBinaryCondition [
 	| stmt cond |
 	cond := self binary: '.gt.' left: 'a' right: '0'.
-	stmt := self ifBlock: cond then: #() else:  #().
+	stmt := self ifBlock: cond then: #() else:  nil.
 
 	self
 		assertExport: stmt
@@ -774,8 +774,8 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementNested [
 		then: { self
 			ifBlock: (self scalarVariable: 'bool2')
 			then: #()
-			else: #() }
-		else: #().
+			else: nil }
+		else: nil.
 
 	self
 		assertExport: stmt
@@ -811,7 +811,7 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
 	stmt := self
 		ifBlock: (self scalarVariable: 'bool')
 		then: {  self writeStatement: { self characterLiteral: 'message' } }
-		else:  #().
+		else: nil.
 
 	self
 		assertExport: stmt
