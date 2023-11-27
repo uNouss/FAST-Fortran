@@ -1244,6 +1244,7 @@ FortranToFASTTests >> testIfArithmetic [
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testIfElseIf [
+	"note: starting and ending position of else block are approximate"
 
 	| result conditional |
 	fortranCode := '      PROGRAM MYPROG
@@ -1261,20 +1262,28 @@ FortranToFASTTests >> testIfElseIf [
 	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(9:11)-(9:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(9:15)-(9:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(9:11)-(9:15)","tag":"assign_expression","target":{"anno":[],"span":"(9:11)-(9:11)","tag":"value","value":{"contents":"d","tag":"variable"}}},"tag":"statement"}],"conditions":[[{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":"a","tag":"variable"}},[{"anno":[],"label":null,"span":"(3:11)-(3:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(3:15)-(3:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(3:11)-(3:15)","tag":"assign_expression","target":{"anno":[],"span":"(3:11)-(3:11)","tag":"value","value":{"contents":"a","tag":"variable"}}},"tag":"statement"}]],[{"anno":[],"span":"(4:20)-(4:20)","tag":"value","value":{"contents":"b","tag":"variable"}},[{"anno":[],"label":null,"span":"(5:11)-(5:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(5:15)-(5:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(5:11)-(5:15)","tag":"assign_expression","target":{"anno":[],"span":"(5:11)-(5:11)","tag":"value","value":{"contents":"b","tag":"variable"}}},"tag":"statement"}]],[{"anno":[],"span":"(6:20)-(6:20)","tag":"value","value":{"contents":"c","tag":"variable"}},[{"anno":[],"label":null,"span":"(7:11)-(7:15)","statement":{"anno":[],"expression":{"anno":[],"span":"(7:15)-(7:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(7:11)-(7:15)","tag":"assign_expression","target":{"anno":[],"span":"(7:11)-(7:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}]]],"end_label":null,"label":null,"name":null,"span":"(2:10)-(10:15)","tag":"if"}],"name":"myprog","span":"(1:7)-(11:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
+	self assert: result first statementBlock statements size equals: 1. .
+
 	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatementBlock statements size equals: 1.
 	self assert: conditional elseStatementBlock statements size equals: 1.
+	self assert: conditional thenStatementBlock startPos equals: 55.
+	self assert: conditional elseStatementBlock startPos equals: 77.
 
 	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatementBlock statements size equals: 1.
 	self assert: conditional elseStatementBlock statements size equals: 1.
+	self assert: conditional thenStatementBlock startPos equals: 99.
+	self assert: conditional elseStatementBlock startPos equals: 121.
 
 	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatementBlock statements size equals: 1.
 	self assert: conditional elseStatementBlock statements size equals: 1.
+	self assert: conditional thenStatementBlock startPos equals: 143.
+	self assert: conditional elseStatementBlock startPos equals: 173.
 	
 	conditional := conditional elseStatementBlock statements first.
 	self assert: conditional class equals: FASTFortranAssignmentStatement.
@@ -1364,6 +1373,9 @@ C comment in then part
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
 	self assert: conditional thenStatementBlock statements isEmpty.
 	self assert: conditional thenStatementBlock comments size equals: 1.
+	self assert: conditional thenStatementBlock startPos equals: 43.
+	self assert: conditional thenStatementBlock endPos equals: 64.
+
 ]
 
 { #category : #'tests-statement' }
@@ -1381,7 +1393,10 @@ FortranToFASTTests >> testIfThenWithStatement [
 
 	conditional := result first statementBlock statements first.
 	self assert: conditional class equals: FASTFortranIfBlockStatement.
+	self assert: conditional thenStatementBlock class equals: FASTFortranStatementBlock.
 	self assert: conditional thenStatementBlock statements size equals: 1.
+	self assert: conditional thenStatementBlock startPos equals: 51.
+	self assert: conditional thenStatementBlock endPos equals: 55.
 ]
 
 { #category : #'tests-statement' }

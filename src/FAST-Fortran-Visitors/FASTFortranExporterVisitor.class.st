@@ -390,9 +390,9 @@ FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImp
 ]
 
 { #category : #'visiting - expressions' }
-FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
+FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranType [
 	self << 'integer'.
-	self visitFASTFortranType: aFASTFortranIntegerType
+	self visitFASTFortranType: aFASTFortranType
 ]
 
 { #category : #'visiting - statements' }
