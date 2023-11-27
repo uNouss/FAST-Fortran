@@ -934,6 +934,30 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: (self integerLiteral: '10')) variables: #(str).
+
+	self
+		assertExport: stmt
+		equals: 
+'      character*10 str
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationIntegerTypeWithSize [
+	| stmt |
+	stmt := self declarationStatement: (self integerType: (self integerLiteral: '8')) variables: #(i).
+
+	self
+		assertExport: stmt
+		equals: 
+'      integer*8 i
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationLogicalType [
 	| stmt |
 	stmt := self declarationStatement: (self logicalType: nil) variables: #(r).
@@ -966,18 +990,6 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 		assertExport: stmt
 		equals: 
 '      integer i,j
-'
-]
-
-{ #category : #'tests - statements' }
-FASTFortranExporterVisitorTest >> testOneDeclarationcharacterTypeWithSize [
-	| stmt |
-	stmt := self declarationStatement: (self characterType: (self integerLiteral: '10')) variables: #(str).
-
-	self
-		assertExport: stmt
-		equals: 
-'      character*10 str
 '
 ]
 
