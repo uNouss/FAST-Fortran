@@ -70,11 +70,23 @@ FASTFortranJsonVisitor >> pointToPosition: lineColumn [
 { #category : #private }
 FASTFortranJsonVisitor >> putMembers: entities inBody: stmtBlock [
 
+	| start end |
+	entities ifEmpty: [ ^self ].
+
+	start := entities first startPos.
+	end   := entities first endPos.
+
 	entities do: [ :each |
+		start := start min: each startPos.
+		end   := end max: each endPos.
+
 		each isStatement
 			ifTrue: [ stmtBlock addStatement: each ]
 			ifFalse: [ stmtBlock addComment: each ]
-	]
+	].
+
+	stmtBlock startPos: start.
+	stmtBlock endPos: end
 ]
 
 { #category : #private }
@@ -253,19 +265,25 @@ FASTFortranJsonVisitor >> visitConditions: aConditionList [
 
 	firstIf := nil.
 	elseIf := nil.
-	data do: [ :each |
+	data do: [ :condAndThenPair |
 		| newIf |
 
+	"no way to know exactly the starting and ending position of this if
+	 we use the condition startPos - 3 ('IF ') and the then block endPosition"
 		newIf := FASTFortranIfBlockStatement new
 			mooseModel: model ;
-			condition: each first;
-			thenStatementBlock: each second;
+			startPos: condAndThenPair first startPos - 3 ;
+			endPos: condAndThenPair second endPos ;
+			condition: condAndThenPair first;
+			thenStatementBlock: condAndThenPair second;
 			yourself.
 
 		firstIf
 			ifNil: [ firstIf := newIf ]
 			ifNotNil: [ elseIf elseStatementBlock: ( FASTFortranStatementBlock new
 				mooseModel: model ;
+				startPos: newIf startPos ;
+				endPos: newIf endPos ;
 				statements: {newIf} ;
 				yourself ) ].
 		elseIf := newIf ].
@@ -315,10 +333,9 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 	data := super visitDeclarationStatement: aDeclarationStatementNode.
 
 	^(self newEntity: FASTFortranVariableDeclarationStatement atPosition: data first)
-		type: data second;
-			"TODO clarify the need of attributes"
-		  "attributes: data third;"
-		declarators: data fourth;
+		type: data second ;
+		  "attributes: data third ;"
+		declarators: data fourth ;
 		yourself
 ]
 
@@ -570,10 +587,9 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 	  - second element contains all statements of the corresponding then
 	- 'blocks' contains all statements of the last else (i.e. not an elseif)"
 
-	| data ifStmt lastElse |
+	| data ifStmt |
 	data := super visitIf: anIfNode.
 	ifStmt := data third.
-	lastElse := data fourth.
 
 	self set: ifStmt startEnd: data first.
 
