@@ -546,6 +546,19 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitGoto_computedStatement: aGotoComputedStatementNode [
+	"#(span labels target)"
+
+	| data |
+	data := super visitGoto_computedStatement: aGotoComputedStatementNode.
+
+	^(self newEntity: FASTFortranGoToComputedStatement atPosition: data first)
+		labels: data second ;
+		expression: data third ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIf: anIfNode [
 	"ifNode has 'conditionals' and 'blocks'
 	- 'conditionals' is an array of pairs where
