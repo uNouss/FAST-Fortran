@@ -562,12 +562,6 @@ FASTFortranGenerator >> defineProperties [
 
 	(labelReference property: #label type: #String) comment: 'The value of the label. The value is an integer literal, stored in a String'.
 
-	(loopControlExpression property: #increment type: #String) comment:
-		'Loop control increment value'.
-
-	(loopControlExpression property: #limit type: #String) comment:
-		'Loop control limit value'.
-
 	(returnStatement property: #alternateReturnLable type: #String)
 		comment: 'Optional. Expression of type INTEGER or REAL'.
 
@@ -698,8 +692,18 @@ FASTFortranGenerator >> defineRelations [
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
-	<>- ((assignmentExpression property: #parentLoopControlExpresison)
-			 comment: 'Parent loop control expresison').
+	<>- (assignmentExpression property: #parentLoopControlInitialization).
+
+	((loopControlExpression property: #increment) comment:
+		'Loop control increment value')
+	<>- (tExpression property: #parentLoopControlIncrement).
+
+	((loopControlExpression property: #limit) comment:
+		'Loop control limit value')
+	<>- (tExpression property: #parentLoopControlLimit).
+
+	(loopControlExpression property: #limit type: #String) comment:
+		'Loop control limit value'.
 
 	((programFile property: #programUnit) comment:
 		 'Program Units in a program file')
