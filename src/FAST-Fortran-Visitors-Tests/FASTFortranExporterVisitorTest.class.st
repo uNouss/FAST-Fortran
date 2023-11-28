@@ -522,7 +522,7 @@ FASTFortranExporterVisitorTest >> testCommonStatement [
 FASTFortranExporterVisitorTest >> testContinueStatement [
 	| cmt |
 	cmt := FASTFortranContinueStatement new
-		label: (self integerLiteral: '110').
+		label: '110'.
 
 	self
 		assertExport: cmt
@@ -653,7 +653,7 @@ FASTFortranExporterVisitorTest >> testFormatStatement [
 	| stmt |
 	stmt := FASTFortranFormatStatement new
 		formatDescription: '(/8x)' ;
-		label: (self integerLiteral: '110') ;
+		label: '110' ;
 		yourself.
 
 	self
@@ -877,6 +877,19 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 '
 ]
 
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testLabelledStatement [
+	| stmt |
+	stmt := self returnStatement: nil.
+	stmt label: '100'.
+
+	self
+		assertExport: stmt
+		equals: 
+'100   return 
+'
+]
+
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testLongDataStatementLine [
 
@@ -908,7 +921,7 @@ FASTFortranExporterVisitorTest >> testLongFormatLine [
 
 	stmt := FASTFortranFormatStatement new
 		formatDescription: '(1h,//36hxabs-(156)intrinsicfunctions--//11x,26habs,iabs(absolutevalue)//20hsubsetref.-15.3)' ;
-		label: (self integerLiteral: '110') ;
+		label: '110' ;
 		yourself.
 
 	self
