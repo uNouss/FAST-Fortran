@@ -7,10 +7,10 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#label => FMProperty',
-		'#parentGotoStatement => FMOne type: #FASTFortranGoToStatement opposite: #label',
 		'#parentIfArithmeticLessBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #lessLabel',
 		'#parentIfArithmeticEqualBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #equalLabel',
-		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel'
+		'#parentIfArithmeticMoreBranch => FMOne type: #FASTFortranIfArithmeticStatement opposite: #greaterLabel',
+		'#referencer => FMOne type: #FASTFortranTWithLabelReferences opposite: #labelReferences'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -37,30 +37,6 @@ FASTFortranLabelReference >> label [
 FASTFortranLabelReference >> label: anObject [
 	<generated>
 	label := anObject
-]
-
-{ #category : #accessing }
-FASTFortranLabelReference >> parentGotoStatement [
-	"Relation named: #parentGotoStatement type: #FASTFortranGoToStatement opposite: #label"
-
-	<generated>
-	<container>
-	<derived>
-	^ parentGotoStatement
-]
-
-{ #category : #accessing }
-FASTFortranLabelReference >> parentGotoStatement: anObject [
-
-	<generated>
-	parentGotoStatement := anObject
-]
-
-{ #category : #navigation }
-FASTFortranLabelReference >> parentGotoStatementGroup [
-	<generated>
-	<navigation: 'ParentGotoStatement'>
-	^ MooseSpecializedGroup with: self parentGotoStatement
 ]
 
 { #category : #accessing }
@@ -133,4 +109,20 @@ FASTFortranLabelReference >> parentIfArithmeticMoreBranchGroup [
 	<generated>
 	<navigation: 'ParentIfArithmeticMoreBranch'>
 	^ MooseSpecializedGroup with: self parentIfArithmeticMoreBranch
+]
+
+{ #category : #accessing }
+FASTFortranLabelReference >> referencer [
+	"Relation named: #referencer type: #FASTFortranTWithLabelReferences opposite: #labelReferences"
+
+	<generated>
+	<FMComment: 'A statement (like goto) referencing this label'>
+	^ referencer
+]
+
+{ #category : #accessing }
+FASTFortranLabelReference >> referencer: anObject [
+
+	<generated>
+	referencer := anObject
 ]

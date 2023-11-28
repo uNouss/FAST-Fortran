@@ -23,6 +23,16 @@ FASTFortranJsonVisitor >> initialize [
 ]
 
 { #category : #private }
+FASTFortranJsonVisitor >> integerLiteralToLabelRef: literal [
+
+	^ FASTFortranLabelReference new
+		  label: literal primitiveValue;
+		  startPos: literal startPos;
+		  endPos: literal endPos;
+		  yourself
+]
+
+{ #category : #private }
 FASTFortranJsonVisitor >> invertLiteral: aFASTFortranLiteral class: class [
 
 	| number |
@@ -531,17 +541,24 @@ FASTFortranJsonVisitor >> visitFunction_call: aFunctionCallNode [
 FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	"so far only unconditional case is processed"
 
-	| data label |
+	| data |
 	data := super visitGotoStatement: aGotoStatementNode.
 
-	label := FASTFortranLabelReference new
-		label: data second primitiveValue ;
-		startPos: data second startPos ;
-		endPos: data second endPos ;
-		yourself.
- 
-	^(self newEntity: FASTFortranGoToStatement atPosition: data first)
-		label: label ;
+	^ (self newEntity: FASTFortranGoToStatement atPosition: data first)
+		  labelReferences: { self integerLiteralToLabelRef: data second } ;
+		  yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitGoto_computedStatement: aGotoComputedStatementNode [
+	"#(span labels target)"
+
+	| data |
+	data := super visitGoto_computedStatement: aGotoComputedStatementNode.
+
+	^(self newEntity: FASTFortranGoToComputedStatement atPosition: data first)
+		labelReferences: (data second collect: [:lit | self integerLiteralToLabelRef: lit]) ;
+		selectorExpression: data third ;
 		yourself
 ]
 

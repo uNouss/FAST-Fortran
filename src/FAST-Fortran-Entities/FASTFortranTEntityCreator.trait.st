@@ -367,13 +367,6 @@ FASTFortranTEntityCreator >> newGoToStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newGoToUnconditionalStatement [
-
-	<generated>
-	^ self add: FASTFortranGoToUnconditionalStatement new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newIfArithmeticStatement [
 
 	<generated>

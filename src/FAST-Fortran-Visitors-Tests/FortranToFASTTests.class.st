@@ -1263,9 +1263,41 @@ FortranToFASTTests >> testGoto [
 	self assert: stmt endPos equals: 37.
 
 
-	self assert: stmt label class equals: FASTFortranLabelReference.
-	self assert: stmt label label equals: '100'.
-	self assert: stmt label startPos equals: 35.
+	self assert: stmt labelReferences size equals: 1.
+	self assert: stmt labelReferences anyOne label equals: '100'.
+	self assert: stmt labelReferences anyOne startPos equals: 35.
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testGotoComputed [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+       GOTO (100,200,300,400) var
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:33)","statement":{"anno":[],"labels":{"anno":[],"list":[{"anno":[],"span":"(2:14)-(2:16)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},{"anno":[],"span":"(2:18)-(2:20)","tag":"value","value":{"contents":["200",null],"tag":"integer"}},{"anno":[],"span":"(2:22)-(2:24)","tag":"value","value":{"contents":["300",null],"tag":"integer"}},{"anno":[],"span":"(2:26)-(2:28)","tag":"value","value":{"contents":["400",null],"tag":"integer"}}],"span":"(2:13)-(2:29)"},"span":"(2:8)-(2:33)","tag":"goto_computed","target":{"anno":[],"span":"(2:31)-(2:33)","tag":"value","value":{"contents":"var","tag":"variable"}}},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranGoToComputedStatement.
+	self assert: stmt startPos equals: 30.
+	self assert: stmt endPos equals: 55.
+
+
+	self assert: stmt labelReferences size equals: 4.
+	stmt labelReferences do: [ :label |
+		self assert: label class equals: FASTFortranLabelReference.
+		self assert: (label label endsWith: '00').
+		self assert: (#(36 40 44 48) includes: label startPos)
+	].
+
+	self assert: stmt selectorExpression class equals: FASTFortranScalarVariable.
+	self assert: stmt selectorExpression name equals: 'var'.
+	self assert: stmt selectorExpression startPos equals: 53.
 
 ]
 
