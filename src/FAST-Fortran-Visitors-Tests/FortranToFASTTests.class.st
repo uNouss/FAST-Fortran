@@ -1048,6 +1048,29 @@ C comment in loop
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDoStatementWithLabel [
+
+	| result stmt |
+	fortranCode := '      program main
+      do 100 i=1, max
+100   continue
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:14)-(2:16)","tag":"assign_expression","target":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:19)-(2:21)","tag":"value","value":{"contents":"max","tag":"variable"}},"span":"(2:14)-(2:21)"},"end_label":{"anno":[],"span":"(3:1)-(3:3)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},"label":null,"name":null,"span":"(2:7)-(2:21)","tag":"do","target":{"anno":[],"span":"(2:10)-(2:12)","tag":"value","value":{"contents":["100",null],"tag":"integer"}}}],"name":"main","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt loopControl isNotNil.
+
+	self assert: stmt labelReferences size equals: 1.
+	self assert: stmt labelReferences anyOne class equals: FASTFortranLabelReference.
+	self assert: stmt labelReferences anyOne label equals: '100'
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testEntryStatement [
 
 	| result stmt |
