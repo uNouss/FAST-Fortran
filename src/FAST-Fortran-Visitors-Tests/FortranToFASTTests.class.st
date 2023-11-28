@@ -1263,9 +1263,9 @@ FortranToFASTTests >> testGoto [
 	self assert: stmt endPos equals: 37.
 
 
-	self assert: stmt label class equals: FASTFortranLabelReference.
-	self assert: stmt label label equals: '100'.
-	self assert: stmt label startPos equals: 35.
+	self assert: stmt labelReferences size equals: 1.
+	self assert: stmt labelReferences anyOne label equals: '100'.
+	self assert: stmt labelReferences anyOne startPos equals: 35.
 
 ]
 
@@ -1288,16 +1288,16 @@ FortranToFASTTests >> testGotoComputed [
 	self assert: stmt endPos equals: 55.
 
 
-	self assert: stmt labels size equals: 4.
-	stmt labels do: [ :label |
+	self assert: stmt labelReferences size equals: 4.
+	stmt labelReferences do: [ :label |
 		self assert: label class equals: FASTFortranLabelReference.
 		self assert: (label label endsWith: '00').
 		self assert: (#(36 40 44 48) includes: label startPos)
 	].
 
-	self assert: stmt expression class equals: FASTFortranScalarVariable.
-	self assert: stmt expression name equals: 'var'.
-	self assert: stmt expression startPos equals: 53.
+	self assert: stmt selectorExpression class equals: FASTFortranScalarVariable.
+	self assert: stmt selectorExpression name equals: 'var'.
+	self assert: stmt selectorExpression startPos equals: 53.
 
 ]
 

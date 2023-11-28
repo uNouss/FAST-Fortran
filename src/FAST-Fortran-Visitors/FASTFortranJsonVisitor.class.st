@@ -545,7 +545,7 @@ FASTFortranJsonVisitor >> visitGotoStatement: aGotoStatementNode [
 	data := super visitGotoStatement: aGotoStatementNode.
 
 	^ (self newEntity: FASTFortranGoToStatement atPosition: data first)
-		  label: (self integerLiteralToLabelRef: data second);
+		  labelReferences: { self integerLiteralToLabelRef: data second } ;
 		  yourself
 ]
 
@@ -557,8 +557,8 @@ FASTFortranJsonVisitor >> visitGoto_computedStatement: aGotoComputedStatementNod
 	data := super visitGoto_computedStatement: aGotoComputedStatementNode.
 
 	^(self newEntity: FASTFortranGoToComputedStatement atPosition: data first)
-		labels: (data second collect: [:lit | self integerLiteralToLabelRef: lit]) ;
-		expression: data third ;
+		labelReferences: (data second collect: [:lit | self integerLiteralToLabelRef: lit]) ;
+		selectorExpression: data third ;
 		yourself
 ]
 
