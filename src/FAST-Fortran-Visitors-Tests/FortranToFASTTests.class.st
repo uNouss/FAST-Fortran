@@ -1134,8 +1134,8 @@ FortranToFASTTests >> testFormatStatement [
 	self assert: stmt startPos equals: 28.
 	self assert: stmt endPos equals: 59.
 
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '110'.
+	self assert: stmt label equals: '110'.
+
 	self assert: stmt formatDescription equals: '(a8,2x,i4,f8.2,f8.2)'
 
 ]
@@ -1534,47 +1534,6 @@ FortranToFASTTests >> testImplicitNoneStatement [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testLabeledStatement [
-
-	| result stmt |
-	fortranCode := '      PROGRAM MYPROG
-110   i=5
-      END
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:3)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},"span":"(2:1)-(2:10)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"span":"(2:8)-(2:10)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranAssignmentStatement.
-	self assert: stmt startPos equals: 29.
-
-	self assert: stmt label equals: '110'.
-
-]
-
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testLabelledStatement [
-
-	| result stmt |
-	fortranCode := '      PROGRAM MYPROG
-100    i=5
-      END
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:3)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},"span":"(2:1)-(2:10)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"span":"(2:8)-(2:10)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-	
-	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranAssignmentStatement.
-
-	self assert: stmt startPos equals: 29.
-	self assert: stmt endPos equals: 31.
-
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '100'.
-	self assert: stmt label startPos equals: 22.
-]
-
-{ #category : #'tests-statement' }
 FortranToFASTTests >> testLogicalIfEmpty [
 
 	| result conditional |
@@ -1863,8 +1822,7 @@ FortranToFASTTests >> testStatementWithLabel [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '10'.
+	self assert: stmt label equals: '10'.
 ]
 
 { #category : #'tests-statement' }
