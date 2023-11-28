@@ -419,6 +419,7 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 			terminalStatement := FASTFortranContinueStatement new.
 			terminalStatement startPos: end_label startPos.
 			terminalStatement endPos: doStatement endPos.
+			terminalStatement label: end_label primitiveValue.
 		
 			body addStatement: terminalStatement
 		]
