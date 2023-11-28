@@ -368,12 +368,26 @@ FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunction
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
+	"note: an unconditional goto use TWithLabelReferences, but it actually has only one"
+
+	self
+		sixSpaces ;
+		<< 'goto (' ;
+		visitNodeListSeparatedByCommas: aFASTFortranGoToComputedStatement labelReferences ;
+		<< ') '.
+	aFASTFortranGoToComputedStatement selectorExpression accept: self.
+	self newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
+	"note: an unconditional goto use TWithLabelReferences, but it actually has only one"
 
 	self
 		sixSpaces ;
 		<< 'goto '.
-	aFASTFortranGoToStatement label accept: self.
+	aFASTFortranGoToStatement labelReferences anyOne accept: self.
 	self newLine
 ]
 
