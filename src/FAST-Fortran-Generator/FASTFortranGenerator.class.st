@@ -580,7 +580,7 @@ FASTFortranGenerator >> defineProperties [
 	(tUnaryExpression property: #operator type: #String) comment:
 		'Unary expression operator'.
 
-	(type property: #size type: #String) comment: 'a data size in bytes'.
+	(type property: #size type: #Number) comment: 'a data size in bytes'.
 
 	(variable property: #name type: #String) comment:
 		'Determines the variable name'.
