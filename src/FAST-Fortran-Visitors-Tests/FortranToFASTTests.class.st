@@ -2061,8 +2061,7 @@ FortranToFASTTests >> testVariableDeclarationCharacter [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt type class equals: FASTFortranCharacterType.
-	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
-	self assert: stmt type size primitiveValue equals: '40'.
+	self assert: stmt type size equals: 40.
 
 	self assert: stmt declarators size equals: 1.
 	var := stmt declarators first.
@@ -2112,8 +2111,7 @@ FortranToFASTTests >> testVariableDeclarationIntegerWithLength [
 	self assert: stmt startPos equals: 26.
 
 	self assert: stmt type class equals: FASTFortranIntegerType.
-	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
-	self assert: stmt type size primitiveValue equals: '8'.
+	self assert: stmt type size equals: 8.
 
 ]
 
@@ -2186,8 +2184,7 @@ FortranToFASTTests >> testVariableDeclarationWithLength [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt type class equals: FASTFortranCharacterType.
-	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
-	self assert: stmt type size primitiveValue equals: '40'.
+	self assert: stmt type size equals: 40.
 
 	self assert: stmt declarators size equals: 1.
 	var := stmt declarators first.
