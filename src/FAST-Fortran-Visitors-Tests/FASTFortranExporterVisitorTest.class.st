@@ -11,6 +11,16 @@ Class {
 }
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> array: name access: aCollection [
+
+	^FASTFortranArrayVariable new
+		name: name ;
+		indices: aCollection ;
+		yourself
+
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollection [
 
 	| declarator |
@@ -355,6 +365,19 @@ FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
 		assertExport: stmt
 		equals: 
 '      a = fct(5,b)
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testAssignementStatementArrayAssigned [
+	| stmt |
+	stmt := self assignementStatement: 'a' value: (self scalarVariable: 'b').
+	stmt variable: (self array: 'arr' access: { self scalarVariable: 'i' . self integerLiteral: 1}).
+
+	self
+		assertExport: stmt
+		equals: 
+'      arr(i,1) = b
 '
 ]
 
