@@ -4,8 +4,8 @@ I am the super class of all Fortran statements
 Class {
 	#name : #FASTFortranAbstractStatement,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement + FASTFortranTStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait + FASTFortranTStatement classTrait',
+	#traits : 'FASTFortranTStatement',
+	#classTraits : 'FASTFortranTStatement classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

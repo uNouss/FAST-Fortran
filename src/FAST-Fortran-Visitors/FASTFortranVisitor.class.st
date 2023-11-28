@@ -39,9 +39,8 @@ FASTFortranVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVariable [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
-	<generated>
-	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranAssignmentStatement.
+
+	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement
 ]
 
 { #category : #'visiting - expressions' }
@@ -476,9 +475,8 @@ FASTFortranVisitor >> visitFASTFortranRealType: aFASTFortranRealType [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
-	<generated>
-	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranReturnStatement.
+
+	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement
 ]
 
 { #category : #'visiting - statements' }
@@ -612,12 +610,6 @@ FASTFortranVisitor >> visitFASTFortranTInvocation: aFASTFortranTInvocation [
 	<generated>
 	self visitFASTFortranTExpression: aFASTFortranTInvocation.
 	self visitFASTFortranTWithArguments: aFASTFortranTInvocation.
-]
-
-{ #category : #'visiting - traits' }
-FASTFortranVisitor >> visitFASTFortranTLabelledStatement: aFASTFortranTLabelledStatement [
-	<generated>
-	self visitFASTFortranTStatement: aFASTFortranTLabelledStatement.
 ]
 
 { #category : #'visiting - traits' }

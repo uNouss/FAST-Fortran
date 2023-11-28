@@ -90,7 +90,6 @@ Class {
 		'statementBlock',
 		'assignmentExpression',
 		'tConditionalStatement',
-		'tLabelledStatement',
 		'tEntryArgument',
 		'dataGroup',
 		'labelReference',
@@ -414,7 +413,6 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"FORTRAN STATEMENTS"
 	abstractStatement --|> tStatement.
-	abstractStatement --|> tLabelledStatement.
 	acceptStatement  --|> tStatement.
 	assignmentStatement --|> abstractStatement.
 	assignmentStatement --|> tAssignment.
@@ -949,8 +947,6 @@ FASTFortranGenerator >> defineTraits [
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
-
-	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
 
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 

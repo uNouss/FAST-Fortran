@@ -820,11 +820,14 @@ FASTFortranJsonVisitor >> visitStar: anObject [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitStatement: aStatementNode [
+	"#(span label statement)"
 
 	| data |
 	data := super visitStatement: aStatementNode.
 
-	data second ifNotNil: [ data third label: data second ].
+	data second ifNotNil: [
+		data third label: data second primitiveValue ].
+
 	^ data third
 ]
 

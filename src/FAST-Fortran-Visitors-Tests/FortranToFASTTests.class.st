@@ -908,8 +908,7 @@ FortranToFASTTests >> testContinueStatement [
 	self assert: stmt startPos equals: 28.
 	self assert: stmt endPos equals: 35.
 
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '110'.
+	self assert: stmt label equals: '110'.
 
 ]
 
@@ -1135,8 +1134,8 @@ FortranToFASTTests >> testFormatStatement [
 	self assert: stmt startPos equals: 28.
 	self assert: stmt endPos equals: 59.
 
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '110'.
+	self assert: stmt label equals: '110'.
+
 	self assert: stmt formatDescription equals: '(a8,2x,i4,f8.2,f8.2)'
 
 ]
@@ -1823,8 +1822,7 @@ FortranToFASTTests >> testStatementWithLabel [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranStopStatement.
-	self assert: stmt label class equals: FASTFortranIntegerLiteral.
-	self assert: stmt label primitiveValue equals: '10'.
+	self assert: stmt label equals: '10'.
 ]
 
 { #category : #'tests-statement' }
