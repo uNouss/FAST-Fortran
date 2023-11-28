@@ -7,7 +7,7 @@ Class {
 	#traits : 'FASTFortranTAssignment',
 	#classTraits : 'FASTFortranTAssignment classTrait',
 	#instVars : [
-		'#parentLoopControlExpresison => FMOne type: #FASTFortranLoopControlExpression opposite: #init'
+		'#parentLoopControlInitialization => FMOne type: #FASTFortranLoopControlExpression opposite: #init'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -22,26 +22,25 @@ FASTFortranAssignmentExpression class >> annotation [
 ]
 
 { #category : #accessing }
-FASTFortranAssignmentExpression >> parentLoopControlExpresison [
-	"Relation named: #parentLoopControlExpresison type: #FASTFortranLoopControlExpression opposite: #init"
+FASTFortranAssignmentExpression >> parentLoopControlInitialization [
+	"Relation named: #parentLoopControlInitialization type: #FASTFortranLoopControlExpression opposite: #init"
 
 	<generated>
-	<FMComment: 'Parent loop control expresison'>
 	<container>
 	<derived>
-	^ parentLoopControlExpresison
+	^ parentLoopControlInitialization
 ]
 
 { #category : #accessing }
-FASTFortranAssignmentExpression >> parentLoopControlExpresison: anObject [
+FASTFortranAssignmentExpression >> parentLoopControlInitialization: anObject [
 
 	<generated>
-	parentLoopControlExpresison := anObject
+	parentLoopControlInitialization := anObject
 ]
 
 { #category : #navigation }
-FASTFortranAssignmentExpression >> parentLoopControlExpresisonGroup [
+FASTFortranAssignmentExpression >> parentLoopControlInitializationGroup [
 	<generated>
-	<navigation: 'ParentLoopControlExpresison'>
-	^ MooseSpecializedGroup with: self parentLoopControlExpresison
+	<navigation: 'ParentLoopControlInitialization'>
+	^ MooseSpecializedGroup with: self parentLoopControlInitialization
 ]

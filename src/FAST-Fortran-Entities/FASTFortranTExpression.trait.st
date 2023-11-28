@@ -15,6 +15,8 @@ Trait {
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
 		'#parentGotoAssignedStatement => FMOne type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression',
 		'#parentGotoComputedStatement => FMOne type: #FASTFortranGoToComputedStatement opposite: #selectorExpression',
+		'#parentLoopControlIncrement => FMOne type: #FASTFortranLoopControlExpression opposite: #increment',
+		'#parentLoopControlLimit => FMOne type: #FASTFortranLoopControlExpression opposite: #limit',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression'
 	],
@@ -259,6 +261,54 @@ FASTFortranTExpression >> parentGotoComputedStatement: anObject [
 
 	<generated>
 	parentGotoComputedStatement := anObject
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentLoopControlIncrement [
+	"Relation named: #parentLoopControlIncrement type: #FASTFortranLoopControlExpression opposite: #increment"
+
+	<generated>
+	<container>
+	<derived>
+	^ parentLoopControlIncrement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentLoopControlIncrement: anObject [
+
+	<generated>
+	parentLoopControlIncrement := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentLoopControlIncrementGroup [
+	<generated>
+	<navigation: 'ParentLoopControlIncrement'>
+	^ MooseSpecializedGroup with: self parentLoopControlIncrement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentLoopControlLimit [
+	"Relation named: #parentLoopControlLimit type: #FASTFortranLoopControlExpression opposite: #limit"
+
+	<generated>
+	<container>
+	<derived>
+	^ parentLoopControlLimit
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentLoopControlLimit: anObject [
+
+	<generated>
+	parentLoopControlLimit := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentLoopControlLimitGroup [
+	<generated>
+	<navigation: 'ParentLoopControlLimit'>
+	^ MooseSpecializedGroup with: self parentLoopControlLimit
 ]
 
 { #category : #accessing }
