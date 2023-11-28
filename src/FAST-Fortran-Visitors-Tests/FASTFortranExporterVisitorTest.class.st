@@ -372,7 +372,7 @@ FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
 FASTFortranExporterVisitorTest >> testAssignementStatementArrayAssigned [
 	| stmt |
 	stmt := self assignementStatement: 'a' value: (self scalarVariable: 'b').
-	stmt variable: (self array: 'arr' access: { self scalarVariable: 'i' . self integerLiteral: 1}).
+	stmt variable: (self array: 'arr' access: { self scalarVariable: 'i' . self integerLiteral: '1'}).
 
 	self
 		assertExport: stmt

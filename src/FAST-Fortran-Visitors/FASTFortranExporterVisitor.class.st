@@ -184,6 +184,7 @@ FASTFortranExporterVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVa
 	self
 		<< aFASTFortranArrayVariable name ;
 		<< '(' ;
+		visitNodeListSeparatedByCommas: aFASTFortranArrayVariable indices ;
 		<< ')'
 ]
 
