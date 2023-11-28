@@ -28,7 +28,6 @@ Class {
 		'goToStatement',
 		'goToAssignedStatement',
 		'goToComputed',
-		'goToUnconditional',
 		'ifArithmeticStatement',
 		'ifBlockStatement',
 		'ifLogicalStatement',
@@ -105,7 +104,8 @@ Class {
 		'tVariableDeclarator',
 		'variableDeclarator',
 		'arrayDimension',
-		'commonGroup'
+		'commonGroup',
+		'tWithLabelReferences'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -441,9 +441,11 @@ FASTFortranGenerator >> defineHierarchy [
 	formatStatement --|> tFormatIdentifier.
 	functionStatement --|> abstractStatement.
 	goToStatement --|> abstractStatement.
+	goToStatement --|> tWithLabelReferences.
 	goToAssignedStatement --|> abstractStatement.
+	goToAssignedStatement --|> tWithLabelReferences.
 	goToComputed --|> abstractStatement.
-	goToUnconditional --|> abstractStatement.
+	goToComputed --|> tWithLabelReferences.
 	ifArithmeticStatement --|> abstractStatement.
 	ifArithmeticStatement --|> tConditionalStatement.
 	ifBlockStatement --|> abstractStatement.
@@ -663,8 +665,11 @@ FASTFortranGenerator >> defineRelations [
 	<>- ((tExpression property: #assignementExpressionOwner) comment:
 			 'The AssignementExpression owner (if possible)').
 
-	(goToStatement property: #label)
-	<>- (labelReference property: #parentGotoStatement).
+	((goToComputed property: #selectorExpression) comment: 'The expression which value selects the label to go to')
+	- (tExpression property: #parentGotoComputedStatement).
+
+	((goToAssignedStatement property: #selectorExpression) comment: 'The expression which value selects the label to go to')
+	- (tExpression property: #parentGotoAssignedStatement).
 
 	((tConditionalStatement property: #condition) comment: 'Condition')
 	<>-
@@ -722,7 +727,12 @@ FASTFortranGenerator >> defineRelations [
 	((tWithFormatIdentifier property: #format) comment:
 		 'format identifier')
 	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
-			 'The owner of the format identifier')
+			 'The owner of the format identifier').
+
+	((tWithLabelReferences property: #labelReferences) comment:
+		 'the label(s) referenced')
+	-* ((labelReference property: #referencer) comment:
+			 'A statement (like goto) referencing this label')
 ]
 
 { #category : #definition }
@@ -817,7 +827,7 @@ FASTFortranGenerator >> defineStatements [
 
 	goToStatement := builder
 		                 newClassNamed: #GoToStatement
-		                 comment: 'I represent Fortran Go To statement'.
+		                 comment: 'I represent Fortran Go To (unconditional) statement'.
 
 	goToAssignedStatement := builder
 		                         newClassNamed: #GoToAssignedStatement
@@ -827,10 +837,7 @@ FASTFortranGenerator >> defineStatements [
 		                newClassNamed: #GoToComputedStatement
 		                comment:
 		                'I represent Fortran Go To (Computed) statement'.
-	goToUnconditional := builder
-		                     newClassNamed: #GoToUnconditionalStatement
-		                     comment:
-		                     'I represent Fortran Go To (Unconditional) statement'.
+
 	ifArithmeticStatement := builder
 		                         newClassNamed: #IfArithmeticStatement
 		                         comment:
@@ -945,8 +952,10 @@ FASTFortranGenerator >> defineTraits [
 
 	tLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
 
+	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
+
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 
-	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
+	tWithLabelReferences := builder newTraitNamed: #TWithLabelReferences comment: 'I represent a statement (various kind of goto) that can have label references'.
 
 ]
