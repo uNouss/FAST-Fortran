@@ -1051,7 +1051,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: (self integerLiteral: '10')) variables: #(str).
+	stmt := self declarationStatement: (self characterType: 10) variables: #(str).
 
 	self
 		assertExport: stmt
@@ -1063,7 +1063,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationIntegerTypeWithSize [
 	| stmt |
-	stmt := self declarationStatement: (self integerType: (self integerLiteral: '8')) variables: #(i).
+	stmt := self declarationStatement: (self integerType: 8) variables: #(i).
 
 	self
 		assertExport: stmt

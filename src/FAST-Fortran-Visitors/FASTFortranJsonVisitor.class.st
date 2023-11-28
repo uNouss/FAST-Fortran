@@ -938,13 +938,18 @@ FASTFortranJsonVisitor >> visitSubtraction: aSubtractionOperatorNode [
 
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitType: aTypeNode [
+	"#(span base_type selector)"
 
 	| data |
 	data := super visitType: aTypeNode.
 	self
 		set: data second
 		startEnd: data first.
-	data second size: data third.
+
+	 	data second size:
+			(data third
+				ifNil: [ nil ]
+				ifNotNil: [ :typeSize | typeSize primitiveValue asInteger ]).
 
 	^data second
 ]

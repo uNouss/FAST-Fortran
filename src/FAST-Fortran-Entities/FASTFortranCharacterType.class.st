@@ -15,18 +15,3 @@ FASTFortranCharacterType class >> annotation [
 	<generated>
 	^ self
 ]
-
-{ #category : #accessing }
-FASTFortranCharacterType >> size [
-
-	<FMProperty: #size type: #Number>
-	<generated>
-	<FMComment: 'Determines a size of bytes of storage a character string occupies'>
-	^ size
-]
-
-{ #category : #accessing }
-FASTFortranCharacterType >> size: anObject [
-	<generated>
-	size := anObject
-]
