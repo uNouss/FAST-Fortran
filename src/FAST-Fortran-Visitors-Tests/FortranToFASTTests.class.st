@@ -1982,6 +1982,34 @@ FortranToFASTTests >> testSubroutineWithParameters [
 
 ]
 
+{ #category : #'tests-programUnit' }
+FortranToFASTTests >> testSubroutineWithParametersOnTwoLines [
+
+	| result rtn |
+	fortranCode := '      SUBROUTINE SIMPLESUBROUTINE( a,
+     & b)
+      continue
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:36)-(1:36)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"b","tag":"variable"}}],"span":"(1:36)-(2:8)"},"blocks":[{"anno":[],"label":null,"span":"(3:7)-(3:14)","statement":{"anno":[],"span":"(3:7)-(3:14)","tag":"continue"},"tag":"statement"}],"name":"simplesubroutine","options":[null,null],"span":"(1:7)-(4:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+	
+	self assert: result isCollection.
+
+	rtn := result anyOne.
+	self assert: rtn class equals: FASTFortranSubroutine.
+	self assert: rtn name equals: 'simplesubroutine'.
+
+	self assert: rtn statementBlock class equals: FASTFortranStatementBlock.
+	self assert: rtn statementBlock statements size equals: 1.
+	self assert: rtn statementBlock startPos equals: 55.
+
+	self assert: rtn parameters size equals: 2.
+	self assert: rtn parameters first startPos equals: 36.
+	self assert: rtn parameters second startPos equals: 46.
+
+]
+
 { #category : #tests }
 FortranToFASTTests >> testTokenPosition [
 

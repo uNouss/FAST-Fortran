@@ -893,6 +893,7 @@ FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
+	"#(span name arguments blocks)"
 
 	| data routine |
 	data := super visitSubroutine: aSubroutineNode.
@@ -903,7 +904,12 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 		statementBlock: data fourth;
 		yourself.
 
-	self setBodyPosition: routine fromProgramUnitPosition: data first.
+	data fourth statements ifEmpty: [
+		"only useful for the tests ?"
+		self
+			setBodyPosition: routine
+			fromProgramUnitPosition: data first
+	].
 
 	^routine
 ]
