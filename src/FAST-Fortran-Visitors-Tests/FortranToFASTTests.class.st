@@ -1296,8 +1296,8 @@ FortranToFASTTests >> testFunctionWithStatement [
 	self assert: fct startPos equals: 7.
 
 	self assert: fct statementBlock statements size equals: 1.
-	self assert: fct statementBlock startPos equals: 31.
-	self assert: fct statementBlock endPos equals: 46.
+	self assert: fct statementBlock startPos equals: 37.
+	self assert: fct statementBlock endPos equals: 44.
 
 	self assert: fct returnType class equals: FASTFortranIntegerType.
 ]
