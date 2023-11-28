@@ -1,9 +1,11 @@
 "
-I represent Fortran Go To statement
+I represent Fortran Go To (unconditional) statement
 "
 Class {
 	#name : #FASTFortranGoToStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithLabelReferences',
+	#classTraits : 'FASTFortranTWithLabelReferences classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
@@ -14,26 +16,4 @@ FASTFortranGoToStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranGoToStatement >> label [
-	"Relation named: #label type: #FASTFortranLabelReference opposite: #parentGotoStatement"
-
-	<generated>
-	^ label
-]
-
-{ #category : #accessing }
-FASTFortranGoToStatement >> label: anObject [
-
-	<generated>
-	label := anObject
-]
-
-{ #category : #navigation }
-FASTFortranGoToStatement >> labelGroup [
-	<generated>
-	<navigation: 'Label'>
-	^ MooseSpecializedGroup with: self label
 ]

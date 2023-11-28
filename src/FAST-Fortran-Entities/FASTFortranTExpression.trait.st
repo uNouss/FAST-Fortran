@@ -13,6 +13,8 @@ Trait {
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
 		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
+		'#parentGotoAssignedStatement => FMOne type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression',
+		'#parentGotoComputedStatement => FMOne type: #FASTFortranGoToComputedStatement opposite: #selectorExpression',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression'
 	],
@@ -225,6 +227,38 @@ FASTFortranTExpression >> parentExpressionGroup [
 	<generated>
 	<navigation: 'ParentExpression'>
 	^ MooseSpecializedGroup with: self parentExpression
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentGotoAssignedStatement [
+	"Relation named: #parentGotoAssignedStatement type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression"
+
+	<generated>
+	<derived>
+	^ parentGotoAssignedStatement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentGotoAssignedStatement: anObject [
+
+	<generated>
+	parentGotoAssignedStatement := anObject
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentGotoComputedStatement [
+	"Relation named: #parentGotoComputedStatement type: #FASTFortranGoToComputedStatement opposite: #selectorExpression"
+
+	<generated>
+	<derived>
+	^ parentGotoComputedStatement
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentGotoComputedStatement: anObject [
+
+	<generated>
+	parentGotoComputedStatement := anObject
 ]
 
 { #category : #accessing }
