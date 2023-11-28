@@ -1243,6 +1243,11 @@ FortranToFASTTests >> testFunctionStatement [
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 41.
 
+	self assert: stmt arguments size equals: 2.
+	stmt arguments do: [:arg |
+		self assert: arg class equals: FASTFortranScalarVariable ].
+	self assert: stmt expression class equals: FASTFortranBinaryExpression
+
 ]
 
 { #category : #'tests-programUnit' }
