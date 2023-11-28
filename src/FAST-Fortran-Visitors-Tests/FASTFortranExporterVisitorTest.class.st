@@ -753,6 +753,21 @@ FASTFortranExporterVisitorTest >> testFunctionNoReturnType [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testFunctionStatement [
+	| node |
+	node := FASTFortranFunctionStatement new.
+	node name: 'fct'.
+	node arguments: (self scalarVariables: #(x y)).
+	node expression: (self binary: '+' left: 'x' right: '2').
+
+	self
+		assertExport: node
+		equals: 
+'      fct(x,y) = x + 2
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testFunctionWithParameterNoStatement [
 	| node |
 	node := self functionDeclaration: 'BLAH'.

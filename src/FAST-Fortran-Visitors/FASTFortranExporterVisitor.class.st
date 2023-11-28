@@ -156,6 +156,9 @@ FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAbstractStatement: aFASTFortranAbstractStatement [
+	"main role is to print the 'header' of the line:
+	 - six spaces, or
+	 - a label + spaces to complete 6 columns"
 
 	aFASTFortranAbstractStatement label
 		ifNil: [ self sixSpaces ]
@@ -382,6 +385,19 @@ FASTFortranExporterVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunction
 			self visitFASTFortranTWithArguments: aFASTFortranFunctionCall.
 			self << ')'
 	]
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranFunctionStatement: aFASTFortranFunctionStatement [
+
+	self visitFASTFortranAbstractStatement: aFASTFortranFunctionStatement.
+	self
+		<< aFASTFortranFunctionStatement name ;
+		<< '(' ;
+		visitNodeListSeparatedByCommas: aFASTFortranFunctionStatement arguments ;
+		<< ') = '.
+	aFASTFortranFunctionStatement expression accept: self.
+	self newLine
 ]
 
 { #category : #'visiting - statements' }
