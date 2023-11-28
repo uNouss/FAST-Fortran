@@ -5,10 +5,10 @@ Class {
 	#name : #FASTFortranLoopControlExpression,
 	#superclass : #FASTFortranAbstractExpression,
 	#instVars : [
-		'#increment => FMProperty',
-		'#limit => FMProperty',
 		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl',
-		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison'
+		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlInitialization',
+		'#increment => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlIncrement',
+		'#limit => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlLimit'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -24,8 +24,8 @@ FASTFortranLoopControlExpression class >> annotation [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> increment [
+	"Relation named: #increment type: #FASTFortranTExpression opposite: #parentLoopControlIncrement"
 
-	<FMProperty: #increment type: #String>
 	<generated>
 	<FMComment: 'Loop control increment value'>
 	^ increment
@@ -33,13 +33,21 @@ FASTFortranLoopControlExpression >> increment [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> increment: anObject [
+
 	<generated>
 	increment := anObject
 ]
 
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> incrementGroup [
+	<generated>
+	<navigation: 'Increment'>
+	^ MooseSpecializedGroup with: self increment
+]
+
 { #category : #accessing }
 FASTFortranLoopControlExpression >> init [
-	"Relation named: #init type: #FASTFortranAssignmentExpression opposite: #parentLoopControlExpresison"
+	"Relation named: #init type: #FASTFortranAssignmentExpression opposite: #parentLoopControlInitialization"
 
 	<generated>
 	<FMComment: 'initial assignment'>
@@ -73,6 +81,13 @@ FASTFortranLoopControlExpression >> limit [
 FASTFortranLoopControlExpression >> limit: anObject [
 	<generated>
 	limit := anObject
+]
+
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> limitGroup [
+	<generated>
+	<navigation: 'Limit'>
+	^ MooseSpecializedGroup with: self limit
 ]
 
 { #category : #accessing }
