@@ -1534,6 +1534,25 @@ FortranToFASTTests >> testImplicitNoneStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testLabeledStatement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+110   i=5
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:3)","tag":"value","value":{"contents":["100",null],"tag":"integer"}},"span":"(2:1)-(2:10)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"span":"(2:8)-(2:10)","tag":"assign_expression","target":{"anno":[],"span":"(2:8)-(2:8)","tag":"value","value":{"contents":"i","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 29.
+
+	self assert: stmt label equals: '110'.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testLabelledStatement [
 
 	| result stmt |
