@@ -541,9 +541,9 @@ FASTFortranJsonVisitor >> visitFunctionStatement: aFunctionStatementNode [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
-	"^self visitJsonMap: aFunctionNode keys: #(span name type arguments blocks result subprograms)"
+	"#(span name type arguments blocks result subprograms)"
 
-	| data function headerEndPos |
+	| data function |
 	data := super visitFunctionWithBlocks: aFunctionNode.
 
 	function := (self newEntity: FASTFortranFunction atPosition: data first)
@@ -553,7 +553,12 @@ FASTFortranJsonVisitor >> visitFunctionWithBlocks: aFunctionNode [
 		statementBlock: data fifth ;
 		yourself.
 
-	self setBodyPosition: function fromProgramUnitPosition: data first.
+	data fifth statements ifEmpty: [
+		"only useful for the tests ?"
+		self
+			setBodyPosition: function
+			fromProgramUnitPosition: data first
+	].
 
 	^function
 ]
@@ -893,6 +898,7 @@ FASTFortranJsonVisitor >> visitStringLiteralValue: aString [
 
 { #category : #'visiting prog-unit' }
 FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
+	"#(span name arguments blocks)"
 
 	| data routine |
 	data := super visitSubroutine: aSubroutineNode.
@@ -903,7 +909,12 @@ FASTFortranJsonVisitor >> visitSubroutine: aSubroutineNode [
 		statementBlock: data fourth;
 		yourself.
 
-	self setBodyPosition: routine fromProgramUnitPosition: data first.
+	data fourth statements ifEmpty: [
+		"only useful for the tests ?"
+		self
+			setBodyPosition: routine
+			fromProgramUnitPosition: data first
+	].
 
 	^routine
 ]
