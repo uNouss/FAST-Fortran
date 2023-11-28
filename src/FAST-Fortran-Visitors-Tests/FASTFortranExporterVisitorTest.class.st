@@ -616,6 +616,26 @@ FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
 '
 ]
 
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDoStatementWithLabel [
+	| stmt init |
+
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
+	stmt := self
+		doStatement: (self loopControlInit: init increment: nil limit: 'max')
+		statements: { FASTFortranContinueStatement new label: '110'}.
+	stmt labelReferences: { self labelReference: '110' }.
+
+	self
+		assertExport: stmt
+		equals: 
+'      do 110 i = 1,max
+110     continue
+'
+]
+
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testEmptySubroutineNoParameters [
 	| sub |
