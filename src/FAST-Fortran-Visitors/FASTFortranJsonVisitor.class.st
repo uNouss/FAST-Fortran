@@ -387,14 +387,46 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: aDoNode [
+	"#(span do_spec target body end_label)
+	- target is a label number (optional)
+	- end_label is the 'terminal statement' (typically a 'continue') with that label
+	Note that 'fortran-src' does not store the terminal statement if it is 'continue'
+	Otherwise the statement is stored in the 'body'"
 
-	| data |
+	| data doStatement body |
+
 	data := super visitDo: aDoNode.
+	
+	doStatement := self newEntity: FASTFortranDoStatement atPosition: data first.
+	doStatement loopControl: data second.
 
-	^ (self newEntity: FASTFortranDoStatement atPosition: data first)
-		  loopControl: data second;
-		  statementBlock: data third ;
-		  yourself
+	data third ifNotNil: [ :target |
+		doStatement labelReferences: { self integerLiteralToLabelRef: target }
+	].
+	
+	body := data fourth.
+	
+	data fifth ifNotNil: [ :end_label || createContinue terminalStatement |
+		body statements
+			ifEmpty: [ createContinue := true ]
+			ifNotEmpty: [
+				terminalStatement := body statements last.
+				createContinue := (terminalStatement label ~= end_label primitiveValue)
+			].
+
+		createContinue ifTrue: [
+			"need to create a CONTINUE terminalStatement"
+			terminalStatement := FASTFortranContinueStatement new.
+			terminalStatement startPos: end_label startPos.
+			terminalStatement endPos: doStatement endPos.
+		
+			body addStatement: terminalStatement
+		]
+	].
+
+	doStatement statementBlock: body.
+
+	^doStatement
 ]
 
 { #category : #'visiting statement' }

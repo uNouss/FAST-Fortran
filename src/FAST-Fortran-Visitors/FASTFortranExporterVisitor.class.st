@@ -294,13 +294,26 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
-
+	"FASTFortranDoStatement uses TWithLabelReferences, but it makes only one such reference"
 	self
 		visitFASTFortranAbstractStatement: aFASTFortranDoStatement ;
 		<< 'do '.
+	aFASTFortranDoStatement labelReferences ifNotEmpty: [ :references |
+		"there is only 1 reference"
+		references anyOne accept: self.
+		self << ' '
+	].
+
 	aFASTFortranDoStatement loopControl accept: self.
 	self newLine.
-	aFASTFortranDoStatement statementBlock accept: self
+	aFASTFortranDoStatement statementBlock accept: self.
+
+	aFASTFortranDoStatement labelReferences ifEmpty: [
+		self
+			sixSpaces ;
+			<< 'end do' ;
+			newLine
+	].
 ]
 
 { #category : #'visiting - statements' }

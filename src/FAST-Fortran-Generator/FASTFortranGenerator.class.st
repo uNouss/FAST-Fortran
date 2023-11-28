@@ -428,6 +428,7 @@ FASTFortranGenerator >> defineHierarchy [
 	exitStatement --|> abstractStatement.
 	dimensionStatement --|> abstractStatement.
 	doStatement --|> abstractStatement.
+	doStatement --|> tWithLabelReferences.
 	doWhileStatement --|> abstractStatement.
 	elseStatement --|> abstractStatement.
 	endFileStatement --|> abstractStatement.

@@ -581,9 +581,10 @@ FASTFortranExporterVisitorTest >> testDataStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatement [
 	| stmt init |
-	self skip: 'init in control should be an expression, not a statement'.
 
-	init := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
 	stmt := self
 		doStatement: (self loopControlInit: init increment: '1' limit: 'max')
 		statements: #().
@@ -591,7 +592,7 @@ FASTFortranExporterVisitorTest >> testDoStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      do i=1, 1, max
+'      do i = 1,1,max
       end do
 '
 ]
@@ -599,9 +600,10 @@ FASTFortranExporterVisitorTest >> testDoStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
 	| stmt init |
-	self skip: 'init in control should be an expression, not a statement'.
 
-	init := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
 	stmt := self
 		doStatement: (self loopControlInit: init increment: nil limit: 'max')
 		statements: #().
@@ -609,8 +611,28 @@ FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
 	self
 		assertExport: stmt
 		equals: 
-'      do i=1, max
+'      do i = 1,max
       end do
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDoStatementWithLabel [
+	| stmt init |
+
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
+	stmt := self
+		doStatement: (self loopControlInit: init increment: nil limit: 'max')
+		statements: { FASTFortranContinueStatement new label: '110'}.
+	stmt labelReferences: { self labelReference: '110' }.
+
+	self
+		assertExport: stmt
+		equals: 
+'      do 110 i = 1,max
+110     continue
 '
 ]
 
