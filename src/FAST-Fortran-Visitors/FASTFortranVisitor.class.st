@@ -38,6 +38,12 @@ FASTFortranVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVariable [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranAssignmentExpression: aFASTFortranAssignmentExpression [
+
+	self visitFASTFortranTAssignment: aFASTFortranAssignmentExpression
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
 	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement
@@ -537,7 +543,6 @@ FASTFortranVisitor >> visitFASTFortranTAssignment: aFASTFortranTAssignment [
 
 	aFASTFortranTAssignment variable accept: self.
 	aFASTFortranTAssignment expression accept: self.
-	self visitFASTFortranTExpression: aFASTFortranTAssignment.
 ]
 
 { #category : #'visiting - traits' }
