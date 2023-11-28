@@ -1071,7 +1071,9 @@ FortranToFASTTests >> testDoStatementWithLabelAndContinue [
 
 	self assert: stmt statementBlock statements size equals: 1.
 	self assert: stmt statementBlock statements anyOne class equals: FASTFortranContinueStatement.
+	self assert: stmt statementBlock statements anyOne label equals: '100'.
 	self assert: stmt statementBlock statements anyOne startPos equals: 42.
+	
 
 ]
 
@@ -1099,6 +1101,7 @@ FortranToFASTTests >> testDoStatementWithLabelAndTerminalStatement [
 
 	self assert: stmt statementBlock statements size equals: 1.
 	self assert: stmt statementBlock statements anyOne class equals: FASTFortranPrintStatement.
+	self assert: stmt statementBlock statements anyOne label equals: '100'.
 	self assert: stmt statementBlock statements anyOne startPos equals: 48.
 
 ]
