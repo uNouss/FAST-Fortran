@@ -283,9 +283,9 @@ FASTFortranVisitor >> visitFASTFortranFunctionCall: aFASTFortranFunctionCall [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranFunctionStatement: aFASTFortranFunctionStatement [
-	<generated>
-	self visitFASTFortranTWithArguments: aFASTFortranFunctionStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranFunctionStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranFunctionStatement.
+	self visitFASTFortranTWithArguments: aFASTFortranFunctionStatement
 ]
 
 { #category : #'visiting - statements' }
