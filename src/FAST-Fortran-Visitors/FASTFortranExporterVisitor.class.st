@@ -155,6 +155,17 @@ FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranAbstractStatement: aFASTFortranAbstractStatement [
+
+	aFASTFortranAbstractStatement label
+		ifNil: [ self sixSpaces ]
+		ifNotNil: [ :label |
+			self
+				<< label ;
+				upToSixSpaces: label size ]
+]
+
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
 
 	(aFASTFortranArrayDimension lowerBound)
@@ -179,7 +190,7 @@ FASTFortranExporterVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVa
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
-	self sixSpaces.
+	self visitFASTFortranAbstractStatement: aFASTFortranAssignmentStatement.
 	super visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement.
 	self newLine
 ]
@@ -206,7 +217,7 @@ FASTFortranExporterVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBina
 FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranCallStatement ;
 		<< 'call ' ;
 		<< aFASTFortranCallStatement name.
 		
@@ -219,13 +230,13 @@ FASTFortranExporterVisitor >> visitFASTFortranCallStatement: aFASTFortranCallSta
 	self newLine
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 	self << 'character'.
 	self visitFASTFortranType: aFASTFortranType
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #testing }
 FASTFortranExporterVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
 
 	aFASTFortranCommonGroup name
@@ -245,7 +256,7 @@ FASTFortranExporterVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGro
 FASTFortranExporterVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranCommonStatement ;
 		<< 'common'.
 		aFASTFortranCommonStatement groups do: [ :commonGroup | commonGroup accept: self ].
 		self newLine
@@ -254,17 +265,13 @@ FASTFortranExporterVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommo
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
 
-	| lineStart |
-	lineStart := self streamPosition.
-	aFASTFortranContinueStatement label accept: self.
-	
 	self
-		upToSixSpaces: (self streamPosition - lineStart) ;
+		visitFASTFortranAbstractStatement: aFASTFortranContinueStatement ;
 		<< 'continue' ;
 		newLine
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 
 	self
@@ -278,7 +285,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranDataStatement ;
 		<< 'data ' ;
 		visitNodeListSeparatedByCommas: aFASTFortranDataStatement dataGroups ;
 		newLine
@@ -288,7 +295,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranDoStatement ;
 		<< 'do '.
 	aFASTFortranDoStatement loopControl accept: self.
 	self newLine.
@@ -299,7 +306,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStateme
 FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatementNode [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranEntryStatementNode ;
 		<< 'entry ' ;
 		<< aFASTFortranEntryStatementNode name ;
 		<< '('.
@@ -313,7 +320,7 @@ FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryS
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranExternalStatement ;
 		<< 'external ' ;
 		<< aFASTFortranExternalStatement name ;
 		newLine
@@ -322,12 +329,8 @@ FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExt
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranFormatStatement: aFASTFortranFormatStatement [
 
-	| lineStart |
-	lineStart := self streamPosition.
-	aFASTFortranFormatStatement label accept: self.
-	
 	self
-		upToSixSpaces: (self streamPosition - lineStart) ;
+		visitFASTFortranAbstractStatement: aFASTFortranFormatStatement ;
 		<< 'format '.
 
 	"splitting the format string on comma because the importer gathers everything in a sometimes
@@ -372,7 +375,7 @@ FASTFortranExporterVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortra
 	"note: an unconditional goto use TWithLabelReferences, but it actually has only one"
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranGoToComputedStatement ;
 		<< 'goto (' ;
 		visitNodeListSeparatedByCommas: aFASTFortranGoToComputedStatement labelReferences ;
 		<< ') '.
@@ -385,7 +388,7 @@ FASTFortranExporterVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToSta
 	"note: an unconditional goto use TWithLabelReferences, but it actually has only one"
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranGoToStatement ;
 		<< 'goto '.
 	aFASTFortranGoToStatement labelReferences anyOne accept: self.
 	self newLine
@@ -395,7 +398,7 @@ FASTFortranExporterVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToSta
 FASTFortranExporterVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatementNode [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranIfArithmeticStatementNode ;
 		<< 'if ('.
 	aFASTFortranIfArithmeticStatementNode condition accept: self.
 	self << ') '.
@@ -409,9 +412,10 @@ FASTFortranExporterVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortra
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+	"note: can we have a label on an else line ?"
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranIfBlockStatement ;
 		<< 'if ('.
 	aFASTFortranIfBlockStatement condition accept: self.
 	self
@@ -437,7 +441,7 @@ FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIf
 
 	| tmp |
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranIfLogicalStatement ;
 		<< 'if ('.
 	aFASTFortranIfLogicalStatement condition accept: self.
 	self << ') '.
@@ -451,7 +455,7 @@ FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIf
 FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranImplicitStatement ;
 		<< 'implicit none' ;
 		newLine
 ]
@@ -462,7 +466,7 @@ FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelReference [
 
 	self << aFASTFortranLabelReference label
@@ -474,7 +478,7 @@ FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
 
 	aFASTFortranLoopControlExpression init accept: self.
@@ -501,7 +505,7 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 FASTFortranExporterVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranParameterStatement ;
 		<< 'parameter (' ;
 		visitNodeListSeparatedByCommas: aFASTFortranParameterStatement declarators ;
 		<< ')' ;
@@ -512,7 +516,7 @@ FASTFortranExporterVisitor >> visitFASTFortranParameterStatement: aFASTFortranPa
 FASTFortranExporterVisitor >> visitFASTFortranPauseStatement: aFASTFortranPausetStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranPausetStatement ;
 		<< 'pause '.
 	aFASTFortranPausetStatement displayArgument
 		ifNotNil: [ :message | self << message ].
@@ -559,7 +563,7 @@ FASTFortranExporterVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatem
 FASTFortranExporterVisitor >> visitFASTFortranStopStatement: aFASTFortranStoptStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranStoptStatement ;
 		<< 'stop '.
 	aFASTFortranStoptStatement displayArgument
 		ifNotNil: [ :message | self << message ].
@@ -621,7 +625,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTLiteral: aFASTFortranTLiteral [
 FASTFortranExporterVisitor >> visitFASTFortranTReturnStatement: aFASTFortranTReturnStatement [
 
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranTReturnStatement ;
 		<< 'return '.
 	aFASTFortranTReturnStatement expression
 		ifNotNil: [ :expr | expr accept: self ].
@@ -648,7 +652,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 	self << ')'.
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
 
 	aFASTFortranType size ifNotNil: [ :length |
@@ -659,7 +663,7 @@ FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortranVariableDeclarationStatement [
-	self sixSpaces.
+	self visitFASTFortranAbstractStatement: aFASTFortranVariableDeclarationStatement.
 	aFASTFortranVariableDeclarationStatement type accept: self.
 	self << ' '.
 	self visitNodeListSeparatedByCommas: aFASTFortranVariableDeclarationStatement declarators.
@@ -667,7 +671,7 @@ FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarationStatement: aFAS
 		
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
 
 	self << aFASTFortranVariableDeclarator variable.
@@ -690,7 +694,7 @@ FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVa
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
 	self
-		sixSpaces ;
+		visitFASTFortranAbstractStatement: aFASTFortranWriteStatement ;
 		<< 'write'.
 	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
 	self << ' '.
