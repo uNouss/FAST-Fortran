@@ -1141,6 +1141,36 @@ FortranToFASTTests >> testEntryStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testEquivalenceStatementOneGroupScalarVariables [
+
+	| result stmt |
+	fortranCode := '      SUBROUTINE SUBRTN
+      EQUIVALENCE (a,b,c)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:25)","statement":{"anno":[],"groups":{"anno":[],"list":[{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"b","tag":"variable"}},{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":"c","tag":"variable"}}],"span":"(2:19)-(2:25)"}],"span":"(2:19)-(2:25)"},"span":"(2:7)-(2:25)","tag":"equivalence"},"tag":"statement"}],"name":"subrtn","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranEntryStatement.
+	self assert: stmt name equals: 'xyz'.
+	self assert: stmt startPos equals: 31.
+	self assert: stmt endPos equals: 46.
+
+	self assert: stmt entryArguments size equals: 2.
+
+	self assert: stmt entryArguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt entryArguments first name equals: 'abc'.
+	self assert: stmt entryArguments first startPos equals: 41.
+
+	self assert: stmt entryArguments second class equals: FASTFortranAsterisk.
+	self assert: stmt entryArguments second startPos equals: 45.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testExit [
 
 	| result stmt |
