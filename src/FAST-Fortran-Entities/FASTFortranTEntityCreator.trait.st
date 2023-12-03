@@ -297,6 +297,13 @@ FASTFortranTEntityCreator >> newEntryStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newEquivalenceGroup [
+
+	<generated>
+	^ self add: FASTFortranEquivalenceGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newEquivalenceStatement [
 
 	<generated>
