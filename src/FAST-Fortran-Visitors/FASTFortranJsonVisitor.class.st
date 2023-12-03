@@ -329,7 +329,7 @@ FASTFortranJsonVisitor >> visitDataStatement: aDataStatement [
 
 	"error in #span of dataStatement in the exported Json"
 	stmt := self newEntity: FASTFortranDataStatement atPosition: data first.
-	stmt variableGroups: data second.
+	stmt variableGroups: data second second.
 	stmt endPos: (stmt variableGroups last endPos).
 	
 	^stmt
@@ -466,6 +466,28 @@ FASTFortranJsonVisitor >> visitEntryStatement: anEntryNode [
 		entryArguments: data third ;
 		yourself
 	
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitEquivalenceGroup: anEquivalenceGroup [
+
+	| data stmt |
+	data :=  super visitEquivalenceGroup: anEquivalenceGroup.
+
+	^(self newEntity: FASTFortranEquivalenceGroup atPosition: data first)
+		variables: data second ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitEquivalenceStatement: anEquivalenceStatement [
+
+	| data stmt |
+	data :=  super visitEquivalenceStatement: anEquivalenceStatement.
+
+	^(self newEntity: FASTFortranEquivalenceStatement atPosition: data first)
+		variableGroups: data second second ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
