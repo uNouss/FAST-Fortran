@@ -1,9 +1,11 @@
 "
-I represent Fortran Equivalence statement
+I represent a Fortran Equivalence statement
 "
 Class {
 	#name : #FASTFortranEquivalenceStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithVariableGroups',
+	#classTraits : 'FASTFortranTWithVariableGroups classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

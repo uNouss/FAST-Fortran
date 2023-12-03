@@ -7,7 +7,8 @@ Class {
 	#traits : 'FASTFortranTEntryStatement + FASTFortranTVariableEntity',
 	#classTraits : 'FASTFortranTEntryStatement classTrait + FASTFortranTVariableEntity classTrait',
 	#instVars : [
-		'#name => FMProperty'
+		'#name => FMProperty',
+		'#parentVariableGroup => FMOne type: #FASTFortranTVariableGroup opposite: #variables'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -37,16 +38,16 @@ FASTFortranVariable >> name: anObject [
 ]
 
 { #category : #accessing }
-FASTFortranVariable >> parentDataStatement [
-	"Relation named: #parentDataStatement type: #FASTFortranDataGroup opposite: #dataVariables"
+FASTFortranVariable >> parentVariableGroup [
+	"Relation named: #parentVariableGroup type: #FASTFortranTVariableGroup opposite: #variables"
 
 	<generated>
-	^ parentDataStatement
+	^ parentVariableGroup
 ]
 
 { #category : #accessing }
-FASTFortranVariable >> parentDataStatement: anObject [
+FASTFortranVariable >> parentVariableGroup: anObject [
 
 	<generated>
-	parentDataStatement := anObject
+	parentVariableGroup := anObject
 ]

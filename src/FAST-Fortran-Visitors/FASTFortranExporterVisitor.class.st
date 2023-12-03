@@ -279,7 +279,7 @@ FASTFortranExporterVisitor >> visitFASTFortranContinueStatement: aFASTFortranCon
 FASTFortranExporterVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 
 	self
-		visitNodeListSeparatedByCommas: aFASTFortranDataGroup dataVariables ;
+		visitNodeListSeparatedByCommas: aFASTFortranDataGroup variables ;
 		<< ' /' ;
 		visitNodeListSeparatedByCommas: aFASTFortranDataGroup dataConstants ;
 		<< '/ '
@@ -291,7 +291,7 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 	self
 		visitFASTFortranAbstractStatement: aFASTFortranDataStatement ;
 		<< 'data ' ;
-		visitNodeListSeparatedByCommas: aFASTFortranDataStatement dataGroups ;
+		visitNodeListSeparatedByCommas: aFASTFortranDataStatement variableGroups ;
 		newLine
 ]
 
@@ -332,6 +332,25 @@ FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryS
 		<< ')' ;
 		newLine.
 
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceGroup [
+
+	self
+		<< ' ('
+		visitNodeListSeparatedByCommas: aFASTFortranEquivalenceGroup variables ;
+		<< ')'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivalenceStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranEquivalenceStatement ;
+		<< 'equivalence' ;
+		visitNodeListSeparatedByCommas: aFASTFortranEquivalenceStatement variableGroups ;
+		newLine
 ]
 
 { #category : #'visiting - statements' }

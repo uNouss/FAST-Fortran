@@ -40,6 +40,14 @@ FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollec
 		yourself
 ]
 
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> arrayVariable: aName indice: anInteger [
+	^FASTFortranArrayVariable new
+		name: aName ;
+		indices: { self integerLiteral: anInteger }
+		yourself
+]
+
 { #category : #running }
 FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString [
 	| generated |
@@ -560,13 +568,13 @@ FASTFortranExporterVisitorTest >> testDataStatement [
 	| stmt |
 
 	stmt := FASTFortranDataStatement new
-		dataGroups: {
+		variableGroups: {
 			FASTFortranDataGroup new
-				dataVariables: (self scalarVariables: #(a b)) ;
+				variables: (self scalarVariables: #(a b)) ;
 				dataConstants: { self characterLiteral: 'un' . self characterLiteral: 'deux' }
 			.
 			FASTFortranDataGroup new
-				dataVariables: (self scalarVariables: #(c)) ;
+				variables: (self scalarVariables: #(c)) ;
 				dataConstants: { self characterLiteral: 'trois' }
 		} ;
 		yourself.
@@ -678,6 +686,31 @@ FASTFortranExporterVisitorTest >> testEntryStatement [
 		assertExport: stmt
 		equals:
 '      entry XYZ(ABC,*)
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testEquivalenceStatement [
+
+	| stmt |
+
+	stmt := FASTFortranEquivalenceStatement new
+		variableGroups: {
+			FASTFortranEquivalenceGroup new
+				variables: {
+					self scalarVariable: #a .
+					self arrayVariable: #b indice: '1'
+				}
+			.
+			FASTFortranEquivalenceGroup new
+				variables: (self scalarVariables: #(c d e))
+		} ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      equivalence (a,b(1)), (c,d,e)
 '
 ]
 
@@ -956,9 +989,9 @@ FASTFortranExporterVisitorTest >> testLongDataStatementLine [
 	| stmt |
 
 	stmt := FASTFortranDataStatement new
-		dataGroups: {
+		variableGroups: {
 			FASTFortranDataGroup new
-				dataVariables: (self scalarVariables: #(abcde fghijk lmnopq)) ;
+				variables: (self scalarVariables: #(abcde fghijk lmnopq)) ;
 				dataConstants: {
 					self characterLiteral: '---------------' .
 					self characterLiteral: '---------------' .

@@ -930,24 +930,24 @@ FortranToFASTTests >> testDataStatement [
 	self assert: stmt startPos equals: 32.
 	self assert: stmt endPos equals: 95.
 
-	self assert: stmt dataGroups size equals: 2.
+	self assert: stmt variableGroups size equals: 2.
 
-	dataGroup := stmt dataGroups first.
-	self assert: dataGroup dataVariables size equals: 2.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine1'.
-	self assert: dataGroup dataVariables first startPos equals: 37.
+	dataGroup := stmt variableGroups first.
+	self assert: dataGroup variables size equals: 2.
+	self assert: dataGroup variables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup variables first name equals: 'chaine1'.
+	self assert: dataGroup variables first startPos equals: 37.
 
 	self assert: dataGroup dataConstants size equals: 2.
 	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
 	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
 	self assert: dataGroup dataConstants first startPos equals: 56.
 
-	dataGroup := stmt dataGroups second.
-	self assert: dataGroup dataVariables size equals: 1.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine3'.
-	self assert: dataGroup dataVariables first startPos equals: 76.
+	dataGroup := stmt variableGroups second.
+	self assert: dataGroup variables size equals: 1.
+	self assert: dataGroup variables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup variables first name equals: 'chaine3'.
+	self assert: dataGroup variables first startPos equals: 76.
 
 	self assert: dataGroup dataConstants size equals: 1.
 	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
@@ -1137,6 +1137,101 @@ FortranToFASTTests >> testEntryStatement [
 
 	self assert: stmt entryArguments second class equals: FASTFortranAsterisk.
 	self assert: stmt entryArguments second startPos equals: 45.
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testEquivalenceStatementOneGroupArrayVariables [
+
+	| result stmt grp |
+	fortranCode := '      SUBROUTINE SUBRTN
+      EQUIVALENCE (a,b(1),c(2))
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:31)","statement":{"anno":[],"groups":{"anno":[],"list":[{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"tag":"expr"},"name":null,"span":"(2:24)-(2:24)"}],"span":"(2:24)-(2:24)"},"function":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"b","tag":"variable"}},"span":"(2:22)-(2:25)","tag":"function_call"},{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":["2",null],"tag":"integer"}},"tag":"expr"},"name":null,"span":"(2:29)-(2:29)"}],"span":"(2:29)-(2:29)"},"function":{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"contents":"c","tag":"variable"}},"span":"(2:27)-(2:30)","tag":"function_call"}],"span":"(2:19)-(2:31)"}],"span":"(2:19)-(2:31)"},"span":"(2:7)-(2:31)","tag":"equivalence"},"tag":"statement"}],"name":"subrtn","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranEquivalenceStatement.
+	self assert: stmt startPos equals: 31.
+	self assert: stmt endPos equals: 55.
+
+	self assert: stmt variableGroups size equals: 1.
+
+	grp := stmt variableGroups first.
+	self assert: grp class equals: FASTFortranEquivalenceGroup.
+	self assert: grp startPos equals: 43.
+
+	self assert: grp variables size equals: 3.
+	self assert: grp variables first class equals: FASTFortranScalarVariable.
+	self assert: grp variables second class equals: FASTFortranArrayVariable.
+	self assert: grp variables third class equals: FASTFortranArrayVariable.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testEquivalenceStatementOneGroupScalarVariables [
+
+	| result stmt grp |
+	fortranCode := '      SUBROUTINE SUBRTN
+      EQUIVALENCE (a,b,c)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:25)","statement":{"anno":[],"groups":{"anno":[],"list":[{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"b","tag":"variable"}},{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":"c","tag":"variable"}}],"span":"(2:19)-(2:25)"}],"span":"(2:19)-(2:25)"},"span":"(2:7)-(2:25)","tag":"equivalence"},"tag":"statement"}],"name":"subrtn","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranEquivalenceStatement.
+	self assert: stmt startPos equals: 31.
+	self assert: stmt endPos equals: 49.
+
+	self assert: stmt variableGroups size equals: 1.
+
+	grp := stmt variableGroups first.
+	self assert: grp class equals: FASTFortranEquivalenceGroup.
+	self assert: grp startPos equals: 43.
+
+	self assert: grp variables size equals: 3.
+	grp variables do: [ :var |
+		self assert: var class equals: FASTFortranScalarVariable.
+		#(44 46 48) includes: var startPos.
+		#('a' 'b' 'c') includes: var name
+		
+	]
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testEquivalenceStatementSeveralGroups [
+
+	| result stmt grp |
+	fortranCode := '      SUBROUTINE SUBRTN
+      EQUIVALENCE (a,b,c), (d,e)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:32)","statement":{"anno":[],"groups":{"anno":[],"list":[{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"a","tag":"variable"}},{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":"b","tag":"variable"}},{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":"c","tag":"variable"}}],"span":"(2:19)-(2:25)"},{"anno":[],"list":[{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":"d","tag":"variable"}},{"anno":[],"span":"(2:31)-(2:31)","tag":"value","value":{"contents":"e","tag":"variable"}}],"span":"(2:28)-(2:32)"}],"span":"(2:19)-(2:32)"},"span":"(2:7)-(2:32)","tag":"equivalence"},"tag":"statement"}],"name":"subrtn","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranEquivalenceStatement.
+	self assert: stmt startPos equals: 31.
+	self assert: stmt endPos equals: 56.
+
+	self assert: stmt variableGroups size equals: 2.
+
+	grp := stmt variableGroups first.
+	self assert: grp class equals: FASTFortranEquivalenceGroup.
+	self assert: grp variables size equals: 3.
+	self assert: grp startPos equals: 43.
+
+	grp := stmt variableGroups second.
+	self assert: grp class equals: FASTFortranEquivalenceGroup.
+	self assert: grp variables size equals: 2.
+	self assert: grp startPos equals: 52.
 
 ]
 

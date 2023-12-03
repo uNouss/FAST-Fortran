@@ -8,6 +8,17 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Importer'
 }
 
+{ #category : #private }
+FASTFortranJsonVisitor >> functionCallToArrayVariable: invocation [
+
+	^ FASTFortranArrayVariable new
+		name: invocation name ;
+		indices: invocation arguments ;
+		startPos: invocation startPos;
+		endPos: invocation endPos;
+		yourself
+]
+
 { #category : #initialization }
 FASTFortranJsonVisitor >> initLineSizes: fortranSource [
 
@@ -316,7 +327,7 @@ FASTFortranJsonVisitor >> visitDataGroup: aDataGroup [
 	data :=  super visitDataGroup: aDataGroup.
 
 	^(self newEntity: FASTFortranDataGroup  atPosition: data first)
-		dataVariables: data second ;
+		variables: data second ;
 		dataConstants: data third ;
 		yourself
 ]
@@ -329,8 +340,8 @@ FASTFortranJsonVisitor >> visitDataStatement: aDataStatement [
 
 	"error in #span of dataStatement in the exported Json"
 	stmt := self newEntity: FASTFortranDataStatement atPosition: data first.
-	stmt dataGroups: data second.
-	stmt endPos: (stmt dataGroups last endPos).
+	stmt variableGroups: data second second.
+	stmt endPos: (stmt variableGroups last endPos).
 	
 	^stmt
 ]
@@ -466,6 +477,35 @@ FASTFortranJsonVisitor >> visitEntryStatement: anEntryNode [
 		entryArguments: data third ;
 		yourself
 	
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitEquivalenceGroup: anEquivalenceGroup [
+
+	| data variables |
+	data :=  super visitEquivalenceGroup: anEquivalenceGroup.
+	
+	"array variables might be created as function calls ..."
+	variables := data second collect: [ :var |
+		(var class = FASTFortranFunctionCall)
+			ifTrue: [ self functionCallToArrayVariable: var ]
+			ifFalse: [ var ]
+	].
+
+	^(self newEntity: FASTFortranEquivalenceGroup atPosition: data first)
+		variables: variables ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitEquivalenceStatement: anEquivalenceStatement [
+
+	| data |
+	data :=  super visitEquivalenceStatement: anEquivalenceStatement.
+
+	^(self newEntity: FASTFortranEquivalenceStatement atPosition: data first)
+		variableGroups: data second second ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
