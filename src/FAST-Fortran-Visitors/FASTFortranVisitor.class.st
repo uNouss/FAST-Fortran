@@ -161,8 +161,9 @@ FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranDataStatement.
+	aFASTFortranDataStatement dataGroups do: [ :group | group accept: self ].
 ]
 
 { #category : #'visiting - statements' }
@@ -241,6 +242,12 @@ FASTFortranVisitor >> visitFASTFortranEntity: aFASTFortranEntity [
 FASTFortranVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranEntryStatement.
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceGroup [
+
+	
 ]
 
 { #category : #'visiting - statements' }
