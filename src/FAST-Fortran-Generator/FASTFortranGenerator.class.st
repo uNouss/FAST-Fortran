@@ -105,7 +105,9 @@ Class {
 		'arrayDimension',
 		'commonGroup',
 		'tWithLabelReferences',
-		'equivalenceGroup'
+		'equivalenceGroup',
+		'tVariableGroup',
+		'tWithVariableGroup'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -424,18 +426,20 @@ FASTFortranGenerator >> defineHierarchy [
 	commonStatement --|> abstractStatement.
 	continueStatement --|> abstractStatement.
 	dataStatement --|> abstractStatement.
+	dataStatement --|> tWithVariableGroup.
 	decodeStatement --|> abstractStatement.
-	encodeStatement --|> abstractStatement.
-	exitStatement --|> abstractStatement.
 	dimensionStatement --|> abstractStatement.
 	doStatement --|> abstractStatement.
 	doStatement --|> tWithLabelReferences.
 	doWhileStatement --|> abstractStatement.
 	elseStatement --|> abstractStatement.
+	encodeStatement --|> abstractStatement.
 	endFileStatement --|> abstractStatement.
 	entryStatement --|> abstractStatement.
 	entryStatement --|> tNamedEntity.
 	equivalenceStatement --|> abstractStatement.
+	equivalenceStatement --|> tWithVariableGroup.
+	exitStatement --|> abstractStatement.
 	externalStatement --|> abstractStatement.
 	formatStatement --|> abstractStatement.
 	formatStatement --|> tFormatIdentifier.
@@ -489,6 +493,8 @@ FASTFortranGenerator >> defineHierarchy [
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
 	commonGroup  --|> tWithDeclarators.
+	dataGroup --|> tVariableGroup.
+	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
@@ -617,13 +623,13 @@ FASTFortranGenerator >> defineRelations [
 	<>-* ((commonGroup property: #parentCommonStatement) comment:
 			 'Parent common statement I belong to').
 
-	(dataGroup property: #dataVariables)
-	-* (variable property: #parentDataStatement).
-
 	(dataGroup property: #dataConstants)
 	-* (tExpression property: #parentDataStatement).
 
-	dataStatement <>-* dataGroup.
+	(tVariableGroup property: #variables)
+	-* (variable property: #parentVariableGroup).
+
+	tWithVariableGroup <>-* tVariableGroup.
 	
 	((tWithDeclarators property: #declarators) comment: 'variables declared')
 	<>-* (tVariableDeclarator property: #parentDeclaration).
@@ -647,12 +653,6 @@ FASTFortranGenerator >> defineRelations [
 
 	(entryStatement property: #entryArguments)
 	<>-* (tEntryArgument property: #entryStatement).
-
-	equivalenceStatement
-		<>-* (equivalenceGroup property: #parentEquivalenceStatement).
-
-	(equivalenceGroup property: #variables)
-		<>-* (tVariableExpression property: #parentEquivalenceGroup).
 
 	(function property: #returnType)
 	*- (type property: #typedFunctions).
@@ -961,6 +961,10 @@ FASTFortranGenerator >> defineTraits [
 
 	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
+	tVariableGroup := builder newTraitNamed: #TVariableGroup comment: 'I represent an entity with several variables like in a DataStatement or an EquivalenceStatement'.
+
+	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement'.
+ 
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
 	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
