@@ -1143,7 +1143,7 @@ FortranToFASTTests >> testEntryStatement [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testEquivalenceStatementOneGroupScalarVariables [
 
-	| result stmt |
+	| result stmt grp |
 	fortranCode := '      SUBROUTINE SUBRTN
       EQUIVALENCE (a,b,c)
       END
@@ -1154,20 +1154,23 @@ FortranToFASTTests >> testEquivalenceStatementOneGroupScalarVariables [
 	self assert: result first statementBlock statements size equals: 1.
 
 	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranEntryStatement.
-	self assert: stmt name equals: 'xyz'.
+	self assert: stmt class equals: FASTFortranEquivalenceStatement.
 	self assert: stmt startPos equals: 31.
-	self assert: stmt endPos equals: 46.
+	self assert: stmt endPos equals: 49.
 
-	self assert: stmt entryArguments size equals: 2.
+	self assert: stmt variableGroups size equals: 1.
 
-	self assert: stmt entryArguments first class equals: FASTFortranScalarVariable.
-	self assert: stmt entryArguments first name equals: 'abc'.
-	self assert: stmt entryArguments first startPos equals: 41.
+	grp := stmt variableGroups first.
+	self assert: grp class equals: FASTFortranEquivalenceGroup.
+	self assert: grp startPos equals: 43.
 
-	self assert: stmt entryArguments second class equals: FASTFortranAsterisk.
-	self assert: stmt entryArguments second startPos equals: 45.
-
+	self assert: grp variables size equals: 3.
+	grp variables do: [ :var |
+		self assert: var class equals: FASTFortranScalarVariable.
+		#(44 46 48) includes: var startPos.
+		#('a' 'b' 'c') includes: var name
+		
+	]
 ]
 
 { #category : #'tests-statement' }
