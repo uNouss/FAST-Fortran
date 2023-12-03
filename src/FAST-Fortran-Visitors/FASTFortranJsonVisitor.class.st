@@ -8,6 +8,17 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Importer'
 }
 
+{ #category : #private }
+FASTFortranJsonVisitor >> functionCallToArrayVariable: invocation [
+
+	^ FASTFortranArrayVariable new
+		name: invocation name ;
+		indices: invocation arguments ;
+		startPos: invocation startPos;
+		endPos: invocation endPos;
+		yourself
+]
+
 { #category : #initialization }
 FASTFortranJsonVisitor >> initLineSizes: fortranSource [
 
@@ -471,18 +482,25 @@ FASTFortranJsonVisitor >> visitEntryStatement: anEntryNode [
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitEquivalenceGroup: anEquivalenceGroup [
 
-	| data stmt |
+	| data variables |
 	data :=  super visitEquivalenceGroup: anEquivalenceGroup.
+	
+	"array variables might be created as function calls ..."
+	variables := data second collect: [ :var |
+		(var class = FASTFortranFunctionCall)
+			ifTrue: [ self functionCallToArrayVariable: var ]
+			ifFalse: [ var ]
+	].
 
 	^(self newEntity: FASTFortranEquivalenceGroup atPosition: data first)
-		variables: data second ;
+		variables: variables ;
 		yourself
 ]
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitEquivalenceStatement: anEquivalenceStatement [
 
-	| data stmt |
+	| data |
 	data :=  super visitEquivalenceStatement: anEquivalenceStatement.
 
 	^(self newEntity: FASTFortranEquivalenceStatement atPosition: data first)
