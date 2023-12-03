@@ -40,6 +40,14 @@ FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollec
 		yourself
 ]
 
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> arrayVariable: aName indice: anInteger [
+	^FASTFortranArrayVariable new
+		name: aName ;
+		indices: { self integerLiteral: anInteger }
+		yourself
+]
+
 { #category : #running }
 FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString [
 	| generated |
@@ -678,6 +686,31 @@ FASTFortranExporterVisitorTest >> testEntryStatement [
 		assertExport: stmt
 		equals:
 '      entry XYZ(ABC,*)
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testEquivalenceStatement [
+
+	| stmt |
+
+	stmt := FASTFortranEquivalenceStatement new
+		variableGroups: {
+			FASTFortranEquivalenceGroup new
+				variables: {
+					self scalarVariable: #a .
+					self arrayVariable: #b indice: 1
+				}
+			.
+			FASTFortranEquivalenceGroup new
+				variables: (self scalarVariable: #(c d e))
+		} ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      equivalence (a,b(1)), (c,d,e)
 '
 ]
 
