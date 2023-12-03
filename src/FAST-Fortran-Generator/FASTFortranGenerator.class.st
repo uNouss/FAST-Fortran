@@ -104,7 +104,8 @@ Class {
 		'variableDeclarator',
 		'arrayDimension',
 		'commonGroup',
-		'tWithLabelReferences'
+		'tWithLabelReferences',
+		'equivalenceGroup'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -647,6 +648,12 @@ FASTFortranGenerator >> defineRelations [
 	(entryStatement property: #entryArguments)
 	<>-* (tEntryArgument property: #entryStatement).
 
+	equivalenceStatement
+		<>-* (equivalenceGroup property: #parentEquivalenceStatement).
+
+	(equivalenceGroup property: #variables)
+		<>-* (tVariableExpression property: #parentEquivalenceGroup).
+
 	(function property: #returnType)
 	*- (type property: #typedFunctions).
 
@@ -808,10 +815,14 @@ FASTFortranGenerator >> defineStatements [
 	entryStatement := builder
 		                  newClassNamed: #EntryStatement
 		                  comment: 'I represent Fortran Entry statement'.
+	equivalenceGroup := builder
+		                        newClassNamed: #EquivalenceGroup
+		                        comment:
+		                        'I represent a group of variables in an Equivalence statement'.
 	equivalenceStatement := builder
 		                        newClassNamed: #EquivalenceStatement
 		                        comment:
-		                        'I represent Fortran Equivalence statement'.
+		                        'I represent a Fortran Equivalence statement'.
 	externalStatement := builder
 		                     newClassNamed: #ExternalStatement
 		                     comment:
