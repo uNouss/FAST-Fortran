@@ -930,24 +930,24 @@ FortranToFASTTests >> testDataStatement [
 	self assert: stmt startPos equals: 32.
 	self assert: stmt endPos equals: 95.
 
-	self assert: stmt dataGroups size equals: 2.
+	self assert: stmt variableGroups size equals: 2.
 
-	dataGroup := stmt dataGroups first.
-	self assert: dataGroup dataVariables size equals: 2.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine1'.
-	self assert: dataGroup dataVariables first startPos equals: 37.
+	dataGroup := stmt variableGroups first.
+	self assert: dataGroup variables size equals: 2.
+	self assert: dataGroup variables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup variables first name equals: 'chaine1'.
+	self assert: dataGroup variables first startPos equals: 37.
 
 	self assert: dataGroup dataConstants size equals: 2.
 	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
 	self assert: dataGroup dataConstants first primitiveValue equals: 'Blah'.
 	self assert: dataGroup dataConstants first startPos equals: 56.
 
-	dataGroup := stmt dataGroups second.
-	self assert: dataGroup dataVariables size equals: 1.
-	self assert: dataGroup dataVariables first class equals: FASTFortranScalarVariable.
-	self assert: dataGroup dataVariables first name equals: 'chaine3'.
-	self assert: dataGroup dataVariables first startPos equals: 76.
+	dataGroup := stmt variableGroups second.
+	self assert: dataGroup variables size equals: 1.
+	self assert: dataGroup variables first class equals: FASTFortranScalarVariable.
+	self assert: dataGroup variables first name equals: 'chaine3'.
+	self assert: dataGroup variables first startPos equals: 76.
 
 	self assert: dataGroup dataConstants size equals: 1.
 	self assert: dataGroup dataConstants first class equals: FASTFortranCharacterLiteral.
