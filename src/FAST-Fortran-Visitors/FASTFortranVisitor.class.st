@@ -155,7 +155,7 @@ FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueSta
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 
-	aFASTFortranDataGroup dataVariables do: [ :var | var accept: self ].
+	aFASTFortranDataGroup variables do: [ :var | var accept: self ].
 	aFASTFortranDataGroup dataConstants do: [ :const | const accept: self ].
 ]
 
@@ -163,7 +163,7 @@ FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 
 	self visitFASTFortranTLabelledStatement: aFASTFortranDataStatement.
-	aFASTFortranDataStatement dataGroups do: [ :group | group accept: self ].
+	aFASTFortranDataStatement variableGroups do: [ :group | group accept: self ].
 ]
 
 { #category : #'visiting - statements' }
@@ -247,13 +247,15 @@ FASTFortranVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatement
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceGroup [
 
-	
+	aFASTFortranEquivalenceGroup variables do: [ :var |
+		var accept: self ]
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivalenceStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranEquivalenceStatement.
+	aFASTFortranEquivalenceStatement variableGroups do: [ :group | group accept: self ].
 ]
 
 { #category : #'visiting - statements' }

@@ -699,11 +699,11 @@ FASTFortranExporterVisitorTest >> testEquivalenceStatement [
 			FASTFortranEquivalenceGroup new
 				variables: {
 					self scalarVariable: #a .
-					self arrayVariable: #b indice: 1
+					self arrayVariable: #b indice: '1'
 				}
 			.
 			FASTFortranEquivalenceGroup new
-				variables: (self scalarVariable: #(c d e))
+				variables: (self scalarVariables: #(c d e))
 		} ;
 		yourself.
 

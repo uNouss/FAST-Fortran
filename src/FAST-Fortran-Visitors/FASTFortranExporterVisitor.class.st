@@ -334,6 +334,25 @@ FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryS
 
 ]
 
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceGroup [
+
+	self
+		<< ' ('
+		visitNodeListSeparatedByCommas: aFASTFortranEquivalenceGroup variables ;
+		<< ')'
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivalenceStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranEquivalenceStatement ;
+		<< 'equivalence' ;
+		visitNodeListSeparatedByCommas: aFASTFortranEquivalenceStatement variableGroups ;
+		newLine
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	self
