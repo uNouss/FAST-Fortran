@@ -474,7 +474,6 @@ FASTFortranGenerator >> defineHierarchy [
 	printStatement --|> tWithFormat.
 	readStatement --|> abstractStatement.
 	readStatement --|> tWithIOParameters.
-	readStatement --|> tWithFormat.
 	returnStatement --|> abstractStatement.
 	returnStatement --|> tReturnStatement.
 	rewindStatement --|> abstractStatement.
@@ -490,7 +489,6 @@ FASTFortranGenerator >> defineHierarchy [
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
 	writeStatement --|> tWithIOParameters.
-	writeStatement --|> tWithFormat.
 
 
 	"DATA"
@@ -636,7 +634,8 @@ FASTFortranGenerator >> defineRelations [
 	(tVariableGroup property: #variables)
 	-* (variable property: #parentVariableGroup).
 
-	tWithIOParameters <>-* (tIOParameter property: #parentIOStatement).
+	((tWithIOParameters property: #ioParameters) comment: 'I represent a statement with IO-parameters (read or write)')
+	<>-* (tIOParameter property: #parentIOStatement).
 
 	tWithVariableGroup <>-* tVariableGroup.
 	
@@ -982,7 +981,7 @@ FASTFortranGenerator >> defineTraits [
  
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
-	tWithFormat := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
+	tWithFormat := builder newTraitNamed: #TWithFormat comment: 'I represent a statement with a format (format, print)'.
 
 	tWithLabelReferences := builder newTraitNamed: #TWithLabelReferences comment: 'I represent a statement (various kind of goto) that can have label references'.
 
