@@ -705,9 +705,8 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithParameters: aFASTFortranTWith
 FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
 
 	aFASTFortranType size ifNotNil: [ :length |
-		self
-			<< '*' ;
-			<< length asString
+		self << '*'.
+		length accept: self
 	]
 ]
 
