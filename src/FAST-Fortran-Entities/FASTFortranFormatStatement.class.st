@@ -4,8 +4,8 @@ I represent Fortran Format statement
 Class {
 	#name : #FASTFortranFormatStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTFormatIdentifier',
-	#classTraits : 'FASTFortranTFormatIdentifier classTrait',
+	#traits : 'FASTFortranTWithFormat',
+	#classTraits : 'FASTFortranTWithFormat classTrait',
 	#instVars : [
 		'#formatDescription => FMProperty'
 	],

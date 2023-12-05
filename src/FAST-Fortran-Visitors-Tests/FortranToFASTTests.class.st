@@ -753,36 +753,6 @@ FortranToFASTTests >> testCallSubroutine [
 
 ]
 
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testCallWrite [
-
-	| result body stmt |
-	fortranCode := '      PROGRAM TESTALT
-       WRITE (*,*) "OK - Normal Return [n=0]"
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:45)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:45)","tag":"value","value":{"contents":"OK - Normal Return [n=0]","tag":"string"}}],"span":"(2:20)-(2:45)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:15)-(2:15)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:17)-(2:17)"}],"span":"(2:14)-(2:18)"},"span":"(2:8)-(2:45)","tag":"write"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first class equals: FASTFortranProgramMain.
-
-	body := result first statementBlock statements.
-	self assert: body size equals: 1.
-
-	stmt := body first.
-	self assert: stmt class equals: FASTFortranWriteStatement.
-	self assert: stmt startPos equals: 30.
-	self assert: stmt endPos equals: 67.
-
-	self assert: stmt format size equals: 2.
-	stmt format do: [ :each |
-		self assert: each class equals: FASTFortranAsterisk
-	].
-
-	self assert: stmt arguments size equals: 1.
-
-]
-
 { #category : #tests }
 FortranToFASTTests >> testComment [
 
@@ -1945,10 +1915,40 @@ FortranToFASTTests >> testPrintOneVariable [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt format class equals: FASTFortranAsterisk.
+
 	arguments := stmt arguments.
 	self assert: arguments size equals: 1.
 	self assert: arguments first class equals: FASTFortranScalarVariable.
 	self assert: arguments first name equals: 'x'
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testReadWithFormat [
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      READ( 3, ''(5F4.1)'') V
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:27)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"contents":"v","tag":"variable"}}],"span":"(2:27)-(2:27)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":null,"span":"(2:13)-(2:13)"},{"anno":[],"expr":{"anno":[],"span":"(2:16)-(2:24)","tag":"value","value":{"contents":"(5F4.1)","tag":"string"}},"name":null,"span":"(2:16)-(2:24)"}],"span":"(2:11)-(2:25)"},"span":"(2:7)-(2:27)","tag":"read"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranReadStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 53.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 39.
+	self assert: stmt ioParameters second class equals: FASTFortranCharacterLiteral.
+	self assert: stmt ioParameters second startPos equals: 42.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments first startPos equals: 53.
 ]
 
 { #category : #'tests-statement' }
@@ -2311,4 +2311,129 @@ FortranToFASTTests >> testVariableDeclarationWithStarSize [
 	self assert: stmt type class equals: FASTFortranCharacterType.
 	self assert: stmt type size class equals: FASTFortranAsterisk.
 
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteComplexFormat [
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      WRITE( 3, ''(5F4.1)'') V
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:28)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":"v","tag":"variable"}}],"span":"(2:28)-(2:28)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:25)","tag":"value","value":{"contents":"(5F4.1)","tag":"string"}},"name":null,"span":"(2:17)-(2:25)"}],"span":"(2:12)-(2:26)"},"span":"(2:7)-(2:28)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 54.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranCharacterLiteral .
+	self assert: stmt ioParameters second startPos equals: 43.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments first startPos equals: 54.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteFullIOParameters [
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      WRITE( 1, 2, REC=3, IOSTAT=N, ERR=8 ) X, Y
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:48)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:45)-(2:45)","tag":"value","value":{"contents":"x","tag":"variable"}},{"anno":[],"span":"(2:48)-(2:48)","tag":"value","value":{"contents":"y","tag":"variable"}}],"span":"(2:45)-(2:48)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["2",null],"tag":"integer"}},"name":null,"span":"(2:17)-(2:17)"},{"anno":[],"expr":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":"rec","span":"(2:20)-(2:24)"},{"anno":[],"expr":{"anno":[],"span":"(2:34)-(2:34)","tag":"value","value":{"contents":"n","tag":"variable"}},"name":"iostat","span":"(2:27)-(2:34)"},{"anno":[],"expr":{"anno":[],"span":"(2:41)-(2:41)","tag":"value","value":{"contents":["8",null],"tag":"integer"}},"name":"err","span":"(2:37)-(2:41)"}],"span":"(2:12)-(2:43)"},"span":"(2:7)-(2:48)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 74.
+
+	self assert: stmt ioParameters size equals: 5.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters second startPos equals: 43.
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters third startPos equals: 46.
+	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fourth startPos equals: 53.
+	self assert: stmt ioParameters fifth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fifth startPos equals: 63.
+
+	self assert: stmt arguments size equals: 2.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments first startPos equals: 71.
+	self assert: stmt arguments second class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments second startPos equals: 74.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteStarStarIOParameters [
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      WRITE( *, * ) ''I/O error'' 
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:31)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:21)-(2:31)","tag":"value","value":{"contents":"I/O error","tag":"string"}}],"span":"(2:21)-(2:31)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:17)-(2:17)"}],"span":"(2:12)-(2:19)"},"span":"(2:7)-(2:31)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 57.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranAsterisk.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranAsterisk.
+	self assert: stmt ioParameters second startPos equals: 43.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranCharacterLiteral.
+	self assert: stmt arguments first startPos equals: 47.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteToInternalFile [
+	"Write Internal File seems to be just a String variable"
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      WRITE( STRING, 1) ''A message''
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:35)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:25)-(2:35)","tag":"value","value":{"contents":"A message","tag":"string"}}],"span":"(2:25)-(2:35)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:19)","tag":"value","value":{"contents":"string","tag":"variable"}},"name":null,"span":"(2:14)-(2:19)"},{"anno":[],"expr":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"name":null,"span":"(2:22)-(2:22)"}],"span":"(2:12)-(2:23)"},"span":"(2:7)-(2:35)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 61.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranScalarVariable.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters second startPos equals: 48.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranCharacterLiteral.
+	self assert: stmt arguments first startPos equals: 51.
 ]

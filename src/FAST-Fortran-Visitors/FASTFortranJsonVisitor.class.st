@@ -641,6 +641,33 @@ FASTFortranJsonVisitor >> visitGoto_computedStatement: aGotoComputedStatementNod
 		yourself
 ]
 
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitIOParameter: anIOParameterNode [
+	"#(span name expr)"
+
+	| data assignedVariable|
+	data := super visitIOParameter: anIOParameterNode.
+
+	data second ifNil: [ ^data third ].
+
+	assignedVariable := FASTFortranScalarVariable new.
+	assignedVariable name: data second.
+	assignedVariable startPos: (self pointToPosition: data first first).
+	assignedVariable endPos: (assignedVariable startPos + assignedVariable name size - 1).
+
+	^(self newEntity: FASTFortranAssignmentExpression atPosition: data first)
+		variable: assignedVariable ;
+		expression: data third ;
+		yourself
+
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitIOParameters: aWriteFormatNode [
+
+	^ (super visitIOParameters: aWriteFormatNode) second reject: #isNil
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIf: anIfNode [
 	"ifNode has 'conditionals' and 'blocks'
@@ -845,6 +872,21 @@ FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitReadStatement: aReadStatementNode [
+	"see #visitWriteStatement:
+	visited keys are: #(span ioParameters arguments)"
+
+	| data |
+	data := super visitReadStatement: aReadStatementNode.
+
+	^(self newEntity: FASTFortranReadStatement atPosition: data first)
+		ioParameters: data second;
+		arguments: data third;
+		yourself
+
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 	^FASTFortranRealType new
@@ -1040,24 +1082,22 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitWriteFormat: aWriteFormatNode [
-
-	^ (super visitWriteFormat: aWriteFormatNode) second reject: #isNil
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	"write statement. should follow the pattern: 
 	WRITE([UNIT=] u [, [FMT=] f] [, IOSTAT=ios] [, REC=rn] [, ERR=s]) iolist
-	WRITE([ UNIT=] u, [NML=] grname [, IOSTAT=ios] [, ERR=s])"
+	WRITE([ UNIT=] u, [NML=] grname [, IOSTAT=ios] [, ERR=s])
+	
+	Part within parentheses are the IO-Parameters
+	Part after the parentheses are the argument
+	
+	visited keys are: #(span ioParameters arguments)"
 
 	| data |
 	data := super visitWriteStatement: aWriteStatementNode.
 
 	^(self newEntity: FASTFortranWriteStatement atPosition: data first)
-		format: data second;
+		ioParameters: data second;
 		arguments: data third;
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		yourself
 
 ]

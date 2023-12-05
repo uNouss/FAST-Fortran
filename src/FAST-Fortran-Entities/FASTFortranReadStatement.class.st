@@ -4,6 +4,8 @@ I represent Fortran Read statement
 Class {
 	#name : #FASTFortranReadStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithIOParameters',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithIOParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

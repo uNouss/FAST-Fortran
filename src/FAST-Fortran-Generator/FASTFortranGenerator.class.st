@@ -74,8 +74,6 @@ Class {
 		'doublePrecisionConstant',
 		'integerConstant',
 		'realConstant',
-		'tWithFormatIdentifier',
-		'tFormatIdentifier',
 		'asterisk',
 		'ampersand',
 		'functionStatement',
@@ -107,7 +105,11 @@ Class {
 		'tWithLabelReferences',
 		'equivalenceGroup',
 		'tVariableGroup',
-		'tWithVariableGroup'
+		'tWithVariableGroup',
+		'tWithFormat',
+		'tFormat',
+		'tIOParameter',
+		'tWithIOParameters'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -395,20 +397,13 @@ FASTFortranGenerator >> defineHierarchy [
 	subprogram --|> programUnit.
 	mainprogram --|> programUnit.
 	procedure --|> subprogram.
+	procedure --|> tWithParameters.
 	blockData --|> subprogram.
 	function --|> procedure.
 	subroutine --|> procedure.
 
 	programFile --|> tWithComments.
 	programUnit --|> tWithComments.
-
-	"TRAITS"
-	procedure --|> tWithParameters.
-	functionCall --|> tWithArguments.
-	functionStatement --|> tWithArguments.
-	callStatement --|> tWithArguments.
-	printStatement --|> tWithArguments.
-	writeStatement --|> tWithArguments.
 
 	"other entities"
 	comment --|> tEntity.
@@ -422,6 +417,7 @@ FASTFortranGenerator >> defineHierarchy [
 	automaticStatement --|> abstractStatement.
 	backspaceStatement --|> abstractStatement.
 	callStatement --|> abstractStatement.
+	callStatement --|> tWithArguments.
 	closeStatement --|> abstractStatement.
 	commonStatement --|> abstractStatement.
 	continueStatement --|> abstractStatement.
@@ -442,8 +438,9 @@ FASTFortranGenerator >> defineHierarchy [
 	exitStatement --|> abstractStatement.
 	externalStatement --|> abstractStatement.
 	formatStatement --|> abstractStatement.
-	formatStatement --|> tFormatIdentifier.
+	formatStatement --|> tWithFormat.
 	functionStatement --|> abstractStatement.
+	functionStatement --|> tWithArguments.
 	goToStatement --|> abstractStatement.
 	goToStatement --|> tWithLabelReferences.
 	goToAssignedStatement --|> abstractStatement.
@@ -469,8 +466,11 @@ FASTFortranGenerator >> defineHierarchy [
 	pauseStatement --|> abstractStatement.
 	pragmaStatement --|> abstractStatement.
 	printStatement --|> abstractStatement.
-	printStatement --|> tWithFormatIdentifier.
+	printStatement --|> tWithFormat.
+	printStatement --|> tWithArguments.
 	readStatement --|> abstractStatement.
+	readStatement --|> tWithIOParameters.
+	readStatement --|> tWithArguments.
 	returnStatement --|> abstractStatement.
 	returnStatement --|> tReturnStatement.
 	rewindStatement --|> abstractStatement.
@@ -485,21 +485,25 @@ FASTFortranGenerator >> defineHierarchy [
 	virtualStatement --|> abstractStatement.
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
-	writeStatement --|> tWithFormatIdentifier.
+	writeStatement --|> tWithIOParameters.
+	writeStatement --|> tWithArguments.
 
 
 	"DATA"
 	abstractExpression --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
+	assignmentExpression --|> tIOParameter.
 	commonGroup  --|> tWithDeclarators.
 	dataGroup --|> tVariableGroup.
 	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
+	functionCall --|> tWithArguments.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
 	scalarVariable --|> variable.
+	scalarVariable --|> tFormat.
 	arrayVariable --|> variable.
 	loopControlExpression --|> abstractExpression.
 	substring --|> abstractExpression.
@@ -519,12 +523,14 @@ FASTFortranGenerator >> defineHierarchy [
 	doublePrecisionConstant --|> tNumericalLiteral.
 	integerConstant --|> abstractLiteral.
 	integerConstant --|> tNumericalLiteral.
+	integerConstant --|> tFormat.
 	realConstant --|> abstractLiteral.
 	realConstant --|> tNumericalLiteral.
 	ampersand --|> abstractLiteral.
 	ampersand --|> tCharacterLiteral.
 	characterConstant --|> abstractLiteral.
 	characterConstant --|> tCharacterLiteral.
+	characterConstant --|> tFormat.
 	booleanConstant --|> abstractLiteral.
 	booleanConstant --|> tBooleanLiteral.
 
@@ -539,7 +545,9 @@ FASTFortranGenerator >> defineHierarchy [
 
 	asterisk --|> tNumericalLiteral.
 	asterisk --|> tEntryArgument.
-	asterisk --|> tFormatIdentifier.
+	asterisk --|> tFormat.
+
+	tFormat --|> tIOParameter
 ]
 
 { #category : #definition }
@@ -592,8 +600,6 @@ FASTFortranGenerator >> defineProperties [
 
 	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
 
-	(writeStatement property: #format type: #String) comment:
-		'Format identifier. '
 ]
 
 { #category : #definition }
@@ -626,6 +632,9 @@ FASTFortranGenerator >> defineRelations [
 
 	(tVariableGroup property: #variables)
 	-* (variable property: #parentVariableGroup).
+
+	((tWithIOParameters property: #ioParameters) comment: 'I represent a statement with IO-parameters (read or write)')
+	<>-* (tIOParameter property: #parentIOStatement).
 
 	tWithVariableGroup <>-* tVariableGroup.
 	
@@ -729,15 +738,14 @@ FASTFortranGenerator >> defineRelations [
 	((type property: #size) comment: 'a data size in bytes')
 	<>- (tNumericalLiteral property: #parentTypeSize).
 
-	((tWithFormatIdentifier property: #format) comment:
-		 'format identifier')
-	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
-			 'The owner of the format identifier').
+	((tWithFormat property: #format) comment: 'The description of the format')
+	<>- ((tFormat property: #parentFormatedStatement) comment: 'A format description in a Format/Print/Read/Write statement').
 
 	((tWithLabelReferences property: #labelReferences) comment:
 		 'the label(s) referenced')
 	-* ((labelReference property: #referencer) comment:
-			 'A statement (like goto) referencing this label')
+			 'A statement (like goto) referencing this label').
+
 ]
 
 { #category : #definition }
@@ -953,19 +961,23 @@ FASTFortranGenerator >> defineTraits [
 
 	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
 
-	tVariableDeclarator := builder newTraitNamed: #TVariableDeclarator comment: 'I represent a variable declarator: variable declared + optional initial value'.
-
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
-	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
+	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement'.
+
+	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
+
+	tVariableDeclarator := builder newTraitNamed: #TVariableDeclarator comment: 'I represent a variable declarator: variable declared + optional initial value'.
 
 	tVariableGroup := builder newTraitNamed: #TVariableGroup comment: 'I represent an entity with several variables like in a DataStatement or an EquivalenceStatement'.
+
+	tWithIOParameters := builder newTraitNamed: #TWithIOParameters.
 
 	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement'.
  
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
-	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
+	tWithFormat := builder newTraitNamed: #TWithFormat comment: 'I represent a statement with a format (format, print)'.
 
 	tWithLabelReferences := builder newTraitNamed: #TWithLabelReferences comment: 'I represent a statement (various kind of goto) that can have label references'.
 

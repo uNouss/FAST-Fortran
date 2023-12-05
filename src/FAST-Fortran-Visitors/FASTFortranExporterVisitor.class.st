@@ -155,6 +155,16 @@ FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranAbstractIOStatement: aFASTFortranIOStatement named: aString [
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranIOStatement ;
+		<< aString ;
+		visitFASTFortranTWithIOParameters: aFASTFortranIOStatement ioParameters ;
+		visitFASTFortranTWithArguments: aFASTFortranIOStatement ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranAbstractStatement: aFASTFortranAbstractStatement [
 	"main role is to print the 'header' of the line:
 	 - six spaces, or
@@ -583,6 +593,11 @@ FASTFortranExporterVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMa
 	self visitFASTFortranTBehaviouralEntity: aFASTFortranProgramMain
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranReadStatement: aFASTFortranReadStatement [
+	self visitFASTFortranAbstractIOStatement: aFASTFortranReadStatement named: 'read'.
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'.
@@ -688,10 +703,19 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithA
 ]
 
 { #category : #'visiting - traits' }
-FASTFortranExporterVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
+FASTFortranExporterVisitor >> visitFASTFortranTWithFormat: aFASTFortranTWithFormatIdentifier [
 	self << '('.
 	self visitNodeListSeparatedByCommas: aFASTFortranTWithFormatIdentifier format.
 	self << ')'.
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranExporterVisitor >> visitFASTFortranTWithIOParameters: anIOParametersCollection [
+
+	self
+		<< ' (' ;
+		visitNodeListSeparatedByCommas: anIOParametersCollection ;
+		<< ') '
 ]
 
 { #category : #'visiting - traits' }
@@ -744,13 +768,7 @@ FASTFortranExporterVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVa
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
-	self
-		visitFASTFortranAbstractStatement: aFASTFortranWriteStatement ;
-		<< 'write'.
-	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
-	self << ' '.
-	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
-	self newLine
+	self visitFASTFortranAbstractIOStatement: aFASTFortranWriteStatement named: 'write'.
 ]
 
 { #category : #visiting }
