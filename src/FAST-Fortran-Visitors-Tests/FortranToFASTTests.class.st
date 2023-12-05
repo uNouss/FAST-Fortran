@@ -2160,7 +2160,7 @@ FortranToFASTTests >> testVariableDeclarationCharacter [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt type class equals: FASTFortranCharacterType.
-	self assert: stmt type size equals: 40.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
 
 	self assert: stmt declarators size equals: 1.
 	var := stmt declarators first.
@@ -2210,7 +2210,7 @@ FortranToFASTTests >> testVariableDeclarationIntegerWithLength [
 	self assert: stmt startPos equals: 26.
 
 	self assert: stmt type class equals: FASTFortranIntegerType.
-	self assert: stmt type size equals: 8.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
 
 ]
 
@@ -2283,9 +2283,32 @@ FortranToFASTTests >> testVariableDeclarationWithLength [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt type class equals: FASTFortranCharacterType.
-	self assert: stmt type size equals: 40.
+	self assert: stmt type size class equals: FASTFortranIntegerLiteral.
 
 	self assert: stmt declarators size equals: 1.
 	var := stmt declarators first.
 	self assert: var variable equals: 'astring'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testVariableDeclarationWithStarSize [
+
+	| result stmt |
+	fortranCode := '      program main
+      character*(*) str
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:23)","statement":{"anno":[],"attributes":null,"declarators":{"anno":[],"list":[{"anno":[],"initial":null,"length":null,"span":"(2:21)-(2:23)","type":"scalar","variable":{"anno":[],"span":"(2:21)-(2:23)","tag":"value","value":{"contents":"str","tag":"variable"}}}],"span":"(2:21)-(2:23)"},"span":"(2:7)-(2:23)","tag":"declaration","type":{"anno":[],"base_type":"character","selector":{"anno":[],"kind":null,"length":{"anno":[],"span":"(2:18)-(2:18)","tag":"value","value":{"tag":"star"}},"span":"(2:16)-(2:19)"},"span":"(2:7)-(2:19)"}},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranVariableDeclarationStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 42.
+
+	self assert: stmt type class equals: FASTFortranCharacterType.
+	self assert: stmt type size class equals: FASTFortranAsterisk.
+
 ]
