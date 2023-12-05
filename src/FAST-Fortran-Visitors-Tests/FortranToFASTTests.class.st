@@ -2317,7 +2317,7 @@ FortranToFASTTests >> testVariableDeclarationWithStarSize [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testWriteFullFormat [
 
-	| stmt result arguments |
+	| stmt result |
 	fortranCode := '      subroutine mysub ()
       WRITE( 1, 2, REC=3, IOSTAT=N, ERR=8 ) X, Y
       end
@@ -2332,16 +2332,22 @@ FortranToFASTTests >> testWriteFullFormat [
 
 	self assert: stmt ioParameters size equals: 5.
 
-	arguments := stmt arguments.
-	self assert: arguments size equals: 1.
-	self assert: arguments first class equals: FASTFortranScalarVariable.
-	self assert: arguments first name equals: 'x'
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fifth class equals: FASTFortranAssignmentExpression.
+
+	self assert: stmt arguments size equals: 2.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments second class equals: FASTFortranScalarVariable.
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testWriteStarStarFormat [
 
-	| stmt result arguments |
+	| stmt result |
 	fortranCode := '      subroutine mysub (msg)
       WRITE( *, * ) ''I/O error'' 
       end
@@ -2354,10 +2360,12 @@ FortranToFASTTests >> testWriteStarStarFormat [
 	self assert: stmt startPos equals: 36.
 	self assert: stmt endPos equals: 60.
 
-	self assert: stmt format class equals: FASTFortranAsterisk.
+	self assert: stmt ioParameters size equals: 2.
 
-	arguments := stmt arguments.
-	self assert: arguments size equals: 1.
-	self assert: arguments first class equals: FASTFortranScalarVariable.
-	self assert: arguments first name equals: 'x'
+	self assert: stmt ioParameters first class equals: FASTFortranAsterisk.
+	self assert: stmt ioParameters second class equals: FASTFortranAsterisk.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranCharacterLiteral.
 ]
