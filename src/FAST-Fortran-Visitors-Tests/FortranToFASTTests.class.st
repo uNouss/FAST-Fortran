@@ -2314,7 +2314,36 @@ FortranToFASTTests >> testVariableDeclarationWithStarSize [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testWriteFullFormat [
+FortranToFASTTests >> testWriteComplexFormat [
+
+	| stmt result |
+	fortranCode := '      subroutine mysub ()
+      WRITE( 3, ''(5F4.1)'') V
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:28)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":"v","tag":"variable"}}],"span":"(2:28)-(2:28)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:25)","tag":"value","value":{"contents":"(5F4.1)","tag":"string"}},"name":null,"span":"(2:17)-(2:25)"}],"span":"(2:12)-(2:26)"},"span":"(2:7)-(2:28)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 54.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranCharacterLiteral .
+	self assert: stmt ioParameters second startPos equals: 43.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments first startPos equals: 54.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteFullIOParameters [
 
 	| stmt result |
 	fortranCode := '      subroutine mysub ()
@@ -2351,7 +2380,7 @@ FortranToFASTTests >> testWriteFullFormat [
 ]
 
 { #category : #'tests-statement' }
-FortranToFASTTests >> testWriteStarStarFormat [
+FortranToFASTTests >> testWriteStarStarIOParameters [
 
 	| stmt result |
 	fortranCode := '      subroutine mysub ()
