@@ -5,8 +5,8 @@ Class {
 	#name : #FASTFortranType,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#size => FMProperty',
 		'#parentDeclaration => FMOne type: #FASTFortranVariableDeclarationStatement opposite: #type',
+		'#size => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize',
 		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -54,8 +54,8 @@ FASTFortranType >> parentDeclarationGroup [
 
 { #category : #accessing }
 FASTFortranType >> size [
+	"Relation named: #size type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize"
 
-	<FMProperty: #size type: #Number>
 	<generated>
 	<FMComment: 'a data size in bytes'>
 	^ size
@@ -63,8 +63,16 @@ FASTFortranType >> size [
 
 { #category : #accessing }
 FASTFortranType >> size: anObject [
+
 	<generated>
 	size := anObject
+]
+
+{ #category : #navigation }
+FASTFortranType >> sizeGroup [
+	<generated>
+	<navigation: 'Size'>
+	^ MooseSpecializedGroup with: self size
 ]
 
 { #category : #accessing }
