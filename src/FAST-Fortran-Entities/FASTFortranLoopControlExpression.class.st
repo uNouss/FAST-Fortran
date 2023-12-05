@@ -70,8 +70,8 @@ FASTFortranLoopControlExpression >> initGroup [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> limit [
+	"Relation named: #limit type: #FASTFortranTExpression opposite: #parentLoopControlLimit"
 
-	<FMProperty: #limit type: #String>
 	<generated>
 	<FMComment: 'Loop control limit value'>
 	^ limit
@@ -79,6 +79,7 @@ FASTFortranLoopControlExpression >> limit [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> limit: anObject [
+
 	<generated>
 	limit := anObject
 ]

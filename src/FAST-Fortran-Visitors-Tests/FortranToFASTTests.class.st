@@ -321,10 +321,10 @@ FortranToFASTTests >> testAssignementStringLiteral [
 
 	| result stmt |
 	fortranCode := '      PROGRAM MYPROG
-          c = ''once upon a time''
+          c = ''once upon a time there were ''''quotes''''! ''
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:32)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:32)","tag":"value","value":{"contents":"once upon a time","tag":"string"}},"span":"(2:11)-(2:32)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:56)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:56)","tag":"value","value":{"contents":"once upon a time there were ''quotes''! ","tag":"string"}},"span":"(2:11)-(2:56)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
@@ -332,7 +332,7 @@ FortranToFASTTests >> testAssignementStringLiteral [
 	self assert: stmt startPos equals: 32.
 
 	self assert: stmt expression class equals: FASTFortranCharacterLiteral.
-	self assert: stmt expression primitiveValue equals: 'once upon a time'.
+	self assert: stmt expression primitiveValue equals: 'once upon a time there were ''''quotes''''! '.
 	self assert: stmt expression startPos equals: 36.
 
 ]

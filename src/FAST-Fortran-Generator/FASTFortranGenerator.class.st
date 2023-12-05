@@ -709,9 +709,6 @@ FASTFortranGenerator >> defineRelations [
 		'Loop control limit value')
 	<>- (tExpression property: #parentLoopControlLimit).
 
-	(loopControlExpression property: #limit type: #String) comment:
-		'Loop control limit value'.
-
 	((programFile property: #programUnit) comment:
 		 'Program Units in a program file')
 	<>-* ((programUnit property: #parentProgramFile) comment:
