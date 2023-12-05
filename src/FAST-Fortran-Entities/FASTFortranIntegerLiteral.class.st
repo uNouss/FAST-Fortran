@@ -4,8 +4,8 @@ I represent Fortran Arithmetic Integer Literal (Constant) statement
 Class {
 	#name : #FASTFortranIntegerLiteral,
 	#superclass : #FASTFortranAbstractLiteral,
-	#traits : 'FASTFortranTNumericalLiteral',
-	#classTraits : 'FASTFortranTNumericalLiteral classTrait',
+	#traits : 'FASTFortranTFormat + FASTFortranTNumericalLiteral',
+	#classTraits : 'FASTFortranTFormat classTrait + FASTFortranTNumericalLiteral classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

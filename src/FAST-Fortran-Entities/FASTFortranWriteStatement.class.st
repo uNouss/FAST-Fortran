@@ -4,10 +4,10 @@ I represent Fortran Write statement
 Class {
 	#name : #FASTFortranWriteStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait',
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTWithIOParameters',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTWithIOParameters classTrait',
 	#instVars : [
-		'#format => FMProperty'
+		'#format => FMOne type: #FASTFortranTExpression opposite: #parentWriteFormat'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -23,15 +23,22 @@ FASTFortranWriteStatement class >> annotation [
 
 { #category : #accessing }
 FASTFortranWriteStatement >> format [
+	"Relation named: #format type: #FASTFortranTExpression opposite: #parentWriteFormat"
 
-	<FMProperty: #format type: #String>
 	<generated>
-	<FMComment: 'Format identifier. '>
 	^ format
 ]
 
 { #category : #accessing }
 FASTFortranWriteStatement >> format: anObject [
+
 	<generated>
 	format := anObject
+]
+
+{ #category : #navigation }
+FASTFortranWriteStatement >> formatGroup [
+	<generated>
+	<navigation: 'Format'>
+	^ MooseSpecializedGroup with: self format
 ]

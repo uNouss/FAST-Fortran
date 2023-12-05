@@ -4,7 +4,7 @@ I represent a statement with format identifier (print, write, ...)
 Trait {
 	#name : #FASTFortranTWithFormatIdentifier,
 	#instVars : [
-		'#format => FMOne type: #FASTFortranTFormatIdentifier opposite: #formatParentStatement'
+		'#format => FMOne type: #FASTFortranTFormat opposite: #parentFormatedStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -20,10 +20,10 @@ FASTFortranTWithFormatIdentifier classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTWithFormatIdentifier >> format [
-	"Relation named: #format type: #FASTFortranTFormatIdentifier opposite: #formatParentStatement"
+	"Relation named: #format type: #FASTFortranTFormat opposite: #parentFormatedStatement"
 
 	<generated>
-	<FMComment: 'format identifier'>
+	<FMComment: 'The description of the format'>
 	^ format
 ]
 
