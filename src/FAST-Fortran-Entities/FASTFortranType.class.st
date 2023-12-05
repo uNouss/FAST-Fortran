@@ -6,8 +6,8 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#parentDeclaration => FMOne type: #FASTFortranVariableDeclarationStatement opposite: #type',
-		'#size => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize',
-		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType'
+		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType',
+		'#size => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
