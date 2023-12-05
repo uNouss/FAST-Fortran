@@ -364,6 +364,16 @@ FASTFortranExporterVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortran
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranExitStatement ;
+		<< 'exit' ;
+		newLine.
+
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	self
 		visitFASTFortranAbstractStatement: aFASTFortranExternalStatement ;

@@ -260,7 +260,7 @@ FASTFortranVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivale
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
-	<generated>
+
 	self visitFASTFortranTLabelledStatement: aFASTFortranExitStatement.
 ]
 

@@ -739,6 +739,18 @@ FASTFortranExporterVisitorTest >> testEquivalenceStatement [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testExitStatement [
+	| stmt |
+	stmt := FASTFortranExitStatement new.
+
+	self
+		assertExport: stmt
+		equals: 
+'      exit
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testExternalStatement [
 	| stmt |
 	stmt := self externalStatement: 'aVar'.
