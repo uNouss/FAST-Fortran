@@ -4,7 +4,7 @@ I represent a format description (eg. in Format or Print statement
 Trait {
 	#name : #FASTFortranTFormat,
 	#instVars : [
-		'#parentFormatedStatement => FMOne type: #FASTFortranTWithFormatIdentifier opposite: #format'
+		'#parentFormatedStatement => FMOne type: #FASTFortranTWithFormat opposite: #format'
 	],
 	#traits : 'FASTFortranTIOParameter',
 	#classTraits : 'FASTFortranTIOParameter classTrait',
@@ -22,7 +22,7 @@ FASTFortranTFormat classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTFormat >> parentFormatedStatement [
-	"Relation named: #parentFormatedStatement type: #FASTFortranTWithFormatIdentifier opposite: #format"
+	"Relation named: #parentFormatedStatement type: #FASTFortranTWithFormat opposite: #format"
 
 	<generated>
 	<FMComment: 'A format description in a Format/Print/Read/Write statement'>

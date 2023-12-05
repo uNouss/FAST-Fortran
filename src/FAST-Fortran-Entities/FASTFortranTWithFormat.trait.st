@@ -1,8 +1,8 @@
 "
-I represent a statement with format identifier (print, write, ...)
+I represent a statement with a format (format, print)
 "
 Trait {
-	#name : #FASTFortranTWithFormatIdentifier,
+	#name : #FASTFortranTWithFormat,
 	#instVars : [
 		'#format => FMOne type: #FASTFortranTFormat opposite: #parentFormatedStatement'
 	],
@@ -10,16 +10,16 @@ Trait {
 }
 
 { #category : #meta }
-FASTFortranTWithFormatIdentifier classSide >> annotation [
+FASTFortranTWithFormat classSide >> annotation [
 
-	<FMClass: #TWithFormatIdentifier super: #Object>
+	<FMClass: #TWithFormat super: #Object>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
 ]
 
 { #category : #accessing }
-FASTFortranTWithFormatIdentifier >> format [
+FASTFortranTWithFormat >> format [
 	"Relation named: #format type: #FASTFortranTFormat opposite: #parentFormatedStatement"
 
 	<generated>
@@ -28,14 +28,14 @@ FASTFortranTWithFormatIdentifier >> format [
 ]
 
 { #category : #accessing }
-FASTFortranTWithFormatIdentifier >> format: anObject [
+FASTFortranTWithFormat >> format: anObject [
 
 	<generated>
 	format := anObject
 ]
 
 { #category : #navigation }
-FASTFortranTWithFormatIdentifier >> formatGroup [
+FASTFortranTWithFormat >> formatGroup [
 	<generated>
 	<navigation: 'Format'>
 	^ MooseSpecializedGroup with: self format

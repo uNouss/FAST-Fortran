@@ -1,7 +1,7 @@
 Trait {
 	#name : #FASTFortranTWithIOParameters,
 	#instVars : [
-		'#iOParameter => FMMany type: #FASTFortranTIOParameter opposite: #parentIOStatement'
+		'#ioParameters => FMMany type: #FASTFortranTIOParameter opposite: #parentIOStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -16,30 +16,31 @@ FASTFortranTWithIOParameters classSide >> annotation [
 ]
 
 { #category : #adding }
-FASTFortranTWithIOParameters >> addIOParameter: anObject [
+FASTFortranTWithIOParameters >> addIoParameter: anObject [
 	<generated>
-	^ self iOParameter add: anObject
+	^ self ioParameters add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranTWithIOParameters >> iOParameter [
-	"Relation named: #iOParameter type: #FASTFortranTIOParameter opposite: #parentIOStatement"
+FASTFortranTWithIOParameters >> ioParameters [
+	"Relation named: #ioParameters type: #FASTFortranTIOParameter opposite: #parentIOStatement"
 
 	<generated>
+	<FMComment: 'I represent a statement with IO-parameters (read or write)'>
 	<derived>
-	^ iOParameter
+	^ ioParameters
 ]
 
 { #category : #accessing }
-FASTFortranTWithIOParameters >> iOParameter: anObject [
+FASTFortranTWithIOParameters >> ioParameters: anObject [
 
 	<generated>
-	iOParameter value: anObject
+	ioParameters value: anObject
 ]
 
 { #category : #navigation }
-FASTFortranTWithIOParameters >> iOParameterGroup [
+FASTFortranTWithIOParameters >> ioParametersGroup [
 	<generated>
-	<navigation: 'IOParameter'>
-	^ MooseSpecializedGroup withAll: self iOParameter asSet
+	<navigation: 'IoParameters'>
+	^ MooseSpecializedGroup withAll: self ioParameters asSet
 ]

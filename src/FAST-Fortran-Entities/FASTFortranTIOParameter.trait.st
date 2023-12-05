@@ -4,7 +4,7 @@ I represent a parameter to an IO-statement (read or write)
 Trait {
 	#name : #FASTFortranTIOParameter,
 	#instVars : [
-		'#parentIOStatement => FMOne type: #FASTFortranTWithIOParameters opposite: #iOParameter'
+		'#parentIOStatement => FMOne type: #FASTFortranTWithIOParameters opposite: #ioParameters'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -20,7 +20,7 @@ FASTFortranTIOParameter classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTIOParameter >> parentIOStatement [
-	"Relation named: #parentIOStatement type: #FASTFortranTWithIOParameters opposite: #iOParameter"
+	"Relation named: #parentIOStatement type: #FASTFortranTWithIOParameters opposite: #ioParameters"
 
 	<generated>
 	<container>

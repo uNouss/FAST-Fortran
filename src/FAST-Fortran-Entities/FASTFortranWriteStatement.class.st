@@ -4,8 +4,8 @@ I represent Fortran Write statement
 Class {
 	#name : #FASTFortranWriteStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTWithIOParameters',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTWithIOParameters classTrait',
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithIOParameters',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithIOParameters classTrait',
 	#instVars : [
 		'#format => FMOne type: #FASTFortranTExpression opposite: #parentWriteFormat'
 	],

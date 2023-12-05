@@ -4,8 +4,8 @@ I represent Fortran Print statement
 Class {
 	#name : #FASTFortranPrintStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait',
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormat',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormat classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
