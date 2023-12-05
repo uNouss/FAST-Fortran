@@ -101,7 +101,7 @@ FASTFortranExporterVisitorTest >> characterLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> characterType: dimension [
 	^FASTFortranCharacterType new
-		size: dimension ;
+		size: (self typeSize: dimension) ;
 		yourself
 ]
 
@@ -206,7 +206,7 @@ FASTFortranExporterVisitorTest >> integerLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> integerType: dimension [
 	^FASTFortranIntegerType new
-		size: dimension ;
+		size: (self typeSize: dimension) ;
 		yourself
 ]
 
@@ -253,7 +253,7 @@ FASTFortranExporterVisitorTest >> realLiteral: value [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> realType: dimension [
 	^FASTFortranRealType new
-		size: dimension ;
+		size: (self typeSize: dimension) ;
 		yourself
 ]
 
@@ -1082,6 +1082,18 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeStarSize [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: '*') variables: #(str).
+
+	self
+		assertExport: stmt
+		equals: 
+'      character*(*) str
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 	| stmt |
 	stmt := self declarationStatement: (self characterType: 10) variables: #(str).
@@ -1295,6 +1307,13 @@ FASTFortranExporterVisitorTest >> testWriteStatement [
 		equals: 
 '      write(*,*) ''message''
 '
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> typeSize: dimension [
+	dimension isNumber ifTrue: [ ^self integerLiteral: dimension asString ].
+	dimension = '*' ifTrue: [ ^FASTFortranAsterisk new ].
+	^nil
 ]
 
 { #category : #'entity creation' }

@@ -990,7 +990,7 @@ FASTFortranJsonVisitor >> visitType: aTypeNode [
 	 	data second size:
 			(data third
 				ifNil: [ nil ]
-				ifNotNil: [ :typeSize | typeSize primitiveValue asInteger ]).
+				ifNotNil: [ :typeSize | typeSize ]).
 
 	^data second
 ]
