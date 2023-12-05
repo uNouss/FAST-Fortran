@@ -106,7 +106,10 @@ Class {
 		'equivalenceGroup',
 		'tVariableGroup',
 		'tWithVariableGroup',
-		'tWithFormat'
+		'tWithFormat',
+		'tFormat',
+		'tIOParameter',
+		'tWithIOParameters'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -470,6 +473,7 @@ FASTFortranGenerator >> defineHierarchy [
 	printStatement --|> abstractStatement.
 	printStatement --|> tWithFormat.
 	readStatement --|> abstractStatement.
+	readStatement --|> tWithIOParameters.
 	readStatement --|> tWithFormat.
 	returnStatement --|> abstractStatement.
 	returnStatement --|> tReturnStatement.
@@ -485,6 +489,7 @@ FASTFortranGenerator >> defineHierarchy [
 	virtualStatement --|> abstractStatement.
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
+	writeStatement --|> tWithIOParameters.
 	writeStatement --|> tWithFormat.
 
 
@@ -492,6 +497,7 @@ FASTFortranGenerator >> defineHierarchy [
 	abstractExpression --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
+	assignmentExpression --|> tIOParameter.
 	commonGroup  --|> tWithDeclarators.
 	dataGroup --|> tVariableGroup.
 	equivalenceGroup --|> tVariableGroup.
@@ -500,6 +506,7 @@ FASTFortranGenerator >> defineHierarchy [
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
 	scalarVariable --|> variable.
+	scalarVariable --|> tFormat.
 	arrayVariable --|> variable.
 	loopControlExpression --|> abstractExpression.
 	substring --|> abstractExpression.
@@ -519,12 +526,14 @@ FASTFortranGenerator >> defineHierarchy [
 	doublePrecisionConstant --|> tNumericalLiteral.
 	integerConstant --|> abstractLiteral.
 	integerConstant --|> tNumericalLiteral.
+	integerConstant --|> tFormat.
 	realConstant --|> abstractLiteral.
 	realConstant --|> tNumericalLiteral.
 	ampersand --|> abstractLiteral.
 	ampersand --|> tCharacterLiteral.
 	characterConstant --|> abstractLiteral.
 	characterConstant --|> tCharacterLiteral.
+	characterConstant --|> tFormat.
 	booleanConstant --|> abstractLiteral.
 	booleanConstant --|> tBooleanLiteral.
 
@@ -539,6 +548,9 @@ FASTFortranGenerator >> defineHierarchy [
 
 	asterisk --|> tNumericalLiteral.
 	asterisk --|> tEntryArgument.
+	asterisk --|> tFormat.
+
+	tFormat --|> tIOParameter
 ]
 
 { #category : #definition }
@@ -591,7 +603,6 @@ FASTFortranGenerator >> defineProperties [
 
 	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
 
-	(tWithFormat property: #format type: #String) comment: 'The description of the print/read/write format'
 ]
 
 { #category : #definition }
@@ -624,6 +635,8 @@ FASTFortranGenerator >> defineRelations [
 
 	(tVariableGroup property: #variables)
 	-* (variable property: #parentVariableGroup).
+
+	tWithIOParameters <>-* (tIOParameter property: #parentIOStatement).
 
 	tWithVariableGroup <>-* tVariableGroup.
 	
@@ -726,6 +739,9 @@ FASTFortranGenerator >> defineRelations [
 
 	((type property: #size) comment: 'a data size in bytes')
 	<>- (tNumericalLiteral property: #parentTypeSize).
+
+	((tWithFormat property: #format) comment: 'The description of the format')
+	<>- ((tFormat property: #parentFormatedStatement) comment: 'A format description in a Format/Print/Read/Write statement').
 
 	((tWithLabelReferences property: #labelReferences) comment:
 		 'the label(s) referenced')
@@ -954,7 +970,11 @@ FASTFortranGenerator >> defineTraits [
 
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
+	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
+
 	tVariableGroup := builder newTraitNamed: #TVariableGroup comment: 'I represent an entity with several variables like in a DataStatement or an EquivalenceStatement'.
+
+	tWithIOParameters := builder newTraitNamed: #TWithIOParameters.
 
 	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement'.
  
