@@ -872,6 +872,21 @@ FASTFortranJsonVisitor >> visitProgramFile: aProgramFileNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitReadStatement: aReadStatementNode [
+	"see #visitWriteStatement:
+	visited keys are: #(span ioParameters arguments)"
+
+	| data |
+	data := super visitReadStatement: aReadStatementNode.
+
+	^(self newEntity: FASTFortranReadStatement atPosition: data first)
+		ioParameters: data second;
+		arguments: data third;
+		yourself
+
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 	^FASTFortranRealType new
@@ -1070,7 +1085,12 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	"write statement. should follow the pattern: 
 	WRITE([UNIT=] u [, [FMT=] f] [, IOSTAT=ios] [, REC=rn] [, ERR=s]) iolist
-	WRITE([ UNIT=] u, [NML=] grname [, IOSTAT=ios] [, ERR=s])"
+	WRITE([ UNIT=] u, [NML=] grname [, IOSTAT=ios] [, ERR=s])
+	
+	Part within parentheses are the IO-Parameters
+	Part after the parentheses are the argument
+	
+	visited keys are: #(span ioParameters arguments)"
 
 	| data |
 	data := super visitWriteStatement: aWriteStatementNode.
@@ -1078,7 +1098,6 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	^(self newEntity: FASTFortranWriteStatement atPosition: data first)
 		ioParameters: data second;
 		arguments: data third;
-		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		yourself
 
 ]
