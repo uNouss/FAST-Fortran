@@ -57,6 +57,18 @@ FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString 
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> assignement: aName expression: value [
+	"end position is approximate, test should adjust if a real value is needed"
+
+	^FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: aName) ;
+		expression: value ;
+		startPos: 1 ;
+		endPos: aName size + 3 ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> assignementStatement: aName value: rhs [
 	"end position is approximate, test should adjust if a real value is needed"
 
@@ -241,6 +253,18 @@ FASTFortranExporterVisitorTest >> loopControlInit: init increment: incr limit: l
 	incr ifNotNil: [ entity increment: (self integerLiteral: incr) ].
 	entity limit: (self scalarVariable: limit).
 	^entity
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> readStatement: aCollection [
+	"end position is approximate, test should adjust if a real value is needed"
+
+	^FASTFortranReadStatement new
+		ioParameters: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
+		arguments: aCollection ;
+		startPos: 1 ;
+		endPos: 30 ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -914,14 +938,14 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithElseBlock [
 	stmt := self
 		ifBlock: (self scalarVariable: 'bool')
 		then: #()
-		else:  {  self writeStatement: { self characterLiteral: 'message' } }.
+		else:  {  self returnStatement: nil }.
 
 	self
 		assertExport: stmt
 		equals: 
 '      if (bool) then
       else
-        write(*,*) ''message''
+        return 
       end if
 '
 ]
@@ -931,14 +955,14 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementWithThenBlock [
 	| stmt |
 	stmt := self
 		ifBlock: (self scalarVariable: 'bool')
-		then: {  self writeStatement: { self characterLiteral: 'message' } }
+		then: {  self returnStatement: nil }
 		else: nil.
 
 	self
 		assertExport: stmt
 		equals: 
 '      if (bool) then
-        write(*,*) ''message''
+        return 
       end if
 '
 ]
@@ -1196,6 +1220,24 @@ FASTFortranExporterVisitorTest >> testPauseStatementWithString [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testReadStatement [
+	| stmt |
+	stmt := self readStatement: { self scalarVariable: 'V' }.
+	stmt ioParameters: {
+		self integerLiteral: '1' .
+		self assignement: 'rec' expression: (self integerLiteral: '3') .
+		self assignement: 'iostat' expression: (self scalarVariable: 'N') .
+		self assignement: 'err' expression: (self integerLiteral: '8') .
+	}.
+
+	self
+		assertExport: stmt
+		equals: 
+'      read (1,rec = 3,iostat = N,err = 8) V
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testReturnStatementEmpty [
 	| stmt |
 	stmt :=  self returnStatement: nil.
@@ -1305,7 +1347,7 @@ FASTFortranExporterVisitorTest >> testWriteStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      write(*,*) ''message''
+'      write (*,*) ''message''
 '
 ]
 
@@ -1333,7 +1375,7 @@ FASTFortranExporterVisitorTest >> writeStatement: aCollection [
 	"end position is approximate, test should adjust if a real value is needed"
 
 	^FASTFortranWriteStatement new
-		format: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
+		ioParameters: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
 		arguments: aCollection ;
 		startPos: 1 ;
 		endPos: 30 ;
