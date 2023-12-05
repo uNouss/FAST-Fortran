@@ -624,7 +624,7 @@ FASTFortranExporterVisitorTest >> testDoStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      do i = 1,1,max
+'      do i = 1,max,1
       end do
 '
 ]

@@ -547,18 +547,20 @@ FASTFortranExporterVisitor >> visitFASTFortranLogicalType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
-{ #category : #'visiting - expressions' }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopControlExpression [
 
 	aFASTFortranLoopControlExpression init accept: self.
-	aFASTFortranLoopControlExpression increment
-	ifNotNil: [ :incr |
-		self << ','.
-		incr accept: self ].
+
 	aFASTFortranLoopControlExpression limit
 	ifNotNil: [ :limit |
 		self << ','.
 		limit accept: self ].
+
+	aFASTFortranLoopControlExpression increment
+	ifNotNil: [ :incr |
+		self << ','.
+		incr accept: self ].
 
 ]
 
