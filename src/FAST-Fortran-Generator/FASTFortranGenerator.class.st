@@ -587,8 +587,6 @@ FASTFortranGenerator >> defineProperties [
 	(tUnaryExpression property: #operator type: #String) comment:
 		'Unary expression operator'.
 
-	(type property: #size type: #Number) comment: 'a data size in bytes'.
-
 	(variable property: #name type: #String) comment:
 		'Determines the variable name'.
 
@@ -727,6 +725,9 @@ FASTFortranGenerator >> defineRelations [
 	((tUnaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
 			 'Parent expression (if possible)').
+
+	((type property: #size) comment: 'a data size in bytes')
+	<>- (tNumericalLiteral property: #parentTypeSize).
 
 	((tWithFormatIdentifier property: #format) comment:
 		 'format identifier')
