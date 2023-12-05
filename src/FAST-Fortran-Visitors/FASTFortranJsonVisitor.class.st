@@ -443,10 +443,7 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
-	"note: fortran-src inverted content of 'limit' and 'increment'
-
-	 #(span initial increment limit)
-
+	"#(span initial limit increment)
 	 'init' is an AssignementStatement, need to convert it to an AssignementExpression"
 
 	| data assignementExpr |
@@ -463,8 +460,8 @@ FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
 		   newEntity: FASTFortranLoopControlExpression
 		   atPosition: data first)
 		  init: assignementExpr ;
-		  increment: data third ;
-		  limit: data fourth ;
+		  limit: data third ;
+		  increment: data fourth ;
 		  yourself
 ]
 

@@ -959,11 +959,11 @@ FortranToFASTTests >> testDoStatementEmptyInitIncrementLimit [
 
 	| result stmt control |
 	fortranCode := '      program main
-      do i = len(chaine),-1,1
+      do i = len(chaine),1,-1
       end do
       end
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[],"do_spec":{"anno":[],"increment":{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"initial":{"anno":[],"expression":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:18)-(2:23)","tag":"value","value":{"contents":"chaine","tag":"variable"}},"tag":"expr"},"name":null,"span":"(2:18)-(2:23)"}],"span":"(2:18)-(2:23)"},"function":{"anno":[],"span":"(2:14)-(2:16)","tag":"value","value":{"contents":"len","tag":"intrinsic"}},"span":"(2:14)-(2:24)","tag":"function_call"},"span":"(2:10)-(2:24)","tag":"assign_expression","target":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"expression":{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"op":{"tag":"minus"},"span":"(2:26)-(2:27)","tag":"unary"},"span":"(2:10)-(2:29)"},"end_label":null,"label":null,"name":null,"span":"(2:7)-(3:12)","tag":"do","target":null}],"name":"main","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[],"do_spec":{"anno":[],"increment":{"anno":[],"expression":{"anno":[],"span":"(2:29)-(2:29)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"op":{"tag":"minus"},"span":"(2:28)-(2:29)","tag":"unary"},"initial":{"anno":[],"expression":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"expr":{"contents":{"anno":[],"span":"(2:18)-(2:23)","tag":"value","value":{"contents":"chaine","tag":"variable"}},"tag":"expr"},"name":null,"span":"(2:18)-(2:23)"}],"span":"(2:18)-(2:23)"},"function":{"anno":[],"span":"(2:14)-(2:16)","tag":"value","value":{"contents":"len","tag":"intrinsic"}},"span":"(2:14)-(2:24)","tag":"function_call"},"span":"(2:10)-(2:24)","tag":"assign_expression","target":{"anno":[],"span":"(2:10)-(2:10)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:26)-(2:26)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:10)-(2:29)"},"end_label":null,"label":null,"name":null,"span":"(2:7)-(3:12)","tag":"do","target":null}],"name":"main","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	self assert: result first statementBlock statements size equals: 1.
@@ -983,11 +983,11 @@ FortranToFASTTests >> testDoStatementEmptyInitIncrementLimit [
 	self assert: control init startPos equals: 29.
 
 	self assert: control increment class equals: FASTFortranIntegerLiteral.
-	self assert: control increment startPos equals: 45.
+	self assert: control increment startPos equals: 47.
 	self assert: control increment primitiveValue equals: '-1'.
 
 	self assert: control limit class equals: FASTFortranIntegerLiteral.
-	self assert: control limit startPos equals: 48.
+	self assert: control limit startPos equals: 45.
 	self assert: control limit primitiveValue equals: '1'.
 ]
 
