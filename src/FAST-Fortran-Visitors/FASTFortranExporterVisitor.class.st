@@ -706,7 +706,9 @@ FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
 
 	aFASTFortranType size ifNotNil: [ :length |
 		self << '*'.
-		length accept: self
+		length class = FASTFortranAsterisk
+			ifTrue: [ self << '(*)' ]
+			ifFalse: [ length accept: self ]
 	]
 ]
 
