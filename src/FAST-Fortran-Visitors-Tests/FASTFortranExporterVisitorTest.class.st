@@ -1082,6 +1082,18 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeStarSize [
+	| stmt |
+	stmt := self declarationStatement: (self characterType: '*') variables: #(str).
+
+	self
+		assertExport: stmt
+		equals: 
+'      character*(*) str
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 	| stmt |
 	stmt := self declarationStatement: (self characterType: 10) variables: #(str).
