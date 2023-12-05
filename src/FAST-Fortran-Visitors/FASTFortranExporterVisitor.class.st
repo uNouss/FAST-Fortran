@@ -703,7 +703,7 @@ FASTFortranExporterVisitor >> visitFASTFortranTWithArguments: aFASTFortranTWithA
 ]
 
 { #category : #'visiting - traits' }
-FASTFortranExporterVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
+FASTFortranExporterVisitor >> visitFASTFortranTWithFormat: aFASTFortranTWithFormatIdentifier [
 	self << '('.
 	self visitNodeListSeparatedByCommas: aFASTFortranTWithFormatIdentifier format.
 	self << ')'.
