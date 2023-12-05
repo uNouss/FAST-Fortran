@@ -442,7 +442,7 @@ FASTFortranVisitor >> visitFASTFortranPragmaStatement: aFASTFortranPragmaStateme
 FASTFortranVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement [
 	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranPrintStatement.
-	self visitFASTFortranTWithFormatIdentifier: aFASTFortranPrintStatement.
+	self visitFASTFortranTWithFormat: aFASTFortranPrintStatement.
 	self visitFASTFortranTLabelledStatement: aFASTFortranPrintStatement.
 ]
 
@@ -712,9 +712,9 @@ FASTFortranVisitor >> visitFASTFortranTWithComments: aFASTFortranTWithComments [
 ]
 
 { #category : #'visiting - traits' }
-FASTFortranVisitor >> visitFASTFortranTWithFormatIdentifier: aFASTFortranTWithFormatIdentifier [
+FASTFortranVisitor >> visitFASTFortranTWithIOParameters: aFASTFortranTWithIOParameters [
 
-	aFASTFortranTWithFormatIdentifier format do: [ :fmt | fmt accept: self ]
+	aFASTFortranTWithIOParameters ioParameters do: [ :parameter | parameter accept: self ]
 ]
 
 { #category : #'visiting - traits' }
@@ -786,7 +786,7 @@ FASTFortranVisitor >> visitFASTFortranVolatileStatement: aFASTFortranVolatileSta
 FASTFortranVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranWriteStatement.
-	self visitFASTFortranTWithFormatIdentifier: aFASTFortranWriteStatement.
+	self visitFASTFortranTWithFormat: aFASTFortranWriteStatement.
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 ]
 
