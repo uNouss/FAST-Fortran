@@ -74,8 +74,6 @@ Class {
 		'doublePrecisionConstant',
 		'integerConstant',
 		'realConstant',
-		'tWithFormatIdentifier',
-		'tFormatIdentifier',
 		'asterisk',
 		'ampersand',
 		'functionStatement',
@@ -107,7 +105,8 @@ Class {
 		'tWithLabelReferences',
 		'equivalenceGroup',
 		'tVariableGroup',
-		'tWithVariableGroup'
+		'tWithVariableGroup',
+		'tWithFormat'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -442,7 +441,7 @@ FASTFortranGenerator >> defineHierarchy [
 	exitStatement --|> abstractStatement.
 	externalStatement --|> abstractStatement.
 	formatStatement --|> abstractStatement.
-	formatStatement --|> tFormatIdentifier.
+	formatStatement --|> tWithFormat.
 	functionStatement --|> abstractStatement.
 	goToStatement --|> abstractStatement.
 	goToStatement --|> tWithLabelReferences.
@@ -469,8 +468,9 @@ FASTFortranGenerator >> defineHierarchy [
 	pauseStatement --|> abstractStatement.
 	pragmaStatement --|> abstractStatement.
 	printStatement --|> abstractStatement.
-	printStatement --|> tWithFormatIdentifier.
+	printStatement --|> tWithFormat.
 	readStatement --|> abstractStatement.
+	readStatement --|> tWithFormat.
 	returnStatement --|> abstractStatement.
 	returnStatement --|> tReturnStatement.
 	rewindStatement --|> abstractStatement.
@@ -485,7 +485,7 @@ FASTFortranGenerator >> defineHierarchy [
 	virtualStatement --|> abstractStatement.
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
-	writeStatement --|> tWithFormatIdentifier.
+	writeStatement --|> tWithFormat.
 
 
 	"DATA"
@@ -539,7 +539,6 @@ FASTFortranGenerator >> defineHierarchy [
 
 	asterisk --|> tNumericalLiteral.
 	asterisk --|> tEntryArgument.
-	asterisk --|> tFormatIdentifier.
 ]
 
 { #category : #definition }
@@ -592,8 +591,7 @@ FASTFortranGenerator >> defineProperties [
 
 	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
 
-	(writeStatement property: #format type: #String) comment:
-		'Format identifier. '
+	(tWithFormat property: #format type: #String) comment: 'The description of the print/read/write format'
 ]
 
 { #category : #definition }
@@ -729,15 +727,14 @@ FASTFortranGenerator >> defineRelations [
 	((type property: #size) comment: 'a data size in bytes')
 	<>- (tNumericalLiteral property: #parentTypeSize).
 
-	((tWithFormatIdentifier property: #format) comment:
-		 'format identifier')
-	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
-			 'The owner of the format identifier').
-
 	((tWithLabelReferences property: #labelReferences) comment:
 		 'the label(s) referenced')
 	-* ((labelReference property: #referencer) comment:
-			 'A statement (like goto) referencing this label')
+			 'A statement (like goto) referencing this label').
+
+	(writeStatement property: #format)
+	<>- (tExpression property: #parentWriteFormat).
+
 ]
 
 { #category : #definition }
@@ -957,15 +954,13 @@ FASTFortranGenerator >> defineTraits [
 
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
-	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
-
 	tVariableGroup := builder newTraitNamed: #TVariableGroup comment: 'I represent an entity with several variables like in a DataStatement or an EquivalenceStatement'.
 
 	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement'.
  
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
-	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
+	tWithFormat := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
 
 	tWithLabelReferences := builder newTraitNamed: #TWithLabelReferences comment: 'I represent a statement (various kind of goto) that can have label references'.
 
