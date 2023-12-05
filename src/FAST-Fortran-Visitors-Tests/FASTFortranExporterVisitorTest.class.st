@@ -1248,6 +1248,17 @@ FASTFortranExporterVisitorTest >> testStopStatementWithString [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testStringLiteralWithQuote [
+	| expr |
+	expr := self characterLiteral: 'a ''''string'''' with quotes'.
+
+	self
+		assertExport: expr
+		equals: 
+'''a ''''string'''' with quotes'''
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 	| sub stmt |
 	sub := self subroutine: 'blah'.
