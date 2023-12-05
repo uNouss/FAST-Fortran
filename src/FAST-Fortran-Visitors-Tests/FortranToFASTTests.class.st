@@ -1945,6 +1945,7 @@ FortranToFASTTests >> testPrintOneVariable [
 	self assert: stmt endPos equals: 45.
 
 	self assert: stmt format class equals: FASTFortranAsterisk.
+
 	arguments := stmt arguments.
 	self assert: arguments size equals: 1.
 	self assert: arguments first class equals: FASTFortranScalarVariable.
@@ -2311,4 +2312,52 @@ FortranToFASTTests >> testVariableDeclarationWithStarSize [
 	self assert: stmt type class equals: FASTFortranCharacterType.
 	self assert: stmt type size class equals: FASTFortranAsterisk.
 
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteFullFormat [
+
+	| stmt result arguments |
+	fortranCode := '      subroutine mysub ()
+      WRITE( 1, 2, REC=3, IOSTAT=N, ERR=8 ) X, Y
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":null,"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:48)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:45)-(2:45)","tag":"value","value":{"contents":"x","tag":"variable"}},{"anno":[],"span":"(2:48)-(2:48)","tag":"value","value":{"contents":"y","tag":"variable"}}],"span":"(2:45)-(2:48)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["2",null],"tag":"integer"}},"name":null,"span":"(2:17)-(2:17)"},{"anno":[],"expr":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":"rec","span":"(2:20)-(2:24)"},{"anno":[],"expr":{"anno":[],"span":"(2:34)-(2:34)","tag":"value","value":{"contents":"n","tag":"variable"}},"name":"iostat","span":"(2:27)-(2:34)"},{"anno":[],"expr":{"anno":[],"span":"(2:41)-(2:41)","tag":"value","value":{"contents":["8",null],"tag":"integer"}},"name":"err","span":"(2:37)-(2:41)"}],"span":"(2:12)-(2:43)"},"span":"(2:7)-(2:48)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 74.
+
+	self assert: stmt ioParameters size equals: 5.
+
+	arguments := stmt arguments.
+	self assert: arguments size equals: 1.
+	self assert: arguments first class equals: FASTFortranScalarVariable.
+	self assert: arguments first name equals: 'x'
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testWriteStarStarFormat [
+
+	| stmt result arguments |
+	fortranCode := '      subroutine mysub (msg)
+      WRITE( *, * ) ''I/O error'' 
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(1:25)-(1:27)","tag":"value","value":{"contents":"msg","tag":"variable"}}],"span":"(1:25)-(1:27)"},"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:31)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:21)-(2:31)","tag":"value","value":{"contents":"I/O error","tag":"string"}}],"span":"(2:21)-(2:31)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:17)-(2:17)"}],"span":"(2:12)-(2:19)"},"span":"(2:7)-(2:31)","tag":"write"},"tag":"statement"}],"name":"mysub","options":[null,null],"span":"(1:7)-(3:9)","subprograms":null,"tag":"subroutine"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 36.
+	self assert: stmt endPos equals: 60.
+
+	self assert: stmt format class equals: FASTFortranAsterisk.
+
+	arguments := stmt arguments.
+	self assert: arguments size equals: 1.
+	self assert: arguments first class equals: FASTFortranScalarVariable.
+	self assert: arguments first name equals: 'x'
 ]
