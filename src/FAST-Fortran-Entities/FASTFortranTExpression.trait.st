@@ -17,7 +17,6 @@ Trait {
 		'#parentGotoComputedStatement => FMOne type: #FASTFortranGoToComputedStatement opposite: #selectorExpression',
 		'#parentLoopControlIncrement => FMOne type: #FASTFortranLoopControlExpression opposite: #increment',
 		'#parentLoopControlLimit => FMOne type: #FASTFortranLoopControlExpression opposite: #limit',
-		'#parentWriteFormat => FMOne type: #FASTFortranWriteStatement opposite: #format',
 		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression'
 	],
@@ -310,30 +309,6 @@ FASTFortranTExpression >> parentLoopControlLimitGroup [
 	<generated>
 	<navigation: 'ParentLoopControlLimit'>
 	^ MooseSpecializedGroup with: self parentLoopControlLimit
-]
-
-{ #category : #accessing }
-FASTFortranTExpression >> parentWriteFormat [
-	"Relation named: #parentWriteFormat type: #FASTFortranWriteStatement opposite: #format"
-
-	<generated>
-	<container>
-	<derived>
-	^ parentWriteFormat
-]
-
-{ #category : #accessing }
-FASTFortranTExpression >> parentWriteFormat: anObject [
-
-	<generated>
-	parentWriteFormat := anObject
-]
-
-{ #category : #navigation }
-FASTFortranTExpression >> parentWriteFormatGroup [
-	<generated>
-	<navigation: 'ParentWriteFormat'>
-	^ MooseSpecializedGroup with: self parentWriteFormat
 ]
 
 { #category : #accessing }
