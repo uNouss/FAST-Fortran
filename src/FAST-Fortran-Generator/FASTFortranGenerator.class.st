@@ -397,20 +397,13 @@ FASTFortranGenerator >> defineHierarchy [
 	subprogram --|> programUnit.
 	mainprogram --|> programUnit.
 	procedure --|> subprogram.
+	procedure --|> tWithParameters.
 	blockData --|> subprogram.
 	function --|> procedure.
 	subroutine --|> procedure.
 
 	programFile --|> tWithComments.
 	programUnit --|> tWithComments.
-
-	"TRAITS"
-	procedure --|> tWithParameters.
-	functionCall --|> tWithArguments.
-	functionStatement --|> tWithArguments.
-	callStatement --|> tWithArguments.
-	printStatement --|> tWithArguments.
-	writeStatement --|> tWithArguments.
 
 	"other entities"
 	comment --|> tEntity.
@@ -424,6 +417,7 @@ FASTFortranGenerator >> defineHierarchy [
 	automaticStatement --|> abstractStatement.
 	backspaceStatement --|> abstractStatement.
 	callStatement --|> abstractStatement.
+	callStatement --|> tWithArguments.
 	closeStatement --|> abstractStatement.
 	commonStatement --|> abstractStatement.
 	continueStatement --|> abstractStatement.
@@ -446,6 +440,7 @@ FASTFortranGenerator >> defineHierarchy [
 	formatStatement --|> abstractStatement.
 	formatStatement --|> tWithFormat.
 	functionStatement --|> abstractStatement.
+	functionStatement --|> tWithArguments.
 	goToStatement --|> abstractStatement.
 	goToStatement --|> tWithLabelReferences.
 	goToAssignedStatement --|> abstractStatement.
@@ -472,8 +467,10 @@ FASTFortranGenerator >> defineHierarchy [
 	pragmaStatement --|> abstractStatement.
 	printStatement --|> abstractStatement.
 	printStatement --|> tWithFormat.
+	printStatement --|> tWithArguments.
 	readStatement --|> abstractStatement.
 	readStatement --|> tWithIOParameters.
+	readStatement --|> tWithArguments.
 	returnStatement --|> abstractStatement.
 	returnStatement --|> tReturnStatement.
 	rewindStatement --|> abstractStatement.
@@ -489,6 +486,7 @@ FASTFortranGenerator >> defineHierarchy [
 	volatileStatement --|> abstractStatement.
 	writeStatement --|> abstractStatement.
 	writeStatement --|> tWithIOParameters.
+	writeStatement --|> tWithArguments.
 
 
 	"DATA"
@@ -500,6 +498,7 @@ FASTFortranGenerator >> defineHierarchy [
 	dataGroup --|> tVariableGroup.
 	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
+	functionCall --|> tWithArguments.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
