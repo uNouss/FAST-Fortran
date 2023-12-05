@@ -641,6 +641,33 @@ FASTFortranJsonVisitor >> visitGoto_computedStatement: aGotoComputedStatementNod
 		yourself
 ]
 
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitIOParameter: anIOParameterNode [
+	"#(span name expr)"
+
+	| data assignedVariable|
+	data := super visitIOParameter: anIOParameterNode.
+
+	data second ifNil: [ ^data third ].
+
+	assignedVariable := FASTFortranScalarVariable new.
+	assignedVariable name: data second.
+	assignedVariable startPos: (self pointToPosition: data first first).
+	assignedVariable endPos: (assignedVariable startPos + assignedVariable name size - 1).
+
+	^(self newEntity: FASTFortranAssignmentExpression atPosition: data first)
+		variable: assignedVariable ;
+		expression: data third ;
+		yourself
+
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitIOParameters: aWriteFormatNode [
+
+	^ (super visitIOParameters: aWriteFormatNode) second reject: #isNil
+]
+
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIf: anIfNode [
 	"ifNode has 'conditionals' and 'blocks'
@@ -1040,12 +1067,6 @@ FASTFortranJsonVisitor >> visitVariable: aVariableNode [
 ]
 
 { #category : #'visiting statement' }
-FASTFortranJsonVisitor >> visitWriteFormat: aWriteFormatNode [
-
-	^ (super visitWriteFormat: aWriteFormatNode) second reject: #isNil
-]
-
-{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	"write statement. should follow the pattern: 
 	WRITE([UNIT=] u [, [FMT=] f] [, IOSTAT=ios] [, REC=rn] [, ERR=s]) iolist
@@ -1055,7 +1076,7 @@ FASTFortranJsonVisitor >> visitWriteStatement: aWriteStatementNode [
 	data := super visitWriteStatement: aWriteStatementNode.
 
 	^(self newEntity: FASTFortranWriteStatement atPosition: data first)
-		format: data second;
+		ioParameters: data second;
 		arguments: data third;
 		"sourceAnchor: (self makeIndexedAnchor: data first) ;"
 		yourself

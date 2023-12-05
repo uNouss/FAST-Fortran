@@ -747,9 +747,6 @@ FASTFortranGenerator >> defineRelations [
 	-* ((labelReference property: #referencer) comment:
 			 'A statement (like goto) referencing this label').
 
-	(writeStatement property: #format)
-	<>- (tExpression property: #parentWriteFormat).
-
 ]
 
 { #category : #definition }
