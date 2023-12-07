@@ -340,7 +340,7 @@ FortranToFASTTests >> testAssignementStringLiteral [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testAssignementToArrayRange [
 
-	| result stmt |
+	| result stmt var |
 	fortranCode := '      PROGRAM MYPROG
       NOMARC(1:1) = ''c''
       END
@@ -350,10 +350,15 @@ FortranToFASTTests >> testAssignementToArrayRange [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
-	self assert: stmt startPos equals: 32.
-	self assert: stmt endPos equals: 36.
 
-	self assert: stmt variable class equals: FASTFortranArrayRange.
+	var := stmt variable.
+	self assert: var class equals: FASTFortranArrayRange.
+	self assert: var lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: var lowerBound primitiveValue equals: '1'.
+	self assert: var upperBound class equals: FASTFortranIntegerLiteral.
+	self assert: var upperBound primitiveValue equals: '1'.
+	self assert: var startPos equals: 35.
+	self assert: var endPos equals: 37.
 ]
 
 { #category : #'tests-expression' }
