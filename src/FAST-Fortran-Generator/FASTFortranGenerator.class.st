@@ -491,6 +491,7 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"DATA"
 	abstractExpression --|> tExpression.
+	arrayRange --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
 	assignmentExpression --|> tIOParameter.
