@@ -352,13 +352,17 @@ FortranToFASTTests >> testAssignementToArrayRange [
 	self assert: stmt class equals: FASTFortranAssignmentStatement.
 
 	var := stmt variable.
-	self assert: var class equals: FASTFortranArrayRange.
-	self assert: var lowerBound class equals: FASTFortranIntegerLiteral.
-	self assert: var lowerBound primitiveValue equals: '1'.
-	self assert: var upperBound class equals: FASTFortranIntegerLiteral.
-	self assert: var upperBound primitiveValue equals: '1'.
-	self assert: var startPos equals: 35.
-	self assert: var endPos equals: 37.
+	self assert: var class equals: FASTFortranArrayVariable.
+	self assert: var indices size equals: 1.
+	self assert: var indices first class equals: FASTFortranArrayRange.
+
+
+	self assert: var indices first lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: var indices first lowerBound primitiveValue equals: '1'.
+	self assert: var indices first upperBound class equals: FASTFortranIntegerLiteral.
+	self assert: var indices first upperBound primitiveValue equals: '1'.
+	self assert: var indices first startPos equals: 35.
+	self assert: var indices first endPos equals: 37.
 ]
 
 { #category : #'tests-expression' }
