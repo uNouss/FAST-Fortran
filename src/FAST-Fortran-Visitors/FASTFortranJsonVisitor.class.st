@@ -876,7 +876,12 @@ FASTFortranJsonVisitor >> visitRange: aRangeNode [
 	"span lower upper stride"
 
 	| data |
-	data := super visitRange: aRangeNode
+	data := super visitRange: aRangeNode.
+
+	^(self newEntity: FASTFortranArrayRange atPosition: data first)
+		lowerBound: data second ;
+		upperBound: data third ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -937,6 +942,15 @@ FASTFortranJsonVisitor >> visitSelector: aSelectorNode [
 	data ifNil: [ ^nil ].
 	data second ifNotNil: [ :kind | ^kind ].
 	^data third
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitSingle: anArraySingleIndexNode [
+	"#(span index)"
+
+	^(super visitSingle: anArraySingleIndexNode)
+		second
+
 ]
 
 { #category : #visiting }
@@ -1018,7 +1032,7 @@ FASTFortranJsonVisitor >> visitSubscript: aSubscriptNode [
 
 	^(self newEntity: FASTFortranArrayVariable atPosition: data first)
 		name: data second name ;
-		indices: { data third second . data third third } ;
+		indices: data third ;
 		yourself
 ]
 
