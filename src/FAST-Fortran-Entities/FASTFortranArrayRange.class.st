@@ -4,6 +4,8 @@ I represent an array lower/upper bounds
 Class {
 	#name : #FASTFortranArrayRange,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression',
+	#classTraits : 'FASTFortranTExpression classTrait',
 	#instVars : [
 		'#upperBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator',
 		'#lowerBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator',
