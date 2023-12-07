@@ -369,6 +369,22 @@ FASTFortranExporterVisitorTest >> testArrayDeclarationMultipleDimensions [
 '
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testArrayRange [
+	| stmt |
+	stmt := FASTFortranArrayVariable new
+		name: 'arr' ;
+		indices: { FASTFortranArrayRange new
+			lowerBound: (self integerLiteral: '1') ;
+			upperBound: (self scalarVariable: 'max') } ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'arr(1:max)'
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testArrayVariable [
 	| stmt |
