@@ -24,11 +24,11 @@ FASTFortranVisitor >> visitFASTFortranArrayBound: aFASTFortranArrayBound [
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
+FASTFortranVisitor >> visitFASTFortranArrayRange: aFASTFortranArrayRange [
 
 	^{
-		self visitFASTFortranArrayBound: aFASTFortranArrayDimension lowerBound .
-		self visitFASTFortranArrayBound: aFASTFortranArrayDimension upperBound
+		self visitFASTFortranArrayBound: aFASTFortranArrayRange lowerBound .
+		self visitFASTFortranArrayBound: aFASTFortranArrayRange upperBound
 	}
 ]
 
