@@ -332,7 +332,7 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		yourself
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testArrayDeclaration [
 	| stmt |
 	stmt := self arrayDeclaration: 'v' dimensions: #( #('1' '10') ).
@@ -385,7 +385,7 @@ FASTFortranExporterVisitorTest >> testArrayRange [
 'arr(1:max)'
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testArrayVariable [
 	| stmt |
 	stmt := FASTFortranArrayVariable new
@@ -453,7 +453,7 @@ FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 '
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testBinaryExpression [
 	| expr |
 	expr := FASTFortranBinaryExpression new
@@ -466,7 +466,7 @@ FASTFortranExporterVisitorTest >> testBinaryExpression [
 		equals: 'a + 5'
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testBinaryExpressionNe [
 	| expr |
 	expr := FASTFortranBinaryExpression new
