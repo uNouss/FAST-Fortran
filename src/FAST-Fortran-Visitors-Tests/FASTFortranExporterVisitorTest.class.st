@@ -27,7 +27,7 @@ FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollec
 	declarator := self variableDeclarator: variable.
 	declarator dimensions:
 		(aCollection collect: [ :dim |
-			FASTFortranArrayDimension new
+			FASTFortranArrayRange new
 				lowerBound: (dim first ifNotNil: [ self integerLiteral: dim first ]) ;
 				upperBound: (dim second ifNotNil: [ self integerLiteral: dim second ])
 		]).

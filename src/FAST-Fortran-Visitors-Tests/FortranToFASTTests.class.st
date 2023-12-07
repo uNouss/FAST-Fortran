@@ -52,7 +52,7 @@ FortranToFASTTests >> testArrayDeclaration [
 	declarator := stmt declarators first.
 	self assert: declarator variable equals: 'arr'.
 	self assert: declarator dimensions size equals: 1.
-	self assert: declarator dimensions first class equals: FASTFortranArrayDimension. 
+	self assert: declarator dimensions first class equals: FASTFortranArrayRange. 
 	self assert: declarator dimensions first lowerBound equals: nil. 
 	self assert: declarator dimensions first upperBound class equals: FASTFortranIntegerLiteral.
 	self assert: declarator dimensions first upperBound primitiveValue equals: '10'.
@@ -156,7 +156,7 @@ FortranToFASTTests >> testArrayDeclarationVariableBound [
 	declarator := stmt declarators first.
 	self assert: declarator variable equals: 'arr'.
 	self assert: declarator dimensions size equals: 1.
-	self assert: declarator dimensions first class equals: FASTFortranArrayDimension. 
+	self assert: declarator dimensions first class equals: FASTFortranArrayRange. 
 	self assert: declarator dimensions first lowerBound equals: nil. 
 	self assert: declarator dimensions first upperBound class equals: FASTFortranScalarVariable.
 	self assert: declarator dimensions first upperBound name equals: 'max'.

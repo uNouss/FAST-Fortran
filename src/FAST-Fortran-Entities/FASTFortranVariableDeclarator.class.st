@@ -7,7 +7,7 @@ Class {
 	#traits : 'FASTFortranTVariableDeclarator',
 	#classTraits : 'FASTFortranTVariableDeclarator classTrait',
 	#instVars : [
-		'#dimensions => FMMany type: #FASTFortranArrayDimension opposite: #parentVariableDeclarator'
+		'#dimensions => FMMany type: #FASTFortranArrayRange opposite: #parentVariableDeclarator'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
