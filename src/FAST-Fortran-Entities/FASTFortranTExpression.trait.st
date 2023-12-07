@@ -127,7 +127,7 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 
 { #category : #accessing }
 FASTFortranTExpression >> parentArrayDimensionDeclarator [
-	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayDimension opposite: #upperBound"
+	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayRange opposite: #upperBound"
 
 	<generated>
 	<FMComment: 'Parent array dimension declarator'>

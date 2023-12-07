@@ -52,7 +52,7 @@ FASTFortranTEntityCreator >> newAmpersand [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArrayDimension [
+FASTFortranTEntityCreator >> newArrayRange [
 
 	<generated>
 	^ self add: FASTFortranArrayRange new

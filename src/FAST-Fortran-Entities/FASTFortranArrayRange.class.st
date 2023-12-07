@@ -1,5 +1,5 @@
 "
-I represent an array lower/upper bounds declaration
+I represent an array lower/upper bounds
 "
 Class {
 	#name : #FASTFortranArrayRange,
@@ -15,7 +15,7 @@ Class {
 { #category : #meta }
 FASTFortranArrayRange class >> annotation [
 
-	<FMClass: #ArrayDimension super: #FASTFortranEntity>
+	<FMClass: #ArrayRange super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

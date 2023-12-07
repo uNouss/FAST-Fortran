@@ -29,7 +29,7 @@ FASTFortranVariableDeclarator >> addDimension: anObject [
 
 { #category : #accessing }
 FASTFortranVariableDeclarator >> dimensions [
-	"Relation named: #dimensions type: #FASTFortranArrayDimension opposite: #parentVariableDeclarator"
+	"Relation named: #dimensions type: #FASTFortranArrayRange opposite: #parentVariableDeclarator"
 
 	<generated>
 	<FMComment: 'Possible dimensions in case this is an array declaration'>

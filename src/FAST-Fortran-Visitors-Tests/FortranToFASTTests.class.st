@@ -337,6 +337,25 @@ FortranToFASTTests >> testAssignementStringLiteral [
 
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testAssignementToArrayRange [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+      NOMARC(1:1) = ''c''
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:23)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:21)-(2:23)","tag":"value","value":{"contents":"c","tag":"string"}},"span":"(2:7)-(2:23)","tag":"assign_expression","target":{"anno":[],"expression":{"anno":[],"span":"(2:7)-(2:12)","tag":"value","value":{"contents":"nomarc","tag":"variable"}},"indices":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:14)-(2:16)","stride":null,"tag":"range","upper":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"contents":["1",null],"tag":"integer"}}}],"span":"(2:14)-(2:16)"},"span":"(2:7)-(2:17)","tag":"subscript"}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 36.
+
+	self assert: stmt variable class equals: FASTFortranArrayRange.
+]
+
 { #category : #'tests-expression' }
 FortranToFASTTests >> testBinaryExpressionDivision [
 	
