@@ -27,7 +27,7 @@ FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollec
 	declarator := self variableDeclarator: variable.
 	declarator dimensions:
 		(aCollection collect: [ :dim |
-			FASTFortranArrayDimension new
+			FASTFortranArrayRange new
 				lowerBound: (dim first ifNotNil: [ self integerLiteral: dim first ]) ;
 				upperBound: (dim second ifNotNil: [ self integerLiteral: dim second ])
 		]).
@@ -332,7 +332,7 @@ FASTFortranExporterVisitorTest >> subroutine: aName [
 		yourself
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testArrayDeclaration [
 	| stmt |
 	stmt := self arrayDeclaration: 'v' dimensions: #( #('1' '10') ).
@@ -369,7 +369,23 @@ FASTFortranExporterVisitorTest >> testArrayDeclarationMultipleDimensions [
 '
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testArrayRange [
+	| stmt |
+	stmt := FASTFortranArrayVariable new
+		name: 'arr' ;
+		indices: { FASTFortranArrayRange new
+			lowerBound: (self integerLiteral: '1') ;
+			upperBound: (self scalarVariable: 'max') } ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'arr(1:max)'
+]
+
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testArrayVariable [
 	| stmt |
 	stmt := FASTFortranArrayVariable new
@@ -437,7 +453,7 @@ FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 '
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testBinaryExpression [
 	| expr |
 	expr := FASTFortranBinaryExpression new
@@ -450,7 +466,7 @@ FASTFortranExporterVisitorTest >> testBinaryExpression [
 		equals: 'a + 5'
 ]
 
-{ #category : #'tests - statements' }
+{ #category : #tests }
 FASTFortranExporterVisitorTest >> testBinaryExpressionNe [
 	| expr |
 	expr := FASTFortranBinaryExpression new

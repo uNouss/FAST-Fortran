@@ -179,7 +179,7 @@ FASTFortranExporterVisitor >> visitFASTFortranAbstractStatement: aFASTFortranAbs
 ]
 
 { #category : #visiting }
-FASTFortranExporterVisitor >> visitFASTFortranArrayDimension: aFASTFortranArrayDimension [
+FASTFortranExporterVisitor >> visitFASTFortranArrayRange: aFASTFortranArrayDimension [
 
 	(aFASTFortranArrayDimension lowerBound)
 		ifNotNil: [ :lb |

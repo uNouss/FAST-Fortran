@@ -1,9 +1,11 @@
 "
-I represent an array lower/upper bounds declaration
+I represent an array lower/upper bounds
 "
 Class {
-	#name : #FASTFortranArrayDimension,
+	#name : #FASTFortranArrayRange,
 	#superclass : #FASTFortranEntity,
+	#traits : 'FASTFortranTExpression',
+	#classTraits : 'FASTFortranTExpression classTrait',
 	#instVars : [
 		'#upperBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator',
 		'#lowerBound => FMOne type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator',
@@ -13,16 +15,16 @@ Class {
 }
 
 { #category : #meta }
-FASTFortranArrayDimension class >> annotation [
+FASTFortranArrayRange class >> annotation [
 
-	<FMClass: #ArrayDimension super: #FASTFortranEntity>
+	<FMClass: #ArrayRange super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> lowerBound [
+FASTFortranArrayRange >> lowerBound [
 	"Relation named: #lowerBound type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator"
 
 	<generated>
@@ -31,21 +33,21 @@ FASTFortranArrayDimension >> lowerBound [
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> lowerBound: anObject [
+FASTFortranArrayRange >> lowerBound: anObject [
 
 	<generated>
 	lowerBound := anObject
 ]
 
 { #category : #navigation }
-FASTFortranArrayDimension >> lowerBoundGroup [
+FASTFortranArrayRange >> lowerBoundGroup [
 	<generated>
 	<navigation: 'LowerBound'>
 	^ MooseSpecializedGroup with: self lowerBound
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> parentVariableDeclarator [
+FASTFortranArrayRange >> parentVariableDeclarator [
 	"Relation named: #parentVariableDeclarator type: #FASTFortranVariableDeclarator opposite: #dimensions"
 
 	<generated>
@@ -55,21 +57,21 @@ FASTFortranArrayDimension >> parentVariableDeclarator [
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> parentVariableDeclarator: anObject [
+FASTFortranArrayRange >> parentVariableDeclarator: anObject [
 
 	<generated>
 	parentVariableDeclarator := anObject
 ]
 
 { #category : #navigation }
-FASTFortranArrayDimension >> parentVariableDeclaratorGroup [
+FASTFortranArrayRange >> parentVariableDeclaratorGroup [
 	<generated>
 	<navigation: 'ParentVariableDeclarator'>
 	^ MooseSpecializedGroup with: self parentVariableDeclarator
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> upperBound [
+FASTFortranArrayRange >> upperBound [
 	"Relation named: #upperBound type: #FASTFortranTExpression opposite: #parentArrayDimensionDeclarator"
 
 	<generated>
@@ -78,14 +80,14 @@ FASTFortranArrayDimension >> upperBound [
 ]
 
 { #category : #accessing }
-FASTFortranArrayDimension >> upperBound: anObject [
+FASTFortranArrayRange >> upperBound: anObject [
 
 	<generated>
 	upperBound := anObject
 ]
 
 { #category : #navigation }
-FASTFortranArrayDimension >> upperBoundGroup [
+FASTFortranArrayRange >> upperBoundGroup [
 	<generated>
 	<navigation: 'UpperBound'>
 	^ MooseSpecializedGroup with: self upperBound

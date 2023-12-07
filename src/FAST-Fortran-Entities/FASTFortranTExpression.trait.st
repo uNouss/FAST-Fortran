@@ -8,7 +8,7 @@ Trait {
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
 		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
-		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimension opposite: #upperBound',
+		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayRange opposite: #upperBound',
 		'#parentArrayExpression => FMOne type: #FASTFortranArrayVariable opposite: #indices',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
@@ -127,7 +127,7 @@ FASTFortranTExpression >> expressionStatementOwnerGroup [
 
 { #category : #accessing }
 FASTFortranTExpression >> parentArrayDimensionDeclarator [
-	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayDimension opposite: #upperBound"
+	"Relation named: #parentArrayDimensionDeclarator type: #FASTFortranArrayRange opposite: #upperBound"
 
 	<generated>
 	<FMComment: 'Parent array dimension declarator'>

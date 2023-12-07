@@ -100,7 +100,6 @@ Class {
 		'tWithDeclarators',
 		'tVariableDeclarator',
 		'variableDeclarator',
-		'arrayDimension',
 		'commonGroup',
 		'tWithLabelReferences',
 		'equivalenceGroup',
@@ -109,7 +108,8 @@ Class {
 		'tWithFormat',
 		'tFormat',
 		'tIOParameter',
-		'tWithIOParameters'
+		'tWithIOParameters',
+		'arrayRange'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -168,10 +168,10 @@ FASTFortranGenerator >> defineData [
 		             comment:
 		             'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
 
-	arrayDimension := builder
-		                            newClassNamed: #ArrayDimension
+	arrayRange := builder
+		                            newClassNamed: #ArrayRange
 		                            comment:
-		                            'I represent an array lower/upper bounds declaration'.
+		                            'I represent an array lower/upper bounds'.
 
 	arrayVariable := builder
 		                            newClassNamed: #ArrayVariable
@@ -491,6 +491,7 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"DATA"
 	abstractExpression --|> tExpression.
+	arrayRange --|> tExpression.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
 	assignmentExpression --|> tIOParameter.
@@ -607,16 +608,16 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
-	((arrayDimension property: #upperBound) comment: 'An upper bound of an array dimension')
+	((arrayRange property: #upperBound) comment: 'An upper bound of an array dimension')
 	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
 
-	((arrayDimension property: #lowerBound) comment: 'A lower bound of an array dimension')
+	((arrayRange property: #lowerBound) comment: 'A lower bound of an array dimension')
 	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
 			 'Parent array dimension declarator').
 
 	((variableDeclarator property: #dimensions) comment: 'Possible dimensions in case this is an array declaration')
-	<>-* ((arrayDimension property: #parentVariableDeclarator)
+	<>-* ((arrayRange property: #parentVariableDeclarator)
 			comment: 'The variable declarator I am part of').
 
 	((arrayVariable property: #indices) comment: 'Indices used in the array access')
