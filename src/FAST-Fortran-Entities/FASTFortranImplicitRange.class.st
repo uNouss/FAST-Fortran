@@ -4,11 +4,10 @@ I represent a range of characters in an Implicit statement
 Class {
 	#name : #FASTFortranImplicitRange,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTImplicitCharacter',
-	#classTraits : 'FASTFortranTImplicitCharacter classTrait',
 	#instVars : [
 		'#from => FMProperty',
-		'#to => FMProperty'
+		'#to => FMProperty',
+		'#parentImplicitRule => FMOne type: #FASTFortranImplicitTypingRule opposite: #ranges'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -35,6 +34,29 @@ FASTFortranImplicitRange >> from [
 FASTFortranImplicitRange >> from: anObject [
 	<generated>
 	from := anObject
+]
+
+{ #category : #accessing }
+FASTFortranImplicitRange >> parentImplicitRule [
+	"Relation named: #parentImplicitRule type: #FASTFortranImplicitTypingRule opposite: #ranges"
+
+	<generated>
+	<container>
+	^ parentImplicitRule
+]
+
+{ #category : #accessing }
+FASTFortranImplicitRange >> parentImplicitRule: anObject [
+
+	<generated>
+	parentImplicitRule := anObject
+]
+
+{ #category : #navigation }
+FASTFortranImplicitRange >> parentImplicitRuleGroup [
+	<generated>
+	<navigation: 'ParentImplicitRule'>
+	^ MooseSpecializedGroup with: self parentImplicitRule
 ]
 
 { #category : #accessing }

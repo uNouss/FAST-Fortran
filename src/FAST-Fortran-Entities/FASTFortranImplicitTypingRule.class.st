@@ -5,9 +5,9 @@ Class {
 	#name : #FASTFortranImplicitTypingRule,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#characters => FMMany type: #FASTFortranTImplicitCharacter opposite: #parentImplicitRule',
 		'#parentImplicitStatement => FMOne type: #FASTFortranImplicitStatement opposite: #typingRules',
-		'#type => FMOne type: #FASTFortranType opposite: #parentImplicitRule'
+		'#type => FMOne type: #FASTFortranType opposite: #parentImplicitRule',
+		'#ranges => FMMany type: #FASTFortranImplicitRange opposite: #parentImplicitRule'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -22,32 +22,9 @@ FASTFortranImplicitTypingRule class >> annotation [
 ]
 
 { #category : #adding }
-FASTFortranImplicitTypingRule >> addCharacter: anObject [
+FASTFortranImplicitTypingRule >> addRange: anObject [
 	<generated>
-	^ self characters add: anObject
-]
-
-{ #category : #accessing }
-FASTFortranImplicitTypingRule >> characters [
-	"Relation named: #characters type: #FASTFortranTImplicitCharacter opposite: #parentImplicitRule"
-
-	<generated>
-	<derived>
-	^ characters
-]
-
-{ #category : #accessing }
-FASTFortranImplicitTypingRule >> characters: anObject [
-
-	<generated>
-	characters value: anObject
-]
-
-{ #category : #navigation }
-FASTFortranImplicitTypingRule >> charactersGroup [
-	<generated>
-	<navigation: 'Characters'>
-	^ MooseSpecializedGroup withAll: self characters asSet
+	^ self ranges add: anObject
 ]
 
 { #category : #accessing }
@@ -71,6 +48,29 @@ FASTFortranImplicitTypingRule >> parentImplicitStatementGroup [
 	<generated>
 	<navigation: 'ParentImplicitStatement'>
 	^ MooseSpecializedGroup with: self parentImplicitStatement
+]
+
+{ #category : #accessing }
+FASTFortranImplicitTypingRule >> ranges [
+	"Relation named: #ranges type: #FASTFortranImplicitRange opposite: #parentImplicitRule"
+
+	<generated>
+	<derived>
+	^ ranges
+]
+
+{ #category : #accessing }
+FASTFortranImplicitTypingRule >> ranges: anObject [
+
+	<generated>
+	ranges value: anObject
+]
+
+{ #category : #navigation }
+FASTFortranImplicitTypingRule >> rangesGroup [
+	<generated>
+	<navigation: 'Ranges'>
+	^ MooseSpecializedGroup withAll: self ranges asSet
 ]
 
 { #category : #accessing }
