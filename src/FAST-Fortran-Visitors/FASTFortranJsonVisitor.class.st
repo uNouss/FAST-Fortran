@@ -723,7 +723,8 @@ FASTFortranJsonVisitor >> visitIf_logicalStatement: anIfNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
-	"If 'items' is nil, correspond to the statement 'implicit none'"
+	"#(span items)
+	 If 'items' is nil, correspond to the statement 'implicit none'"
 
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
