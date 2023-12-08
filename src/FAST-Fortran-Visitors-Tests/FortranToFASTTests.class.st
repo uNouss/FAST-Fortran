@@ -1748,9 +1748,9 @@ FortranToFASTTests >> testImplicitStatement [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 50.
 
-	self assert: stmt implicitTypingRules size equals: 1.
+	self assert: stmt typingRules size equals: 1.
 
-	rule := stmt implicitTypingRules anyOne.
+	rule := stmt typingRules anyOne.
 	self assert: rule type class equals: FASTFortranLogicalType.
 	
 	self assert: rule characters size equals: 1.
@@ -1768,18 +1768,18 @@ FortranToFASTTests >> testImplicitStatementCharacterSize [
        IMPLICIT CHARACTER*4 (C,S) 
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:33)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"c","span":"(2:30)-(2:30)","to":null},{"anno":[],"from":"s","span":"(2:32)-(2:32)","to":null}],"span":"(2:30)-(2:32)"},"span":"(2:17)-(2:33)","type":{"anno":[],"base_type":"character","selector":{"anno":[],"kind":null,"length":{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"contents":["4",null],"tag":"integer"}},"span":"(2:26)-(2:27)"},"span":"(2:17)-(2:27)"}}],"span":"(2:17)-(2:33)"},"span":"(2:8)-(2:33)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
 
 	self assert: stmt class equals: FASTFortranImplicitStatement.
 	self assert: stmt startPos equals: 29.
-	self assert: stmt endPos equals: 50.
+	self assert: stmt endPos equals: 54.
 
-	self assert: stmt implicitTypingRules size equals: 1.
+	self assert: stmt typingRules size equals: 1.
 
-	rule := stmt implicitTypingRules anyOne.
+	rule := stmt typingRules anyOne.
 	self assert: rule type class equals: FASTFortranCharacterType.
 	self assert: rule type size class equals: FASTFortranIntegerLiteral.
 	self assert: rule type size primitiveValue equals: '4'.
@@ -1795,18 +1795,18 @@ FortranToFASTTests >> testImplicitStatementNoRange [
        IMPLICIT COMPLEX (U,V,W)
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:31)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"u","span":"(2:26)-(2:26)","to":null},{"anno":[],"from":"v","span":"(2:28)-(2:28)","to":null},{"anno":[],"from":"w","span":"(2:30)-(2:30)","to":null}],"span":"(2:26)-(2:30)"},"span":"(2:17)-(2:31)","type":{"anno":[],"base_type":"complex","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:31)"},"span":"(2:8)-(2:31)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
 
 	self assert: stmt class equals: FASTFortranImplicitStatement.
 	self assert: stmt startPos equals: 29.
-	self assert: stmt endPos equals: 50.
+	self assert: stmt endPos equals: 52.
 
-	self assert: stmt implicitTypingRules size equals: 1.
+	self assert: stmt typingRules size equals: 1.
 
-	rule := stmt implicitTypingRules anyOne.
+	rule := stmt typingRules anyOne.
 	self assert: rule type class equals: FASTFortranComplexType.
 	
 	self assert: rule characters size equals: 3.
@@ -1824,19 +1824,19 @@ FortranToFASTTests >> testImplicitStatementSeveralItems [
        IMPLICIT LOGICAL (l-N), INTEGER (C,S) 
       END
 '.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:44)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"l","span":"(2:26)-(2:28)","to":"n"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}},{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"c","span":"(2:41)-(2:41)","to":null},{"anno":[],"from":"s","span":"(2:43)-(2:43)","to":null}],"span":"(2:41)-(2:43)"},"span":"(2:32)-(2:44)","type":{"anno":[],"base_type":"integer","selector":null,"span":"(2:32)-(2:38)"}}],"span":"(2:17)-(2:44)"},"span":"(2:8)-(2:44)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
 	result := self visitJsonCode.
 
 	stmt := result first statementBlock statements first.
 
 	self assert: stmt class equals: FASTFortranImplicitStatement.
 	self assert: stmt startPos equals: 29.
-	self assert: stmt endPos equals: 50.
+	self assert: stmt endPos equals: 65.
 
-	self assert: stmt implicitTypingRules size equals: 2.
+	self assert: stmt typingRules size equals: 2.
 
-	self assert: stmt implicitTypingRules first class equals: FASTFortranLogicalType.
-	self assert: stmt implicitTypingRules second class equals: FASTFortranIntegerType
+	self assert: stmt typingRules first class equals: FASTFortranLogicalType.
+	self assert: stmt typingRules second class equals: FASTFortranIntegerType
 
 ]
 
