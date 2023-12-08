@@ -342,10 +342,27 @@ FASTFortranVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalS
 	self visitFASTFortranTLabelledStatement: aFASTFortranIfLogicalStatement.
 ]
 
+{ #category : #visiting }
+FASTFortranVisitor >> visitFASTFortranImplicitRange: aFASTFortranImplicitRange [
+
+	aFASTFortranImplicitRange from accept: self.
+	aFASTFortranImplicitRange to
+		ifNotNil: [ :to | to accept: self]
+]
+
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 	<generated>
 	self visitFASTFortranTLabelledStatement: aFASTFortranImplicitStatement.
+]
+
+{ #category : #visiting }
+FASTFortranVisitor >> visitFASTFortranImplicitTypingRule: aFortranImplicitTypingRule [
+
+	aFortranImplicitTypingRule type accept: self.
+	aFortranImplicitTypingRule ranges do: [ :range |
+		range accept: self
+	]
 ]
 
 { #category : #'visiting - statements' }

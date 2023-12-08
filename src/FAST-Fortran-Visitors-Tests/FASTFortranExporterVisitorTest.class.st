@@ -200,10 +200,20 @@ FASTFortranExporterVisitorTest >> ifBlock: condition then: thenBlock else: elseB
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> implicitRange: from to: to [
+
+	^FASTFortranImplicitRange new
+		from: from ;
+		to: to ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> implicitStatement [
 	^FASTFortranImplicitStatement new
 		startPos: 1 ;
 		endPos: 13 ;
+		typingRules: #() ;
 		yourself
 
 ]
@@ -1019,6 +1029,25 @@ FASTFortranExporterVisitorTest >> testImplicitStatement [
 		assertExport: stmt
 		equals: 
 '      implicit none
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testImplicitStatementSeveralRules [
+	| stmt |
+	stmt := self implicitStatement.
+	stmt addTypingRule: (FASTFortranImplicitTypingRule new
+		type: (self logicalType: nil) ;
+		ranges: { self implicitRange: 'l' to: 'n'}).
+	stmt addTypingRule: (FASTFortranImplicitTypingRule new
+		type: (self integerType: nil) ;
+		ranges: { self implicitRange: 'c' to: nil . self implicitRange: 's' to: nil }).
+
+
+	self
+		assertExport: stmt
+		equals: 
+'      implicit logical (l-n), integer (c,s)
 '
 ]
 

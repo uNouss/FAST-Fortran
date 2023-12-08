@@ -1,5 +1,5 @@
 "
-I represent a format description (eg. in Format or Print statement
+I represent a format description (eg. in Format or Print statement)
 "
 Trait {
 	#name : #FASTFortranTFormat,

@@ -277,6 +277,14 @@ nlist: List of variable names, array names, and array declarators  "
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitComplexBaseType: aString [
+
+	^FASTFortranComplexType new
+		mooseModel: model ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitConditions: aConditionList [
 	"a list of {condition . thenPart}, each element being an elseif of the preceding element"
 
@@ -723,13 +731,29 @@ FASTFortranJsonVisitor >> visitIf_logicalStatement: anIfNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
-	"If 'items' is nil, correspond to the statement 'implicit none'"
+	"#(span items)
+	 If 'items' is nil, correspond to the statement 'implicit none'"
 
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
-	^ data second
-		  ifNil: [ self newEntity: FASTFortranImplicitStatement atPosition: data first ]
-		  ifNotNil: [ self notYetImplemented ]
+	^(self newEntity: FASTFortranImplicitStatement atPosition: data first)
+		typingRules: (data second
+		  ifNil: [ #() ]
+		  ifNotNil: [:rules | rules]) ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitImplicitStatementRange: anImplicitStatementRangeNode [
+	"#(span from to)"
+
+	| data |
+	data := super visitImplicitStatementRange: anImplicitStatementRangeNode.
+
+	^(self newEntity: FASTFortranImplicitRange atPosition: data first)
+		from: data second ;
+		to: data third ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -747,6 +771,24 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 		mooseModel: model ;
 		primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
 		yourself
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitItems: anImplicitItemsNode [
+	"#(span type elements)"
+
+	| data |
+	data := super visitItems: anImplicitItemsNode.
+
+	^data
+		ifNotNil: [
+			data second collect: [ :ruleData |
+				(self newEntity: FASTFortranImplicitTypingRule atPosition: ruleData first)
+					type: ruleData second ;
+					ranges: ruleData third ;
+					yourself
+			]
+	]
 ]
 
 { #category : #'visiting statement' }

@@ -395,10 +395,24 @@ FASTFortranTEntityCreator >> newIfLogicalStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImplicitRange [
+
+	<generated>
+	^ self add: FASTFortranImplicitRange new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newImplicitStatement [
 
 	<generated>
 	^ self add: FASTFortranImplicitStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImplicitTypingRule [
+
+	<generated>
+	^ self add: FASTFortranImplicitTypingRule new
 ]
 
 { #category : #'entity creation' }

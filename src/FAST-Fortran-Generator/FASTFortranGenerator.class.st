@@ -109,7 +109,9 @@ Class {
 		'tFormat',
 		'tIOParameter',
 		'tWithIOParameters',
-		'arrayRange'
+		'arrayRange',
+		'implicitTypingRule',
+		'implicitRange'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -492,6 +494,7 @@ FASTFortranGenerator >> defineHierarchy [
 	"DATA"
 	abstractExpression --|> tExpression.
 	arrayRange --|> tExpression.
+	arrayVariable --|> variable.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
 	assignmentExpression --|> tIOParameter.
@@ -500,14 +503,13 @@ FASTFortranGenerator >> defineHierarchy [
 	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
 	functionCall --|> tWithArguments.
+	loopControlExpression --|> abstractExpression.
+	scalarVariable --|> variable.
+	scalarVariable --|> tFormat.
+	substring --|> abstractExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
-	scalarVariable --|> variable.
-	scalarVariable --|> tFormat.
-	arrayVariable --|> variable.
-	loopControlExpression --|> abstractExpression.
-	substring --|> abstractExpression.
 	variableDeclarator --|> tVariableDeclarator.
 	
 	binaryExpression --|> abstractExpression.
@@ -575,6 +577,12 @@ FASTFortranGenerator >> defineProperties [
 
 	(functionStatement property: #name type: #String) comment:
 		'Name of a function statement'.
+
+	(implicitRange property: #from type: #String) comment:
+		'Start of character range for implicit rule'.
+
+	(implicitRange property: #to type: #String) comment:
+		'End of character range for implicit rule'.
 
 	(labelReference property: #label type: #String) comment: 'The value of the label. The value is an integer literal, stored in a String'.
 
@@ -704,6 +712,15 @@ FASTFortranGenerator >> defineRelations [
 
 	(ifArithmeticStatement property: #greaterLabel)
 	<>- (labelReference property: #parentIfArithmeticMoreBranch).
+
+	(implicitStatement property: #typingRules)
+	<>-* (implicitTypingRule property: #parentImplicitStatement).
+
+	implicitTypingRule
+	<>- (type property: #parentImplicitRule).
+
+	(implicitTypingRule property: #ranges)
+	<>-* (implicitRange property: #parentImplicitRule).
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
@@ -872,6 +889,17 @@ FASTFortranGenerator >> defineStatements [
 		                     newClassNamed: #ImplicitStatement
 		                     comment:
 		                     'I represent Fortran Implicit statement'.
+
+	implicitTypingRule := builder
+		                     newClassNamed: #ImplicitTypingRule
+		                     comment:
+		                     'I represent a rule (ie. Type+letter range) in an Implicit statement'.
+
+	implicitRange := builder
+		                     newClassNamed: #ImplicitRange
+		                     comment:
+		                     'I represent a range of characters in an Implicit statement'.
+
 	includeStatement := builder
 		                    newClassNamed: #IncludeStatement
 		                    comment: 'I represent Fortran Include statement'.
@@ -964,7 +992,7 @@ FASTFortranGenerator >> defineTraits [
 
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
-	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement'.
+	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement)'.
 
 	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
 
