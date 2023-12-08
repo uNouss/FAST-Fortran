@@ -111,8 +111,7 @@ Class {
 		'tWithIOParameters',
 		'arrayRange',
 		'implicitTypingRule',
-		'implicitRange',
-		'tImplicitCharacter'
+		'implicitRange'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
