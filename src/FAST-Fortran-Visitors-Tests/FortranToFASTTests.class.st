@@ -1732,6 +1732,86 @@ FortranToFASTTests >> testImplicitNoneStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testImplicitStatement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+       IMPLICIT LOGICAL (A-Z)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+
+	self assert: stmt class equals: FASTFortranImplicitStatement.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 50.
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testImplicitStatementCharacterSize [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+       IMPLICIT CHARACTER*4 (C,S) 
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+
+	self assert: stmt class equals: FASTFortranImplicitStatement.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 50.
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testImplicitStatementNoRange [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+       IMPLICIT COMPLEX (U,V,W)
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+
+	self assert: stmt class equals: FASTFortranImplicitStatement.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 50.
+
+
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testImplicitStatementSeveralItems [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+       IMPLICIT LOGICAL (l-N), INTEGER (C,S) 
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:8)-(2:29)","statement":{"anno":[],"items":{"anno":[],"list":[{"anno":[],"elements":{"anno":[],"list":[{"anno":[],"from":"a","span":"(2:26)-(2:28)","to":"z"}],"span":"(2:26)-(2:28)"},"span":"(2:17)-(2:29)","type":{"anno":[],"base_type":"logical","selector":null,"span":"(2:17)-(2:23)"}}],"span":"(2:17)-(2:29)"},"span":"(2:8)-(2:29)","tag":"implicit"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+
+	self assert: stmt class equals: FASTFortranImplicitStatement.
+	self assert: stmt startPos equals: 29.
+	self assert: stmt endPos equals: 50.
+
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testLogicalIfEmpty [
 
 	| result conditional |
