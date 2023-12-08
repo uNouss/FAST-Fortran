@@ -710,13 +710,13 @@ FASTFortranGenerator >> defineRelations [
 	(ifArithmeticStatement property: #greaterLabel)
 	<>- (labelReference property: #parentIfArithmeticMoreBranch).
 
-	implicitStatement
+	(implicitStatement property: #typingRules)
 	<>-* (implicitTypingRule property: #parentImplicitStatement).
 
 	implicitTypingRule
 	<>- (type property: #parentImplicitRule).
 
-	implicitTypingRule
+	(implicitTypingRule property: #characters)
 	<>- (tImplicitCharacter property: #parentImplicitRule).
 
 	((loopControlExpression property: #init) comment:
