@@ -1729,6 +1729,8 @@ FortranToFASTTests >> testImplicitNoneStatement [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 41.
 
+	self assert: stmt typingRules isEmpty
+
 ]
 
 { #category : #'tests-statement' }
@@ -1833,12 +1835,12 @@ FortranToFASTTests >> testImplicitStatementSeveralItems [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 65.
 
-	self assert: stmt ranges size equals: 2.
+	self assert: stmt typingRules size equals: 2.
 
-	self assert: stmt ranges first class equals: FASTFortranImplicitTypingRule.
-	self assert: stmt ranges first type class equals: FASTFortranLogicalType.
-	self assert: stmt ranges second class equals: FASTFortranImplicitTypingRule.
-	self assert: stmt ranges second type class equals: FASTFortranIntegerType.
+	self assert: stmt typingRules first class equals: FASTFortranImplicitTypingRule.
+	self assert: stmt typingRules first type class equals: FASTFortranLogicalType.
+	self assert: stmt typingRules second class equals: FASTFortranImplicitTypingRule.
+	self assert: stmt typingRules second type class equals: FASTFortranIntegerType.
 
 ]
 

@@ -738,7 +738,7 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 	data := super visitImplicitStatement: anImplicitStatementNode.
 	^(self newEntity: FASTFortranImplicitStatement atPosition: data first)
 		typingRules: (data second
-		  ifNil: [ nil ]
+		  ifNil: [ #() ]
 		  ifNotNil: [:rules | rules]) ;
 		yourself
 ]
@@ -780,11 +780,14 @@ FASTFortranJsonVisitor >> visitItems: anImplicitItemsNode [
 	| data |
 	data := super visitItems: anImplicitItemsNode.
 
-	^data second collect: [ :ruleData |
-		(self newEntity: FASTFortranImplicitTypingRule atPosition: ruleData first)
-			type: ruleData second ;
-			ranges: ruleData third ;
-			yourself
+	^data
+		ifNotNil: [
+			data second collect: [ :ruleData |
+				(self newEntity: FASTFortranImplicitTypingRule atPosition: ruleData first)
+					type: ruleData second ;
+					ranges: ruleData third ;
+					yourself
+			]
 	]
 ]
 
