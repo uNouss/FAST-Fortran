@@ -734,6 +734,19 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitImplicitStatementRange: anImplicitStatementRangeNode [
+	"#(span from to)"
+
+	| data |
+	data := super visitImplicitStatementRange: anImplicitStatementRangeNode.
+
+	^(self newEntity: FASTFortranImplicitRange atPosition: data first)
+		from: data second ;
+		to: data third ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 
 	^FASTFortranIntegerType new
@@ -747,6 +760,19 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 	^FASTFortranIntegerLiteral new
 		mooseModel: model ;
 		primitiveValue: (super visitIntegerLiteralValue: anIntegerLiteralValueNode);
+		yourself
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitItems: anImplicitItemsNode [
+	"#(span type elements)"
+
+	| data |
+	data := super visitItems: anImplicitItemsNode.
+
+	^(self newEntity: FASTFortranImplicitTypingRule atPosition: data first)
+		type: data second ;
+		characters: data third ;
 		yourself
 ]
 
