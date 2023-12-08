@@ -7,6 +7,7 @@ Class {
 	#instVars : [
 		'#parentDeclaration => FMOne type: #FASTFortranVariableDeclarationStatement opposite: #type',
 		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType',
+		'#parentImplicitRule => FMOne type: #FASTFortranImplicitTypingRule opposite: #type',
 		'#size => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -50,6 +51,30 @@ FASTFortranType >> parentDeclarationGroup [
 	<generated>
 	<navigation: 'ParentDeclaration'>
 	^ MooseSpecializedGroup with: self parentDeclaration
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentImplicitRule [
+	"Relation named: #parentImplicitRule type: #FASTFortranImplicitTypingRule opposite: #type"
+
+	<generated>
+	<container>
+	<derived>
+	^ parentImplicitRule
+]
+
+{ #category : #accessing }
+FASTFortranType >> parentImplicitRule: anObject [
+
+	<generated>
+	parentImplicitRule := anObject
+]
+
+{ #category : #navigation }
+FASTFortranType >> parentImplicitRuleGroup [
+	<generated>
+	<navigation: 'ParentImplicitRule'>
+	^ MooseSpecializedGroup with: self parentImplicitRule
 ]
 
 { #category : #accessing }
