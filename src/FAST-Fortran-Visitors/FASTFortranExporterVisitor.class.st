@@ -520,13 +520,40 @@ FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIf
 	indent := tmp
 ]
 
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranImplicitRange: aFASTFortranImplicitRange [
+
+	self << aFASTFortranImplicitRange from.
+	aFASTFortranImplicitRange to
+		ifNotNil: [ :to |
+			self
+				<< '-' ;
+				<< to
+		]
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 
 	self
 		visitFASTFortranAbstractStatement: aFASTFortranImplicitStatement ;
-		<< 'implicit none' ;
-		newLine
+		<< 'implicit'.
+	aFASTFortranImplicitStatement typingRules
+		ifEmpty: [ self << ' none' ]
+		ifNotEmpty: [
+			self visitNodeListSeparatedByCommas: aFASTFortranImplicitStatement typingRules
+		].
+	self newLine
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranImplicitTypingRule: aFortranImplicitTypingRule [
+
+	self << ' '.
+	aFortranImplicitTypingRule type accept: self.
+	self << ' ('.
+	self visitNodeListSeparatedByCommas: aFortranImplicitTypingRule ranges.
+	self << ')'
 ]
 
 { #category : #'visiting - expressions' }

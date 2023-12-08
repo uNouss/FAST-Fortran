@@ -360,8 +360,8 @@ FASTFortranVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitSta
 FASTFortranVisitor >> visitFASTFortranImplicitTypingRule: aFortranImplicitTypingRule [
 
 	aFortranImplicitTypingRule type accept: self.
-	aFortranImplicitTypingRule implicitCharacter do: [ :implicitChar |
-		implicitChar accept: self
+	aFortranImplicitTypingRule ranges do: [ :range |
+		range accept: self
 	]
 ]
 
