@@ -4,7 +4,7 @@ I represent a character or a character range in an IMPLICIT statement
 Trait {
 	#name : #FASTFortranTImplicitCharacter,
 	#instVars : [
-		'#parentImplicitRule => FMOne type: #FASTFortranImplicitTypingRule opposite: #implicitCharacter'
+		'#parentImplicitRule => FMOne type: #FASTFortranImplicitTypingRule opposite: #characters'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
@@ -20,7 +20,7 @@ FASTFortranTImplicitCharacter classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTImplicitCharacter >> parentImplicitRule [
-	"Relation named: #parentImplicitRule type: #FASTFortranImplicitTypingRule opposite: #implicitCharacter"
+	"Relation named: #parentImplicitRule type: #FASTFortranImplicitTypingRule opposite: #characters"
 
 	<generated>
 	<container>

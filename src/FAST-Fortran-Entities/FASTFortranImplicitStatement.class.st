@@ -5,7 +5,7 @@ Class {
 	#name : #FASTFortranImplicitStatement,
 	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
-		'#implicitTypingRule => FMMany type: #FASTFortranImplicitTypingRule opposite: #parentImplicitStatement'
+		'#typingRules => FMMany type: #FASTFortranImplicitTypingRule opposite: #parentImplicitStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -20,30 +20,30 @@ FASTFortranImplicitStatement class >> annotation [
 ]
 
 { #category : #adding }
-FASTFortranImplicitStatement >> addImplicitTypingRule: anObject [
+FASTFortranImplicitStatement >> addTypingRule: anObject [
 	<generated>
-	^ self implicitTypingRule add: anObject
+	^ self typingRules add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranImplicitStatement >> implicitTypingRule [
-	"Relation named: #implicitTypingRule type: #FASTFortranImplicitTypingRule opposite: #parentImplicitStatement"
+FASTFortranImplicitStatement >> typingRules [
+	"Relation named: #typingRules type: #FASTFortranImplicitTypingRule opposite: #parentImplicitStatement"
 
 	<generated>
 	<derived>
-	^ implicitTypingRule
+	^ typingRules
 ]
 
 { #category : #accessing }
-FASTFortranImplicitStatement >> implicitTypingRule: anObject [
+FASTFortranImplicitStatement >> typingRules: anObject [
 
 	<generated>
-	implicitTypingRule value: anObject
+	typingRules value: anObject
 ]
 
 { #category : #navigation }
-FASTFortranImplicitStatement >> implicitTypingRuleGroup [
+FASTFortranImplicitStatement >> typingRulesGroup [
 	<generated>
-	<navigation: 'ImplicitTypingRule'>
-	^ MooseSpecializedGroup withAll: self implicitTypingRule asSet
+	<navigation: 'TypingRules'>
+	^ MooseSpecializedGroup withAll: self typingRules asSet
 ]
