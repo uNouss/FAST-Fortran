@@ -277,6 +277,14 @@ nlist: List of variable names, array names, and array declarators  "
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitComplexBaseType: aString [
+
+	^FASTFortranComplexType new
+		mooseModel: model ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitConditions: aConditionList [
 	"a list of {condition . thenPart}, each element being an elseif of the preceding element"
 
@@ -728,9 +736,11 @@ FASTFortranJsonVisitor >> visitImplicitStatement: anImplicitStatementNode [
 
 	| data |
 	data := super visitImplicitStatement: anImplicitStatementNode.
-	^ data second
-		  ifNil: [ self newEntity: FASTFortranImplicitStatement atPosition: data first ]
-		  ifNotNil: [ self notYetImplemented ]
+	^(self newEntity: FASTFortranImplicitStatement atPosition: data first)
+		typingRules: (data second
+		  ifNil: [ nil ]
+		  ifNotNil: [:rules | rules]) ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -770,10 +780,12 @@ FASTFortranJsonVisitor >> visitItems: anImplicitItemsNode [
 	| data |
 	data := super visitItems: anImplicitItemsNode.
 
-	^(self newEntity: FASTFortranImplicitTypingRule atPosition: data first)
-		type: data second ;
-		characters: data third ;
-		yourself
+	^data second collect: [ :ruleData |
+		(self newEntity: FASTFortranImplicitTypingRule atPosition: ruleData first)
+			type: ruleData second ;
+			ranges: ruleData third ;
+			yourself
+	]
 ]
 
 { #category : #'visiting statement' }
