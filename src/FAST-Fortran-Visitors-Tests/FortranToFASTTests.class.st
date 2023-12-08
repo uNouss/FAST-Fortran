@@ -1734,7 +1734,7 @@ FortranToFASTTests >> testImplicitNoneStatement [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testImplicitStatement [
 
-	| result stmt |
+	| result stmt rule |
 	fortranCode := '      PROGRAM MYPROG
        IMPLICIT LOGICAL (A-Z)
       END
@@ -1748,13 +1748,22 @@ FortranToFASTTests >> testImplicitStatement [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 50.
 
+	self assert: stmt implicitTypingRules size equals: 1.
+
+	rule := stmt implicitTypingRules anyOne.
+	self assert: rule type class equals: FASTFortranLogicalType.
+	
+	self assert: rule characters size equals: 1.
+	self assert: rule characters anyOne class equals: FASTFortranImplicitRange.
+	self assert: rule characters anyOne from class equals: FASTFortranCharacterLiteral.
+	self assert: rule characters anyOne to   class equals: FASTFortranCharacterLiteral.
 
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testImplicitStatementCharacterSize [
 
-	| result stmt |
+	| result stmt rule |
 	fortranCode := '      PROGRAM MYPROG
        IMPLICIT CHARACTER*4 (C,S) 
       END
@@ -1768,13 +1777,20 @@ FortranToFASTTests >> testImplicitStatementCharacterSize [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 50.
 
+	self assert: stmt implicitTypingRules size equals: 1.
+
+	rule := stmt implicitTypingRules anyOne.
+	self assert: rule type class equals: FASTFortranCharacterType.
+	self assert: rule type size class equals: FASTFortranIntegerLiteral.
+	self assert: rule type size primitiveValue equals: '4'.
+
 
 ]
 
 { #category : #'tests-statement' }
 FortranToFASTTests >> testImplicitStatementNoRange [
 
-	| result stmt |
+	| result stmt rule |
 	fortranCode := '      PROGRAM MYPROG
        IMPLICIT COMPLEX (U,V,W)
       END
@@ -1788,6 +1804,15 @@ FortranToFASTTests >> testImplicitStatementNoRange [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 50.
 
+	self assert: stmt implicitTypingRules size equals: 1.
+
+	rule := stmt implicitTypingRules anyOne.
+	self assert: rule type class equals: FASTFortranComplexType.
+	
+	self assert: rule characters size equals: 3.
+	rule characters do: [ :implicitChar |
+		self assert: implicitChar class equals: FASTFortranCharacterLiteral.
+	]
 
 ]
 
@@ -1808,6 +1833,10 @@ FortranToFASTTests >> testImplicitStatementSeveralItems [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 50.
 
+	self assert: stmt implicitTypingRules size equals: 2.
+
+	self assert: stmt implicitTypingRules first class equals: FASTFortranLogicalType.
+	self assert: stmt implicitTypingRules second class equals: FASTFortranIntegerType
 
 ]
 
