@@ -723,7 +723,7 @@ FASTFortranGenerator >> defineRelations [
 	<>- (type property: #parentImplicitRule).
 
 	(implicitTypingRule property: #characters)
-	<>- (tImplicitCharacter property: #parentImplicitRule).
+	<>-* (tImplicitCharacter property: #parentImplicitRule).
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
