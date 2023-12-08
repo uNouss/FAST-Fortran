@@ -535,8 +535,6 @@ FASTFortranGenerator >> defineHierarchy [
 	characterConstant --|> abstractLiteral.
 	characterConstant --|> tCharacterLiteral.
 	characterConstant --|> tFormat.
-	characterConstant --|> tImplicitCharacter.
-	implicitRange  --|> tImplicitCharacter.
 	booleanConstant --|> abstractLiteral.
 	booleanConstant --|> tBooleanLiteral.
 
@@ -722,8 +720,8 @@ FASTFortranGenerator >> defineRelations [
 	implicitTypingRule
 	<>- (type property: #parentImplicitRule).
 
-	(implicitTypingRule property: #characters)
-	<>-* (tImplicitCharacter property: #parentImplicitRule).
+	(implicitTypingRule property: #ranges)
+	<>-* (implicitRange property: #parentImplicitRule).
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
@@ -996,8 +994,6 @@ FASTFortranGenerator >> defineTraits [
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
 	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement)'.
-
-	tImplicitCharacter := builder newTraitNamed: #TImplicitCharacter comment: 'I represent a character or a character range in an IMPLICIT statement'.
 
 	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
 
