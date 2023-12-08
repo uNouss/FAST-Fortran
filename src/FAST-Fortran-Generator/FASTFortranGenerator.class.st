@@ -581,6 +581,12 @@ FASTFortranGenerator >> defineProperties [
 	(functionStatement property: #name type: #String) comment:
 		'Name of a function statement'.
 
+	(implicitRange property: #from type: #String) comment:
+		'Start of character range for implicit rule'.
+
+	(implicitRange property: #to type: #String) comment:
+		'End of character range for implicit rule'.
+
 	(labelReference property: #label type: #String) comment: 'The value of the label. The value is an integer literal, stored in a String'.
 
 	(returnStatement property: #alternateReturnLable type: #String)
