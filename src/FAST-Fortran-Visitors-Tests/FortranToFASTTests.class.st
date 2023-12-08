@@ -1753,10 +1753,10 @@ FortranToFASTTests >> testImplicitStatement [
 	rule := stmt typingRules anyOne.
 	self assert: rule type class equals: FASTFortranLogicalType.
 	
-	self assert: rule characters size equals: 1.
-	self assert: rule characters anyOne class equals: FASTFortranImplicitRange.
-	self assert: rule characters anyOne from class equals: FASTFortranCharacterLiteral.
-	self assert: rule characters anyOne to   class equals: FASTFortranCharacterLiteral.
+	self assert: rule ranges size equals: 1.
+	self assert: rule ranges anyOne class equals: FASTFortranImplicitRange.
+	self assert: rule ranges anyOne from equals: $a.
+	self assert: rule ranges anyOne to   equals: $z.
 
 ]
 
@@ -1809,9 +1809,9 @@ FortranToFASTTests >> testImplicitStatementNoRange [
 	rule := stmt typingRules anyOne.
 	self assert: rule type class equals: FASTFortranComplexType.
 	
-	self assert: rule characters size equals: 3.
-	rule characters do: [ :implicitChar |
-		self assert: implicitChar class equals: FASTFortranCharacterLiteral.
+	self assert: rule ranges size equals: 3.
+	rule ranges do: [ :range |
+		self assert: range to equals: nil.
 	]
 
 ]
@@ -1833,10 +1833,12 @@ FortranToFASTTests >> testImplicitStatementSeveralItems [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 65.
 
-	self assert: stmt typingRules size equals: 2.
+	self assert: stmt ranges size equals: 2.
 
-	self assert: stmt typingRules first class equals: FASTFortranLogicalType.
-	self assert: stmt typingRules second class equals: FASTFortranIntegerType
+	self assert: stmt ranges first class equals: FASTFortranImplicitTypingRule.
+	self assert: stmt ranges first type class equals: FASTFortranLogicalType.
+	self assert: stmt ranges second class equals: FASTFortranImplicitTypingRule.
+	self assert: stmt ranges second type class equals: FASTFortranIntegerType.
 
 ]
 
