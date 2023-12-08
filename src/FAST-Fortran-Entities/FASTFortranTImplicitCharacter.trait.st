@@ -24,7 +24,6 @@ FASTFortranTImplicitCharacter >> parentImplicitRule [
 
 	<generated>
 	<container>
-	<derived>
 	^ parentImplicitRule
 ]
 

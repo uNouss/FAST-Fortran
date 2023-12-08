@@ -5,9 +5,9 @@ Class {
 	#name : #FASTFortranImplicitTypingRule,
 	#superclass : #FASTFortranEntity,
 	#instVars : [
+		'#characters => FMMany type: #FASTFortranTImplicitCharacter opposite: #parentImplicitRule',
 		'#parentImplicitStatement => FMOne type: #FASTFortranImplicitStatement opposite: #typingRules',
-		'#type => FMOne type: #FASTFortranType opposite: #parentImplicitRule',
-		'#characters => FMOne type: #FASTFortranTImplicitCharacter opposite: #parentImplicitRule'
+		'#type => FMOne type: #FASTFortranType opposite: #parentImplicitRule'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -21,11 +21,18 @@ FASTFortranImplicitTypingRule class >> annotation [
 	^ self
 ]
 
+{ #category : #adding }
+FASTFortranImplicitTypingRule >> addCharacter: anObject [
+	<generated>
+	^ self characters add: anObject
+]
+
 { #category : #accessing }
 FASTFortranImplicitTypingRule >> characters [
 	"Relation named: #characters type: #FASTFortranTImplicitCharacter opposite: #parentImplicitRule"
 
 	<generated>
+	<derived>
 	^ characters
 ]
 
@@ -33,14 +40,14 @@ FASTFortranImplicitTypingRule >> characters [
 FASTFortranImplicitTypingRule >> characters: anObject [
 
 	<generated>
-	characters := anObject
+	characters value: anObject
 ]
 
 { #category : #navigation }
 FASTFortranImplicitTypingRule >> charactersGroup [
 	<generated>
 	<navigation: 'Characters'>
-	^ MooseSpecializedGroup with: self characters
+	^ MooseSpecializedGroup withAll: self characters asSet
 ]
 
 { #category : #accessing }
