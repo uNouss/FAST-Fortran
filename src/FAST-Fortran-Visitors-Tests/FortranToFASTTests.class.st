@@ -1757,8 +1757,8 @@ FortranToFASTTests >> testImplicitStatement [
 	
 	self assert: rule ranges size equals: 1.
 	self assert: rule ranges anyOne class equals: FASTFortranImplicitRange.
-	self assert: rule ranges anyOne from equals: $a.
-	self assert: rule ranges anyOne to   equals: $z.
+	self assert: rule ranges anyOne from equals: 'a'.
+	self assert: rule ranges anyOne to   equals: 'z'.
 
 ]
 
