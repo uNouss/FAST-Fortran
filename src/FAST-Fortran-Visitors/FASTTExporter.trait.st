@@ -17,45 +17,23 @@ FASTTExporter >> << aPrintable [
 ]
 
 { #category : #precedence }
-FASTTExporter >> expressionContextOperator [
-	"lazy accessor"
-
-	^expressionContextOperator ifNil: [ expressionContextOperator := Stack new ].
-
-]
-
-{ #category : #outputting }
-FASTTExporter >> indent [
-
-	indent ifNil: [ ^indent := 1 ].
-	^indent := indent + 1
-]
-
-{ #category : #outputting }
-FASTTExporter >> indented: aPrintable [
-
-	self outputIndentPrefix.
-	self unindented: aPrintable
-]
-
-{ #category : #precedence }
-FASTTExporter >> initializeOperatorsPrecedence [
-	"should put in variable #operatorsPrecedence the precedence of each operator of the language
+FASTTExporter >> defaultOperatorsPrecedence [
+	"operatorsPrecedence is a dictionary: operator -> precedence for all possible operators
 	Higher number means higher precedence
-	Same operator can be entered in different forms (eg: #add and #'+')
+	the same operator can be entered in different forms (eg: #add and #'+')
 	
-	The value here are examples but should be correct for most languages.
+	The value here are examples but should be correct for many languages.
 	They fit C/Java operators definition.
-	The gaps in precedence values allow to introduce other opertaros if needed.
-	These precedences can be changed.
+	The gaps in precedence values allow to introduce other operators if needed.
+	And the precedences value can also be changed.
 
 	The last one (#topLevelExpression) is introduced to deal with expressions within other expressions
-	For example `1 * someFunction(2 + 3)` here '*' has no precedence over '+', but because it is
-	based on a global expression stack, it could get confused.
+	For example in `1 * someFunction(2 + 3)` , '*' has no precedence over '+', but because the check
+	(see #lowerPrecedence:) uses a global expression stack, it could get confused.
 	The solution is to push #topLevelExpression on the stack at the start of a new expression (here
 	'2 + 3')"
 
-	^operatorsPrecedence := Dictionary newFrom: {
+	^{
 		"postfixOperator"
 		#'unary++' -> 120 .
 		#'unary--' -> 120 .
@@ -65,8 +43,9 @@ FASTTExporter >> initializeOperatorsPrecedence [
 		#'--unary' -> 110 .
 		#'+unary' -> 110 .
 		#'-unary' -> 110 .
-		#'~unary' -> 110 .
-		#'!unary' -> 110 .
+
+		#'!' -> 110 .
+		#not -> 110 .
 		
 		"cast"
 		#cast -> 100 .
@@ -137,6 +116,36 @@ FASTTExporter >> initializeOperatorsPrecedence [
 ]
 
 { #category : #precedence }
+FASTTExporter >> expressionContextOperator [
+	"lazy accessor"
+
+	^expressionContextOperator ifNil: [ expressionContextOperator := Stack new ].
+
+]
+
+{ #category : #outputting }
+FASTTExporter >> indent [
+
+	indent ifNil: [ ^indent := 1 ].
+	^indent := indent + 1
+]
+
+{ #category : #outputting }
+FASTTExporter >> indented: aPrintable [
+
+	self outputIndentPrefix.
+	self unindented: aPrintable
+]
+
+{ #category : #precedence }
+FASTTExporter >> languageOperatorsPrecedence [
+	"this methods gives a chance to redefine precedence in different languages
+
+	specific language exporters should redefine it and make changes to the #operatorsPrecedence Dictionary"
+
+]
+
+{ #category : #precedence }
 FASTTExporter >> lowerPrecedence: operator [
 	"check whether #operator has lower precedence than a surounding expression (top of
 	expressionContextOperator)
@@ -156,10 +165,18 @@ FASTTExporter >> newLine [
 
 { #category : #precedence }
 FASTTExporter >> operatorPrecedence: operator [
+
+	^self operatorsPrecedence at: operator asSymbol
+]
+
+{ #category : #precedence }
+FASTTExporter >> operatorsPrecedence [
 	"lazy accessor"
 
-	^(operatorsPrecedence ifNil: [ self initializeOperatorsPrecedence ])
-		at: operator
+	^operatorsPrecedence ifNil: [
+			operatorsPrecedence := Dictionary newFrom: self defaultOperatorsPrecedence.
+			self languageOperatorsPrecedence.
+			operatorsPrecedence ]
 ]
 
 { #category : #outputting }
@@ -172,9 +189,9 @@ FASTTExporter >> output: aPrintable [
 FASTTExporter >> outputExpression: aBlock inParentheses: aBoolean [
 	"executes aBlock to output some expression, putting it within parenthesis if needed"
 
-	aBoolean ifTrue: [ self output: $( ].
+	aBoolean ifTrue: [ self output: '(' ].
 	aBlock value.
-	aBoolean ifTrue: [ self output: $) ]
+	aBoolean ifTrue: [ self output: ')' ]
 ]
 
 { #category : #precedence }
@@ -185,9 +202,9 @@ FASTTExporter >> outputExpression: aBlock withOperator: operator [
 
 	self
 		outputExpression: [
-			expressionContextOperator push: operator.
+			self expressionContextOperator push: operator.
 			aBlock value.
-			expressionContextOperator pop
+			self expressionContextOperator pop
 		]
 		 inParentheses: (self lowerPrecedence: operator)
 ]
@@ -216,9 +233,9 @@ FASTTExporter >> outputTopLevelExpression: aBlock [
 
 	See comment in #initializeOperatorsPrecedence"
 
-	expressionContextOperator push: #topLevelExpression.
+	self expressionContextOperator push: #topLevelExpression.
 	aBlock value.
-	expressionContextOperator pop
+	self expressionContextOperator pop
 ]
 
 { #category : #outputting }
