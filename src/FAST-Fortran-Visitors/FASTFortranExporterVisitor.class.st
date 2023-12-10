@@ -103,10 +103,10 @@ FASTFortranExporterVisitor >> languageOperatorsPrecedence [
 { #category : #outputting }
 FASTFortranExporterVisitor >> newLine [
 	"redefines to deal with line length
-	beware of the order, need to zero #column befaire calling #output: which tests it"
+	 writes directly to the outputStream so that the return does not count for one column"
 
 	column := 0.
-	self output: String cr.
+	self outputStream cr.
 ]
 
 { #category : #outputting }
