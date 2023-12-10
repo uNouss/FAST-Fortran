@@ -85,6 +85,9 @@ FASTFortranExporterVisitor >> languageOperatorsPrecedence [
 	
 	precedences taken from: https://www.tutorialspoint.com/fortran/fortran_operators_precedence.htm"
 
+	 "unary operator"
+	operatorsPrecedence at: #'.not.' put: 110.
+
 	"exponentiation between NOT and multiplicative operator"
 	operatorsPrecedence at: #'**' put: 100.
 
@@ -808,6 +811,19 @@ FASTFortranExporterVisitor >> visitFASTFortranType: aFASTFortranType [
 			ifTrue: [ self << '(*)' ]
 			ifFalse: [ length accept: self ]
 	]
+]
+
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranUnaryExpression: aFASTFortranUnaryExpression [
+
+	self outputExpression: [
+		self
+			<< aFASTFortranUnaryExpression operator ;
+			space.
+		aFASTFortranUnaryExpression expression accept: self
+		]
+		withOperator: aFASTFortranUnaryExpression operator.
+	
 ]
 
 { #category : #'visiting - statements' }

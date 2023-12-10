@@ -1234,6 +1234,50 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 '
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOperatorsPrecedenceNoParentheses [
+	
+	| expr |
+	expr := self binary: '+' left: 'v' right: '5'.
+
+	self assertExport: expr
+		equals: 'v + 5'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasHigherPrecedence [
+	
+	| expr |
+	expr := self binary: '+' left: 'i' right: '5'.
+	expr right: (self binary: '*' left: 'j' right: '5').
+
+	self assertExport: expr
+		equals: 'i + j * 5'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasLowerPrecedence [
+	
+	| expr |
+	expr := self binary: '*' left: 'i' right: '5'.
+	expr right: (self binary: '+' left: 'j' right: '5').
+
+	self assertExport: expr
+		equals: 'i * (j + 5)'
+]
+
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubUnary [
+	
+	| expr |
+	expr := self binary: '.and.' left: 'logical1' right: '0'.
+	expr right: (self unary: '.not.' operand: (self scalarVariable: 'logical2')).
+
+	self
+		assertExport: expr
+		equals: 'logical1 .and. .not. logical2'
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testPauseStatementEmpty [
 	| stmt |
@@ -1413,6 +1457,15 @@ FASTFortranExporterVisitorTest >> typeSize: dimension [
 	dimension isNumber ifTrue: [ ^self integerLiteral: dimension asString ].
 	dimension = '*' ifTrue: [ ^FASTFortranAsterisk new ].
 	^nil
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> unary: op operand: operand [
+
+	^FASTFortranUnaryExpression new
+		operator: op ;
+		expression: operand ;
+		yourself
 ]
 
 { #category : #'entity creation' }
