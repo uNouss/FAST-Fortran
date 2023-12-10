@@ -1,9 +1,9 @@
 Class {
 	#name : #FASTFortranExporterVisitor,
 	#superclass : #FASTFortranVisitor,
+	#traits : 'FASTTExporter',
+	#classTraits : 'FASTTExporter classTrait',
 	#instVars : [
-		'stream',
-		'indent',
 		'column',
 		'breakLongCommentLines',
 		'breakLongLines'
@@ -11,30 +11,20 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Visitor'
 }
 
-{ #category : #streaming }
-FASTFortranExporterVisitor >> << aString [
-
-	((column + aString size) > 72)
-		ifTrue: [ self continuationLine: aString ].
-
-	self stream << aString.
-	column := column + aString size
-]
-
-{ #category : #accessing }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> breakLongCommentLines: aBoolean [
 
 	breakLongCommentLines := aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> breakLongLines: aBoolean [
 
 	breakLongLines := aBoolean.
 	breakLongLines ifFalse: [ self breakLongCommentLines: false ]
 ]
 
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> continuationLine: line [
 
 	breakLongLines ifFalse: [ ^self ].
@@ -73,11 +63,6 @@ FASTFortranExporterVisitor >> dontBreakLongLines [
 	self breakLongLines: false
 ]
 
-{ #category : #streaming }
-FASTFortranExporterVisitor >> indent [
-	indent := indent + 1
-]
-
 { #category : #initialization }
 FASTFortranExporterVisitor >> initialize [
 	super initialize.
@@ -94,16 +79,23 @@ FASTFortranExporterVisitor >> isComment: aLine [
 	^( #($c $C $*) includes: aLine first) and: [ column = 0 ]
 ]
 
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> newLine [
+	"redefines to deal with line length"
 
-	self stream cr.
-	column := 0
+	column := 0.
+	self output: String cr.
 ]
 
-{ #category : #accessing }
-FASTFortranExporterVisitor >> resetStream [
-	stream := nil
+{ #category : #outputting }
+FASTFortranExporterVisitor >> output: aString [
+	"redefines to deal with line length"
+
+	((column + aString size) > 72)
+		ifTrue: [ self continuationLine: aString ].
+
+	self outputStream << aString.
+	column := column + aString size
 ]
 
 { #category : #accessing }
@@ -113,7 +105,7 @@ FASTFortranExporterVisitor >> rootEntitiesIn: aFASTFortranModel [
 	]
 ]
 
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> sixSpaces [
 	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
 
@@ -121,30 +113,19 @@ FASTFortranExporterVisitor >> sixSpaces [
 	
 ]
 
-{ #category : #streaming }
-FASTFortranExporterVisitor >> spaces: number [
-
-	self << (String space repeat: number)
-]
-
-{ #category : #accessing }
-FASTFortranExporterVisitor >> stream [
-	^stream ifNil: [ stream := WriteStream on: '' ]
-]
-
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> streamPosition [
 
 	^self stream position
 ]
 
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> unindent [
 	self assert: (indent > 0).
 	indent := indent - 1
 ]
 
-{ #category : #streaming }
+{ #category : #outputting }
 FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
 
@@ -250,7 +231,7 @@ FASTFortranExporterVisitor >> visitFASTFortranCharacterType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
-{ #category : #testing }
+{ #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
 
 	aFASTFortranCommonGroup name

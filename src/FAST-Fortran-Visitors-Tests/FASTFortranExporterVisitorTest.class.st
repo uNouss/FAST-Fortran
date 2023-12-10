@@ -52,7 +52,7 @@ FASTFortranExporterVisitorTest >> arrayVariable: aName indice: anInteger [
 FASTFortranExporterVisitorTest >> assertExport: anEntity equals: expectedString [
 	| generated |
 	anEntity accept: visitor.
-	generated := visitor stream contents.
+	generated := visitor outputStream contents.
 	self assert: generated equals: expectedString
 ]
 
