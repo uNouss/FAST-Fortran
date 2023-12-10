@@ -34,11 +34,12 @@ FASTTExporter >> defaultOperatorsPrecedence [
 	'2 + 3')"
 
 	^{
-		"postfixOperator"
+		"unary postfix operators"
 		#'unary++' -> 120 .
 		#'unary--' -> 120 .
 
-		"prefixOperator"
+		"unary prefix operators
+		 cannot be just the operator itself because '-' would be confused with the binary '-'"
 		#'++unary' -> 110 .
 		#'--unary' -> 110 .
 		#'+unary' -> 110 .
@@ -50,7 +51,7 @@ FASTTExporter >> defaultOperatorsPrecedence [
 		"cast"
 		#cast -> 100 .
 
-		"multiplicativeOperator"
+		"multiplicative operators"
 		#'*' -> 90 .
 		#times -> 90 .
 		#'/' -> 90 .
@@ -61,13 +62,13 @@ FASTTExporter >> defaultOperatorsPrecedence [
 		"stringConcatenationOperator -- needed to deal with: String+(i+1)"
 		#concat -> 80 .
 
-		"additiveOperator"
+		"additive operators"
 		#'+' -> 70 .
 		#add -> 70 .
 		#'-' -> 70 .
 		#minus -> 70 .
 
-		"relationalOperator"
+		"relational operators"
 		#'<' -> 60 .
 		#lt -> 60 .
 		#lessThan -> 60 .
@@ -84,7 +85,7 @@ FASTTExporter >> defaultOperatorsPrecedence [
 		#ge -> 60 .
 		#greaterEqual -> 60 .
 
-		"equalityOperator"
+		"equality operators"
 		#'==' -> 50 .
 		#eq -> 50 .
 		#equal -> 50 .
@@ -93,18 +94,18 @@ FASTTExporter >> defaultOperatorsPrecedence [
 		#ne -> 50 .
 		#notEqual -> 50 .
 
-		"logicalAndOperator"
+		"logical And operators"
 		#'&&' -> 40 .
 		#and -> 40 .
 
-		"logicalOrOperator"
+		"logical Or operators"
 		#'||' -> 30 .
 		#or -> 30 .
 
-		"ternaryOperator"
+		"ternary operator"
 		#'?:' -> 20 .
 
-		"assignmentOperator"
+		"assignment operators"
 		#'=' ->  10 .
 		#'+=' -> 10 .
 		#'-=' -> 10 .
