@@ -11,6 +11,7 @@ Trait {
 
 { #category : #outputting }
 FASTTExporter >> << aPrintable [
+	"syntactical sugar"
 
 	self output: aPrintable
 ]
@@ -171,9 +172,9 @@ FASTTExporter >> output: aPrintable [
 FASTTExporter >> outputExpression: aBlock inParentheses: aBoolean [
 	"executes aBlock to output some expression, putting it within parenthesis if needed"
 
-	aBoolean ifTrue: [ self << $( ].
+	aBoolean ifTrue: [ self output: $( ].
 	aBlock value.
-	aBoolean ifTrue: [ self << $) ]
+	aBoolean ifTrue: [ self output: $) ]
 ]
 
 { #category : #precedence }

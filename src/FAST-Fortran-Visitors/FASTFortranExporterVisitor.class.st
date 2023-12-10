@@ -81,7 +81,8 @@ FASTFortranExporterVisitor >> isComment: aLine [
 
 { #category : #outputting }
 FASTFortranExporterVisitor >> newLine [
-	"redefines to deal with line length"
+	"redefines to deal with line length
+	beware of the order, need to zero #column befaire calling #output: which tests it"
 
 	column := 0.
 	self output: String cr.
