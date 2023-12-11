@@ -1045,7 +1045,7 @@ FortranToFASTTests >> testDimensionStatementRange [
 { #category : #'tests-statement' }
 FortranToFASTTests >> testDimensionStatementSimple [
 
-	| result stmt |
+	| result stmt decl |
 	fortranCode := '      program simplemain
       DIMENSION V(1000) 
       end
@@ -1057,9 +1057,16 @@ FortranToFASTTests >> testDimensionStatementSimple [
 
 	stmt := result first statementBlock statements first.	
 	self assert: stmt class equals: FASTFortranDimensionStatement.
-	
+	self assert: stmt startPos equals: 32.
 	self assert: stmt endPos equals: 48.
 
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable name equals: 'v'.
+	self assert: decl variable dimensions size equals: 1.
+	self assert: decl variable dimensions anyOne lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: decl variable dimensions anyOne lowerBound primitiveValue equals: '1000'.
 ]
 
 { #category : #'tests-statement' }
