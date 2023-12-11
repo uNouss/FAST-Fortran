@@ -83,30 +83,42 @@ FASTFortranExporterVisitor >> isComment: aLine [
 FASTFortranExporterVisitor >> languageOperatorsPrecedence [
 	"redefined to introduce fortran operators
 	
-	precedences taken from: https://www.tutorialspoint.com/fortran/fortran_operators_precedence.htm"
+	precedences taken from: https://www.tutorialspoint.com/fortran/fortran_operators_precedence.htm
+	and: https://www.ibm.com/docs/en/xl-fortran-aix/13.1.0?topic=expressions-logical"
 
-	 "unary operator"
+	 "unary operators"
 	operatorsPrecedence at: #'.not.' put: 110.
 
-	"exponentiation between NOT and multiplicative operator"
+	"exponentiation operator between NOT and multiplicative operator"
 	operatorsPrecedence at: #'**' put: 100.
 
-	"different is '/='"
+	"relational operators"
+	operatorsPrecedence at: #'.gt.' put: 60.
+	operatorsPrecedence at: #'.ge.' put: 60.
+	operatorsPrecedence at: #'.lt.' put: 60.
+	operatorsPrecedence at: #'.le.' put: 60.
+
+	"equality operators"
+	operatorsPrecedence at: #'.eq.' put: 50.
+	operatorsPrecedence at: #'.ne.' put: 50.
 	operatorsPrecedence at: #'/=' put: 50.
 
 	"logical operators"
 	operatorsPrecedence at: #'.and.' put: 40.
 	operatorsPrecedence at: #'.or.' put: 30.
+	operatorsPrecedence at: #'.xor.' put: 25.
+	operatorsPrecedence at: #'.eqv.' put: 25.
+	operatorsPrecedence at: #'.neqv.' put: 25.
 
 ]
 
 { #category : #outputting }
 FASTFortranExporterVisitor >> newLine [
 	"redefines to deal with line length
-	beware of the order, need to zero #column befaire calling #output: which tests it"
+	 writes directly to the outputStream so that the return does not count for one column"
 
 	column := 0.
-	self output: String cr.
+	self outputStream cr.
 ]
 
 { #category : #outputting }
@@ -337,6 +349,12 @@ FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStateme
 			<< 'end do' ;
 			newLine
 	].
+]
+
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranDoublePrecisionType: aFASTFortranType [
+	self << 'double precision'.
+	self visitFASTFortranType: aFASTFortranType
 ]
 
 { #category : #'visiting - statements' }

@@ -41,5 +41,5 @@ FASTFortranDifferentialValidator >> reExportAST: ast [
 	visitor := FASTFortranExporterVisitor new.
 
 	ast accept: visitor.
-	^visitor stream contents replaceAllRegex: String cr with: String lf
+	^visitor outputStream contents replaceAllRegex: String cr with: String lf
 ]

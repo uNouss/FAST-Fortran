@@ -23,15 +23,17 @@ FortranProjectImporter >> getFASTFor: sourceCode [
 		stream cr
 	].
 	
-	self fortran: fastSrcFile toJsonASTFolder: self fastSrcFolder.
+	self parseFortran77: fastSrcFile.
 	^self jsonASTToFAST 
 ]
 
 { #category : #'*FAST-Fortran-Visitors' }
 FortranProjectImporter >> jsonASTToFAST [
 
-	| jsonAST |
-	jsonAST := self defaultFASTSource withExtension: 'json'.
+	| fortranFile jsonAST |
+	fortranFile := self defaultFASTSource.
+	jsonAST := (self fortranFolderToASTFolder: fortranFile parent) / (fortranFile basename , '.json').
+
 	^FASTFortranJsonVisitor new visitProgramFile:
 		  (jsonAST readStreamDo: [ :str | 
 			   NeoJSONReader fromString: str contents ])

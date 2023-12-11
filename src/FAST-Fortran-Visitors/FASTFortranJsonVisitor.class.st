@@ -157,7 +157,7 @@ FASTFortranJsonVisitor >> visitArgument: anArgumentNode [
 	^ data
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitArrayDeclarationDim: arrayDeclarationDim [
 
 	| data |
@@ -169,7 +169,7 @@ FASTFortranJsonVisitor >> visitArrayDeclarationDim: arrayDeclarationDim [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitAssign_expression: anAssignExpressionNode [
 	"The assignment statement assigns a value to a variable, substring, array element, record, or record field"
 
@@ -239,7 +239,7 @@ CALL sub [([ar[, ar]])] where sub is a name of the subroutine to be called, ar i
 		  yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 
 	^FASTFortranCharacterType new
@@ -276,7 +276,7 @@ nlist: List of variable names, array names, and array declarators  "
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitComplexBaseType: aString [
 
 	^FASTFortranComplexType new
@@ -367,7 +367,7 @@ FASTFortranJsonVisitor >> visitDeclarationStatement: aDeclarationStatementNode [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
 	"#(span initial length dims variable)"
 
@@ -381,7 +381,7 @@ FASTFortranJsonVisitor >> visitDeclarator: aDeclaratorNode [
 	^declarator
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 
 	| data |
@@ -392,7 +392,7 @@ FASTFortranJsonVisitor >> visitDeclaratorVariable: aDeclaratorVariableNode [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 
 	^ (super visitDeclarators: aDeclaratorsList) second
@@ -471,6 +471,14 @@ FASTFortranJsonVisitor >> visitDo_spec: aDoSpecNode [
 		  limit: data third ;
 		  increment: data fourth ;
 		  yourself
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitDouble_precisionBaseType: aString [
+
+	^FASTFortranDoublePrecisionType new
+		mooseModel: model ;
+		yourself
 ]
 
 { #category : #'visiting statement' }
@@ -756,7 +764,7 @@ FASTFortranJsonVisitor >> visitImplicitStatementRange: anImplicitStatementRangeN
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 
 	^FASTFortranIntegerType new
@@ -803,7 +811,7 @@ FASTFortranJsonVisitor >> visitLabelReference: aLabelReference [
 		yourself
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitLogicalBaseType: aString [
 
 	^FASTFortranLogicalType new
@@ -941,7 +949,7 @@ FASTFortranJsonVisitor >> visitReadStatement: aReadStatementNode [
 
 ]
 
-{ #category : #'visiting statement' }
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitRealBaseType: aString [
 
 	^FASTFortranRealType new
