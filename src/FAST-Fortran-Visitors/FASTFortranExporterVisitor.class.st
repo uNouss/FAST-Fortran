@@ -67,7 +67,6 @@ FASTFortranExporterVisitor >> dontBreakLongLines [
 FASTFortranExporterVisitor >> initialize [
 	super initialize.
 
-	indent := 0.
 	column := 0.
 	breakLongLines := true.
 	breakLongCommentLines := false
