@@ -351,6 +351,12 @@ FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStateme
 	].
 ]
 
+{ #category : #visiting }
+FASTFortranExporterVisitor >> visitFASTFortranDoublePrecisionType: aFASTFortranType [
+	self << 'double precision'.
+	self visitFASTFortranType: aFASTFortranType
+]
+
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatementNode [
 	"call to #outputExpression:inParentheses: is oportunistic.

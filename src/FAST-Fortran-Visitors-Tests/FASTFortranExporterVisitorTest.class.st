@@ -1187,6 +1187,18 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOneDeclarationDoublePrecisionType [
+	| stmt |
+	stmt := self declarationStatement: (FASTFortranDoublePrecisionType new) variables: #(r).
+
+	self
+		assertExport: stmt
+		equals: 
+'      double precision r
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationIntegerTypeWithSize [
 	| stmt |
 	stmt := self declarationStatement: (self integerType: 8) variables: #(i).
