@@ -67,7 +67,6 @@ FASTFortranExporterVisitor >> dontBreakLongLines [
 FASTFortranExporterVisitor >> initialize [
 	super initialize.
 
-	indent := 0.
 	column := 0.
 	breakLongLines := true.
 	breakLongCommentLines := false
@@ -148,23 +147,11 @@ FASTFortranExporterVisitor >> sixSpaces [
 ]
 
 { #category : #outputting }
-FASTFortranExporterVisitor >> streamPosition [
-
-	^self stream position
-]
-
-{ #category : #outputting }
-FASTFortranExporterVisitor >> unindent [
-	self assert: (indent > 0).
-	indent := indent - 1
-]
-
-{ #category : #outputting }
 FASTFortranExporterVisitor >> upToSixSpaces: preceedingSize [
 	"mandatory six spaces at the begining of line + optional indent (2 spaces per level)"
 
 	| nbSpaces |
-	nbSpaces := 6 + (indent * 2) - preceedingSize.
+	nbSpaces := 6 + (self indentLevel * 2) - preceedingSize.
 	self spaces: nbSpaces
 	
 ]
@@ -547,18 +534,24 @@ FASTFortranExporterVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBl
 
 { #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
+	"Need to fiddle with indentationLevel because THEN statement is on the same line
+	 as IfLogical
+	 Sets the indentationLevel to -3 so that it gives zero spaces when combined with the
+	 customary six spaces at the begining of all statements"
 
 	| tmp |
+
 	self
 		visitFASTFortranAbstractStatement: aFASTFortranIfLogicalStatement ;
 		<< 'if ' ;
 		outputExpression: [ aFASTFortranIfLogicalStatement condition accept: self ]
 		inParentheses: true ;
 		space.
-	tmp := indent.
-	indent := -3.
+
+	tmp := self indentLevel.
+	indentLevel := -3.
 	aFASTFortranIfLogicalStatement statement accept: self.
-	indent := tmp
+	indentLevel := tmp
 ]
 
 { #category : #visiting }
