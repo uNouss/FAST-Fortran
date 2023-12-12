@@ -1072,6 +1072,23 @@ FASTFortranExporterVisitorTest >> testImplicitStatementSeveralRules [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testImpliedDoExpression [
+	| expr init |
+
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
+	expr := FASTFortranImpliedDoExpression new
+		loopControl: (self loopControlInit: init increment: '1' limit: 'max') ;
+		variables: (self scalarVariables: #(v i)).
+
+	self
+		assertExport: expr
+		equals: 
+'(v,i,i = 1,max,1)'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testLabelledStatement [
 	| stmt |
 	stmt := self returnStatement: nil.

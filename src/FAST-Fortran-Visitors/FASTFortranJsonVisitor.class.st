@@ -776,6 +776,19 @@ FASTFortranJsonVisitor >> visitImplicitStatementRange: anImplicitStatementRangeN
 		yourself
 ]
 
+{ #category : #'visiting expression' }
+FASTFortranJsonVisitor >> visitImplied_do:  anImpliedDoListsNode [ 
+	"span do_spec expressions"
+
+	| data |
+	data := super visitImplied_do:  anImpliedDoListsNode.
+
+	^(self newEntity: FASTFortranImpliedDoExpression atPosition: data first)
+		loopControl: data second ;
+		variables: (data copyFrom: 3 to: data size) ;
+		yourself
+]
+
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 

@@ -367,6 +367,16 @@ FASTFortranVisitor >> visitFASTFortranImplicitTypingRule: aFortranImplicitTyping
 	]
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranVisitor >> visitFASTFortranImpliedDo: aFASTFortranImpliedDo [
+
+	aFASTFortranImpliedDo variables do: [ :var |
+		var accept: self
+	].
+	aFASTFortranImpliedDo loopControl accept: self
+
+]
+
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIncludeStatement: aFASTFortranIncludeStatement [
 	<generated>

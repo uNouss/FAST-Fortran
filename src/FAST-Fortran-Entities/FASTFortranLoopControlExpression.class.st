@@ -3,9 +3,9 @@ a Fortran Loop Control Expression
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,
-	#superclass : #FASTFortranAbstractExpression,
+	#superclass : #FASTFortranEntity,
 	#instVars : [
-		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl',
+		'#parentLoop => FMOne type: #FASTFortranTWithLoopControl opposite: #loopControl',
 		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlInitialization',
 		'#increment => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlIncrement',
 		'#limit => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlLimit'
@@ -16,7 +16,7 @@ Class {
 { #category : #meta }
 FASTFortranLoopControlExpression class >> annotation [
 
-	<FMClass: #LoopControlExpression super: #FASTFortranAbstractExpression>
+	<FMClass: #LoopControlExpression super: #FASTFortranEntity>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
@@ -93,7 +93,7 @@ FASTFortranLoopControlExpression >> limitGroup [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> parentLoop [
-	"Relation named: #parentLoop type: #FASTFortranDoStatement opposite: #loopControl"
+	"Relation named: #parentLoop type: #FASTFortranTWithLoopControl opposite: #loopControl"
 
 	<generated>
 	<FMComment: 'Parent loop'>
