@@ -111,7 +111,9 @@ Class {
 		'tWithIOParameters',
 		'arrayRange',
 		'implicitTypingRule',
-		'implicitRange'
+		'implicitRange',
+		'impliedDoExpression',
+		'tWithLoopControl'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -250,6 +252,11 @@ f77 allows the BYTE type as an array index, just as it allows the REAL type, but
 		                       newClassNamed: #DoublePrecisionType
 		                       comment:
 		                       'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
+
+	impliedDoExpression := builder
+		                   newClassNamed: #ImplicitDoExpression
+		                   comment:
+		                   'I represent a Fortran "implicit do" expression'.
 
 	integerConstant := builder
 		                   newClassNamed: #IntegerLiteral
@@ -430,6 +437,7 @@ FASTFortranGenerator >> defineHierarchy [
 	dimensionStatement --|> tWithDeclarators.
 	doStatement --|> abstractStatement.
 	doStatement --|> tWithLabelReferences.
+	doStatement --|> tWithLoopControl.
 	doWhileStatement --|> abstractStatement.
 	elseStatement --|> abstractStatement.
 	encodeStatement --|> abstractStatement.
@@ -492,7 +500,7 @@ FASTFortranGenerator >> defineHierarchy [
 	writeStatement --|> tWithArguments.
 
 
-	"DATA"
+	"Expressions"
 	abstractExpression --|> tExpression.
 	arrayRange --|> tExpression.
 	arrayVariable --|> variable.
@@ -504,7 +512,9 @@ FASTFortranGenerator >> defineHierarchy [
 	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
 	functionCall --|> tWithArguments.
-	loopControlExpression --|> abstractExpression.
+	impliedDoExpression --|> tWithLoopControl.
+	impliedDoExpression --|> tExpression.
+	impliedDoExpression --|> tVariableGroup.
 	scalarVariable --|> variable.
 	scalarVariable --|> tFormat.
 	substring --|> abstractExpression.
@@ -640,6 +650,9 @@ FASTFortranGenerator >> defineRelations [
 	(dataGroup property: #dataConstants)
 	-* (tExpression property: #parentDataStatement).
 
+	(impliedDoExpression property: #variables)
+	<>-* (tVariableEntity property: #parentImpliedExpression).
+
 	(tVariableGroup property: #variables)
 	-* (variable property: #parentVariableGroup).
 
@@ -659,7 +672,7 @@ FASTFortranGenerator >> defineRelations [
 	<>-
 	((type property: #parentDeclaration) comment: 'Parent declaration').
 
-	((doStatement property: #loopControl) comment: 'loop control')
+	((tWithLoopControl property: #loopControl) comment: 'loop control')
 	<>-
 	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
 
@@ -1003,7 +1016,9 @@ FASTFortranGenerator >> defineTraits [
 
 	tWithIOParameters := builder newTraitNamed: #TWithIOParameters.
 
-	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement'.
+	tWithLoopControl := builder newTraitNamed: #TWithLoopControl comment: 'I represent a loop control: initialization/limit/increment'.
+ 
+	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a statement with variable groups like a DataStatement or an EquivalenceStatement'.
  
 	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
 
