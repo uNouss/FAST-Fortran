@@ -416,6 +416,13 @@ FASTFortranTEntityCreator >> newImplicitTypingRule [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImpliedDoExpression [
+
+	<generated>
+	^ self add: FASTFortranImpliedDoExpression new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newIncludeStatement [
 
 	<generated>

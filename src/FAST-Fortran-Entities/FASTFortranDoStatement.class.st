@@ -4,10 +4,9 @@ I represent Fortran Do statement
 Class {
 	#name : #FASTFortranDoStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTWithLabelReferences',
-	#classTraits : 'FASTFortranTWithLabelReferences classTrait',
+	#traits : 'FASTFortranTWithLabelReferences + FASTFortranTWithLoopControl',
+	#classTraits : 'FASTFortranTWithLabelReferences classTrait + FASTFortranTWithLoopControl classTrait',
 	#instVars : [
-		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
 		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentDoStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -20,29 +19,6 @@ FASTFortranDoStatement class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranDoStatement >> loopControl [
-	"Relation named: #loopControl type: #FASTFortranLoopControlExpression opposite: #parentLoop"
-
-	<generated>
-	<FMComment: 'loop control'>
-	^ loopControl
-]
-
-{ #category : #accessing }
-FASTFortranDoStatement >> loopControl: anObject [
-
-	<generated>
-	loopControl := anObject
-]
-
-{ #category : #navigation }
-FASTFortranDoStatement >> loopControlGroup [
-	<generated>
-	<navigation: 'LoopControl'>
-	^ MooseSpecializedGroup with: self loopControl
 ]
 
 { #category : #accessing }

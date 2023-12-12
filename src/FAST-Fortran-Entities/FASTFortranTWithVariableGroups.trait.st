@@ -1,5 +1,5 @@
 "
-I represent a sattement with variable groups like a DataStatement or an EquivalenceStatement
+I represent a statement with variable groups like a DataStatement or an EquivalenceStatement
 "
 Trait {
 	#name : #FASTFortranTWithVariableGroups,
