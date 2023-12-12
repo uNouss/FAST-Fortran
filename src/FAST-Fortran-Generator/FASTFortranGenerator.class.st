@@ -254,9 +254,9 @@ f77 allows the BYTE type as an array index, just as it allows the REAL type, but
 		                       'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
 
 	impliedDoExpression := builder
-		                   newClassNamed: #ImplicitDoExpression
+		                   newClassNamed: #ImpliedDoExpression
 		                   comment:
-		                   'I represent a Fortran "implicit do" expression'.
+		                   'I represent a Fortran "implied do" expression'.
 
 	integerConstant := builder
 		                   newClassNamed: #IntegerLiteral
