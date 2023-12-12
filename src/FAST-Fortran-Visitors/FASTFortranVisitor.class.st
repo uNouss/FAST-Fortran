@@ -174,8 +174,10 @@ FASTFortranVisitor >> visitFASTFortranDecodeStatement: aFASTFortranDecodeStateme
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranDimensionStatement.
+
+	aFASTFortranDimensionStatement declarators do: [ :declarator |
+		declarator accept: self
+	]
 ]
 
 { #category : #'visiting - statements' }
