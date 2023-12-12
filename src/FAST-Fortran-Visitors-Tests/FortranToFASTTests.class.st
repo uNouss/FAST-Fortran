@@ -1929,7 +1929,7 @@ FortranToFASTTests >> testIfThenWithTwoStatements [
 { #category : #'tests-expression' }
 FortranToFASTTests >> testImplicitDoExpression [
 
-	| result stmt |
+	| result stmt control |
 	fortranCode := '      PROGRAM MYPROG
       WRITE (*,*) (SPACE,I,I=1,N)
 
@@ -1945,8 +1945,26 @@ FortranToFASTTests >> testImplicitDoExpression [
 
 	self assert: stmt arguments size equals: 1.
 
-	self assert: stmt arguments anyOne class equals: FASTFortranScalarVariable.
-	self assert: stmt arguments first startPos equals: 54.
+	self assert: stmt arguments anyOne class equals: FASTFortranImpliedDoExpression.
+	self assert: stmt arguments first startPos equals: 40.
+
+	self assert: stmt arguments anyOne variables size equals: 2.	
+
+	control := stmt arguments first loopControl.
+	self assert: control class equals: FASTFortranLoopControlExpression.
+	self assert: control limit class equals: FASTFortranScalarVariable.
+	self assert: control limit name equals: 'n'.
+	self assert: control increment isNil.
+
+	self assert: control init class equals: FASTFortranAssignmentExpression.
+
+	self assert: control init variable class equals: FASTFortranScalarVariable.
+	self assert: control init variable name equals: 'i'.
+
+	self assert: control init expression class equals: FASTFortranIntegerLiteral.
+	self assert: control init expression primitiveValue equals: '1'.
+
+
 ]
 
 { #category : #'tests-statement' }
