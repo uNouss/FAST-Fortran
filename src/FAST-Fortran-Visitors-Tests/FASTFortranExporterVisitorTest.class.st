@@ -23,21 +23,26 @@ FASTFortranExporterVisitorTest >> array: name access: aCollection [
 { #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> arrayDeclaration: variable dimensions: aCollection [
 
+	^ FASTFortranVariableDeclarationStatement new
+		  type: (self integerType: nil);
+		  declarators: { self arrayDeclarator: variable dimensions: aCollection };
+		  startPos: 1;
+		  endPos: 10;
+		  yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> arrayDeclarator: variable dimensions: aCollection [
+
 	| declarator |
 	declarator := self variableDeclarator: variable.
-	declarator dimensions:
-		(aCollection collect: [ :dim |
-			FASTFortranArrayRange new
-				lowerBound: (dim first ifNotNil: [ self integerLiteral: dim first ]) ;
-				upperBound: (dim second ifNotNil: [ self integerLiteral: dim second ])
-		]).
-
-	^FASTFortranVariableDeclarationStatement new
-		type: (self integerType: nil) ;
-		declarators: { declarator } ;
-		startPos: 1 ;
-		endPos: 10 ;
-		yourself
+	declarator dimensions: (aCollection collect: [ :dim |
+			 FASTFortranArrayRange new
+				 lowerBound:
+					 (dim first ifNotNil: [ self integerLiteral: dim first ]);
+				 upperBound:
+					 (dim second ifNotNil: [ self integerLiteral: dim second ]) ]).
+	^ declarator
 ]
 
 { #category : #'entity creation' }
@@ -633,6 +638,21 @@ FASTFortranExporterVisitorTest >> testDataStatement [
 		assertExport: stmt
 		equals: 
 '      data a,b /''un'',''deux''/ ,c /''trois''/ 
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testDimensionStatement [
+
+	| stmt |
+
+	stmt := FASTFortranDimensionStatement new
+		declarators: { self arrayDeclarator: 'v' dimensions: #( #('1' '10') ) }.
+
+	self
+		assertExport: stmt
+		equals: 
+'      dimension v(1:10)
 '
 ]
 

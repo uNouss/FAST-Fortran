@@ -315,6 +315,16 @@ FASTFortranExporterVisitor >> visitFASTFortranDataStatement: aFASTFortranDataSta
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranDimensionStatement ;
+		<< 'dimension ' ;
+		visitNodeListSeparatedByCommas: aFASTFortranDimensionStatement declarators ;
+		newLine
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	"FASTFortranDoStatement uses TWithLabelReferences, but it makes only one such reference"
 	self
