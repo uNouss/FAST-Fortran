@@ -36,12 +36,15 @@ FASTFortranExporterVisitorTest >> arrayDeclarator: variable dimensions: aCollect
 
 	| declarator |
 	declarator := self variableDeclarator: variable.
-	declarator dimensions: (aCollection collect: [ :dim |
+	declarator dimensions: (aCollection collect: [ :dim || min max|
+		(dim size = 2)
+			ifTrue: [ min := dim first. max := dim second ]
+			ifFalse: [ min := nil. max := dim first].
 			 FASTFortranArrayRange new
-				 lowerBound:
-					 (dim first ifNotNil: [ self integerLiteral: dim first ]);
-				 upperBound:
-					 (dim second ifNotNil: [ self integerLiteral: dim second ]) ]).
+				 lowerBound: (min ifNotNil: [self integerLiteral: min]);
+				 upperBound: (self integerLiteral: max)
+	]).
+
 	^ declarator
 ]
 
@@ -647,12 +650,15 @@ FASTFortranExporterVisitorTest >> testDimensionStatement [
 	| stmt |
 
 	stmt := FASTFortranDimensionStatement new
-		declarators: { self arrayDeclarator: 'v' dimensions: #( #('1' '10') ) }.
+		declarators: {
+			self arrayDeclarator: 'v' dimensions: #( #('1' '10') ) .
+			self arrayDeclarator: 'm' dimensions: #( #('100') #('100') ) .
+		}.
 
 	self
 		assertExport: stmt
 		equals: 
-'      dimension v(1:10)
+'      dimension v(1:10),m(100,100)
 '
 ]
 
