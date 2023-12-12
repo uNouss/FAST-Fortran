@@ -594,6 +594,19 @@ FASTFortranExporterVisitor >> visitFASTFortranImplicitTypingRule: aFortranImplic
 
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranExporterVisitor >> visitFASTFortranImpliedDo: aFASTFortranImpliedDo [
+
+	self
+		outputExpression: [
+			self
+				visitNodeListSeparatedByCommas: aFASTFortranImpliedDo variables ;
+				<< ','.
+			aFASTFortranImpliedDo loopControl accept: self
+		]
+		inParentheses: true
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranType [
 	self << 'integer'.
