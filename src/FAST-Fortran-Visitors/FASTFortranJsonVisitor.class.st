@@ -398,6 +398,18 @@ FASTFortranJsonVisitor >> visitDeclarators: aDeclaratorsList [
 	^ (super visitDeclarators: aDeclaratorsList) second
 ]
 
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitDimensionStatement: aDimensionStatementNode [
+	"#(span declarators)"
+
+	| data |
+	data := super visitDimensionStatement: aDimensionStatementNode.
+
+	^(self newEntity: FASTFortranDimensionStatement atPosition: data first)
+		declarators: data second ;
+		yourself
+]
+
 { #category : #'visiting expression' }
 FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 

@@ -4,6 +4,8 @@ I represent FortranDimension statement
 Class {
 	#name : #FASTFortranDimensionStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithDeclarators',
+	#classTraits : 'FASTFortranTWithDeclarators classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 

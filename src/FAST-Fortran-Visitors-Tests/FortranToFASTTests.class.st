@@ -983,6 +983,219 @@ FortranToFASTTests >> testDeclarationIntegerWithInitializer [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementAsterisk [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION A(*), B(N,*)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:28)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:19)","upper":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"tag":"star"}}}],"span":"(2:19)-(2:19)"},"initial":null,"length":null,"span":"(2:17)-(2:20)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"a","tag":"variable"}}},{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:25)-(2:25)","upper":{"anno":[],"span":"(2:25)-(2:25)","tag":"value","value":{"contents":"n","tag":"variable"}}},{"anno":[],"lower":null,"span":"(2:27)-(2:27)","upper":{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"tag":"star"}}}],"span":"(2:25)-(2:27)"},"initial":null,"length":null,"span":"(2:23)-(2:28)","type":"array","variable":{"anno":[],"span":"(2:23)-(2:23)","tag":"value","value":{"contents":"b","tag":"variable"}}}],"span":"(2:17)-(2:28)"},"span":"(2:7)-(2:28)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 53.
+
+	self assert: stmt declarators size equals: 2.
+
+	decl := stmt declarators first.
+	self assert: decl variable equals: 'a'.
+	self assert: decl dimensions size equals: 1.
+	self assert: decl dimensions anyOne lowerBound equals: nil. 
+	self assert: decl dimensions anyOne upperBound class equals: FASTFortranAsterisk.
+
+	decl := stmt declarators second.
+	self assert: decl variable equals: 'b'.
+	self assert: decl dimensions size equals: 2.
+	self assert: decl dimensions first lowerBound equals: nil. 
+	self assert: decl dimensions first upperBound class equals: FASTFortranScalarVariable.
+	self assert: decl dimensions second lowerBound equals: nil. 
+	self assert: decl dimensions second upperBound class equals: FASTFortranAsterisk.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementExpression [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION M(HI, HI*3 + LO)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:32)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:20)","upper":{"anno":[],"span":"(2:19)-(2:20)","tag":"value","value":{"contents":"hi","tag":"variable"}}},{"anno":[],"lower":null,"span":"(2:23)-(2:31)","upper":{"anno":[],"left":{"anno":[],"left":{"anno":[],"span":"(2:23)-(2:24)","tag":"value","value":{"contents":"hi","tag":"variable"}},"op":{"tag":"multiplication"},"right":{"anno":[],"span":"(2:26)-(2:26)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"span":"(2:23)-(2:26)","tag":"binary"},"op":{"tag":"addition"},"right":{"anno":[],"span":"(2:30)-(2:31)","tag":"value","value":{"contents":"lo","tag":"variable"}},"span":"(2:23)-(2:31)","tag":"binary"}}],"span":"(2:19)-(2:31)"},"initial":null,"length":null,"span":"(2:17)-(2:32)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"m","tag":"variable"}}}],"span":"(2:17)-(2:32)"},"span":"(2:7)-(2:32)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 57.
+
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable equals: 'm'.
+	self assert: decl dimensions size equals: 2.
+	self assert: decl dimensions first lowerBound equals: nil. 
+	self assert: decl dimensions first upperBound class equals: FASTFortranScalarVariable.
+	self assert: decl dimensions second lowerBound equals: nil. 
+	self assert: decl dimensions second upperBound class equals: FASTFortranBinaryExpression.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementMultipleDim [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION V(4,4) 
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:19)","upper":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":["4",null],"tag":"integer"}}},{"anno":[],"lower":null,"span":"(2:21)-(2:21)","upper":{"anno":[],"span":"(2:21)-(2:21)","tag":"value","value":{"contents":["4",null],"tag":"integer"}}}],"span":"(2:19)-(2:21)"},"initial":null,"length":null,"span":"(2:17)-(2:22)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"v","tag":"variable"}}}],"span":"(2:17)-(2:22)"},"span":"(2:7)-(2:22)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 47.
+
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable equals: 'v'.
+	self assert: decl dimensions size equals: 2.
+	self assert: decl dimensions first lowerBound equals: nil. 
+	self assert: decl dimensions first upperBound class equals: FASTFortranIntegerLiteral.
+	self assert: decl dimensions second lowerBound equals: nil. 
+	self assert: decl dimensions second upperBound class equals: FASTFortranIntegerLiteral.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementMultipleVariables [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION M(4,4), V(100)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:30)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:19)","upper":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":["4",null],"tag":"integer"}}},{"anno":[],"lower":null,"span":"(2:21)-(2:21)","upper":{"anno":[],"span":"(2:21)-(2:21)","tag":"value","value":{"contents":["4",null],"tag":"integer"}}}],"span":"(2:19)-(2:21)"},"initial":null,"length":null,"span":"(2:17)-(2:22)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"m","tag":"variable"}}},{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:27)-(2:29)","upper":{"anno":[],"span":"(2:27)-(2:29)","tag":"value","value":{"contents":["100",null],"tag":"integer"}}}],"span":"(2:27)-(2:29)"},"initial":null,"length":null,"span":"(2:25)-(2:30)","type":"array","variable":{"anno":[],"span":"(2:25)-(2:25)","tag":"value","value":{"contents":"v","tag":"variable"}}}],"span":"(2:17)-(2:30)"},"span":"(2:7)-(2:30)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 55.
+
+	self assert: stmt declarators size equals: 2.
+
+	decl := stmt declarators first.
+	self assert: decl variable equals: 'm'.
+	self assert: decl dimensions size equals: 2.
+
+	decl := stmt declarators second.
+	self assert: decl variable equals: 'v'.
+	self assert: decl dimensions size equals: 1.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementRange [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION M(-3:3, 4, 3:9)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:31)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"expression":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"op":{"tag":"minus"},"span":"(2:19)-(2:20)","tag":"unary"},"span":"(2:19)-(2:22)","upper":{"anno":[],"span":"(2:22)-(2:22)","tag":"value","value":{"contents":["3",null],"tag":"integer"}}},{"anno":[],"lower":null,"span":"(2:25)-(2:25)","upper":{"anno":[],"span":"(2:25)-(2:25)","tag":"value","value":{"contents":["4",null],"tag":"integer"}}},{"anno":[],"lower":{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"span":"(2:28)-(2:30)","upper":{"anno":[],"span":"(2:30)-(2:30)","tag":"value","value":{"contents":["9",null],"tag":"integer"}}}],"span":"(2:19)-(2:30)"},"initial":null,"length":null,"span":"(2:17)-(2:31)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"m","tag":"variable"}}}],"span":"(2:17)-(2:31)"},"span":"(2:7)-(2:31)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 56.
+
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable equals: 'm'.
+	self assert: decl dimensions size equals: 3.
+
+	self assert: decl dimensions first lowerBound class equals: FASTFortranIntegerLiteral. 
+	self assert: decl dimensions first upperBound class equals: FASTFortranIntegerLiteral.
+
+	self assert: decl dimensions second lowerBound equals: nil. 
+	self assert: decl dimensions second upperBound class equals: FASTFortranIntegerLiteral.
+	
+	self assert: decl dimensions third lowerBound class equals: FASTFortranIntegerLiteral.
+	self assert: decl dimensions third upperBound class equals: FASTFortranIntegerLiteral.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementSimple [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION V(1000) 
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:23)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:22)","upper":{"anno":[],"span":"(2:19)-(2:22)","tag":"value","value":{"contents":["1000",null],"tag":"integer"}}}],"span":"(2:19)-(2:22)"},"initial":null,"length":null,"span":"(2:17)-(2:23)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"v","tag":"variable"}}}],"span":"(2:17)-(2:23)"},"span":"(2:7)-(2:23)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 48.
+
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable equals: 'v'.
+	self assert: decl dimensions size equals: 1.
+	self assert: decl dimensions anyOne lowerBound equals: nil. 
+	self assert: decl dimensions anyOne upperBound class equals: FASTFortranIntegerLiteral.
+	self assert: decl dimensions anyOne upperBound primitiveValue equals: '1000'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testDimensionStatementVarDims [
+
+	| result stmt decl |
+	fortranCode := '      program simplemain
+      DIMENSION M(N,N)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:22)","statement":{"anno":[],"declarators":{"anno":[],"list":[{"anno":[],"dims":{"anno":[],"list":[{"anno":[],"lower":null,"span":"(2:19)-(2:19)","upper":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":"n","tag":"variable"}}},{"anno":[],"lower":null,"span":"(2:21)-(2:21)","upper":{"anno":[],"span":"(2:21)-(2:21)","tag":"value","value":{"contents":"n","tag":"variable"}}}],"span":"(2:19)-(2:21)"},"initial":null,"length":null,"span":"(2:17)-(2:22)","type":"array","variable":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":"m","tag":"variable"}}}],"span":"(2:17)-(2:22)"},"span":"(2:7)-(2:22)","tag":"dimension"},"tag":"statement"}],"name":"simplemain","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDimensionStatement.
+	self assert: stmt startPos equals: 32.
+	self assert: stmt endPos equals: 47.
+
+	self assert: stmt declarators size equals: 1.
+	decl := stmt declarators anyOne.
+
+	self assert: decl variable equals: 'm'.
+	self assert: decl dimensions size equals: 2.
+	self assert: decl dimensions first upperBound class equals: FASTFortranScalarVariable.
+	self assert: decl dimensions first upperBound name equals: 'n'.
+	self assert: decl dimensions second upperBound class equals: FASTFortranScalarVariable.
+	self assert: decl dimensions second upperBound name equals: 'n'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testDoStatementEmptyInitIncrementLimit [
 
 	| result stmt control |

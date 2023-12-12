@@ -427,6 +427,7 @@ FASTFortranGenerator >> defineHierarchy [
 	dataStatement --|> tWithVariableGroup.
 	decodeStatement --|> abstractStatement.
 	dimensionStatement --|> abstractStatement.
+	dimensionStatement --|> tWithDeclarators.
 	doStatement --|> abstractStatement.
 	doStatement --|> tWithLabelReferences.
 	doWhileStatement --|> abstractStatement.
