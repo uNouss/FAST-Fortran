@@ -1926,47 +1926,6 @@ FortranToFASTTests >> testIfThenWithTwoStatements [
 
 ]
 
-{ #category : #'tests-expression' }
-FortranToFASTTests >> testImplicitDoExpression [
-
-	| result stmt control |
-	fortranCode := '      PROGRAM MYPROG
-      WRITE (*,*) (SPACE,I,I=1,N)
-
-      END
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:33)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:30)-(2:30)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:28)-(2:30)","tag":"assign_expression","target":{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:32)-(2:32)","tag":"value","value":{"contents":"n","tag":"variable"}},"span":"(2:28)-(2:32)"},"expressions":{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:24)","tag":"value","value":{"contents":"space","tag":"variable"}},{"anno":[],"span":"(2:26)-(2:26)","tag":"value","value":{"contents":"i","tag":"variable"}}],"span":"(2:20)-(2:26)"},"span":"(2:19)-(2:33)","tag":"implied_do"}],"span":"(2:19)-(2:33)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:16)-(2:16)"}],"span":"(2:13)-(2:17)"},"span":"(2:7)-(2:33)","tag":"write"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	stmt := result first statementBlock statements first.
-	self assert: stmt class equals: FASTFortranWriteStatement.
-	self assert: stmt startPos equals: 28.
-	self assert: stmt endPos equals: 54.
-
-	self assert: stmt arguments size equals: 1.
-
-	self assert: stmt arguments anyOne class equals: FASTFortranImpliedDoExpression.
-	self assert: stmt arguments first startPos equals: 40.
-
-	self assert: stmt arguments anyOne variables size equals: 2.	
-
-	control := stmt arguments first loopControl.
-	self assert: control class equals: FASTFortranLoopControlExpression.
-	self assert: control limit class equals: FASTFortranScalarVariable.
-	self assert: control limit name equals: 'n'.
-	self assert: control increment isNil.
-
-	self assert: control init class equals: FASTFortranAssignmentExpression.
-
-	self assert: control init variable class equals: FASTFortranScalarVariable.
-	self assert: control init variable name equals: 'i'.
-
-	self assert: control init expression class equals: FASTFortranIntegerLiteral.
-	self assert: control init expression primitiveValue equals: '1'.
-
-
-]
-
 { #category : #'tests-statement' }
 FortranToFASTTests >> testImplicitNoneStatement [
 
@@ -2095,6 +2054,47 @@ FortranToFASTTests >> testImplicitStatementSeveralItems [
 	self assert: stmt typingRules first type class equals: FASTFortranLogicalType.
 	self assert: stmt typingRules second class equals: FASTFortranImplicitTypingRule.
 	self assert: stmt typingRules second type class equals: FASTFortranIntegerType.
+
+]
+
+{ #category : #'tests-expression' }
+FortranToFASTTests >> testImpliedDoExpression [
+
+	| result stmt control |
+	fortranCode := '      PROGRAM MYPROG
+      WRITE (*,*) (SPACE,I,I=1,N)
+
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:33)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:30)-(2:30)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:28)-(2:30)","tag":"assign_expression","target":{"anno":[],"span":"(2:28)-(2:28)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:32)-(2:32)","tag":"value","value":{"contents":"n","tag":"variable"}},"span":"(2:28)-(2:32)"},"expressions":{"anno":[],"list":[{"anno":[],"span":"(2:20)-(2:24)","tag":"value","value":{"contents":"space","tag":"variable"}},{"anno":[],"span":"(2:26)-(2:26)","tag":"value","value":{"contents":"i","tag":"variable"}}],"span":"(2:20)-(2:26)"},"span":"(2:19)-(2:33)","tag":"implied_do"}],"span":"(2:19)-(2:33)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:14)-(2:14)"},{"anno":[],"expr":{"anno":[],"span":"(2:16)-(2:16)","tag":"value","value":{"tag":"star"}},"name":null,"span":"(2:16)-(2:16)"}],"span":"(2:13)-(2:17)"},"span":"(2:7)-(2:33)","tag":"write"},"tag":"statement"}],"name":"myprog","span":"(1:7)-(4:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 28.
+	self assert: stmt endPos equals: 54.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments anyOne class equals: FASTFortranImpliedDoExpression.
+	self assert: stmt arguments first startPos equals: 40.
+
+	self assert: stmt arguments anyOne variables size equals: 2.	
+
+	control := stmt arguments first loopControl.
+	self assert: control class equals: FASTFortranLoopControlExpression.
+	self assert: control limit class equals: FASTFortranScalarVariable.
+	self assert: control limit name equals: 'n'.
+	self assert: control increment isNil.
+
+	self assert: control init class equals: FASTFortranAssignmentExpression.
+
+	self assert: control init variable class equals: FASTFortranScalarVariable.
+	self assert: control init variable name equals: 'i'.
+
+	self assert: control init expression class equals: FASTFortranIntegerLiteral.
+	self assert: control init expression primitiveValue equals: '1'.
+
 
 ]
 
