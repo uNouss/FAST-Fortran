@@ -5,7 +5,8 @@ Trait {
 	#name : #FASTFortranTVariableEntity,
 	#instVars : [
 		'#parameterOwner => FMOne type: #FASTFortranTWithParameters opposite: #parameters',
-		'#parentAssignmentExpression => FMOne type: #FASTFortranTAssignment opposite: #variable'
+		'#parentAssignmentExpression => FMOne type: #FASTFortranTAssignment opposite: #variable',
+		'#parentImpliedExpression => FMOne type: #FASTFortranImpliedDoExpression opposite: #variables'
 	],
 	#traits : 'FASTFortranTNamedEntity',
 	#classTraits : 'FASTFortranTNamedEntity classTrait',
@@ -60,4 +61,27 @@ FASTFortranTVariableEntity >> parentAssignmentExpression: anObject [
 
 	<generated>
 	parentAssignmentExpression := anObject
+]
+
+{ #category : #accessing }
+FASTFortranTVariableEntity >> parentImpliedExpression [
+	"Relation named: #parentImpliedExpression type: #FASTFortranImpliedDoExpression opposite: #variables"
+
+	<generated>
+	<container>
+	^ parentImpliedExpression
+]
+
+{ #category : #accessing }
+FASTFortranTVariableEntity >> parentImpliedExpression: anObject [
+
+	<generated>
+	parentImpliedExpression := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTVariableEntity >> parentImpliedExpressionGroup [
+	<generated>
+	<navigation: 'ParentImpliedExpression'>
+	^ MooseSpecializedGroup with: self parentImpliedExpression
 ]
