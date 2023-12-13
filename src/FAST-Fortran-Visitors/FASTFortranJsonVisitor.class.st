@@ -421,8 +421,10 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 	"#(span do_spec target body end_label)
 	- target is a label number (optional)
 	- end_label is the 'terminal statement' (typically a 'continue') with that label
-	Note that 'fortran-src' does not store the terminal statement if it is 'continue'
-	Otherwise the statement is stored in the 'body'"
+
+	Note about 'fortran-src': if the 'end_label' is a CONTINUE labeled statement,
+	then the CONTINUE deos not appear in the AST
+	this can be detected because the DO span does not include the end_label span"
 
 	| data doStatement body |
 
@@ -437,24 +439,17 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 	
 	body := data fourth.
 	
-	data fifth ifNotNil: [ :end_label || createContinue terminalStatement |
-		body statements
-			ifEmpty: [ createContinue := true ]
-			ifNotEmpty: [
-				terminalStatement := body statements last.
-				createContinue := (terminalStatement label ~= end_label primitiveValue)
-			].
-
-		createContinue ifTrue: [
-			"need to create a CONTINUE terminalStatement"
-			terminalStatement := FASTFortranContinueStatement new.
-			terminalStatement startPos: end_label startPos.
-			terminalStatement endPos: doStatement endPos.
-			terminalStatement label: end_label primitiveValue.
+	data fifth ifNotNil: [ :endLabel || lastStatement |
+		(endLabel endPos > doStatement endPos) ifTrue: [
+			"need to create a CONTINUE statement to close the loop"
+			lastStatement := FASTFortranContinueStatement new.
+			lastStatement startPos: endLabel startPos.
+			lastStatement endPos: doStatement endPos.
+			lastStatement label: endLabel primitiveValue.
 		
-			body addStatement: terminalStatement
+			body addStatement: lastStatement
 		]
-	].
+	 ].
 
 	doStatement statementBlock: body.
 

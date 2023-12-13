@@ -4,8 +4,8 @@ A trait representing an unary expression of a node of a source code.
 Trait {
 	#name : #FASTFortranTUnaryExpression,
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
-		'#operator => FMProperty'
+		'#operator => FMProperty',
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#traits : 'FASTFortranTExpression',
 	#classTraits : 'FASTFortranTExpression classTrait',

@@ -4,9 +4,9 @@ I represent a variable declarator: variable declared + optional initial value
 Trait {
 	#name : #FASTFortranTVariableDeclarator,
 	#instVars : [
-		'#expression => FMOne type: #FASTFortranTExpression opposite: #variableDeclaratorOwner',
+		'#variable => FMProperty',
 		'#parentDeclaration => FMOne type: #FASTFortranTWithDeclarators opposite: #declarators',
-		'#variable => FMProperty'
+		'#expression => FMOne type: #FASTFortranTExpression opposite: #variableDeclaratorOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Traits'
 }
