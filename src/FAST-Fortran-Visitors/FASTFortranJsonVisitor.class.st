@@ -688,7 +688,7 @@ FASTFortranJsonVisitor >> visitIOParameter: anIOParameterNode [
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitIOParameters: aWriteFormatNode [
 
-	^ (super visitIOParameters: aWriteFormatNode) second reject: #isNil
+	^(super visitIOParameters: aWriteFormatNode) reject: #isNil
 ]
 
 { #category : #'visiting statement' }
