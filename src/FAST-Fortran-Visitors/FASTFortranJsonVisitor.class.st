@@ -814,7 +814,7 @@ FASTFortranJsonVisitor >> visitInquireStatement: anInquireStatement [
 	data := super visitInquireStatement: anInquireStatement.
 
 	^(self newEntity: FASTFortranInquireStatement atPosition: data first)
-		specifiers: data second ;
+		ioParameters: data second ;
 		yourself
 ]
 

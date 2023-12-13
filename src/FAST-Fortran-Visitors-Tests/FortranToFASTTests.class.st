@@ -2190,20 +2190,20 @@ FortranToFASTTests >> testInquireStatement [
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 74.
 
-	self assert: stmt specifiers size equals: 4.
+	self assert: stmt ioParameters size equals: 4.
 
-	self assert: stmt specifiers first class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers first startPos equals: 34.
-	self assert: stmt specifiers first variable name equals: 'unit'.
-	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers second startPos equals: 45.
-	self assert: stmt specifiers second variable name equals: 'form'.
-	self assert: stmt specifiers third class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers third startPos equals: 56.
-	self assert: stmt specifiers third variable name equals: 'err'.
-	self assert: stmt specifiers fourth class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers fourth startPos equals: 63.
-	self assert: stmt specifiers fourth variable name equals: 'iostat'.
+	self assert: stmt ioParameters first class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters first startPos equals: 34.
+	self assert: stmt ioParameters first variable name equals: 'unit'.
+	self assert: stmt ioParameters second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters second startPos equals: 45.
+	self assert: stmt ioParameters second variable name equals: 'form'.
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters third startPos equals: 56.
+	self assert: stmt ioParameters third variable name equals: 'err'.
+	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fourth startPos equals: 63.
+	self assert: stmt ioParameters fourth variable name equals: 'iostat'.
 ]
 
 { #category : #'tests-statement' }
@@ -2222,15 +2222,15 @@ FortranToFASTTests >> testInquireStatementFilename [
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 64.
 
-	self assert: stmt specifiers size equals: 2.
+	self assert: stmt ioParameters size equals: 2.
 
-	self assert: stmt specifiers first class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers first startPos equals: 35.
-	self assert: stmt specifiers first variable name equals: 'file'.
-	self assert: stmt specifiers first expression class equals: FASTFortranCharacterLiteral.
-	self assert: stmt specifiers first expression primitiveValue equals: '.profile'.
+	self assert: stmt ioParameters first class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters first startPos equals: 35.
+	self assert: stmt ioParameters first variable name equals: 'file'.
+	self assert: stmt ioParameters first expression class equals: FASTFortranCharacterLiteral.
+	self assert: stmt ioParameters first expression primitiveValue equals: '.profile'.
 
-	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters second class equals: FASTFortranAssignmentExpression.
 ]
 
 { #category : #'tests-statement' }
@@ -2250,15 +2250,15 @@ FortranToFASTTests >> testInquireStatementImplicitUnit [
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 73.
 
-	self assert: stmt specifiers size equals: 4.
+	self assert: stmt ioParameters size equals: 4.
 
-	self assert: stmt specifiers first class equals: FASTFortranIntegerLiteral.
-	self assert: stmt specifiers first startPos equals: 36.
-	self assert: stmt specifiers first primitiveValue equals: '3'.
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 36.
+	self assert: stmt ioParameters first primitiveValue equals: '3'.
 
-	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers third class equals: FASTFortranAssignmentExpression.
-	self assert: stmt specifiers fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
 ]
 
 { #category : #'tests-statement' }
