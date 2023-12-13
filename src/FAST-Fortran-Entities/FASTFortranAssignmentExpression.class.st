@@ -4,8 +4,8 @@ I represent an assignment expression as a part of assignment statement
 Class {
 	#name : #FASTFortranAssignmentExpression,
 	#superclass : #FASTFortranAbstractExpression,
-	#traits : 'FASTFortranTAssignment + FASTFortranTIOParameter',
-	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTIOParameter classTrait',
+	#traits : 'FASTFortranTAssignment + FASTFortranTIOParameter + FASTFortranTInquireSpecifier',
+	#classTraits : 'FASTFortranTAssignment classTrait + FASTFortranTIOParameter classTrait + FASTFortranTInquireSpecifier classTrait',
 	#instVars : [
 		'#parentLoopControlInitialization => FMOne type: #FASTFortranLoopControlExpression opposite: #init'
 	],

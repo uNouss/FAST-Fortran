@@ -385,8 +385,10 @@ FASTFortranVisitor >> visitFASTFortranIncludeStatement: aFASTFortranIncludeState
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranInquireStatement: aFASTFortranInquireStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranInquireStatement.
+
+	aFASTFortranInquireStatement specifiers do: [ :specif |
+		specif accept: self
+	]
 ]
 
 { #category : #'visiting - expressions' }

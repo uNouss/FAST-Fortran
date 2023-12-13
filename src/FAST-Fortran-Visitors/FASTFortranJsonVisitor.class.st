@@ -785,6 +785,40 @@ FASTFortranJsonVisitor >> visitImplied_do:  anImpliedDoListsNode [
 ]
 
 { #category : #visiting }
+FASTFortranJsonVisitor >> visitInquireSpecifier: anInquireSpecifier [
+
+	"#(span name expr)"
+
+	| data |
+	data := super visitInquireSpecifier: anInquireSpecifier.
+
+	^data second
+		ifNil: [ data third ]
+		ifNotNil: [ | specifier |
+			specifier := self newEntity: FASTFortranAssignmentExpression atPosition: data first.
+			specifier variable: (FASTFortranScalarVariable new
+				name: data second ;
+				startPos: specifier startPos ;
+				endPos: (specifier startPos + data second size) ;
+				yourself).
+			specifier expression: data third.
+			specifier
+		]
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitInquireStatement: anInquireStatement [ 
+	"#(span specification)"
+
+	| data |
+	data := super visitInquireStatement: anInquireStatement.
+
+	^(self newEntity: FASTFortranInquireStatement atPosition: data first)
+		specifiers: data second ;
+		yourself
+]
+
+{ #category : #visiting }
 FASTFortranJsonVisitor >> visitIntegerBaseType: aString [
 
 	^FASTFortranIntegerType new

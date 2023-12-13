@@ -113,7 +113,8 @@ Class {
 		'implicitTypingRule',
 		'implicitRange',
 		'impliedDoExpression',
-		'tWithLoopControl'
+		'tWithLoopControl',
+		'tInquireSpecifier'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -504,52 +505,54 @@ FASTFortranGenerator >> defineHierarchy [
 
 	"Expressions"
 	abstractExpression --|> tExpression.
+	abstractLiteral --|> abstractExpression.
+	ampersand --|> abstractLiteral.
+	ampersand --|> tCharacterLiteral.
 	arrayRange --|> tExpression.
 	arrayVariable --|> variable.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
+	assignmentExpression --|> tInquireSpecifier.
 	assignmentExpression --|> tIOParameter.
+	binaryExpression --|> abstractExpression.
+	binaryExpression --|> tBinaryExpression.
+	booleanConstant --|> abstractLiteral.
+	booleanConstant --|> tBooleanLiteral.
+	characterConstant --|> abstractLiteral.
+	characterConstant --|> tCharacterLiteral.
+	characterConstant --|> tFormat.
+	characterConstant --|> tInquireSpecifier.
 	commonGroup  --|> tWithDeclarators.
+	complexConstant --|> abstractLiteral.
+	complexConstant --|> tNumericalLiteral.
 	dataGroup --|> tVariableGroup.
+	doubleComplexConstant --|> abstractLiteral.
+	doubleComplexConstant --|> tNumericalLiteral.
+	doublePrecisionConstant --|> abstractLiteral.
+	doublePrecisionConstant --|> tNumericalLiteral.
 	equivalenceGroup --|> tVariableGroup.
 	functionCall --|> abstractExpression.
 	functionCall --|> tWithArguments.
 	impliedDoExpression --|> tWithLoopControl.
 	impliedDoExpression --|> tExpression.
 	impliedDoExpression --|> tVariableGroup.
+	integerConstant --|> abstractLiteral.
+	integerConstant --|> tNumericalLiteral.
+	integerConstant --|> tFormat.
+	integerConstant --|> tInquireSpecifier.
+	realConstant --|> abstractLiteral.
+	realConstant --|> tNumericalLiteral.
 	scalarVariable --|> variable.
 	scalarVariable --|> tFormat.
 	substring --|> abstractExpression.
+	unaryExpression --|> abstractExpression.
+	unaryExpression --|> tUnaryExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
 	variableDeclarator --|> tVariableDeclarator.
-	
-	binaryExpression --|> abstractExpression.
-	binaryExpression --|> tBinaryExpression.
-	unaryExpression --|> abstractExpression.
-	unaryExpression --|> tUnaryExpression.
 
-	abstractLiteral --|> abstractExpression.
-	complexConstant --|> abstractLiteral.
-	complexConstant --|> tNumericalLiteral.
-	doubleComplexConstant --|> abstractLiteral.
-	doubleComplexConstant --|> tNumericalLiteral.
-	doublePrecisionConstant --|> abstractLiteral.
-	doublePrecisionConstant --|> tNumericalLiteral.
-	integerConstant --|> abstractLiteral.
-	integerConstant --|> tNumericalLiteral.
-	integerConstant --|> tFormat.
-	realConstant --|> abstractLiteral.
-	realConstant --|> tNumericalLiteral.
-	ampersand --|> abstractLiteral.
-	ampersand --|> tCharacterLiteral.
-	characterConstant --|> abstractLiteral.
-	characterConstant --|> tCharacterLiteral.
-	characterConstant --|> tFormat.
-	booleanConstant --|> abstractLiteral.
-	booleanConstant --|> tBooleanLiteral.
-
+	"types"
 	byteType --|> type.
 	characterType --|> type.
 	complexType --|> type.
@@ -687,7 +690,7 @@ FASTFortranGenerator >> defineRelations [
 	<>-* (tEntryArgument property: #entryStatement).
 
 	(function property: #returnType)
-	*- (type property: #typedFunctions).
+	<>- (type property: #typedFunctions).
 
 	((functionStatement property: #expression) comment:
 		 'Expression thats being assigned upon declaration to the var')
@@ -738,6 +741,9 @@ FASTFortranGenerator >> defineRelations [
 	(implicitTypingRule property: #ranges)
 	<>-* (implicitRange property: #parentImplicitRule).
 
+	(inquireStatement property: #specifiers)
+	<>-* (tInquireSpecifier property: #parentInquireStatement).
+
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
 	<>- (assignmentExpression property: #parentLoopControlInitialization).
@@ -777,7 +783,7 @@ FASTFortranGenerator >> defineRelations [
 
 	((tWithLabelReferences property: #labelReferences) comment:
 		 'the label(s) referenced')
-	-* ((labelReference property: #referencer) comment:
+	<>-* ((labelReference property: #referencer) comment:
 			 'A statement (like goto) referencing this label').
 
 ]
@@ -1009,6 +1015,8 @@ FASTFortranGenerator >> defineTraits [
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
 	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement)'.
+
+	tInquireSpecifier := builder newTraitNamed: #TInquireSpecifier comment: 'I represent a specifier in an inquire-statement'.
 
 	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
 

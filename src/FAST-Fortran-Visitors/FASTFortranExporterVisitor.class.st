@@ -617,6 +617,19 @@ FASTFortranExporterVisitor >> visitFASTFortranImpliedDo: aFASTFortranImpliedDo [
 		inParentheses: true
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranInquireStatement: aFASTFortranInquireStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranInquireStatement ;
+		<< 'inquire ' ;
+		outputExpression: [
+			self visitNodeListSeparatedByCommas: aFASTFortranInquireStatement specifiers ]
+		inParentheses: true ;
+		newLine.
+
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranType [
 	self << 'integer'.

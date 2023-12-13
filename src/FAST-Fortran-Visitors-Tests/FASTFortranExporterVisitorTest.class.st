@@ -609,12 +609,12 @@ FASTFortranExporterVisitorTest >> testCommonStatement [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testContinueStatement [
-	| cmt |
-	cmt := FASTFortranContinueStatement new
+	| stmt |
+	stmt := FASTFortranContinueStatement new
 		label: '110'.
 
 	self
-		assertExport: cmt
+		assertExport: stmt
 		equals: 
 '110   continue
 '.
@@ -1092,6 +1092,23 @@ FASTFortranExporterVisitorTest >> testImpliedDoExpression [
 		assertExport: expr
 		equals: 
 '(v,i,i = 1,max,1)'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testInquireStatement [
+	| stmt |
+	stmt := FASTFortranInquireStatement new
+		specifiers: {
+			self integerLiteral: '3' .
+			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
+			self assignement: 'err' expression: (self integerLiteral: '10')
+		}.
+
+	self
+		assertExport: stmt
+		equals: 
+'      inquire (3,iostat = stat,err = 10)
+'.
 ]
 
 { #category : #'tests - statements' }
