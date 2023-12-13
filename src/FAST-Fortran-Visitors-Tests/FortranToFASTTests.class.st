@@ -2368,7 +2368,7 @@ FortranToFASTTests >> testOpenStatement [
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranOpenStatement.
 	self assert: stmt startPos equals: 26.
-	self assert: stmt endPos equals: 72.
+	self assert: stmt endPos equals: 67.
 
 	self assert: stmt ioParameters size equals: 3.
 
