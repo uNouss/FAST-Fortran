@@ -2379,6 +2379,8 @@ FortranToFASTTests >> testOpenStatement [
 	self assert: stmt ioParameters second class equals: FASTFortranAssignmentExpression.
 	self assert: stmt ioParameters second startPos equals: 34.
 	self assert: stmt ioParameters second variable name equals: 'file'.
+	self assert: stmt ioParameters second expression class equals: FASTFortranCharacterLiteral.
+	self assert: stmt ioParameters second expression primitiveValue equals: 'projectA/data.test'.
 
 	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
 	self assert: stmt ioParameters third startPos equals: 61.
