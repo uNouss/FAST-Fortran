@@ -1097,7 +1097,7 @@ FASTFortranExporterVisitorTest >> testImpliedDoExpression [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testInquireStatement [
 	| stmt |
-	stmt := FASTFortranRewindStatement new
+	stmt := FASTFortranInquireStatement new
 		ioParameters: {
 			self integerLiteral: '3' .
 			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
@@ -1107,7 +1107,7 @@ FASTFortranExporterVisitorTest >> testInquireStatement [
 	self
 		assertExport: stmt
 		equals: 
-'      rewind (3,iostat = stat,err = 10)
+'      inquire (3,iostat = stat,err = 10)
 '.
 ]
 
