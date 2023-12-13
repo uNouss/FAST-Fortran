@@ -1296,6 +1296,54 @@ FortranToFASTTests >> testDoStatementEmptyNoIncrement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testDoStatementNestedOneContinue [
+
+	| result stmt |
+	fortranCode := '      program main
+      DO 30 L=1,10
+      A=1
+      DO 30 M=L,10
+   30 a=2
+   40 CONTINUE
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[{"anno":[],"label":null,"span":"(3:7)-(3:9)","statement":{"anno":[],"expression":{"anno":[],"span":"(3:9)-(3:9)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(3:7)-(3:9)","tag":"assign_expression","target":{"anno":[],"span":"(3:7)-(3:7)","tag":"value","value":{"contents":"a","tag":"variable"}}},"tag":"statement"},{"anno":[],"body":[{"anno":[],"label":{"anno":[],"span":"(5:4)-(5:5)","tag":"value","value":{"contents":["30",null],"tag":"integer"}},"span":"(5:4)-(5:9)","statement":{"anno":[],"expression":{"anno":[],"span":"(5:9)-(5:9)","tag":"value","value":{"contents":["2",null],"tag":"integer"}},"span":"(5:7)-(5:9)","tag":"assign_expression","target":{"anno":[],"span":"(5:7)-(5:7)","tag":"value","value":{"contents":"a","tag":"variable"}}},"tag":"statement"}],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(4:15)-(4:15)","tag":"value","value":{"contents":"l","tag":"variable"}},"span":"(4:13)-(4:15)","tag":"assign_expression","target":{"anno":[],"span":"(4:13)-(4:13)","tag":"value","value":{"contents":"m","tag":"variable"}}},"limit":{"anno":[],"span":"(4:17)-(4:18)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(4:13)-(4:18)"},"end_label":{"anno":[],"span":"(5:4)-(5:5)","tag":"value","value":{"contents":["30",null],"tag":"integer"}},"label":null,"name":null,"span":"(4:7)-(5:9)","tag":"do","target":{"anno":[],"span":"(4:10)-(4:11)","tag":"value","value":{"contents":["30",null],"tag":"integer"}}}],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:15)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:13)-(2:15)","tag":"assign_expression","target":{"anno":[],"span":"(2:13)-(2:13)","tag":"value","value":{"contents":"l","tag":"variable"}}},"limit":{"anno":[],"span":"(2:17)-(2:18)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:13)-(2:18)"},"end_label":{"anno":[],"span":"(5:4)-(5:5)","tag":"value","value":{"contents":["30",null],"tag":"integer"}},"label":null,"name":null,"span":"(2:7)-(5:9)","tag":"do","target":{"anno":[],"span":"(2:10)-(2:11)","tag":"value","value":{"contents":["30",null],"tag":"integer"}}},{"anno":[],"label":{"anno":[],"span":"(6:4)-(6:5)","tag":"value","value":{"contents":["40",null],"tag":"integer"}},"span":"(6:4)-(6:14)","statement":{"anno":[],"span":"(6:7)-(6:14)","tag":"continue"},"tag":"statement"}],"name":"main","span":"(1:7)-(7:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 2.
+
+	"DO 30 L=1,10"
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt statementBlock statements size equals: 2.
+
+	"A=1"
+	stmt := result first statementBlock statements first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+
+	"DO 30 M=L,10"
+	stmt := result first statementBlock statements first statementBlock statements second.
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt statementBlock statements size equals: 1.
+
+	"30 a=2"
+	stmt := stmt statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt labelReferences size equals: 1.
+	self assert: stmt labelReferences first class equals: FASTFortranLabelReference.
+	self assert: stmt labelReferences first label equals: '30'.
+
+	"40 CONTINUE"
+	stmt := result first statementBlock statements second.
+	self assert: stmt class equals: FASTFortranContinueStatement.
+	self assert: stmt labelReferences size equals: 1.
+	self assert: stmt labelReferences first class equals: FASTFortranLabelReference.
+	self assert: stmt labelReferences first label equals: '40'.
+
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testDoStatementWithComment [
 
 	| result stmt |
