@@ -178,7 +178,6 @@ FortranToFASTTests >> testAssignement [
 	self assert: stmt startPos equals: 32.
 	self assert: stmt endPos equals: 36.
 
-
 	self assert: stmt variable class equals: FASTFortranScalarVariable.
 	self assert: stmt variable name equals: 'c'.
 ]
@@ -2191,18 +2190,75 @@ FortranToFASTTests >> testInquireStatement [
 	self assert: stmt startPos equals: 26.
 	self assert: stmt endPos equals: 74.
 
-	self assert: stmt specifiers size equals: 5.
+	self assert: stmt specifiers size equals: 4.
 
-	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
-	self assert: stmt ioParameters first startPos equals: 40.
-	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral.
-	self assert: stmt ioParameters second startPos equals: 43.
-	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
-	self assert: stmt ioParameters third startPos equals: 46.
-	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
-	self assert: stmt ioParameters fourth startPos equals: 53.
-	self assert: stmt ioParameters fifth class equals: FASTFortranAssignmentExpression.
-	self assert: stmt ioParameters fifth startPos equals: 63
+	self assert: stmt specifiers first class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers first startPos equals: 34.
+	self assert: stmt specifiers first variable name equals: 'unit'.
+	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers second startPos equals: 45.
+	self assert: stmt specifiers second variable name equals: 'form'.
+	self assert: stmt specifiers third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers third startPos equals: 56.
+	self assert: stmt specifiers third variable name equals: 'err'.
+	self assert: stmt specifiers fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers fourth startPos equals: 63.
+	self assert: stmt specifiers fourth variable name equals: 'iostat'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testInquireStatementFilename [
+
+	| stmt result |
+	fortranCode := '      program main
+      NQUIRE( FILE=''.profile'', EXIST=THERE ) end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:45)","statement":{"anno":[],"span":"(2:7)-(2:45)","specification":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:21)-(2:30)","tag":"value","value":{"contents":".profile","tag":"string"}},"name":"file","span":"(2:16)-(2:30)"},{"anno":[],"expr":{"anno":[],"span":"(2:39)-(2:43)","tag":"value","value":{"contents":"there","tag":"variable"}},"name":"exist","span":"(2:33)-(2:43)"}],"span":"(2:14)-(2:45)"},"tag":"inquire"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranInquireStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 64.
+
+	self assert: stmt specifiers size equals: 2.
+
+	self assert: stmt specifiers first class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers first startPos equals: 35.
+	self assert: stmt specifiers first variable name equals: 'file'.
+	self assert: stmt specifiers first expression class equals: FASTFortranCharacterLiteral.
+	self assert: stmt specifiers first expression primitiveValue equals: '.profile'.
+
+	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testInquireStatementImplicitUnit [
+
+	| stmt result |
+	fortranCode := '      program main
+      INQUIRE ( 3, OPENED=OK, NAMED=HASNAME, NAME=FN ) 
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:54)","statement":{"anno":[],"span":"(2:7)-(2:54)","specification":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:17)-(2:17)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"name":null,"span":"(2:17)-(2:17)"},{"anno":[],"expr":{"anno":[],"span":"(2:27)-(2:28)","tag":"value","value":{"contents":"ok","tag":"variable"}},"name":"opened","span":"(2:20)-(2:28)"},{"anno":[],"expr":{"anno":[],"span":"(2:37)-(2:43)","tag":"value","value":{"contents":"hasname","tag":"variable"}},"name":"named","span":"(2:31)-(2:43)"},{"anno":[],"expr":{"anno":[],"span":"(2:51)-(2:52)","tag":"value","value":{"contents":"fn","tag":"variable"}},"name":"name","span":"(2:46)-(2:52)"}],"span":"(2:15)-(2:54)"},"tag":"inquire"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranInquireStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 73.
+
+	self assert: stmt specifiers size equals: 4.
+
+	self assert: stmt specifiers first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt specifiers first startPos equals: 36.
+	self assert: stmt specifiers first primitiveValue equals: '3'.
+
+	self assert: stmt specifiers second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt specifiers fourth class equals: FASTFortranAssignmentExpression.
 ]
 
 { #category : #'tests-statement' }
