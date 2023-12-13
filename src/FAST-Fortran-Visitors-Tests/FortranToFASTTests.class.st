@@ -2566,6 +2566,29 @@ FortranToFASTTests >> testReturnStatementEmpty [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testRewindStatementUnit [
+
+	| stmt result |
+	fortranCode := '      PROGRAM main
+      REWIND 3
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:14)","statement":{"anno":[],"span":"(2:7)-(2:14)","specification":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":["3",null],"tag":"integer"}},"tag":"rewind2"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranRewindStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 33.
+
+	self assert: stmt ioParameters size equals: 1.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 33.
+	self assert: stmt ioParameters first primitiveValue equals: '3'
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testStatementWithLabel [
 
 	| result stmt |
