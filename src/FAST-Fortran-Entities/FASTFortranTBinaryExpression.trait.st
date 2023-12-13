@@ -4,8 +4,8 @@ A trait representing a binary expression of a node of a source code.
 Trait {
 	#name : #FASTFortranTBinaryExpression,
 	#instVars : [
-		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
 		'#operator => FMProperty',
+		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
 		'#right => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
 	],
 	#traits : 'FASTFortranTExpression',

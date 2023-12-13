@@ -5,9 +5,9 @@ Trait {
 	#name : #FASTFortranTStatementBlock,
 	#instVars : [
 		'#fastBehaviouralParent => FMOne type: #FASTFortranTBehaviouralEntity opposite: #statementBlock',
+		'#statements => FMMany type: #FASTFortranTStatement opposite: #statementContainer',
 		'#parentDoStatement => FMOne type: #FASTFortranDoStatement opposite: #statementBlock',
-		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #thenStatementBlock',
-		'#statements => FMMany type: #FASTFortranTStatement opposite: #statementContainer'
+		'#parentIfBlock => FMOne type: #FASTFortranIfBlockStatement opposite: #thenStatementBlock'
 	],
 	#traits : 'FASTFortranTStatement',
 	#classTraits : 'FASTFortranTStatement classTrait',

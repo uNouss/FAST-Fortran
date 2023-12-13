@@ -4,21 +4,21 @@ An abstract superclass representing an expression node of a source code.
 Trait {
 	#name : #FASTFortranTExpression,
 	#instVars : [
+		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
+		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
 		'#argumentOwner => FMOne type: #FASTFortranTWithArguments opposite: #arguments',
 		'#assignedIn => FMOne type: #FASTFortranTAssignment opposite: #expression',
-		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
-		'#expressionStatementOwner => FMOne type: #FASTFortranTExpressionStatement opposite: #expression',
 		'#parentArrayDimensionDeclarator => FMOne type: #FASTFortranArrayRange opposite: #upperBound',
 		'#parentArrayExpression => FMOne type: #FASTFortranArrayVariable opposite: #indices',
-		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
-		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
-		'#parentGotoAssignedStatement => FMOne type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression',
+		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression',
+		'#assignementExpressionOwner => FMOne type: #FASTFortranFunctionStatement opposite: #expression',
 		'#parentGotoComputedStatement => FMOne type: #FASTFortranGoToComputedStatement opposite: #selectorExpression',
+		'#parentGotoAssignedStatement => FMOne type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression',
+		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentLoopControlIncrement => FMOne type: #FASTFortranLoopControlExpression opposite: #increment',
 		'#parentLoopControlLimit => FMOne type: #FASTFortranLoopControlExpression opposite: #limit',
-		'#returnOwner => FMOne type: #FASTFortranTReturnStatement opposite: #expression',
-		'#variableDeclaratorOwner => FMOne type: #FASTFortranTVariableDeclarator opposite: #expression'
+		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',

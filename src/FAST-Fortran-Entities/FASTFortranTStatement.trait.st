@@ -5,8 +5,8 @@ Trait {
 	#name : #FASTFortranTStatement,
 	#instVars : [
 		'#label => FMProperty',
-		'#parentIfStatement => FMOne type: #FASTFortranIfLogicalStatement opposite: #statement',
-		'#statementContainer => FMOne type: #FASTFortranTStatementBlock opposite: #statements'
+		'#statementContainer => FMOne type: #FASTFortranTStatementBlock opposite: #statements',
+		'#parentIfStatement => FMOne type: #FASTFortranIfLogicalStatement opposite: #statement'
 	],
 	#traits : 'FASTFortranTEntity',
 	#classTraits : 'FASTFortranTEntity classTrait',
