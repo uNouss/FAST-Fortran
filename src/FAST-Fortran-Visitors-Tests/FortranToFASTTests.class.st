@@ -2279,14 +2279,14 @@ FortranToFASTTests >> testIntrinsicStatement [
 	self assert: stmt startPos equals: 29.
 	self assert: stmt endPos equals: 46.
 
-	self assert: stmt functions size equals: 2.
+	self assert: stmt variables size equals: 2.
 
-	self assert: stmt functions first class equals: FASTFortranScalarVariable.
-	self assert: stmt functions first startPos equals: 39.
-	self assert: stmt functions first name equals: 'sin'.
-	self assert: stmt functions second class equals: FASTFortranScalarVariable.
-	self assert: stmt functions second startPos equals: 44.
-	self assert: stmt functions second name equals: 'cos'.
+	self assert: stmt variables first class equals: FASTFortranScalarVariable.
+	self assert: stmt variables first startPos equals: 39.
+	self assert: stmt variables first name equals: 'sin'.
+	self assert: stmt variables second class equals: FASTFortranScalarVariable.
+	self assert: stmt variables second startPos equals: 44.
+	self assert: stmt variables second name equals: 'cos'.
 ]
 
 { #category : #'tests-statement' }
