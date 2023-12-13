@@ -316,6 +316,27 @@ FortranToFASTTests >> testAssignementRealLiteral [
 
 ]
 
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testAssignementScientificNotation [
+
+	| result stmt |
+	fortranCode := '      PROGRAM MYPROG
+          c = 1.0E-30
+      END
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:11)-(2:21)","statement":{"anno":[],"expression":{"anno":[],"span":"(2:15)-(2:21)","tag":"value","value":{"contents":[{"exponent":{"letter":"e","num":"-30"},"significand":"1.0"},null],"tag":"real"}},"span":"(2:11)-(2:21)","tag":"assign_expression","target":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"c","tag":"variable"}}},"tag":"statement"}],"name":"myprog","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranAssignmentStatement.
+	self assert: stmt startPos equals: 32.
+
+
+	self assert: stmt expression class equals: FASTFortranRealLiteral.
+	self assert: stmt expression primitiveValue equals: '1.0e-30'.
+]
+
 { #category : #'tests-expression' }
 FortranToFASTTests >> testAssignementStringLiteral [
 
