@@ -989,7 +989,7 @@ FASTFortranJsonVisitor >> visitRealLiteralValue: aRealLiteralValueNode [
 	data := super visitRealLiteralValue: aRealLiteralValueNode.
 	^FASTFortranRealLiteral new
 		mooseModel: model ;
-		primitiveValue: data second;
+		primitiveValue: (data second ifNil: [ data first ] ifNotNil: [data first , data second]);
 		yourself
 ]
 
