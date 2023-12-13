@@ -4,6 +4,8 @@ I represent Fortran Open statement
 Class {
 	#name : #FASTFortranOpenStatement,
 	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithIOParameters',
+	#classTraits : 'FASTFortranTWithIOParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
