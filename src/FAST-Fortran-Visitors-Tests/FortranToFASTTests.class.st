@@ -2175,6 +2175,37 @@ FortranToFASTTests >> testImpliedDoExpression [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testInquireStatement [
+
+	| stmt result |
+	fortranCode := '      program main
+      inquire(unit=xunit,form=zform,err=10,iostat=zios)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:55)","statement":{"anno":[],"span":"(2:7)-(2:55)","specification":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:20)-(2:24)","tag":"value","value":{"contents":"xunit","tag":"variable"}},"name":"unit","span":"(2:15)-(2:24)"},{"anno":[],"expr":{"anno":[],"span":"(2:31)-(2:35)","tag":"value","value":{"contents":"zform","tag":"variable"}},"name":"form","span":"(2:26)-(2:35)"},{"anno":[],"expr":{"anno":[],"span":"(2:41)-(2:42)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"name":"err","span":"(2:37)-(2:42)"},{"anno":[],"expr":{"anno":[],"span":"(2:51)-(2:54)","tag":"value","value":{"contents":"zios","tag":"variable"}},"name":"iostat","span":"(2:44)-(2:54)"}],"span":"(2:14)-(2:55)"},"tag":"inquire"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranInquireStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 74.
+
+	self assert: stmt specifiers size equals: 5.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters second startPos equals: 43.
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters third startPos equals: 46.
+	self assert: stmt ioParameters fourth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fourth startPos equals: 53.
+	self assert: stmt ioParameters fifth class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters fifth startPos equals: 63
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testLogicalIfEmpty [
 
 	| result conditional |
