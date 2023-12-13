@@ -4,8 +4,8 @@ I represent Fortran Character Literal (Constant) statement
 Class {
 	#name : #FASTFortranCharacterLiteral,
 	#superclass : #FASTFortranAbstractLiteral,
-	#traits : 'FASTFortranTCharacterLiteral + FASTFortranTFormat + FASTFortranTInquireSpecifier',
-	#classTraits : 'FASTFortranTCharacterLiteral classTrait + FASTFortranTFormat classTrait + FASTFortranTInquireSpecifier classTrait',
+	#traits : 'FASTFortranTCharacterLiteral + FASTFortranTFormat',
+	#classTraits : 'FASTFortranTCharacterLiteral classTrait + FASTFortranTFormat classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
