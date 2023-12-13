@@ -2354,6 +2354,38 @@ FortranToFASTTests >> testMainProgramEmpty [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testOpenStatement [
+
+	| stmt result |
+	fortranCode := '      PROGRAM main
+      OPEN(8, FILE=''projectA/data.test'', ERR=99)
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:48)","statement":{"anno":[],"span":"(2:7)-(2:48)","specification":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"span":"(2:12)-(2:12)","tag":"value","value":{"contents":["8",null],"tag":"integer"}},"name":null,"span":"(2:12)-(2:12)"},{"anno":[],"expr":{"anno":[],"span":"(2:20)-(2:39)","tag":"value","value":{"contents":"projectA/data.test","tag":"string"}},"name":"file","span":"(2:15)-(2:39)"},{"anno":[],"expr":{"anno":[],"span":"(2:46)-(2:47)","tag":"value","value":{"contents":["99",null],"tag":"integer"}},"name":"err","span":"(2:42)-(2:47)"}],"span":"(2:11)-(2:48)"},"tag":"open"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranOpenStatement.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 72.
+
+	self assert: stmt ioParameters size equals: 3.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 31.
+	self assert: stmt ioParameters first primitiveValue equals: '8'.
+
+	self assert: stmt ioParameters second class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters second startPos equals: 34.
+	self assert: stmt ioParameters second variable name equals: 'file'.
+
+	self assert: stmt ioParameters third class equals: FASTFortranAssignmentExpression.
+	self assert: stmt ioParameters third startPos equals: 61.
+	self assert: stmt ioParameters third variable name equals: 'err'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testParameterStatement [
 
 	| result stmt var |
