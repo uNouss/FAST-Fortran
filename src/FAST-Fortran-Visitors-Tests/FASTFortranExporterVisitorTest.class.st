@@ -1098,7 +1098,7 @@ FASTFortranExporterVisitorTest >> testImpliedDoExpression [
 FASTFortranExporterVisitorTest >> testInquireStatement [
 	| stmt |
 	stmt := FASTFortranInquireStatement new
-		specifiers: {
+		ioParameters: {
 			self integerLiteral: '3' .
 			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
 			self assignement: 'err' expression: (self integerLiteral: '10')

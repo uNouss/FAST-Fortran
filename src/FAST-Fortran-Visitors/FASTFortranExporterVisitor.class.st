@@ -624,7 +624,7 @@ FASTFortranExporterVisitor >> visitFASTFortranInquireStatement: aFASTFortranInqu
 		visitFASTFortranAbstractStatement: aFASTFortranInquireStatement ;
 		<< 'inquire ' ;
 		outputExpression: [
-			self visitNodeListSeparatedByCommas: aFASTFortranInquireStatement specifiers ]
+			self visitNodeListSeparatedByCommas: aFASTFortranInquireStatement ioParameters ]
 		inParentheses: true ;
 		newLine.
 
