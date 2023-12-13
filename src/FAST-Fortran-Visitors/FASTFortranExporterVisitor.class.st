@@ -624,7 +624,7 @@ FASTFortranExporterVisitor >> visitFASTFortranInquireStatement: aFASTFortranInqu
 		visitFASTFortranAbstractStatement: aFASTFortranInquireStatement ;
 		<< 'inquire ' ;
 		outputExpression: [
-			self visitNodeListSeparatedByCommas: aFASTFortranInquireStatement specifiers ]
+			self visitNodeListSeparatedByCommas: aFASTFortranInquireStatement ioParameters ]
 		inParentheses: true ;
 		newLine.
 
@@ -717,6 +717,19 @@ FASTFortranExporterVisitor >> visitFASTFortranReadStatement: aFASTFortranReadSta
 FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self << 'real'.
 	self visitFASTFortranType: aFASTFortranType
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranRewindStatement: aFASTFortranRewindStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranRewindStatement ;
+		<< 'rewind ' ;
+		outputExpression: [
+			self visitNodeListSeparatedByCommas: aFASTFortranRewindStatement ioParameters ]
+		inParentheses: true ;
+		newLine.
+
 ]
 
 { #category : #'visiting - expressions' }

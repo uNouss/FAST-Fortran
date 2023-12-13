@@ -686,9 +686,9 @@ FASTFortranJsonVisitor >> visitIOParameter: anIOParameterNode [
 ]
 
 { #category : #visiting }
-FASTFortranJsonVisitor >> visitIOParameters: aWriteFormatNode [
+FASTFortranJsonVisitor >> visitIOParameters: anIOParametersCollection [
 
-	^ (super visitIOParameters: aWriteFormatNode) second reject: #isNil
+	^(super visitIOParameters: anIOParametersCollection) reject: #isNil
 ]
 
 { #category : #'visiting statement' }
@@ -784,28 +784,6 @@ FASTFortranJsonVisitor >> visitImplied_do:  anImpliedDoListsNode [
 		yourself
 ]
 
-{ #category : #visiting }
-FASTFortranJsonVisitor >> visitInquireSpecifier: anInquireSpecifier [
-
-	"#(span name expr)"
-
-	| data |
-	data := super visitInquireSpecifier: anInquireSpecifier.
-
-	^data second
-		ifNil: [ data third ]
-		ifNotNil: [ | specifier |
-			specifier := self newEntity: FASTFortranAssignmentExpression atPosition: data first.
-			specifier variable: (FASTFortranScalarVariable new
-				name: data second ;
-				startPos: specifier startPos ;
-				endPos: (specifier startPos + data second size) ;
-				yourself).
-			specifier expression: data third.
-			specifier
-		]
-]
-
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitInquireStatement: anInquireStatement [ 
 	"#(span specification)"
@@ -814,7 +792,7 @@ FASTFortranJsonVisitor >> visitInquireStatement: anInquireStatement [
 	data := super visitInquireStatement: anInquireStatement.
 
 	^(self newEntity: FASTFortranInquireStatement atPosition: data first)
-		specifiers: data second ;
+		ioParameters: data second ;
 		yourself
 ]
 
@@ -1034,6 +1012,30 @@ FASTFortranJsonVisitor >> visitReturnStatement: aReturnStatementNode [
 FASTFortranJsonVisitor >> visitReturn_spec: aReturn_specNode [
 
 	^ (super visitReturn_spec: aReturn_specNode) second
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitRewind2Statement: aRewindStatementNode [
+
+	| data |
+	data := super visitRewind2Statement: aRewindStatementNode.
+
+	^(self newEntity: FASTFortranRewindStatement atPosition: data first)
+		ioParameters: data second ;
+		yourself
+
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitRewindStatement: aRewindStatementNode [
+
+	| data |
+	data := super visitRewindStatement: aRewindStatementNode.
+
+	^(self newEntity: FASTFortranRewindStatement atPosition: data first)
+		ioParameters: data second ;
+		yourself
+
 ]
 
 { #category : #visiting }
