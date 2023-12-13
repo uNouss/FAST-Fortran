@@ -1112,6 +1112,22 @@ FASTFortranExporterVisitorTest >> testInquireStatement [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testIntrinsicStatement [
+
+	| stmt |
+
+	stmt := FASTFortranIntrinsicStatement new
+		variables: (self scalarVariables: #(sin cos)) ;
+		yourself.
+
+	self
+		assertExport: stmt
+		equals: 
+'      intrinsic sin,cos
+'
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testLabelledStatement [
 	| stmt |
 	stmt := self returnStatement: nil.

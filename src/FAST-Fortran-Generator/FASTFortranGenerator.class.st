@@ -471,6 +471,7 @@ FASTFortranGenerator >> defineHierarchy [
 	inquireStatement --|> abstractStatement.
 	inquireStatement --|> tWithIOParameters.
 	intrinsicStatement --|> abstractStatement.
+	intrinsicStatement --|> tVariableGroup.
 	mapStatement --|> abstractStatement.
 	nameListStatement --|> abstractStatement.
 	openStatement --|> abstractStatement.

@@ -813,6 +813,17 @@ FASTFortranJsonVisitor >> visitIntegerLiteralValue: anIntegerLiteralValueNode [
 		yourself
 ]
 
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitIntrinsicStatement: anIntrinsicStatement [
+
+	| data |
+	data := super visitIntrinsicStatement: anIntrinsicStatement.
+
+	^(self newEntity: FASTFortranIntrinsicStatement atPosition: data first)
+		variables: data second ;
+		yourself
+]
+
 { #category : #visiting }
 FASTFortranJsonVisitor >> visitItems: anImplicitItemsNode [
 	"#(span type elements)"
