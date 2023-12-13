@@ -40,3 +40,10 @@ FASTFortranTWithLabelReferences >> labelReferences: anObject [
 	<generated>
 	labelReferences value: anObject
 ]
+
+{ #category : #navigation }
+FASTFortranTWithLabelReferences >> labelReferencesGroup [
+	<generated>
+	<navigation: 'LabelReferences'>
+	^ MooseSpecializedGroup withAll: self labelReferences asSet
+]

@@ -33,3 +33,10 @@ FASTFortranFunction >> returnType: anObject [
 	<generated>
 	returnType := anObject
 ]
+
+{ #category : #navigation }
+FASTFortranFunction >> returnTypeGroup [
+	<generated>
+	<navigation: 'ReturnType'>
+	^ MooseSpecializedGroup with: self returnType
+]

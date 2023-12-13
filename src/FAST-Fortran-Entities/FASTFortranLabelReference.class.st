@@ -117,6 +117,7 @@ FASTFortranLabelReference >> referencer [
 
 	<generated>
 	<FMComment: 'A statement (like goto) referencing this label'>
+	<container>
 	^ referencer
 ]
 
@@ -125,4 +126,11 @@ FASTFortranLabelReference >> referencer: anObject [
 
 	<generated>
 	referencer := anObject
+]
+
+{ #category : #navigation }
+FASTFortranLabelReference >> referencerGroup [
+	<generated>
+	<navigation: 'Referencer'>
+	^ MooseSpecializedGroup with: self referencer
 ]

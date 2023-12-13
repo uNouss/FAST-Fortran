@@ -6,7 +6,7 @@ Class {
 	#superclass : #FASTFortranEntity,
 	#instVars : [
 		'#parentDeclaration => FMOne type: #FASTFortranVariableDeclarationStatement opposite: #type',
-		'#typedFunctions => FMMany type: #FASTFortranFunction opposite: #returnType',
+		'#typedFunctions => FMOne type: #FASTFortranFunction opposite: #returnType',
 		'#parentImplicitRule => FMOne type: #FASTFortranImplicitTypingRule opposite: #type',
 		'#size => FMOne type: #FASTFortranTNumericalLiteral opposite: #parentTypeSize'
 	],
@@ -20,12 +20,6 @@ FASTFortranType class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #adding }
-FASTFortranType >> addTypedFunction: anObject [
-	<generated>
-	^ self typedFunctions add: anObject
 ]
 
 { #category : #accessing }
@@ -105,6 +99,7 @@ FASTFortranType >> typedFunctions [
 	"Relation named: #typedFunctions type: #FASTFortranFunction opposite: #returnType"
 
 	<generated>
+	<container>
 	<derived>
 	^ typedFunctions
 ]
@@ -113,5 +108,12 @@ FASTFortranType >> typedFunctions [
 FASTFortranType >> typedFunctions: anObject [
 
 	<generated>
-	typedFunctions value: anObject
+	typedFunctions := anObject
+]
+
+{ #category : #navigation }
+FASTFortranType >> typedFunctionsGroup [
+	<generated>
+	<navigation: 'TypedFunctions'>
+	^ MooseSpecializedGroup with: self typedFunctions
 ]
