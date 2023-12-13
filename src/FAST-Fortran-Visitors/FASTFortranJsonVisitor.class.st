@@ -914,6 +914,18 @@ FASTFortranJsonVisitor >> visitOp: anOperatorNode [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitOpenStatement: anOpenStatement [ 
+	"#(span specification)"
+
+	| data |
+	data := super visitOpenStatement: anOpenStatement.
+
+	^(self newEntity: FASTFortranOpenStatement atPosition: data first)
+		ioParameters: data second ;
+		yourself
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitParameterStatement: aParameterStatementNode [ 
 
 	| data |

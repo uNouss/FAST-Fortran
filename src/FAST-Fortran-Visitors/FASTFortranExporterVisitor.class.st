@@ -676,6 +676,19 @@ FASTFortranExporterVisitor >> visitFASTFortranModel: aFASTFortranModel [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranOpenStatement: aFASTFortranOpenStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranOpenStatement ;
+		<< 'open ' ;
+		outputExpression: [
+			self visitNodeListSeparatedByCommas: aFASTFortranOpenStatement ioParameters ]
+		inParentheses: true ;
+		newLine.
+
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranExporterVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
 
 	self

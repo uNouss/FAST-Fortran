@@ -474,6 +474,7 @@ FASTFortranGenerator >> defineHierarchy [
 	mapStatement --|> abstractStatement.
 	nameListStatement --|> abstractStatement.
 	openStatement --|> abstractStatement.
+	openStatement --|> tWithIOParameters.
 	optionsStatement --|> abstractStatement.
 	parameterStatement --|> abstractStatement.
 	parameterStatement --|> tWithDeclarators.

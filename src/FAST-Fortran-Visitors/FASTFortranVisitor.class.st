@@ -441,8 +441,10 @@ FASTFortranVisitor >> visitFASTFortranNameListStatement: aFASTFortranNameListSta
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranOpenStatement: aFASTFortranOpenStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranOpenStatement.
+
+	aFASTFortranOpenStatement ioParameters do: [ :ioParam |
+		ioParam accept: self
+	]
 ]
 
 { #category : #'visiting - statements' }

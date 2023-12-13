@@ -1306,6 +1306,23 @@ FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 '
 ]
 
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testOpenStatement [
+	| stmt |
+	stmt := FASTFortranOpenStatement new
+		ioParameters: {
+			self integerLiteral: '3' .
+			self assignement: 'file' expression: (self characterLiteral: 'projectA/data.test') .
+			self assignement: 'err' expression: (self integerLiteral: '99')
+		}.
+
+	self
+		assertExport: stmt
+		equals: 
+'      open (3,file = ''projectA/data.test'',err = 99)
+'.
+]
+
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testOperatorsPrecedenceNoParentheses [
 	
