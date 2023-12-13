@@ -820,7 +820,7 @@ FASTFortranJsonVisitor >> visitIntrinsicStatement: anIntrinsicStatement [
 	data := super visitIntrinsicStatement: anIntrinsicStatement.
 
 	^(self newEntity: FASTFortranIntrinsicStatement atPosition: data first)
-		functions: data second ;
+		variables: data second ;
 		yourself
 ]
 
