@@ -113,8 +113,7 @@ Class {
 		'implicitTypingRule',
 		'implicitRange',
 		'impliedDoExpression',
-		'tWithLoopControl',
-		'tInquireSpecifier'
+		'tWithLoopControl'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -470,6 +469,7 @@ FASTFortranGenerator >> defineHierarchy [
 	implicitStatement --|> abstractStatement.
 	includeStatement --|> abstractStatement.
 	inquireStatement --|> abstractStatement.
+	inquireStatement --|> tWithIOParameters.
 	intrinsicStatement --|> abstractStatement.
 	mapStatement --|> abstractStatement.
 	nameListStatement --|> abstractStatement.
@@ -513,7 +513,6 @@ FASTFortranGenerator >> defineHierarchy [
 	arrayVariable --|> variable.
 	assignmentExpression --|> abstractExpression.
 	assignmentExpression --|> tAssignment.
-	assignmentExpression --|> tInquireSpecifier.
 	assignmentExpression --|> tIOParameter.
 	binaryExpression --|> abstractExpression.
 	binaryExpression --|> tBinaryExpression.
@@ -522,7 +521,6 @@ FASTFortranGenerator >> defineHierarchy [
 	characterConstant --|> abstractLiteral.
 	characterConstant --|> tCharacterLiteral.
 	characterConstant --|> tFormat.
-	characterConstant --|> tInquireSpecifier.
 	commonGroup  --|> tWithDeclarators.
 	complexConstant --|> abstractLiteral.
 	complexConstant --|> tNumericalLiteral.
@@ -540,7 +538,6 @@ FASTFortranGenerator >> defineHierarchy [
 	integerConstant --|> abstractLiteral.
 	integerConstant --|> tNumericalLiteral.
 	integerConstant --|> tFormat.
-	integerConstant --|> tInquireSpecifier.
 	realConstant --|> abstractLiteral.
 	realConstant --|> tNumericalLiteral.
 	scalarVariable --|> variable.
@@ -741,9 +738,6 @@ FASTFortranGenerator >> defineRelations [
 
 	(implicitTypingRule property: #ranges)
 	<>-* (implicitRange property: #parentImplicitRule).
-
-	(inquireStatement property: #specifiers)
-	<>-* (tInquireSpecifier property: #parentInquireStatement).
 
 	((loopControlExpression property: #init) comment:
 		 'initial assignment')
@@ -1016,8 +1010,6 @@ FASTFortranGenerator >> defineTraits [
 	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
 
 	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement)'.
-
-	tInquireSpecifier := builder newTraitNamed: #TInquireSpecifier comment: 'I represent a specifier in an inquire-statement'.
 
 	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
 
