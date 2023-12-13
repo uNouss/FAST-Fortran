@@ -404,8 +404,9 @@ FASTFortranVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIntrinsicStatement: aFASTFortranIntrinsicStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranIntrinsicStatement.
+
+	aFASTFortranIntrinsicStatement variables do: [ :var | var accept: self ].
+
 ]
 
 { #category : #'visiting - expressions' }

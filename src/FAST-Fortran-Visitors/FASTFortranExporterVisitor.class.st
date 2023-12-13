@@ -636,6 +636,17 @@ FASTFortranExporterVisitor >> visitFASTFortranIntegerType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranIntrinsicStatement: aFASTFortranIntrinsicStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranIntrinsicStatement ;
+		<< 'intrinsic ' ;
+		visitNodeListSeparatedByCommas: aFASTFortranIntrinsicStatement variables ;
+		newLine.
+
+]
+
 { #category : #visiting }
 FASTFortranExporterVisitor >> visitFASTFortranLabelReference: aFASTFortranLabelReference [
 
