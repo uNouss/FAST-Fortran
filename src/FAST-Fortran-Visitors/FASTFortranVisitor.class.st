@@ -527,8 +527,10 @@ FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStateme
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranRewindStatement: aFASTFortranRewindStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranRewindStatement.
+
+	aFASTFortranRewindStatement ioParameters do: [ :ioParam |
+		ioParam accept: self
+	]
 ]
 
 { #category : #'visiting - statements' }

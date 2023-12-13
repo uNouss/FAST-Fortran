@@ -1435,6 +1435,23 @@ FASTFortranExporterVisitorTest >> testReturnStatementLiteralValue [
 ]
 
 { #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testRewindStatement [
+	| stmt |
+	stmt := FASTFortranRewindStatement new
+		ioParameters: {
+			self integerLiteral: '3' .
+			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
+			self assignement: 'err' expression: (self integerLiteral: '10')
+		}.
+
+	self
+		assertExport: stmt
+		equals: 
+'      rewind (3,iostat = stat,err = 10)
+'.
+]
+
+{ #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testStopStatementEmpty [
 	| stmt |
 	stmt := FASTFortranStopStatement new.

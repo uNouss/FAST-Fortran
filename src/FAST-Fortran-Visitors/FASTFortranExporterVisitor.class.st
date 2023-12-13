@@ -719,6 +719,19 @@ FASTFortranExporterVisitor >> visitFASTFortranRealType: aFASTFortranType [
 	self visitFASTFortranType: aFASTFortranType
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranRewindStatement: aFASTFortranRewindStatement [
+
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranRewindStatement ;
+		<< 'rewind ' ;
+		outputExpression: [
+			self visitNodeListSeparatedByCommas: aFASTFortranRewindStatement ioParameters ]
+		inParentheses: true ;
+		newLine.
+
+]
+
 { #category : #'visiting - expressions' }
 FASTFortranExporterVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalarVariable [
 	self << aFASTFortranScalarVariable name
