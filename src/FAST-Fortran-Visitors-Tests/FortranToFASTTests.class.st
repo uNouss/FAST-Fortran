@@ -3040,20 +3040,17 @@ FortranToFASTTests >> testWriteArrayIOParameter [
 
 	stmt := result first statementBlock statements first.
 	self assert: stmt class equals: FASTFortranWriteStatement.
-	self assert: stmt startPos equals: 33.
-	self assert: stmt endPos equals: 54.
+	self assert: stmt startPos equals: 26.
+	self assert: stmt endPos equals: 46.
 
 	self assert: stmt ioParameters size equals: 2.
 
-	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
-	self assert: stmt ioParameters first startPos equals: 40.
-	self assert: stmt ioParameters second class equals: FASTFortranCharacterLiteral .
+	self assert: stmt ioParameters first class equals: FASTFortranArrayVariable.
+	self assert: stmt ioParameters first startPos equals: 32.
+	self assert: stmt ioParameters first indices size equals: 1.
+	self assert: stmt ioParameters second class equals: FASTFortranIntegerLiteral .
 	self assert: stmt ioParameters second startPos equals: 43.
 
-	self assert: stmt arguments size equals: 1.
-
-	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
-	self assert: stmt arguments first startPos equals: 54.
 ]
 
 { #category : #'tests-statement' }
