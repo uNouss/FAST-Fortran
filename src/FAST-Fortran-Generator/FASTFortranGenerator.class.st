@@ -543,13 +543,13 @@ FASTFortranGenerator >> defineHierarchy [
 	realConstant --|> abstractLiteral.
 	realConstant --|> tNumericalLiteral.
 	scalarVariable --|> variable.
-	scalarVariable --|> tFormat.
 	substring --|> abstractExpression.
 	unaryExpression --|> abstractExpression.
 	unaryExpression --|> tUnaryExpression.
 	variable --|> abstractExpression.
 	variable --|> tVariableEntity.
 	variable --|> tEntryArgument.
+	variable --|> tFormat.
 	variableDeclarator --|> tVariableDeclarator.
 
 	"types"

@@ -4,8 +4,6 @@ a scalar Fortran Variable, used in declarations
 Class {
 	#name : #FASTFortranScalarVariable,
 	#superclass : #FASTFortranVariable,
-	#traits : 'FASTFortranTFormat',
-	#classTraits : 'FASTFortranTFormat classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
