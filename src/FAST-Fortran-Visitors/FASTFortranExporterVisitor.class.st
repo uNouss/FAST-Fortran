@@ -91,6 +91,9 @@ FASTFortranExporterVisitor >> languageOperatorsPrecedence [
 	"exponentiation operator between NOT and multiplicative operator"
 	operatorsPrecedence at: #'**' put: 100.
 
+	"string concatenation"
+	operatorsPrecedence at: #'//' put: 80.
+
 	"relational operators"
 	operatorsPrecedence at: #'.gt.' put: 60.
 	operatorsPrecedence at: #'.ge.' put: 60.
