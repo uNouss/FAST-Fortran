@@ -1524,6 +1524,18 @@ FASTFortranExporterVisitorTest >> testStopStatementWithString [
 '
 ]
 
+{ #category : #tests }
+FASTFortranExporterVisitorTest >> testStringConcatOperator [
+	| stmt |
+	stmt := self binary: '//' left: 'texte' right: '1'.
+	stmt right: (self characterLiteral: ' a string').
+
+	self
+		assertExport: stmt
+		equals: 
+'texte // '' a string'''
+]
+
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testStringLiteralWithQuote [
 	| expr |
