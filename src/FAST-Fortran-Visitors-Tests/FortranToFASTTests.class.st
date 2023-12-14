@@ -3027,6 +3027,36 @@ FortranToFASTTests >> testVariableDeclarationWithStarSize [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testWriteArrayIOParameter [
+
+	| stmt result |
+	fortranCode := '      program main
+      WRITE(TEXTE(1:5),1) V
+      end
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":null,"span":"(2:7)-(2:27)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(2:27)-(2:27)","tag":"value","value":{"contents":"v","tag":"variable"}}],"span":"(2:27)-(2:27)"},"format":{"anno":[],"list":[{"anno":[],"expr":{"anno":[],"expression":{"anno":[],"span":"(2:13)-(2:17)","tag":"value","value":{"contents":"texte","tag":"variable"}},"indices":{"anno":[],"list":[{"anno":[],"lower":{"anno":[],"span":"(2:19)-(2:19)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:19)-(2:21)","stride":null,"tag":"range","upper":{"anno":[],"span":"(2:21)-(2:21)","tag":"value","value":{"contents":["5",null],"tag":"integer"}}}],"span":"(2:19)-(2:21)"},"span":"(2:13)-(2:22)","tag":"subscript"},"name":null,"span":"(2:13)-(2:22)"},{"anno":[],"expr":{"anno":[],"span":"(2:24)-(2:24)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"name":null,"span":"(2:24)-(2:24)"}],"span":"(2:12)-(2:25)"},"span":"(2:7)-(2:27)","tag":"write"},"tag":"statement"}],"name":"main","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+
+	result := self visitJsonCode.
+
+	stmt := result first statementBlock statements first.
+	self assert: stmt class equals: FASTFortranWriteStatement.
+	self assert: stmt startPos equals: 33.
+	self assert: stmt endPos equals: 54.
+
+	self assert: stmt ioParameters size equals: 2.
+
+	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
+	self assert: stmt ioParameters first startPos equals: 40.
+	self assert: stmt ioParameters second class equals: FASTFortranCharacterLiteral .
+	self assert: stmt ioParameters second startPos equals: 43.
+
+	self assert: stmt arguments size equals: 1.
+
+	self assert: stmt arguments first class equals: FASTFortranScalarVariable.
+	self assert: stmt arguments first startPos equals: 54.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testWriteComplexFormat [
 
 	| stmt result |
