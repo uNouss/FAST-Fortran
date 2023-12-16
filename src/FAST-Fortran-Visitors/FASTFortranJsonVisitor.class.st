@@ -3,10 +3,23 @@ Class {
 	#superclass : #FortranAbstractJsonVisitor,
 	#instVars : [
 		'lineSizes',
-		'model'
+		'model',
+		'nestedDoEndLabel'
 	],
 	#category : #'FAST-Fortran-Visitors-Importer'
 }
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> createContinueStatement: endLabel [
+
+	| lastStatement |
+	lastStatement := FASTFortranContinueStatement new.
+	lastStatement startPos: endLabel startPos.
+	lastStatement endPos:
+		endLabel startPos + endLabel primitiveValue size - 1.
+	lastStatement label: endLabel primitiveValue.
+	^ lastStatement
+]
 
 { #category : #private }
 FASTFortranJsonVisitor >> functionCallToArrayVariable: invocation [
@@ -30,7 +43,8 @@ FASTFortranJsonVisitor >> initialize [
 
 	super initialize.
 
-	lineSizes := #(  )
+	lineSizes := #(  ).
+	nestedDoEndLabel := Stack new: 5
 ]
 
 { #category : #private }
@@ -418,42 +432,55 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: aDoNode [
-	"#(span do_spec target body end_label)
+	"The visiting order in the super class is: #(span do_spec target body end_label)
+	We change it here do deal with nested loops
 	- target is a label number (optional)
-	- end_label is the 'terminal statement' (typically a 'continue') with that label
+	- end_label is the 'terminal label' typically for a CONTINUE statement
 
-	Note about 'fortran-src': if the 'end_label' is a CONTINUE labeled statement,
-	then the CONTINUE deos not appear in the AST
-	this can be detected because the DO span does not include the end_label span"
-
-	| data doStatement body |
-
-	data := super visitDo: aDoNode.
+	Note1: in 'fortran-src', if the 'end_label' is for a CONTINUE labeled statement,
+	then the CONTINUE does not appear in the AST and need to be added manually
+	This situation can be detected because the DO span does not include the end_label span
 	
-	doStatement := self newEntity: FASTFortranDoStatement atPosition: data first.
+	Note2: several DO loops can have the same end_label. In that case, we want to add only one
+	CONTINUE statement for all the DO loops.
+	For this we use #nestedDoEndLabel instance variable to hold the list of end_label currently
+	'opened' (this is handled in #visitEnd_label:) "
+
+	"think about order of children visit: put #end_label before #body ?
+	think when to put the label in nestedDoEndLabel"
+
+	| data doStatement body inNestedLoop |
+	data := self visitJsonMap: aDoNode keys: #(span do_spec target end_label body).
+
+	doStatement := self
+		newEntity: FASTFortranDoStatement
+		atPosition: data first.
 	doStatement loopControl: data second.
 
-	data third ifNotNil: [ :target |
-		doStatement labelReferences: { self integerLiteralToLabelRef: target }
+	data third
+	ifNil: [ inNestedLoop := false ]
+	ifNotNil: [ :target |
+		"the same 'target' was also pushed on top of #nestedDoEndLabel"
+		nestedDoEndLabel pop.
+		doStatement labelReferences: { (self integerLiteralToLabelRef: target) }.
+		"if the target is still on top of #nestedDoEndLabel, then we have nested loops
+		with the same end_label"
+		inNestedLoop := nestedDoEndLabel notEmpty and: [nestedDoEndLabel top = target primitiveValue]
 	].
-	
-	body := data fourth.
-	
-	data fifth ifNotNil: [ :endLabel || lastStatement |
-		(endLabel endPos > doStatement endPos) ifTrue: [
-			"need to create a CONTINUE statement to close the loop"
-			lastStatement := FASTFortranContinueStatement new.
-			lastStatement startPos: endLabel startPos.
-			lastStatement endPos: doStatement endPos.
-			lastStatement label: endLabel primitiveValue.
-		
-			body addStatement: lastStatement
-		]
-	 ].
+
+	body := data fifth.
+
+	(inNestedLoop not and: [
+		(data fourth notNil) and: [
+		(data fourth endPos > doStatement endPos) ] ] )
+	ifTrue: [
+		"need to create a CONTINUE statement to close the loop"
+		body addStatement: (self createContinueStatement: (data fourth))
+	].
 
 	doStatement statementBlock: body.
 
-	^doStatement
+	^ doStatement
 ]
 
 { #category : #'visiting statement' }
@@ -486,6 +513,18 @@ FASTFortranJsonVisitor >> visitDouble_precisionBaseType: aString [
 	^FASTFortranDoublePrecisionType new
 		mooseModel: model ;
 		yourself
+]
+
+{ #category : #visiting }
+FASTFortranJsonVisitor >> visitEnd_label: endLabel [
+	"label target in a DO statement. If not nil, we store it in #nestedDoEndLabel because
+	 there is a difficulty in parsing some nested loop with the same target label.
+	 (see also #visitDo:)"
+
+	| data |
+	data := super visitEnd_label: endLabel.
+	data ifNotNil: [ nestedDoEndLabel push: data primitiveValue ].
+	^data
 ]
 
 { #category : #'visiting statement' }
