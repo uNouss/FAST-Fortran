@@ -7,6 +7,12 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Tools'
 }
 
+{ #category : #accessing }
+FASTFortranDifferentialValidator >> comparatorClass [
+
+	^FASTFortranModelComparator 
+]
+
 { #category : #utilities }
 FASTFortranDifferentialValidator >> getASTFromString: string [
 	^importer getFASTFor: string
