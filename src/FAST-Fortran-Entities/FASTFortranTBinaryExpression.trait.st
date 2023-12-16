@@ -4,9 +4,9 @@ A trait representing a binary expression of a node of a source code.
 Trait {
 	#name : #FASTFortranTBinaryExpression,
 	#instVars : [
+		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpressionLeft',
 		'#operator => FMProperty',
-		'#left => FMOne type: #FASTFortranTExpression opposite: #parentExpression',
-		'#right => FMOne type: #FASTFortranTExpression opposite: #parentExpression'
+		'#right => FMOne type: #FASTFortranTExpression opposite: #parentExpressionRight'
 	],
 	#traits : 'FASTFortranTExpression',
 	#classTraits : 'FASTFortranTExpression classTrait',
@@ -24,7 +24,7 @@ FASTFortranTBinaryExpression classSide >> annotation [
 
 { #category : #accessing }
 FASTFortranTBinaryExpression >> left [
-	"Relation named: #left type: #FASTFortranTExpression opposite: #parentExpression"
+	"Relation named: #left type: #FASTFortranTExpression opposite: #parentExpressionLeft"
 
 	<generated>
 	<FMComment: 'left part of a binary expression'>
@@ -62,7 +62,7 @@ FASTFortranTBinaryExpression >> operator: anObject [
 
 { #category : #accessing }
 FASTFortranTBinaryExpression >> right [
-	"Relation named: #right type: #FASTFortranTExpression opposite: #parentExpression"
+	"Relation named: #right type: #FASTFortranTExpression opposite: #parentExpressionRight"
 
 	<generated>
 	<FMComment: 'left part of the expression'>
