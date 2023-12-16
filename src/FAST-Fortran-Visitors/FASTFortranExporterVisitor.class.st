@@ -724,6 +724,18 @@ FASTFortranExporterVisitor >> visitFASTFortranPauseStatement: aFASTFortranPauset
 	self newLine
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranExporterVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement [
+	self
+		visitFASTFortranAbstractStatement: aFASTFortranPrintStatement ;
+		<< 'print '.
+	aFASTFortranPrintStatement format accept: self.
+	self
+		<< ', '
+		visitFASTFortranTWithArguments: aFASTFortranPrintStatement ;
+		newLine
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranExporterVisitor >> visitFASTFortranProgramMain: aFASTFortranProgramMain [
 
