@@ -12,7 +12,9 @@ Trait {
 		'#parentArrayExpression => FMOne type: #FASTFortranArrayVariable opposite: #indices',
 		'#parentConditionalStatement => FMOne type: #FASTFortranTConditionalStatement opposite: #condition',
 		'#parentDataStatement => FMOne type: #FASTFortranDataGroup opposite: #dataConstants',
-		'#parentExpression => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
+		'#parentExpression => FMOne type: #FASTFortranTUnaryExpression opposite: #expression',
+		'#parentExpressionLeft => FMOne type: #FASTFortranTBinaryExpression opposite: #left',
+		'#parentExpressionRight => FMOne type: #FASTFortranTBinaryExpression opposite: #right',
 		'#parentGotoAssignedStatement => FMOne type: #FASTFortranGoToAssignedStatement opposite: #selectorExpression',
 		'#parentGotoComputedStatement => FMOne type: #FASTFortranGoToComputedStatement opposite: #selectorExpression',
 		'#parentLoopControlIncrement => FMOne type: #FASTFortranLoopControlExpression opposite: #increment',
@@ -208,7 +210,7 @@ FASTFortranTExpression >> parentDataStatement: anObject [
 
 { #category : #accessing }
 FASTFortranTExpression >> parentExpression [
-	"Relation named: #parentExpression type: #FASTFortranTBinaryExpression opposite: #left"
+	"Relation named: #parentExpression type: #FASTFortranTUnaryExpression opposite: #expression"
 
 	<generated>
 	<FMComment: 'Parent expression (if possible)'>
@@ -229,6 +231,56 @@ FASTFortranTExpression >> parentExpressionGroup [
 	<generated>
 	<navigation: 'ParentExpression'>
 	^ MooseSpecializedGroup with: self parentExpression
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpressionLeft [
+	"Relation named: #parentExpressionLeft type: #FASTFortranTBinaryExpression opposite: #left"
+
+	<generated>
+	<FMComment: 'Parent (binary) expression of which I am left side'>
+	<container>
+	<derived>
+	^ parentExpressionLeft
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpressionLeft: anObject [
+
+	<generated>
+	parentExpressionLeft := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentExpressionLeftGroup [
+	<generated>
+	<navigation: 'ParentExpressionLeft'>
+	^ MooseSpecializedGroup with: self parentExpressionLeft
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpressionRight [
+	"Relation named: #parentExpressionRight type: #FASTFortranTBinaryExpression opposite: #right"
+
+	<generated>
+	<FMComment: 'Parent (binary) expression of which I am right side'>
+	<container>
+	<derived>
+	^ parentExpressionRight
+]
+
+{ #category : #accessing }
+FASTFortranTExpression >> parentExpressionRight: anObject [
+
+	<generated>
+	parentExpressionRight := anObject
+]
+
+{ #category : #navigation }
+FASTFortranTExpression >> parentExpressionRightGroup [
+	<generated>
+	<navigation: 'ParentExpressionRight'>
+	^ MooseSpecializedGroup with: self parentExpressionRight
 ]
 
 { #category : #accessing }
