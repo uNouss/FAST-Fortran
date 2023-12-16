@@ -760,13 +760,13 @@ FASTFortranGenerator >> defineRelations [
 
 	((tBinaryExpression property: #left) comment:
 		 'left part of a binary expression')
-	<>- ((tExpression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
+	<>- ((tExpression property: #parentExpressionLeft) comment:
+			 'Parent (binary) expression of which I am left side').
 
 	((tBinaryExpression property: #right) comment:
 		 'left part of the expression')
-	<>- ((tExpression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
+	<>- ((tExpression property: #parentExpressionRight) comment:
+			 'Parent (binary) expression of which I am right side').
 
 	((tUnaryExpression property: #expression) comment: 'expression')
 	<>- ((tExpression property: #parentExpression) comment:
