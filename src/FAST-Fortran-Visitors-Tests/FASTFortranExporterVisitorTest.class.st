@@ -274,6 +274,17 @@ FASTFortranExporterVisitorTest >> loopControlInit: init increment: incr limit: l
 ]
 
 { #category : #'entity creation' }
+FASTFortranExporterVisitorTest >> printStatement: aCollection [
+
+	^FASTFortranPrintStatement new
+		format: FASTFortranAsterisk new ;
+		arguments: aCollection ;
+		startPos: 1 ;
+		endPos: 30 ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranExporterVisitorTest >> readStatement: aCollection [
 	"end position is approximate, test should adjust if a real value is needed"
 
@@ -1422,6 +1433,18 @@ FASTFortranExporterVisitorTest >> testPauseStatementWithString [
 		assertExport: stmt
 		equals: 
 '      pause ''error''
+'
+]
+
+{ #category : #'tests - statements' }
+FASTFortranExporterVisitorTest >> testPrintStatement [
+	| stmt |
+	stmt := self printStatement: { self characterLiteral: 'message' }.
+
+	self
+		assertExport: stmt
+		equals: 
+'      print *, ''message''
 '
 ]
 
