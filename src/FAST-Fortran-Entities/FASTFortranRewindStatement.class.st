@@ -1,5 +1,13 @@
 "
 I represent Fortran Rewind statement
+
+## Relations
+======================
+
+### Children
+- Relation: #ioParameters Type: #FASTFortranTIOParameter Opposite: #parentIOStatement Comment: I represent a statement with IO-parameters (read or write)
+
+
 "
 Class {
 	#name : #FASTFortranRewindStatement,

@@ -1,5 +1,13 @@
 "
 I represent a declaration with several variable declarators
+
+## Relations
+======================
+
+### Children
+- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+
+
 "
 Trait {
 	#name : #FASTFortranTWithDeclarators,

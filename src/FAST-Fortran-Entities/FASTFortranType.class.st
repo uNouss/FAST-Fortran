@@ -1,5 +1,17 @@
 "
 I represent Fortran Type statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentDeclaration Type: #FASTFortranVariableDeclarationStatement Opposite: #type Comment: Parent declaration
+- Relation: #parentImplicitRule Type: #FASTFortranImplicitTypingRule Opposite: #type
+- Relation: #typedFunctions Type: #FASTFortranFunction Opposite: #returnType
+### Children
+- Relation: #size Type: #FASTFortranTNumericalLiteral Opposite: #parentTypeSize Comment: a data size in bytes
+
+
 "
 Class {
 	#name : #FASTFortranType,

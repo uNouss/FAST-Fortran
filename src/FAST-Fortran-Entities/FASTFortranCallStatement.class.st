@@ -1,5 +1,17 @@
 "
 I represent Fortran Call statement
+
+## Relations
+======================
+
+### Children
+- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+
+## Properties
+======================
+
+- Named: #name Type: String Comment: Name of called entity (a subroutine)
+
 "
 Class {
 	#name : #FASTFortranCallStatement,

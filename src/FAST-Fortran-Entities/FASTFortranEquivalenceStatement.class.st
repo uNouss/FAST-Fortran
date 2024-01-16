@@ -1,5 +1,13 @@
 "
 I represent a Fortran Equivalence statement
+
+## Relations
+======================
+
+### Children
+- Relation: #variableGroups Type: #FASTFortranTVariableGroup Opposite: #withVariableGroups
+
+
 "
 Class {
 	#name : #FASTFortranEquivalenceStatement,

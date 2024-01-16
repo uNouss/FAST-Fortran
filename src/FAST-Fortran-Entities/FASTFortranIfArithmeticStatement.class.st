@@ -1,5 +1,16 @@
 "
 I represent Fortran If (Arithmetic) statement
+
+## Relations
+======================
+
+### Children
+- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
+- Relation: #equalLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticEqualBranch
+- Relation: #greaterLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticMoreBranch
+- Relation: #lessLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticLessBranch
+
+
 "
 Class {
 	#name : #FASTFortranIfArithmeticStatement,

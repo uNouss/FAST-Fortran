@@ -1,5 +1,13 @@
 "
 I represent Fortran Parameter statement
+
+## Relations
+======================
+
+### Children
+- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+
+
 "
 Class {
 	#name : #FASTFortranParameterStatement,

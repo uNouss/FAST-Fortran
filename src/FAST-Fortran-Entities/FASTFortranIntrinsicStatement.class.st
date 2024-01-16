@@ -1,5 +1,15 @@
 "
 I represent Fortran Intrinsic statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+### Other
+- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+
+
 "
 Class {
 	#name : #FASTFortranIntrinsicStatement,

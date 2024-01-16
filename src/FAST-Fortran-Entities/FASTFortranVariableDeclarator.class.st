@@ -1,5 +1,20 @@
 "
 Part of a variable declaration: name of the variable + optional initial value
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentDeclaration Type: #FASTFortranTWithDeclarators Opposite: #declarators
+### Children
+- Relation: #dimensions Type: #FASTFortranArrayRange Opposite: #parentVariableDeclarator Comment: Possible dimensions in case this is an array declaration
+- Relation: #expression Type: #FASTFortranTExpression Opposite: #variableDeclaratorOwner Comment: Expression assigned to the variable declared
+
+## Properties
+======================
+
+- Named: #variable Type: String Comment: The name of the variable being declared
+
 "
 Class {
 	#name : #FASTFortranVariableDeclarator,

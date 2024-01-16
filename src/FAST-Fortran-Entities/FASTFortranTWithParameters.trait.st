@@ -1,5 +1,13 @@
 "
 I have parameters
+
+## Relations
+======================
+
+### Children
+- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
+
+
 "
 Trait {
 	#name : #FASTFortranTWithParameters,

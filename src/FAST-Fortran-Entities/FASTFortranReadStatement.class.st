@@ -1,5 +1,14 @@
 "
 I represent Fortran Read statement
+
+## Relations
+======================
+
+### Children
+- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+- Relation: #ioParameters Type: #FASTFortranTIOParameter Opposite: #parentIOStatement Comment: I represent a statement with IO-parameters (read or write)
+
+
 "
 Class {
 	#name : #FASTFortranReadStatement,

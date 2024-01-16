@@ -1,6 +1,21 @@
 "
 I represent a reference to a Fortran label, like in a GoTo statement.
 I contain the value of the label referred to
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentIfArithmeticEqualBranch Type: #FASTFortranIfArithmeticStatement Opposite: #equalLabel
+- Relation: #parentIfArithmeticLessBranch Type: #FASTFortranIfArithmeticStatement Opposite: #lessLabel
+- Relation: #parentIfArithmeticMoreBranch Type: #FASTFortranIfArithmeticStatement Opposite: #greaterLabel
+- Relation: #referencer Type: #FASTFortranTWithLabelReferences Opposite: #labelReferences Comment: A statement (like goto) referencing this label
+
+## Properties
+======================
+
+- Named: #label Type: String Comment: The value of the label. The value is an integer literal, stored in a String
+
 "
 Class {
 	#name : #FASTFortranLabelReference,

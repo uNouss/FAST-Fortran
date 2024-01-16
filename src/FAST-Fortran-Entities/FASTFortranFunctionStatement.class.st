@@ -1,5 +1,18 @@
 "
 I represent a function statement - a function-like declaration, made in a single statement
+
+## Relations
+======================
+
+### Children
+- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+- Relation: #expression Type: #FASTFortranTExpression Opposite: #assignementExpressionOwner Comment: Expression thats being assigned upon declaration to the var
+
+## Properties
+======================
+
+- Named: #name Type: String Comment: Name of a function statement
+
 "
 Class {
 	#name : #FASTFortranFunctionStatement,

@@ -1,5 +1,13 @@
 "
 I represent a fortran subroutine or a function
+
+## Relations
+======================
+
+### Children
+- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
+
+
 "
 Class {
 	#name : #FASTFortranProcedure,

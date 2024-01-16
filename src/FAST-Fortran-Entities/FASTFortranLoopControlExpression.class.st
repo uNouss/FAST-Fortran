@@ -1,5 +1,17 @@
 "
 a Fortran Loop Control Expression
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentLoop Type: #FASTFortranTWithLoopControl Opposite: #loopControl Comment: Parent loop
+### Children
+- Relation: #increment Type: #FASTFortranTExpression Opposite: #parentLoopControlIncrement Comment: Loop control increment value
+- Relation: #init Type: #FASTFortranAssignmentExpression Opposite: #parentLoopControlInitialization Comment: initial assignment
+- Relation: #limit Type: #FASTFortranTExpression Opposite: #parentLoopControlLimit Comment: Loop control limit value
+
+
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,

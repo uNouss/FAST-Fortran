@@ -1,5 +1,13 @@
 "
 I represent a loop control: initialization/limit/increment
+
+## Relations
+======================
+
+### Children
+- Relation: #loopControl Type: #FASTFortranLoopControlExpression Opposite: #parentLoop Comment: loop control
+
+
 "
 Trait {
 	#name : #FASTFortranTWithLoopControl,

@@ -1,5 +1,7 @@
 "
 a scalar Fortran Variable, used in declarations
+
+
 "
 Class {
 	#name : #FASTFortranScalarVariable,

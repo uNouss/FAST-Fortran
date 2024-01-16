@@ -1,5 +1,23 @@
 "
 I represent Fortran Entry statement
+
+## Relations
+======================
+
+### Children
+- Relation: #entryArguments Type: #FASTFortranTEntryStatement Opposite: #entryStatement
+### Other
+- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
+
+## Properties
+======================
+
+- Named: #endPos Type: Number
+- Named: #endPos Type: Number
+- Named: #name Type: String
+- Named: #startPos Type: Number
+- Named: #startPos Type: Number
+
 "
 Class {
 	#name : #FASTFortranEntryStatement,

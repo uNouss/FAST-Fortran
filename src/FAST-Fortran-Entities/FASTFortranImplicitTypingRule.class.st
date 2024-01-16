@@ -1,5 +1,16 @@
 "
 I represent a rule (ie. Type+letter range) in an Implicit statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentImplicitStatement Type: #FASTFortranImplicitStatement Opposite: #typingRules
+### Children
+- Relation: #ranges Type: #FASTFortranImplicitRange Opposite: #parentImplicitRule
+- Relation: #type Type: #FASTFortranType Opposite: #parentImplicitRule
+
+
 "
 Class {
 	#name : #FASTFortranImplicitTypingRule,

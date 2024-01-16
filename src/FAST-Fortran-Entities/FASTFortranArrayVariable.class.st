@@ -1,5 +1,13 @@
 "
 An array Fortran Variable, accessed in the code
+
+## Relations
+======================
+
+### Other
+- Relation: #indices Type: #FASTFortranTExpression Opposite: #parentArrayExpression Comment: Indices used in the array access
+
+
 "
 Class {
 	#name : #FASTFortranArrayVariable,

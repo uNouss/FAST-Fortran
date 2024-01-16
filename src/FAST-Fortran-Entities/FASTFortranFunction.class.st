@@ -1,5 +1,13 @@
 "
 I represent a Fortran Function
+
+## Relations
+======================
+
+### Children
+- Relation: #returnType Type: #FASTFortranType Opposite: #typedFunctions
+
+
 "
 Class {
 	#name : #FASTFortranFunction,

@@ -1,5 +1,25 @@
 "
 A node for variable name not in a expression (example: assigned variable or parameter)
+
+## Relations
+======================
+
+### Parents
+- Relation: #parameterOwner Type: #FASTFortranTWithParameters Opposite: #parameters Comment: parameterOwner
+- Relation: #parentImpliedExpression Type: #FASTFortranImpliedDoExpression Opposite: #variables
+### Other
+- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
+- Relation: #parentAssignmentExpression Type: #FASTFortranTAssignment Opposite: #variable Comment: Optional assignment to the variable
+
+## Properties
+======================
+
+- Named: #endPos Type: Number
+- Named: #endPos Type: Number
+- Named: #name Type: String
+- Named: #startPos Type: Number
+- Named: #startPos Type: Number
+
 "
 Trait {
 	#name : #FASTFortranTVariableEntity,

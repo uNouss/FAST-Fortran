@@ -1,5 +1,13 @@
 "
 I represent a parameter to an IO-statement (read or write)
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentIOStatement Type: #FASTFortranTWithIOParameters Opposite: #ioParameters
+
+
 "
 Trait {
 	#name : #FASTFortranTIOParameter,

@@ -1,5 +1,17 @@
 "
 I represent Fortran Format statement
+
+## Relations
+======================
+
+### Children
+- Relation: #format Type: #FASTFortranTFormat Opposite: #parentFormatedStatement Comment: The description of the format
+
+## Properties
+======================
+
+- Named: #formatDescription Type: String
+
 "
 Class {
 	#name : #FASTFortranFormatStatement,
