@@ -6,7 +6,8 @@ Class {
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAcceptStatement: aFASTFortranAcceptStatement [
-	<generated>
+
+	self visitFASTFortranTStatement: aFASTFortranAcceptStatement
 ]
 
 { #category : #'visiting - expressions' }
@@ -46,7 +47,8 @@ FASTFortranVisitor >> visitFASTFortranAssignmentExpression: aFASTFortranAssignme
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAssignmentStatement: aFASTFortranAssignmentStatement [
 
-	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement
+	self visitFASTFortranTAssignment: aFASTFortranAssignmentStatement.
+	self visitFASTFortranTStatement: aFASTFortranAssignmentStatement
 ]
 
 { #category : #'visiting - expressions' }
@@ -57,14 +59,14 @@ FASTFortranVisitor >> visitFASTFortranAsterisk: aFASTFortranAsterisk [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranAutomaticStatement: aFASTFortranAutomaticStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranAutomaticStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranAutomaticStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranBackspaceStatement: aFASTFortranBackspaceStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranBackspaceStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranBackspaceStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -95,9 +97,9 @@ FASTFortranVisitor >> visitFASTFortranByteType: aFASTFortranByteType [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCallStatement: aFASTFortranCallStatement [
-	<generated>
+
 	self visitFASTFortranTWithArguments: aFASTFortranCallStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranCallStatement.
+	self visitFASTFortranTStatement: aFASTFortranCallStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -113,8 +115,8 @@ FASTFortranVisitor >> visitFASTFortranCharacterType: aFASTFortranCharacterType [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCloseStatement: aFASTFortranCloseStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranCloseStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranCloseStatement.
 ]
 
 { #category : #visiting }
@@ -131,8 +133,8 @@ FASTFortranVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranCommonStatement: aFASTFortranCommonStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranCommonStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranCommonStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -148,8 +150,8 @@ FASTFortranVisitor >> visitFASTFortranComplexType: aFASTFortranComplexType [
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranContinueStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranContinueStatement.
 ]
 
 { #category : #visiting }
@@ -162,14 +164,14 @@ FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDataStatement: aFASTFortranDataStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranDataStatement.
+	self visitFASTFortranTStatement: aFASTFortranDataStatement.
 	aFASTFortranDataStatement variableGroups do: [ :group | group accept: self ].
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDecodeStatement: aFASTFortranDecodeStatement [
-	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranDecodeStatement.
+
+	self visitFASTFortranTStatement: aFASTFortranDecodeStatement.
 ]
 
 { #category : #'visiting - statements' }
@@ -177,13 +179,14 @@ FASTFortranVisitor >> visitFASTFortranDimensionStatement: aFASTFortranDimensionS
 
 	aFASTFortranDimensionStatement declarators do: [ :declarator |
 		declarator accept: self
-	]
+	].
+	self visitFASTFortranTStatement: aFASTFortranDimensionStatement
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranDoStatement.
+	self visitFASTFortranTStatement: aFASTFortranDoStatement.
 	aFASTFortranDoStatement loopControl accept: self.
 	aFASTFortranDoStatement statementBlock accept: self
 ]
@@ -191,7 +194,7 @@ FASTFortranVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranDoWhileStatement.
+	self visitFASTFortranTStatement: aFASTFortranDoWhileStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -219,19 +222,19 @@ FASTFortranVisitor >> visitFASTFortranDoublePrecisionType: aFASTFortranDoublePre
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranElseStatement: aFASTFortranElseStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranElseStatement.
+	self visitFASTFortranTStatement: aFASTFortranElseStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEncodeStatement: aFASTFortranEncodeStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranEncodeStatement.
+	self visitFASTFortranTStatement: aFASTFortranEncodeStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEndFileStatement: aFASTFortranEndFileStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranEndFileStatement.
+	self visitFASTFortranTStatement: aFASTFortranEndFileStatement.
 ]
 
 { #category : #visiting }
@@ -243,7 +246,7 @@ FASTFortranVisitor >> visitFASTFortranEntity: aFASTFortranEntity [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranEntryStatement.
+	self visitFASTFortranTStatement: aFASTFortranEntryStatement.
 ]
 
 { #category : #visiting }
@@ -256,27 +259,27 @@ FASTFortranVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceG
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranEquivalenceStatement: aFASTFortranEquivalenceStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranEquivalenceStatement.
+	self visitFASTFortranTStatement: aFASTFortranEquivalenceStatement.
 	aFASTFortranEquivalenceStatement variableGroups do: [ :group | group accept: self ].
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranExitStatement.
+	self visitFASTFortranTStatement: aFASTFortranExitStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranExternalStatement: aFASTFortranExternalStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranExternalStatement.
+	self visitFASTFortranTStatement: aFASTFortranExternalStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranFormatStatement: aFASTFortranFormatStatement [
 	<generated>
 	self visitFASTFortranTFormatIdentifier: aFASTFortranFormatStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranFormatStatement.
+	self visitFASTFortranTStatement: aFASTFortranFormatStatement.
 ]
 
 { #category : #'visiting - programUnits' }
@@ -302,37 +305,37 @@ FASTFortranVisitor >> visitFASTFortranFunctionStatement: aFASTFortranFunctionSta
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranGoToAssignedStatement.
+	self visitFASTFortranTStatement: aFASTFortranGoToAssignedStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranGoToComputedStatement.
+	self visitFASTFortranTStatement: aFASTFortranGoToComputedStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranGoToStatement.
+	self visitFASTFortranTStatement: aFASTFortranGoToStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranGoToUnconditionalStatement.
+	self visitFASTFortranTStatement: aFASTFortranGoToUnconditionalStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranIfArithmeticStatement.
+	self visitFASTFortranTStatement: aFASTFortranIfArithmeticStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranIfBlockStatement.
+	self visitFASTFortranTStatement: aFASTFortranIfBlockStatement.
 	aFASTFortranIfBlockStatement condition accept: self.
 	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
 	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
@@ -341,7 +344,7 @@ FASTFortranVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockState
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranIfLogicalStatement.
+	self visitFASTFortranTStatement: aFASTFortranIfLogicalStatement.
 ]
 
 { #category : #visiting }
@@ -355,7 +358,7 @@ FASTFortranVisitor >> visitFASTFortranImplicitRange: aFASTFortranImplicitRange [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranImplicitStatement: aFASTFortranImplicitStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranImplicitStatement.
+	self visitFASTFortranTStatement: aFASTFortranImplicitStatement.
 ]
 
 { #category : #visiting }
@@ -380,7 +383,7 @@ FASTFortranVisitor >> visitFASTFortranImpliedDo: aFASTFortranImpliedDo [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranIncludeStatement: aFASTFortranIncludeStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranIncludeStatement.
+	self visitFASTFortranTStatement: aFASTFortranIncludeStatement.
 ]
 
 { #category : #'visiting - statements' }
@@ -388,7 +391,8 @@ FASTFortranVisitor >> visitFASTFortranInquireStatement: aFASTFortranInquireState
 
 	aFASTFortranInquireStatement ioParameters do: [ :ioParam |
 		ioParam accept: self
-	]
+	].
+	self visitFASTFortranTStatement: aFASTFortranInquireStatement
 ]
 
 { #category : #'visiting - expressions' }
@@ -406,6 +410,7 @@ FASTFortranVisitor >> visitFASTFortranIntegerType: aFASTFortranIntegerType [
 FASTFortranVisitor >> visitFASTFortranIntrinsicStatement: aFASTFortranIntrinsicStatement [
 
 	aFASTFortranIntrinsicStatement variables do: [ :var | var accept: self ].
+	self visitFASTFortranTStatement: aFASTFortranIntrinsicStatement
 
 ]
 
@@ -431,13 +436,13 @@ FASTFortranVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopCon
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranMapStatement: aFASTFortranMapStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranMapStatement.
+	self visitFASTFortranTStatement: aFASTFortranMapStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranNameListStatement: aFASTFortranNameListStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranNameListStatement.
+	self visitFASTFortranTStatement: aFASTFortranNameListStatement.
 ]
 
 { #category : #'visiting - statements' }
@@ -445,39 +450,39 @@ FASTFortranVisitor >> visitFASTFortranOpenStatement: aFASTFortranOpenStatement [
 
 	aFASTFortranOpenStatement ioParameters do: [ :ioParam |
 		ioParam accept: self
-	]
+	].
+	self visitFASTFortranTStatement: aFASTFortranOpenStatement
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranOptionsStatement: aFASTFortranOptionsStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranOptionsStatement.
+	self visitFASTFortranTStatement: aFASTFortranOptionsStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranParameterStatement: aFASTFortranParameterStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranParameterStatement.
+	self visitFASTFortranTStatement: aFASTFortranParameterStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPauseStatement: aFASTFortranPauseStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranPauseStatement.
+	self visitFASTFortranTStatement: aFASTFortranPauseStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPragmaStatement: aFASTFortranPragmaStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranPragmaStatement.
+	self visitFASTFortranTStatement: aFASTFortranPragmaStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement [
 	<generated>
 	self visitFASTFortranTWithArguments: aFASTFortranPrintStatement.
-	self visitFASTFortranTWithFormat: aFASTFortranPrintStatement.
-	self visitFASTFortranTLabelledStatement: aFASTFortranPrintStatement.
+	self visitFASTFortranTStatement: aFASTFortranPrintStatement.
 ]
 
 { #category : #'visiting - programUnits' }
@@ -511,7 +516,7 @@ FASTFortranVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReadStatement: aFASTFortranReadStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranReadStatement.
+	self visitFASTFortranTStatement: aFASTFortranReadStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -528,7 +533,8 @@ FASTFortranVisitor >> visitFASTFortranRealType: aFASTFortranRealType [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
 
-	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement
+	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement.
+	self visitFASTFortranTStatement: aFASTFortranReturnStatement
 ]
 
 { #category : #'visiting - statements' }
@@ -536,13 +542,14 @@ FASTFortranVisitor >> visitFASTFortranRewindStatement: aFASTFortranRewindStateme
 
 	aFASTFortranRewindStatement ioParameters do: [ :ioParam |
 		ioParam accept: self
-	]
+	].
+	self visitFASTFortranTStatement: aFASTFortranRewindStatement
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranSaveStatement: aFASTFortranSaveStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranSaveStatement.
+	self visitFASTFortranTStatement: aFASTFortranSaveStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -554,19 +561,20 @@ FASTFortranVisitor >> visitFASTFortranScalarVariable: aFASTFortranScalarVariable
 FASTFortranVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
 	<generated>
 	self visitFASTFortranTStatementBlock: aFASTFortranStatementBlock.
+	self visitFASTFortranTStatement: aFASTFortranStatementBlock.
 	self visitFASTFortranTWithComments: aFASTFortranStatementBlock.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranStaticStatement: aFASTFortranStaticStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranStaticStatement.
+	self visitFASTFortranTStatement: aFASTFortranStaticStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranStopStatement: aFASTFortranStopStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranStopStatement.
+	self visitFASTFortranTStatement: aFASTFortranStopStatement.
 ]
 
 { #category : #'visiting - programUnits' }
@@ -783,7 +791,7 @@ FASTFortranVisitor >> visitFASTFortranUnaryExpression: aFASTFortranUnaryExpressi
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranUnionStatement: aFASTFortranUnionStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranUnionStatement.
+	self visitFASTFortranTStatement: aFASTFortranUnionStatement.
 ]
 
 { #category : #'visiting - expressions' }
@@ -796,7 +804,7 @@ FASTFortranVisitor >> visitFASTFortranVariable: aFASTFortranVariable [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortranVariableDeclarationStatement [
 
-	self visitFASTFortranTLabelledStatement: aFASTFortranVariableDeclarationStatement.
+	self visitFASTFortranTStatement: aFASTFortranVariableDeclarationStatement.
 	aFASTFortranVariableDeclarationStatement type accept: self.
 	aFASTFortranVariableDeclarationStatement declarators do: [:decl | decl accept: self]
 ]
@@ -812,20 +820,19 @@ FASTFortranVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDe
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVirtualStatement: aFASTFortranVirtualStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranVirtualStatement.
+	self visitFASTFortranTStatement: aFASTFortranVirtualStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranVolatileStatement: aFASTFortranVolatileStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranVolatileStatement.
+	self visitFASTFortranTStatement: aFASTFortranVolatileStatement.
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
 	<generated>
-	self visitFASTFortranTLabelledStatement: aFASTFortranWriteStatement.
-	self visitFASTFortranTWithFormat: aFASTFortranWriteStatement.
+	self visitFASTFortranTStatement: aFASTFortranWriteStatement.
 	self visitFASTFortranTWithArguments: aFASTFortranWriteStatement.
 ]
 
