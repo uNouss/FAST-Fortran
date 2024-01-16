@@ -42,17 +42,117 @@ FASTFortranBasicBlockVisitor >> nextStatementIsLeader [
 	isLeader := true
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
+
+	| visit |
+	visit := super visitFASTFortranDoStatement: aFASTFortranDoStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement [
+
+	| visit |
+	visit := super visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
+
+	| visit |
+	visit := super visitFASTFortranExitStatement: aFASTFortranExitStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement [
+
+	| visit |
+	visit := super visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
+
+	| visit |
+	visit := super visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
+
+	| visit |
+	visit := super visitFASTFortranGoToStatement: aFASTFortranGoToStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement [
+
+	| visit |
+	visit := super visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
+
+	| visit |
+	visit := super visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+
+	| visit |
+	visit := super visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
+
+	| visit |
+	visit := super visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement.
+	self nextStatementIsLeader.
+
+	^visit
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranBasicBlockVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 	
 	self nextStatementIsLeader.
-	super visitFASTFortranProgramUnit: aFASTFortranProgramUnit
+	^super visitFASTFortranProgramUnit: aFASTFortranProgramUnit
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranBasicBlockVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
 
-	self checkIsLeaderStatement: aFASTFortranTStatement
+	^self checkIsLeaderStatement: aFASTFortranTStatement
 
 ]
 

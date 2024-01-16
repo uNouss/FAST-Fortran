@@ -111,8 +111,8 @@ FASTFortranBasicBlockVisitorTest >> testStatementAfterBlockIsLeader [
 
 	self functionBigSmall accept: visitor.
 
-	self assert: visitor leaderStatements size >= 4.
-
-	self assert: visitor leaderStatements fourth class equals: FASTFortranReturnStatement
+	self assert: (self detectLeaderStatement: [ :statement |
+		statement class = FASTFortranReturnStatement
+	]) isNotNil.
 
 ]
