@@ -1,5 +1,13 @@
 "
 I represent a statement with a format (format, print)
+
+## Relations
+======================
+
+### Children
+- Relation: #format Type: #FASTFortranTFormat Opposite: #parentFormatedStatement Comment: The description of the format
+
+
 "
 Trait {
 	#name : #FASTFortranTWithFormat,

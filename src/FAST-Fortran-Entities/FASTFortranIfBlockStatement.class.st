@@ -1,5 +1,15 @@
 "
 I represent Fortran If (BLock) statement
+
+## Relations
+======================
+
+### Children
+- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
+- Relation: #elseStatementBlock Type: #FASTFortranTStatementBlock Opposite: #parentIfBlock Comment: Statement block containing statements of else branch 
+- Relation: #thenStatementBlock Type: #FASTFortranTStatementBlock Opposite: #parentIfBlock Comment: Statement block containing statements of then branch 
+
+
 "
 Class {
 	#name : #FASTFortranIfBlockStatement,

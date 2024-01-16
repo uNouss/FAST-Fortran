@@ -1,5 +1,7 @@
 "
 The BLOCK DATA statement identifies a subprogram that initializes variables and arrays in labeled common blocks.
+
+
 "
 Class {
 	#name : #FASTFortranBlockData,

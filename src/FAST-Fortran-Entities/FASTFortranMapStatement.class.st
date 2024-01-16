@@ -1,5 +1,7 @@
 "
 I represent Fortran Map statement
+
+
 "
 Class {
 	#name : #FASTFortranMapStatement,

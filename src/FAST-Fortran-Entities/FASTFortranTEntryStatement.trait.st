@@ -1,5 +1,13 @@
 "
 I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk
+
+## Relations
+======================
+
+### Parents
+- Relation: #entryStatement Type: #FASTFortranEntryStatement Opposite: #entryArguments
+
+
 "
 Trait {
 	#name : #FASTFortranTEntryStatement,

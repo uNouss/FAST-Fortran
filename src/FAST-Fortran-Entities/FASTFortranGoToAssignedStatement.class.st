@@ -1,5 +1,15 @@
 "
 I represent Fortran Go To( Assigned) statement
+
+## Relations
+======================
+
+### Children
+- Relation: #labelReferences Type: #FASTFortranLabelReference Opposite: #referencer Comment: the label(s) referenced
+### Other
+- Relation: #selectorExpression Type: #FASTFortranTExpression Opposite: #parentGotoAssignedStatement Comment: The expression which value selects the label to go to
+
+
 "
 Class {
 	#name : #FASTFortranGoToAssignedStatement,

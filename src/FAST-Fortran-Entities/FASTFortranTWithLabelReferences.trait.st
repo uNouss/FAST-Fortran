@@ -1,5 +1,13 @@
 "
 I represent a statement (various kind of goto) that can have label references
+
+## Relations
+======================
+
+### Children
+- Relation: #labelReferences Type: #FASTFortranLabelReference Opposite: #referencer Comment: the label(s) referenced
+
+
 "
 Trait {
 	#name : #FASTFortranTWithLabelReferences,

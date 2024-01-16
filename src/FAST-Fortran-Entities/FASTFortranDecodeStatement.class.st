@@ -1,5 +1,7 @@
 "
 I represent Fortran Decode statement
+
+
 "
 Class {
 	#name : #FASTFortranDecodeStatement,

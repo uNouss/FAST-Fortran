@@ -1,5 +1,13 @@
 "
 I represent Fortran Implicit statement
+
+## Relations
+======================
+
+### Children
+- Relation: #typingRules Type: #FASTFortranImplicitTypingRule Opposite: #parentImplicitStatement
+
+
 "
 Class {
 	#name : #FASTFortranImplicitStatement,

@@ -1,5 +1,19 @@
 "
 I represent a variable declarator: variable declared + optional initial value
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentDeclaration Type: #FASTFortranTWithDeclarators Opposite: #declarators
+### Children
+- Relation: #expression Type: #FASTFortranTExpression Opposite: #variableDeclaratorOwner Comment: Expression assigned to the variable declared
+
+## Properties
+======================
+
+- Named: #variable Type: String Comment: The name of the variable being declared
+
 "
 Trait {
 	#name : #FASTFortranTVariableDeclarator,

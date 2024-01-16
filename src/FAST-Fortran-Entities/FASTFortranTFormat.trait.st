@@ -1,5 +1,14 @@
 "
 I represent a format description (eg. in Format or Print statement)
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentFormatedStatement Type: #FASTFortranTWithFormat Opposite: #format Comment: A format description in a Format/Print/Read/Write statement
+- Relation: #parentIOStatement Type: #FASTFortranTWithIOParameters Opposite: #ioParameters
+
+
 "
 Trait {
 	#name : #FASTFortranTFormat,

@@ -1,5 +1,15 @@
 "
 I represent a group of variables in an Equivalence statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+### Other
+- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+
+
 "
 Class {
 	#name : #FASTFortranEquivalenceGroup,

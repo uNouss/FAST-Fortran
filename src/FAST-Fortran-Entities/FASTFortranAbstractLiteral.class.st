@@ -1,5 +1,7 @@
 "
 I am the super class of all Fortran Literals
+
+
 "
 Class {
 	#name : #FASTFortranAbstractLiteral,

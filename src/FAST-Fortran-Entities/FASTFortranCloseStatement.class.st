@@ -1,5 +1,7 @@
 "
 I represent Fortran Close statement
+
+
 "
 Class {
 	#name : #FASTFortranCloseStatement,

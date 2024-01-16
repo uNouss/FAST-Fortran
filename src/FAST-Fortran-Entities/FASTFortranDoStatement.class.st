@@ -1,5 +1,15 @@
 "
 I represent Fortran Do statement
+
+## Relations
+======================
+
+### Children
+- Relation: #labelReferences Type: #FASTFortranLabelReference Opposite: #referencer Comment: the label(s) referenced
+- Relation: #loopControl Type: #FASTFortranLoopControlExpression Opposite: #parentLoop Comment: loop control
+- Relation: #statementBlock Type: #FASTFortranTStatementBlock Opposite: #parentDoStatement Comment: Statement block containing statements of the do body 
+
+
 "
 Class {
 	#name : #FASTFortranDoStatement,

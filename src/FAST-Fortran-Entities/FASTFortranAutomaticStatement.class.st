@@ -1,5 +1,7 @@
 "
 I represent Fortran Automatic statement
+
+
 "
 Class {
 	#name : #FASTFortranAutomaticStatement,

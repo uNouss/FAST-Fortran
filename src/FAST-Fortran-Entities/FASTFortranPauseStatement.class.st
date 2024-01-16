@@ -1,5 +1,11 @@
 "
 I represent Fortran Pause statement
+
+## Properties
+======================
+
+- Named: #displayArgument Type: String Comment: Optional. Displayed when the program pauses. String of no more that 5 digits or a character constant
+
 "
 Class {
 	#name : #FASTFortranPauseStatement,

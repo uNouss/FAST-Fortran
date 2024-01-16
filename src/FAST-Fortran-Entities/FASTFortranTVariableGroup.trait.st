@@ -1,5 +1,15 @@
 "
 I represent an entity with several variables like in a DataStatement or an EquivalenceStatement
+
+## Relations
+======================
+
+### Parents
+- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+### Other
+- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+
+
 "
 Trait {
 	#name : #FASTFortranTVariableGroup,

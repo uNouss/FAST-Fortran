@@ -1,5 +1,22 @@
 "
 A fortran comment
+
+## Relations
+======================
+
+### Other
+- Relation: #container Type: #FASTFortranTWithComments Opposite: #comments Comment: Source code entity containing the comment
+
+## Properties
+======================
+
+- Named: #content Type: String Comment: Content of the comment as a String
+- Named: #content Type: String Comment: Determines a content of a comment
+- Named: #endPos Type: Number
+- Named: #endPos Type: Number
+- Named: #startPos Type: Number
+- Named: #startPos Type: Number
+
 "
 Class {
 	#name : #FASTFortranComment,

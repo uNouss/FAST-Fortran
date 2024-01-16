@@ -1,5 +1,13 @@
 "
 I represent a statement with variable groups like a DataStatement or an EquivalenceStatement
+
+## Relations
+======================
+
+### Children
+- Relation: #variableGroups Type: #FASTFortranTVariableGroup Opposite: #withVariableGroups
+
+
 "
 Trait {
 	#name : #FASTFortranTWithVariableGroups,

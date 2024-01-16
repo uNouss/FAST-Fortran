@@ -1,5 +1,13 @@
 "
 For entities with comments. In FAST, they are called containers. 
+
+## Relations
+======================
+
+### Other
+- Relation: #comments Type: #FASTFortranTComment Opposite: #container Comment: list of comments defined in the entity
+
+
 "
 Trait {
 	#name : #FASTFortranTWithComments,

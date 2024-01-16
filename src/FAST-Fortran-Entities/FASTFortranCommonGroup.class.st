@@ -1,5 +1,19 @@
 "
 I represent Common group inside a Common statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentCommonStatement Type: #FASTFortranCommonStatement Opposite: #groups Comment: Parent common statement I belong to
+### Children
+- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+
+## Properties
+======================
+
+- Named: #name Type: String Comment: The name of this Common group, might be ommited
+
 "
 Class {
 	#name : #FASTFortranCommonGroup,

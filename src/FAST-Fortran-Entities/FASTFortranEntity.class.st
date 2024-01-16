@@ -1,5 +1,14 @@
 "
 any entity
+
+## Properties
+======================
+
+- Named: #endPos Type: Number
+- Named: #endPos Type: Number
+- Named: #startPos Type: Number
+- Named: #startPos Type: Number
+
 "
 Class {
 	#name : #FASTFortranEntity,

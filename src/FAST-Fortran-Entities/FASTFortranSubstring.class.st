@@ -1,5 +1,7 @@
 "
 I represent Fortran Substring
+
+
 "
 Class {
 	#name : #FASTFortranSubstring,

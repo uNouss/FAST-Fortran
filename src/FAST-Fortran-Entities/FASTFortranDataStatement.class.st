@@ -1,5 +1,13 @@
 "
 I represent a Fortran Data statement
+
+## Relations
+======================
+
+### Children
+- Relation: #variableGroups Type: #FASTFortranTVariableGroup Opposite: #withVariableGroups
+
+
 "
 Class {
 	#name : #FASTFortranDataStatement,

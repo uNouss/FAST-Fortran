@@ -1,5 +1,7 @@
 "
 I represent Fortran End File statement
+
+
 "
 Class {
 	#name : #FASTFortranEndFileStatement,

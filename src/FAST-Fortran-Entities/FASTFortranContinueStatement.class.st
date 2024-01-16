@@ -1,5 +1,7 @@
 "
 I represent Fortran Continue statement
+
+
 "
 Class {
 	#name : #FASTFortranContinueStatement,

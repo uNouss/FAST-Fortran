@@ -1,5 +1,14 @@
 "
 I represent a type declaration for one or many scalar variables or arrays
+
+## Relations
+======================
+
+### Children
+- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+- Relation: #type Type: #FASTFortranType Opposite: #parentDeclaration Comment: type
+
+
 "
 Class {
 	#name : #FASTFortranVariableDeclarationStatement,

@@ -1,5 +1,17 @@
 "
 I represent a call to a function (or function statement)
+
+## Relations
+======================
+
+### Children
+- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+
+## Properties
+======================
+
+- Named: #name Type: String Comment: Name of called function
+
 "
 Class {
 	#name : #FASTFortranFunctionCall,

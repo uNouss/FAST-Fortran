@@ -1,5 +1,18 @@
 "
 I represent a range of characters in an Implicit statement
+
+## Relations
+======================
+
+### Parents
+- Relation: #parentImplicitRule Type: #FASTFortranImplicitTypingRule Opposite: #ranges
+
+## Properties
+======================
+
+- Named: #from Type: String Comment: Start of character range for implicit rule
+- Named: #to Type: String Comment: End of character range for implicit rule
+
 "
 Class {
 	#name : #FASTFortranImplicitRange,

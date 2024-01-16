@@ -1,5 +1,13 @@
 "
 I represent a fortran statement with a condition: if-block, if-logical
+
+## Relations
+======================
+
+### Children
+- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
+
+
 "
 Trait {
 	#name : #FASTFortranTConditionalStatement,

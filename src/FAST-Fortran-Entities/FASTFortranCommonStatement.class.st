@@ -1,5 +1,13 @@
 "
 I represent Fortran Common statement
+
+## Relations
+======================
+
+### Children
+- Relation: #groups Type: #FASTFortranCommonGroup Opposite: #parentCommonStatement Comment: List common groups in this common statement
+
+
 "
 Class {
 	#name : #FASTFortranCommonStatement,

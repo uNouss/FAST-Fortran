@@ -1,5 +1,7 @@
 "
 I represent Fortran Union statement
+
+
 "
 Class {
 	#name : #FASTFortranUnionStatement,

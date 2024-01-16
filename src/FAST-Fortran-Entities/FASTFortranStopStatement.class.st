@@ -1,5 +1,11 @@
 "
 I represent Fortran Stop statement
+
+## Properties
+======================
+
+- Named: #displayArgument Type: String Comment: Optional. Displayed when the program stops. String of no more that 5 digits or a character constant
+
 "
 Class {
 	#name : #FASTFortranStopStatement,

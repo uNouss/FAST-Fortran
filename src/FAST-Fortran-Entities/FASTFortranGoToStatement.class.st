@@ -1,5 +1,13 @@
 "
 I represent Fortran Go To (unconditional) statement
+
+## Relations
+======================
+
+### Children
+- Relation: #labelReferences Type: #FASTFortranLabelReference Opposite: #referencer Comment: the label(s) referenced
+
+
 "
 Class {
 	#name : #FASTFortranGoToStatement,

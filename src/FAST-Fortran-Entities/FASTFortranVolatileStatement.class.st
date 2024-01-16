@@ -1,5 +1,7 @@
 "
 I represent Fortran Volatile statement
+
+
 "
 Class {
 	#name : #FASTFortranVolatileStatement,
