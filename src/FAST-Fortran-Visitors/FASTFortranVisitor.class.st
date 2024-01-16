@@ -15,7 +15,7 @@ FASTFortranVisitor >> visitFASTFortranAmpersand: aFASTFortranAmpersand [
 	self visitFASTFortranTCharacterLiteral: aFASTFortranAmpersand.
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranArrayBound: aFASTFortranArrayBound [
 
 	^aFASTFortranArrayBound
@@ -23,7 +23,7 @@ FASTFortranVisitor >> visitFASTFortranArrayBound: aFASTFortranArrayBound [
 		ifNotNil: [ aFASTFortranArrayBound accept: self ]
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranArrayRange: aFASTFortranArrayRange [
 
 	^{
@@ -37,7 +37,7 @@ FASTFortranVisitor >> visitFASTFortranArrayVariable: aFASTFortranArrayVariable [
 	<generated>
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #'visiting - expressions' }
 FASTFortranVisitor >> visitFASTFortranAssignmentExpression: aFASTFortranAssignmentExpression [
 
 	self visitFASTFortranTAssignment: aFASTFortranAssignmentExpression
@@ -123,7 +123,7 @@ FASTFortranVisitor >> visitFASTFortranComment: aFASTFortranComment [
 	self visitFASTFortranTComment: aFASTFortranComment.
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranCommonGroup: aFASTFortranCommonGroup [
 
 	aFASTFortranCommonGroup variables do: [ :var | var accept: self ].
@@ -152,7 +152,7 @@ FASTFortranVisitor >> visitFASTFortranContinueStatement: aFASTFortranContinueSta
 	self visitFASTFortranTLabelledStatement: aFASTFortranContinueStatement.
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranDataGroup: aFASTFortranDataGroup [
 
 	aFASTFortranDataGroup variables do: [ :var | var accept: self ].
@@ -246,7 +246,7 @@ FASTFortranVisitor >> visitFASTFortranEntryStatement: aFASTFortranEntryStatement
 	self visitFASTFortranTLabelledStatement: aFASTFortranEntryStatement.
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranEquivalenceGroup: aFASTFortranEquivalenceGroup [
 
 	aFASTFortranEquivalenceGroup variables do: [ :var |
@@ -482,6 +482,9 @@ FASTFortranVisitor >> visitFASTFortranPrintStatement: aFASTFortranPrintStatement
 
 { #category : #'visiting - programUnits' }
 FASTFortranVisitor >> visitFASTFortranProcedure: aFASTFortranProcedure [
+	"be careful that #visitFASTFortranTWithParameters: is also called indirectly by
+	 #visitFASTFortranProgramUnit:"
+
 	self visitFASTFortranSubprogram: aFASTFortranProcedure.
 	self visitFASTFortranTWithParameters: aFASTFortranProcedure
 ]
@@ -798,7 +801,7 @@ FASTFortranVisitor >> visitFASTFortranVariableDeclarationStatement: aFASTFortran
 	aFASTFortranVariableDeclarationStatement declarators do: [:decl | decl accept: self]
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #visiting }
 FASTFortranVisitor >> visitFASTFortranVariableDeclarator: aFASTFortranVariableDeclarator [
 
 	^aFASTFortranVariableDeclarator expression
