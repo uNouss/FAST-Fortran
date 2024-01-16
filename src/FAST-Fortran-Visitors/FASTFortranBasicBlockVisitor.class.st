@@ -11,13 +11,28 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Visitor'
 }
 
+{ #category : #'private state' }
+FASTFortranBasicBlockVisitor >> checkIsLeaderStatement: aFASTFortranStatement [
+
+	isLeader ifFalse: [ ^ self ].
+
+	leaderStatements add: aFASTFortranStatement.
+	isLeader := false
+]
+
 { #category : #initialization }
 FASTFortranBasicBlockVisitor >> initialize [
 
 	super initialize.
 
-	leaderStatements := Set new.
+	leaderStatements := OrderedCollection new.
 	isLeader := false
+]
+
+{ #category : #'accessing - private tests' }
+FASTFortranBasicBlockVisitor >> leaderStatements [
+
+	^leaderStatements
 ]
 
 { #category : #'private state' }
@@ -32,4 +47,19 @@ FASTFortranBasicBlockVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgram
 	
 	self nextStatementIsLeader.
 	super visitFASTFortranProgramUnit: aFASTFortranProgramUnit
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
+
+	self checkIsLeaderStatement: aFASTFortranTStatement
+
+]
+
+{ #category : #'visiting - traits' }
+FASTFortranBasicBlockVisitor >> visitFASTFortranTStatementBlock: aFASTFortranTStatementBlock [
+	"first statement in a statement block is a leader"
+
+	self nextStatementIsLeader.
+	^super visitFASTFortranTStatementBlock: aFASTFortranTStatementBlock
 ]
