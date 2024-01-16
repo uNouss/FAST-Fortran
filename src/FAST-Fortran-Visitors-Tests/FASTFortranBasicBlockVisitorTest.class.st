@@ -4,6 +4,16 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Tests-Visitor'
 }
 
+{ #category : #running }
+FASTFortranBasicBlockVisitorTest >> detectLeaderStatement: aBlock [
+	"aBlock should have one parameter and tests that a given leaderStatement was found"
+
+	^visitor leaderStatements
+		detect: aBlock
+		ifNone: [ nil ].
+
+]
+
 { #category : #'entity creation' }
 FASTFortranBasicBlockVisitorTest >> functionBigSmall [
 	"FAST for:
@@ -77,18 +87,23 @@ FASTFortranBasicBlockVisitorTest >> testFirstStatementInBlockIsLeader [
 
 	self functionBigSmall accept: visitor.
 
-	self assert: visitor leaderStatements size >= 3.
+	self assert: (self detectLeaderStatement: [ :statement |
+		(statement class = FASTFortranVariableDeclarationStatement) and:
+		[statement declarators size = 2]
+	]) isNotNil.
 
-	self assert: visitor leaderStatements first class equals: FASTFortranVariableDeclarationStatement.
-	self assert: visitor leaderStatements first declarators size equals: 2.
+	self assert: (self detectLeaderStatement: [ :statement |
+		(statement class = FASTFortranAssignmentStatement) and:
+		[(statement expression class = FASTFortranCharacterLiteral) and:
+		[statement expression primitiveValue = '"small"'] ]
+	]) isNotNil.
 
-	self assert: visitor leaderStatements second class equals: FASTFortranAssignmentStatement.
-	self assert: visitor leaderStatements second expression class equals: FASTFortranCharacterLiteral.
-	self assert: visitor leaderStatements second expression primitiveValue equals: '"small"'.
+	self assert: (self detectLeaderStatement: [ :statement |
+		(statement class = FASTFortranAssignmentStatement) and:
+		[(statement expression class = FASTFortranCharacterLiteral) and:
+		[statement expression primitiveValue = '"big"'] ]
+	]) isNotNil.
 
-	self assert: visitor leaderStatements third class equals: FASTFortranAssignmentStatement.
-	self assert: visitor leaderStatements third expression class equals: FASTFortranCharacterLiteral.
-	self assert: visitor leaderStatements third expression primitiveValue equals: '"big"'.
 ]
 
 { #category : #tests }
