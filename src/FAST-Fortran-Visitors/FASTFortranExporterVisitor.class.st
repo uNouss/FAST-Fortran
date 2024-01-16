@@ -1,3 +1,6 @@
+"
+Avisitor on FASTFortran that exports the AST as Fortran code
+"
 Class {
 	#name : #FASTFortranExporterVisitor,
 	#superclass : #FASTFortranVisitor,

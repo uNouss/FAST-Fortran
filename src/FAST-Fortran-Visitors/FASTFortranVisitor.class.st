@@ -1,3 +1,6 @@
+"
+An abstract visitor on FASTFortran tree
+"
 Class {
 	#name : #FASTFortranVisitor,
 	#superclass : #FASTCoreVisitor,

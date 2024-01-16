@@ -1,3 +1,6 @@
+"
+A FASTFortranVisitor that computes BasicBlocks on the statements
+"
 Class {
 	#name : #FASTFortranBasicBlockVisitor,
 	#superclass : #FASTFortranVisitor,
