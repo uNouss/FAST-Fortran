@@ -90,3 +90,14 @@ FASTFortranBasicBlockVisitorTest >> testFirstStatementInBlockIsLeader [
 	self assert: visitor leaderStatements third expression class equals: FASTFortranCharacterLiteral.
 	self assert: visitor leaderStatements third expression primitiveValue equals: '"big"'.
 ]
+
+{ #category : #tests }
+FASTFortranBasicBlockVisitorTest >> testStatementAfterBlockIsLeader [
+
+	self functionBigSmall accept: visitor.
+
+	self assert: visitor leaderStatements size >= 4.
+
+	self assert: visitor leaderStatements fourth class equals: FASTFortranReturnStatement
+
+]
