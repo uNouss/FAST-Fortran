@@ -83,6 +83,37 @@ FASTFortranCFGVisitorTest >> newVisitor [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
+
+	| conditional |
+	self functionBigSmall accept: visitor.
+
+	conditional := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ])
+		anyOne.
+
+	self assert: conditional nextBlocks size equals: 2.
+	self
+		assert: conditional nextBlocks first nextBlock
+		equals: conditional nextBlocks second nextBlock
+	
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
+
+	| blocks |
+	self functionBigSmall accept: visitor.
+
+	blocks := self findBasicBlocks: FASTFortranBasicBlock with: [ :basicBloc |
+		(basicBloc firstStatement class = FASTFortranVariableDeclarationStatement) and:
+		[basicBloc lastStatement class = FASTFortranAssignmentStatement ]
+	].
+
+	self assert: blocks size equals: 1.
+	self assert: blocks anyOne nextBlock class equals: FASTFortranConditionalBasicBlock
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 
 	| blocks  conditional |

@@ -59,11 +59,11 @@ FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
 	| newBlock |
 
 	newBlock := aBasicBlockClass new.
-	"currentBlock nextBlock: newBlock
-	]."
+
 	self nextStatementStartsBlock.
 
 	basicBlocks add: newBlock.
+
 	currentBlock := newBlock.
 
 	^newBlock
@@ -159,17 +159,24 @@ FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfAr
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 
-	| conditionalBlock newBlock |	
+	| previousBlock conditionalBlock afterBlock |
+	previousBlock := currentBlock.
 	conditionalBlock := self conditionBlockWith: aFASTFortranIfBlockStatement condition.
 
-	conditionalBlock
-		nextBlock: (aFASTFortranIfBlockStatement thenStatementBlock accept: self)
-		onValue: true.
-	conditionalBlock
-		nextBlock: (aFASTFortranIfBlockStatement elseStatementBlock accept: self)
-		onValue: false.
+	previousBlock nextBlock: conditionalBlock.
 
-	newBlock := self newBasicBlock: FASTFortranBasicBlock.
+	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
+
+	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
+	conditionalBlock nextBlock: currentBlock onValue: true.
+	currentBlock nextBlock: afterBlock.
+
+	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
+	conditionalBlock nextBlock: currentBlock onValue: false.
+	currentBlock nextBlock: afterBlock.
+	
+	currentBlock := afterBlock.
+	self nextStatementStartsBlock.
 
 	^conditionalBlock
 ]
@@ -191,19 +198,20 @@ FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatementBlock [
+FASTFortranCFGVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatement [
 
 	| newBlock |
 	newBlock := self newBasicBlock: FASTFortranBasicBlock.
-	super visitFASTFortranTStatementBlock: aFASTFortranStatementBlock.
+
+	super visitFASTFortranTStatementBlock: aFASTFortranStatement.
+
 	^newBlock
 
 ]
 
 { #category : #'visiting - traits' }
 FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
-	"assumes there is only one basicBlock in #currentBlocks
-	 sets the current statement as the lastStatement (for now) of this currentBlock"
+	"sets the current statement as the lastStatement (for now) of the currentBlock"
 
 	self checkForNewBasicBlock: aFASTFortranTStatement.
 	currentBlock lastStatement: aFASTFortranTStatement.
