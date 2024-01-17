@@ -15,61 +15,31 @@ FASTFortranCFGVisitorTest >> findBasicBlocks: aClass with: aPharoBooleanBlock [
 ]
 
 { #category : #'entity creation' }
-FASTFortranCFGVisitorTest >> functionBigSmall [
+FASTFortranCFGVisitorTest >> functionWithLogicalIf [
 	"FAST for:
 
-	CHARACTER*20 FUNCTION fctBigSmall( x, y)
-	INTEGER x, y
-	CHARACTER*20 str
-
-	x = 1
-
-	IF y .gt. 5 THEN
-	str = ""small""
-	y = fctSmall(x)
-
-	ELSE
-	str = ""big""
-	y = y - x
-	END IF
-
-	RETURN str
+	INTEGER FUNCTION something( x)
+	INTEGER x
+	IF (x .lt. 5) return x
+	RETURN x - 5
 	END
 	"
 
 	| function block ifStatement |
-	function := self functionDeclaration: 'fctBigSmall'.
-	self entity: function parameters: #(x y).
-	function returnType: (self characterType: 20).
+	function := self functionDeclaration: 'something'.
+	self entity: function parameters: #(x).
+	function returnType: (self integerType: nil).
 
 	block := function statementBlock.
-	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x y)).
-	block addStatement: (self declarationStatement: (self characterType: 20) variables: #(str)).
-	block addStatement: (self assignementStatement: 'x' value: (self integerLiteral: '1')).
+	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x)).
 
-	ifStatement := self ifBlock: (self binary: '.gt.' left: 'y' right: '5') then: #() else:  #().
+	ifStatement := FASTFortranIfLogicalStatement new.
+	ifStatement condition: (self binary: '.lt.' left: 'x' right: '5').
+	ifStatement statement: (self returnStatement: (self scalarVariable: 'x')).
 	block addStatement: ifStatement.
 
-	block addStatement: (self returnStatement: (self scalarVariable: 'str')).
+	block addStatement: (self returnStatement: (self binary: '-' left: 'x' right: '5')).
 	
-	block statements doWithIndex: [ :statement :i | statement startPos: i ].
-
-	block := ifStatement thenStatementBlock.
-	block addStatement: (self assignementStatement: 'str' value: (self characterLiteral: '"small"')).
-	block addStatement: (self
-		assignementStatement: 'y'
-		value: (self functionCall: 'fctSmall' arguments: { self scalarVariable: 'x' })).
-
-	block statements doWithIndex: [ :statement :i | statement startPos: i ].
-
-	block := ifStatement elseStatementBlock.
-	block addStatement: (self assignementStatement: 'str' value: (self characterLiteral: '"big"')).
-	block addStatement: (self
-		assignementStatement: 'y'
-		value: ((self binary: '-' left: 'y' right: '5')
-			right: (self scalarVariable: 'x') ;
-			yourself)).
-
 	block statements doWithIndex: [ :statement :i | statement startPos: i ].
 
 	^function
@@ -86,7 +56,7 @@ FASTFortranCFGVisitorTest >> newVisitor [
 FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
 
 	| conditional |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	conditional := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ])
 		anyOne.
@@ -102,7 +72,7 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
 FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
 
 	| blocks |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	blocks := self findBasicBlocks: FASTFortranBasicBlock with: [ :basicBloc |
 		(basicBloc firstStatement class = FASTFortranVariableDeclarationStatement) and:
@@ -117,7 +87,7 @@ FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
 FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 
 	| blocks  conditional |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	blocks := self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ].
 
@@ -134,7 +104,7 @@ FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 FASTFortranCFGVisitorTest >> testIfStatementElsePartIsABasicBlock [
 
 	| aBlock |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	aBlock := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [:e | true])
 		anyOne nextBlockForValue: false.
@@ -155,7 +125,7 @@ FASTFortranCFGVisitorTest >> testIfStatementElsePartIsABasicBlock [
 FASTFortranCFGVisitorTest >> testIfStatementFollowedByABasicBlock [
 
 	| blocks |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	blocks := self findBasicBlocks: FASTFortranBasicBlock with: [ :basicBloc |
 		basicBloc lastStatement class = FASTFortranReturnStatement
@@ -169,7 +139,7 @@ FASTFortranCFGVisitorTest >> testIfStatementFollowedByABasicBlock [
 FASTFortranCFGVisitorTest >> testIfStatementThenPartIsABasicBlock [
 
 	| aBlock |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	aBlock := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [:e | true])
 		anyOne nextBlockForValue: true.
@@ -190,7 +160,7 @@ FASTFortranCFGVisitorTest >> testIfStatementThenPartIsABasicBlock [
 FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 
 	| blocks |
-	self functionBigSmall accept: visitor.
+	self functionWithConditional accept: visitor.
 
 	blocks := self findBasicBlocks: FASTFortranBasicBlock with: [ :basicBloc |
 		(basicBloc firstStatement class = FASTFortranVariableDeclarationStatement) and:
