@@ -5,8 +5,10 @@ I represent a format description (eg. in Format or Print statement)
 ======================
 
 ### Parents
-- Relation: #parentFormatedStatement Type: #FASTFortranTWithFormat Opposite: #format Comment: A format description in a Format/Print/Read/Write statement
-- Relation: #parentIOStatement Type: #FASTFortranTWithIOParameters Opposite: #ioParameters
+| Relation | Origin | Opposite | Type | Comment |
+| `parentFormatedStatement` | `FASTFortranTFormat` | `format` | `FASTFortranTWithFormat` | A format description in a Format/Print/Read/Write statement|
+| `parentIOStatement` | `FASTFortranTIOParameter` | `ioParameters` | `FASTFortranTWithIOParameters` | |
+
 
 
 "

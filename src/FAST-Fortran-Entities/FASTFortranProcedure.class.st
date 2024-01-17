@@ -5,7 +5,9 @@ I represent a fortran subroutine or a function
 ======================
 
 ### Children
-- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
+| Relation | Origin | Opposite | Type | Comment |
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+
 
 
 "

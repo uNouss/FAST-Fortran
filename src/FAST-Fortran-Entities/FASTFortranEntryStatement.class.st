@@ -5,18 +5,23 @@ I represent Fortran Entry statement
 ======================
 
 ### Children
-- Relation: #entryArguments Type: #FASTFortranTEntryStatement Opposite: #entryStatement
+| Relation | Origin | Opposite | Type | Comment |
+| `entryArguments` | `FASTFortranEntryStatement` | `entryStatement` | `FASTFortranTEntryStatement` | |
+
 ### Other
-- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
+| Relation | Origin | Opposite | Type | Comment |
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
+
 
 ## Properties
 ======================
 
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #name Type: String
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {

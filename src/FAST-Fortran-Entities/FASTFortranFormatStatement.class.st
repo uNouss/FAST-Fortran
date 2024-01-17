@@ -5,12 +5,15 @@ I represent Fortran Format statement
 ======================
 
 ### Children
-- Relation: #format Type: #FASTFortranTFormat Opposite: #parentFormatedStatement Comment: The description of the format
+| Relation | Origin | Opposite | Type | Comment |
+| `format` | `FASTFortranTWithFormat` | `parentFormatedStatement` | `FASTFortranTFormat` | The description of the format|
+
 
 ## Properties
 ======================
 
-- Named: #formatDescription Type: String
+| Name | Type | Default value | Comment |
+| `formatDescription` | `String` | nil | |
 
 "
 Class {

@@ -5,10 +5,14 @@ I represent a Fortran Data group in a Data statement
 ======================
 
 ### Parents
-- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+| Relation | Origin | Opposite | Type | Comment |
+| `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
+
 ### Other
-- Relation: #dataConstants Type: #FASTFortranTExpression Opposite: #parentDataStatement
-- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+| Relation | Origin | Opposite | Type | Comment |
+| `dataConstants` | `FASTFortranDataGroup` | `parentDataStatement` | `FASTFortranTExpression` | |
+| `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
+
 
 
 "

@@ -5,12 +5,15 @@ I represent a call to a function (or function statement)
 ======================
 
 ### Children
-- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+| Relation | Origin | Opposite | Type | Comment |
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+
 
 ## Properties
 ======================
 
-- Named: #name Type: String Comment: Name of called function
+| Name | Type | Default value | Comment |
+| `name` | `String` | nil | Name of called function|
 
 "
 Class {

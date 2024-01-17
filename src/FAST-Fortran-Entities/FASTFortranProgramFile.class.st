@@ -5,9 +5,13 @@ An entity that can contain fortran program units and comments
 ======================
 
 ### Children
-- Relation: #programUnit Type: #FASTFortranProgramUnit Opposite: #parentProgramFile Comment: Program Units in a program file
+| Relation | Origin | Opposite | Type | Comment |
+| `programUnit` | `FASTFortranProgramFile` | `parentProgramFile` | `FASTFortranProgramUnit` | Program Units in a program file|
+
 ### Other
-- Relation: #comments Type: #FASTFortranTComment Opposite: #container Comment: list of comments defined in the entity
+| Relation | Origin | Opposite | Type | Comment |
+| `comments` | `FASTFortranTWithComments` | `container` | `FASTFortranTComment` | list of comments defined in the entity|
+
 
 
 "

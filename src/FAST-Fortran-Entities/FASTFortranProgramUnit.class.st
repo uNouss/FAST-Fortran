@@ -5,22 +5,29 @@ A fortran program unit is a sequence of statements, terminated by an END stateme
 ======================
 
 ### Parents
-- Relation: #parentProgramFile Type: #FASTFortranProgramFile Opposite: #programUnit Comment: Parent program file
+| Relation | Origin | Opposite | Type | Comment |
+| `parentProgramFile` | `FASTFortranProgramUnit` | `programUnit` | `FASTFortranProgramFile` | Parent program file|
+
 ### Children
-- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
-- Relation: #statementBlock Type: #FASTFortranTStatementBlock Opposite: #fastBehaviouralParent Comment: Statements block of the behavioural entity
+| Relation | Origin | Opposite | Type | Comment |
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+| `statementBlock` | `FASTFortranTBehaviouralEntity` | `fastBehaviouralParent` | `FASTFortranTStatementBlock` | Statements block of the behavioural entity|
+
 ### Other
-- Relation: #comments Type: #FASTFortranTComment Opposite: #container Comment: list of comments defined in the entity
-- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
+| Relation | Origin | Opposite | Type | Comment |
+| `comments` | `FASTFortranTWithComments` | `container` | `FASTFortranTComment` | list of comments defined in the entity|
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
+
 
 ## Properties
 ======================
 
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #name Type: String
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {

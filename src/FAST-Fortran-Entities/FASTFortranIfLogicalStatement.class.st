@@ -5,8 +5,10 @@ The logical IF statement executes one single statement, or does not execute it, 
 ======================
 
 ### Children
-- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
-- Relation: #statement Type: #FASTFortranTStatement Opposite: #parentIfStatement Comment: Statement of the logical if
+| Relation | Origin | Opposite | Type | Comment |
+| `condition` | `FASTFortranTConditionalStatement` | `parentConditionalStatement` | `FASTFortranTExpression` | Condition|
+| `statement` | `FASTFortranIfLogicalStatement` | `parentIfStatement` | `FASTFortranTStatement` | Statement of the logical if|
+
 
 
 "

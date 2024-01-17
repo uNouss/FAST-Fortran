@@ -5,7 +5,9 @@ I represent a Fortran Equivalence statement
 ======================
 
 ### Children
-- Relation: #variableGroups Type: #FASTFortranTVariableGroup Opposite: #withVariableGroups
+| Relation | Origin | Opposite | Type | Comment |
+| `variableGroups` | `FASTFortranTWithVariableGroups` | `withVariableGroups` | `FASTFortranTVariableGroup` | |
+
 
 
 "

@@ -5,7 +5,9 @@ I represent a Fortran Function
 ======================
 
 ### Children
-- Relation: #returnType Type: #FASTFortranType Opposite: #typedFunctions
+| Relation | Origin | Opposite | Type | Comment |
+| `returnType` | `FASTFortranFunction` | `typedFunctions` | `FASTFortranType` | |
+
 
 
 "

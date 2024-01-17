@@ -5,7 +5,9 @@ I represent a statement with variable groups like a DataStatement or an Equivale
 ======================
 
 ### Children
-- Relation: #variableGroups Type: #FASTFortranTVariableGroup Opposite: #withVariableGroups
+| Relation | Origin | Opposite | Type | Comment |
+| `variableGroups` | `FASTFortranTWithVariableGroups` | `withVariableGroups` | `FASTFortranTVariableGroup` | |
+
 
 
 "

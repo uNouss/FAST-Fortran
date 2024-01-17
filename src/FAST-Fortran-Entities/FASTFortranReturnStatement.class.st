@@ -5,20 +5,25 @@ a Fortran Return Statement
 ======================
 
 ### Parents
-- Relation: #parentIfStatement Type: #FASTFortranIfLogicalStatement Opposite: #statement Comment: Parent if statement
-- Relation: #statementContainer Type: #FASTFortranTStatementBlock Opposite: #statements Comment: Block containing this statement.
+| Relation | Origin | Opposite | Type | Comment |
+| `parentIfStatement` | `FASTFortranTStatement` | `statement` | `FASTFortranIfLogicalStatement` | Parent if statement|
+| `statementContainer` | `FASTFortranTStatement` | `statements` | `FASTFortranTStatementBlock` | Block containing this statement.|
+
 ### Children
-- Relation: #expression Type: #FASTFortranTExpression Opposite: #returnOwner Comment: The expression returned
+| Relation | Origin | Opposite | Type | Comment |
+| `expression` | `FASTFortranTReturnStatement` | `returnOwner` | `FASTFortranTExpression` | The expression returned|
+
 
 ## Properties
 ======================
 
-- Named: #alternateReturnLable Type: String Comment: Optional. Expression of type INTEGER or REAL
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #label Type: String Comment: Determines the statement label which consists of 1 to 5 digits, with at least one nonzero
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `alternateReturnLable` | `String` | nil | Optional. Expression of type INTEGER or REAL|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `label` | `String` | nil | Determines the statement label which consists of 1 to 5 digits, with at least one nonzero|
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {

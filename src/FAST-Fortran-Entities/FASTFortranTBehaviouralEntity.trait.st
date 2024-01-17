@@ -11,16 +11,19 @@ Local variables are intended to be stored in the local entities of the body
 ======================
 
 ### Children
-- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
-- Relation: #statementBlock Type: #FASTFortranTStatementBlock Opposite: #fastBehaviouralParent Comment: Statements block of the behavioural entity
+| Relation | Origin | Opposite | Type | Comment |
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+| `statementBlock` | `FASTFortranTBehaviouralEntity` | `fastBehaviouralParent` | `FASTFortranTStatementBlock` | Statements block of the behavioural entity|
+
 
 ## Properties
 ======================
 
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Trait {

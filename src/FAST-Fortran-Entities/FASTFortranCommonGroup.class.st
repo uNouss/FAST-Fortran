@@ -5,14 +5,19 @@ I represent Common group inside a Common statement
 ======================
 
 ### Parents
-- Relation: #parentCommonStatement Type: #FASTFortranCommonStatement Opposite: #groups Comment: Parent common statement I belong to
+| Relation | Origin | Opposite | Type | Comment |
+| `parentCommonStatement` | `FASTFortranCommonGroup` | `groups` | `FASTFortranCommonStatement` | Parent common statement I belong to|
+
 ### Children
-- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+| Relation | Origin | Opposite | Type | Comment |
+| `declarators` | `FASTFortranTWithDeclarators` | `parentDeclaration` | `FASTFortranTVariableDeclarator` | variables declared|
+
 
 ## Properties
 ======================
 
-- Named: #name Type: String Comment: The name of this Common group, might be ommited
+| Name | Type | Default value | Comment |
+| `name` | `String` | nil | The name of this Common group, might be ommited|
 
 "
 Class {
