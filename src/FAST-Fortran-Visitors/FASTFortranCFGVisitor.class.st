@@ -87,66 +87,6 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement [
-
-	| visit |
-	visit := super visitFASTFortranDoWhileStatement: aFASTFortranDoWhileStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
-
-	| visit |
-	visit := super visitFASTFortranExitStatement: aFASTFortranExitStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement [
-
-	| visit |
-	visit := super visitFASTFortranGoToAssignedStatement: aFASTFortranGoToAssignedStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
-
-	| visit |
-	visit := super visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
-
-	| visit |
-	visit := super visitFASTFortranGoToStatement: aFASTFortranGoToStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement [
-
-	| visit |
-	visit := super visitFASTFortranGoToUnconditionalStatement: aFASTFortranGoToUnconditionalStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
 
 	| visit |
@@ -158,6 +98,11 @@ FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfAr
 
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
+	"basic blocks for a IF
+	 - ConditionalBlock that need to be chained as #nextBlock of current one
+	 - BasicBlock for the then-part
+	 - BasicBlock for the else-part
+	 - another BasicBlock for after the IF"
 
 	| previousBlock conditionalBlock afterBlock |
 	previousBlock := currentBlock.
