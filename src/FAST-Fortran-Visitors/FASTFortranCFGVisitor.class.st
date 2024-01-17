@@ -78,12 +78,29 @@ FASTFortranCFGVisitor >> nextStatementStartsBlock [
 
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
+	"basic blocks for a LOOP
+	 - ConditionalBlock that need to be chained as #nextBlock of current one
+	 - BasicBlock for the body of the loop
+	 - another BasicBlock for after the LOOP"
 
-	| visit |
-	visit := super visitFASTFortranDoStatement: aFASTFortranDoStatement.
+	| previousBlock conditionalBlock afterBlock |
+	previousBlock := currentBlock.
+	conditionalBlock := self conditionBlockWith: aFASTFortranDoStatement loopControl.
+	previousBlock nextBlock: conditionalBlock.
+
+	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
+
+	"loop body"
+	aFASTFortranDoStatement statementBlock accept: self.
+	conditionalBlock nextBlock: currentBlock onValue: true.
+	currentBlock nextBlock: conditionalBlock.
+
+	conditionalBlock nextBlock: afterBlock onValue: false.
+
+	currentBlock := afterBlock.
 	self nextStatementStartsBlock.
 
-	^visit
+	^conditionalBlock
 ]
 
 { #category : #'visiting - statements' }

@@ -108,6 +108,58 @@ FASTFortranCFGVisitorTest >> functionWithLogicalIf [
 
 ]
 
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> functionWithLoop [
+	"FAST for:
+
+	INTEGER FUNCTION factorial( x)
+	INTEGER x
+	INTEGER fact=1
+ 
+	DO i=1, x, 1
+	fact = fact*i
+	END DO	
+	RETURN fact
+	END
+	"
+
+	| function block loopStatement init decl |
+	function := self functionDeclaration: 'factorial'.
+	self entity: function parameters: #(x).
+	function returnType: (self integerType: nil).
+
+	decl := self declarationStatement: (self integerType: nil) variables: #(fact).
+	decl declarators first expression: (self integerLiteral: '1').
+
+	block := function statementBlock.
+	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x)).
+	block addStatement: decl.
+
+	init := FASTFortranAssignmentExpression new
+		variable: (self scalarVariable: 'i') ;
+		expression: (self integerLiteral: '1').
+	loopStatement := self
+		doStatement: (self loopControlInit: init increment: '1' limit: 'x')
+		statements: #().
+
+	block addStatement: loopStatement.
+
+	block addStatement: (self returnStatement: (self scalarVariable: 'fact')).
+	
+	block statements doWithIndex: [ :statement :i | statement startPos: i ].
+
+	loopStatement statementBlock addStatement: (self
+		assignementStatement: 'fact'
+		value: ((self binary: '*' left: 'fact' right: '5')
+			right: (self scalarVariable: 'i') ;
+			yourself)).
+
+	block statements doWithIndex: [ :statement :i | statement startPos: i ].
+
+	^function
+
+]
+
 { #category : #running }
 FASTFortranCFGVisitorTest >> newVisitor [
 
@@ -161,6 +213,45 @@ FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
 
 	self assert: blocks size equals: 1.
 	self assert: blocks anyOne nextBlock class equals: FASTFortranConditionalBasicBlock
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
+
+	| conditional basicBlock |
+	self functionWithLoop accept: visitor.
+
+	conditional := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ])
+		anyOne.
+
+	self assert: conditional nextBlocks size equals: 2.
+
+	basicBlock := conditional nextBlockForValue: true.
+	self assert: basicBlock firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: basicBlock firstStatement equals: basicBlock lastStatement.
+	self assert: basicBlock nextBlock equals: conditional.
+
+	basicBlock := conditional nextBlockForValue: false.
+	self assert: basicBlock firstStatement class equals: FASTFortranReturnStatement.
+	self assert: basicBlock firstStatement expression class equals: FASTFortranScalarVariable.
+	self assert: basicBlock firstStatement equals: basicBlock lastStatement.
+
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
+
+	| conditional blocks |
+	self functionWithLoop accept: visitor.
+
+	blocks := self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ].
+
+	self assert: blocks size equals: 1.
+	conditional := blocks anyOne.
+
+	self assert: conditional condition class equals: FASTFortranLoopControlExpression.
+
+	self assert: conditional nextBlocks size equals: 2
 ]
 
 { #category : #tests }
