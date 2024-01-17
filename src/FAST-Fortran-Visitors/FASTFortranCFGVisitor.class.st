@@ -184,11 +184,27 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
 
-	| visit |
-	visit := super visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement.
+	| previousBlock conditionalBlock afterBlock |
+	previousBlock := currentBlock.
+	conditionalBlock := self conditionBlockWith: aFASTFortranIfLogicalStatement condition.
+
+	previousBlock nextBlock: conditionalBlock.
+
+	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
+
+	"for the THEN-PART"
+	currentBlock := self newBasicBlock: FASTFortranBasicBlock.
+	self nextStatementStartsBlock.
+	aFASTFortranIfLogicalStatement statement accept: self.
+	conditionalBlock nextBlock: currentBlock onValue: true.
+	currentBlock nextBlock: afterBlock.
+
+	conditionalBlock nextBlock: afterBlock onValue: false.
+
+	currentBlock := afterBlock.
 	self nextStatementStartsBlock.
 
-	^visit
+	^conditionalBlock
 ]
 
 { #category : #'visiting - programUnits' }

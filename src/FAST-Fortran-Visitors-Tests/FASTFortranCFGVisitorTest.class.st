@@ -15,6 +15,68 @@ FASTFortranCFGVisitorTest >> findBasicBlocks: aClass with: aPharoBooleanBlock [
 ]
 
 { #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> functionWithConditional [
+	"FAST for:
+
+	CHARACTER*20 FUNCTION fctBigSmall( x, y)
+	INTEGER x, y
+	CHARACTER*20 str
+
+	x = 1
+
+	IF y .gt. 5 THEN
+	str = ""small""
+	y = fctSmall(x)
+
+	ELSE
+	str = ""big""
+	y = y - x
+	END IF
+
+	RETURN str
+	END
+	"
+
+	| function block ifStatement |
+	function := self functionDeclaration: 'fctBigSmall'.
+	self entity: function parameters: #(x y).
+	function returnType: (self characterType: 20).
+
+	block := function statementBlock.
+	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x y)).
+	block addStatement: (self declarationStatement: (self characterType: 20) variables: #(str)).
+	block addStatement: (self assignementStatement: 'x' value: (self integerLiteral: '1')).
+
+	ifStatement := self ifBlock: (self binary: '.gt.' left: 'y' right: '5') then: #() else:  #().
+	block addStatement: ifStatement.
+
+	block addStatement: (self returnStatement: (self scalarVariable: 'str')).
+	
+	block statements doWithIndex: [ :statement :i | statement startPos: i ].
+
+	block := ifStatement thenStatementBlock.
+	block addStatement: (self assignementStatement: 'str' value: (self characterLiteral: '"small"')).
+	block addStatement: (self
+		assignementStatement: 'y'
+		value: (self functionCall: 'fctSmall' arguments: { self scalarVariable: 'x' })).
+
+	block statements doWithIndex: [ :statement :i | statement startPos: i ].
+
+	block := ifStatement elseStatementBlock.
+	block addStatement: (self assignementStatement: 'str' value: (self characterLiteral: '"big"')).
+	block addStatement: (self
+		assignementStatement: 'y'
+		value: ((self binary: '-' left: 'y' right: '5')
+			right: (self scalarVariable: 'x') ;
+			yourself)).
+
+	block statements doWithIndex: [ :statement :i | statement startPos: i ].
+
+	^function
+
+]
+
+{ #category : #'entity creation' }
 FASTFortranCFGVisitorTest >> functionWithLogicalIf [
 	"FAST for:
 
@@ -65,6 +127,24 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
 	self
 		assert: conditional nextBlocks first nextBlock
 		equals: conditional nextBlocks second nextBlock
+	
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
+
+	| conditional blocks |
+	self functionWithLogicalIf accept: visitor.
+
+	blocks := self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ].
+
+	self assert: blocks size equals: 1.
+	conditional := blocks anyOne.
+
+	self assert: conditional nextBlocks size equals: 2.
+	self
+		assert: conditional nextBlocks first nextBlock
+		equals: conditional nextBlocks second
 	
 ]
 
