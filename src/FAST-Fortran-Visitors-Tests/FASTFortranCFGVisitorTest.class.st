@@ -1,8 +1,75 @@
 Class {
 	#name : #FASTFortranCFGVisitorTest,
 	#superclass : #FASTFortranAbstractVisitorTest,
+	#instVars : [
+		'ast'
+	],
 	#category : #'FAST-Fortran-Visitors-Tests-Visitor'
 }
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> add: aNode statement: aStatement [
+
+	aStatement startPos: (aNode statementBlock statements size + 1).
+	aNode statementBlock addStatement: aStatement.
+
+	^aStatement
+
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> addDeclarationStatement: name type: typeDescription [
+
+	| statement |
+	statement := (self declarationStatement: (self makeType: typeDescription) variables: { name }).
+	self add: ast statement: statement.
+	^statement
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> addLogicalIf: condition statement: statement [
+
+	| logicalIf |
+	logicalIf := self logicalIf: statement statement: condition.
+
+	self add: ast statement: logicalIf.
+
+	^ logicalIf
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> addParameter: name type: typeDescription [
+	"assume #ast contains a function definition"
+
+	self entity: ast parameters: (ast parameters asOrderedCollection
+			 add: name;
+			 yourself).
+
+	^ self addDeclarationStatement: name type: typeDescription
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> addReturnStatement: expressionDescription [
+
+	self add: ast statement: (self returnStatement: expressionDescription).
+
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> addStatement: aStatement [
+
+	aStatement startPos: (ast statementBlock statements size + 1).
+	ast statementBlock addStatement: aStatement.
+
+	^aStatement
+
+]
+
+{ #category : #accessing }
+FASTFortranCFGVisitorTest >> ast [
+
+	^ast
+]
 
 { #category : #running }
 FASTFortranCFGVisitorTest >> findBasicBlocks: aClass with: aPharoBooleanBlock [
@@ -12,6 +79,16 @@ FASTFortranCFGVisitorTest >> findBasicBlocks: aClass with: aPharoBooleanBlock [
 			(aBasicBlock class = aClass) and:
 			[ aPharoBooleanBlock value: aBasicBlock ]
 		]
+]
+
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> function: name type: typeDescription [
+
+	ast := self functionDeclaration: name.
+	ast returnType: (self makeType: typeDescription).
+
+	^ast
+
 ]
 
 { #category : #'entity creation' }
@@ -43,8 +120,8 @@ FASTFortranCFGVisitorTest >> functionWithConditional [
 	function returnType: (self characterType: 20).
 
 	block := function statementBlock.
-	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x y)).
-	block addStatement: (self declarationStatement: (self characterType: 20) variables: #(str)).
+	block addStatement: (self declarationStatement: #integer variables: #(x y)).
+	block addStatement: (self declarationStatement: #(character 20) variables: #(str)).
 	block addStatement: (self assignementStatement: 'x' value: (self integerLiteral: '1')).
 
 	ifStatement := self ifBlock: (self binary: '.gt.' left: 'y' right: '5') then: #() else:  #().
@@ -68,90 +145,6 @@ FASTFortranCFGVisitorTest >> functionWithConditional [
 		assignementStatement: 'y'
 		value: ((self binary: '-' left: 'y' right: '5')
 			right: (self scalarVariable: 'x') ;
-			yourself)).
-
-	block statements doWithIndex: [ :statement :i | statement startPos: i ].
-
-	^function
-
-]
-
-{ #category : #'entity creation' }
-FASTFortranCFGVisitorTest >> functionWithLogicalIf [
-	"FAST for:
-
-	INTEGER FUNCTION something( x)
-	INTEGER x
-	IF (x .lt. 5) return x
-	RETURN x - 5
-	END
-	"
-
-	| function block ifStatement |
-	function := self functionDeclaration: 'something'.
-	self entity: function parameters: #(x).
-	function returnType: (self integerType: nil).
-
-	block := function statementBlock.
-	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x)).
-
-	ifStatement := FASTFortranIfLogicalStatement new.
-	ifStatement condition: (self binary: '.lt.' left: 'x' right: '5').
-	ifStatement statement: (self returnStatement: (self scalarVariable: 'x')).
-	block addStatement: ifStatement.
-
-	block addStatement: (self returnStatement: (self binary: '-' left: 'x' right: '5')).
-	
-	block statements doWithIndex: [ :statement :i | statement startPos: i ].
-
-	^function
-
-]
-
-{ #category : #'entity creation' }
-FASTFortranCFGVisitorTest >> functionWithLoop [
-	"FAST for:
-
-	INTEGER FUNCTION factorial( x)
-	INTEGER x
-	INTEGER fact=1
- 
-	DO i=1, x, 1
-	fact = fact*i
-	END DO	
-	RETURN fact
-	END
-	"
-
-	| function block loopStatement init decl |
-	function := self functionDeclaration: 'factorial'.
-	self entity: function parameters: #(x).
-	function returnType: (self integerType: nil).
-
-	decl := self declarationStatement: (self integerType: nil) variables: #(fact).
-	decl declarators first expression: (self integerLiteral: '1').
-
-	block := function statementBlock.
-	block addStatement: (self declarationStatement: (self integerType: nil) variables: #(x)).
-	block addStatement: decl.
-
-	init := FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: 'i') ;
-		expression: (self integerLiteral: '1').
-	loopStatement := self
-		doStatement: (self loopControlInit: init increment: '1' limit: 'x')
-		statements: #().
-
-	block addStatement: loopStatement.
-
-	block addStatement: (self returnStatement: (self scalarVariable: 'fact')).
-	
-	block statements doWithIndex: [ :statement :i | statement startPos: i ].
-
-	loopStatement statementBlock addStatement: (self
-		assignementStatement: 'fact'
-		value: ((self binary: '*' left: 'fact' right: '5')
-			right: (self scalarVariable: 'i') ;
 			yourself)).
 
 	block statements doWithIndex: [ :statement :i | statement startPos: i ].
@@ -186,7 +179,19 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
 FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
 
 	| conditional blocks |
-	self functionWithLogicalIf accept: visitor.
+	"
+	INTEGER FUNCTION something( x)
+	INTEGER x
+	IF (x .lt. 5) return x
+	RETURN x - 5
+	END
+	"
+	self function: 'something' type: #integer.
+	self addParameter: #x type: #integer.
+	self addLogicalIf: (self binary: '.lt.' left: #x right: 5) statement: (self returnStatement: #x).
+	self addReturnStatement: (self binary: '-' left: #x right: 5).
+	
+	ast accept: visitor.
 
 	blocks := self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ].
 
@@ -218,8 +223,26 @@ FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
 { #category : #tests }
 FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 
-	| conditional basicBlock |
-	self functionWithLoop accept: visitor.
+	| conditional basicBlock loop |
+	"
+	INTEGER FUNCTION factorial( x)
+	INTEGER x
+	INTEGER fact=1
+ 
+	DO i=1, x, 1
+	fact = fact*i
+	END DO	
+	RETURN fact
+	END
+	"
+	self function: 'factorial' type: #integer.
+	self addParameter: #x type: #integer.
+	self add: ast statement: (self declarationStatement: 'fact' type: #integer init: 1).
+	loop := self add: ast statement: (self doStatement: #(i 1 x 1)  statements: #()).
+	self add: loop statement: (self assignementStatement: 'fact' value: (self binary: '*' left: #fact right: #i)).
+	self add: ast statement: (self returnStatement: #fact).
+	
+	ast accept: visitor.	
 
 	conditional := (self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ])
 		anyOne.
@@ -241,8 +264,26 @@ FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 { #category : #tests }
 FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 
-	| conditional blocks |
-	self functionWithLoop accept: visitor.
+	| conditional blocks loop |
+	"
+	INTEGER FUNCTION factorial( x)
+	INTEGER x
+	INTEGER fact=1
+ 
+	DO i=1, x, 1
+	fact = fact*i
+	END DO	
+	RETURN fact
+	END
+	"
+	self function: 'factorial' type: #integer.
+	self addParameter: #x type: #integer.
+	self add: ast statement: (self declarationStatement: 'fact' type: #integer init: 1).
+	loop := self add: ast statement: (self doStatement: #(i 1 x 1)  statements: #()).
+	self add: loop statement: (self assignementStatement: 'fact' value: (self binary: '*' left: #fact right: #i)).
+	self add: ast statement: (self returnStatement: #fact).
+	
+	ast accept: visitor.	
 
 	blocks := self findBasicBlocks: FASTFortranConditionalBasicBlock with: [ :basicBloc | true ].
 

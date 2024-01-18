@@ -196,7 +196,7 @@ FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 FASTFortranExporterVisitorTest >> testCallStatementExpressionArg [
 	| stmt |
 	stmt := self callStatement: 'subrtn' arguments: {
-		self binary: '*' left: 'a' right: '5' }.
+		self binary: '*' left: #a right: 5 }.
 
 	self
 		assertExport: stmt
@@ -335,14 +335,9 @@ FASTFortranExporterVisitorTest >> testDimensionStatement [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatement [
-	| stmt init |
+	| stmt |
 
-	init := FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: 'i') ;
-		expression: (self integerLiteral: '1').
-	stmt := self
-		doStatement: (self loopControlInit: init increment: '1' limit: 'max')
-		statements: #().
+	stmt := self doStatement: #(i 1 max 1) statements: #().
 
 	self
 		assertExport: stmt
@@ -354,14 +349,9 @@ FASTFortranExporterVisitorTest >> testDoStatement [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
-	| stmt init |
+	| stmt |
 
-	init := FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: 'i') ;
-		expression: (self integerLiteral: '1').
-	stmt := self
-		doStatement: (self loopControlInit: init increment: nil limit: 'max')
-		statements: #().
+	stmt := self doStatement: #(i 1 max) statements: #().
 
 	self
 		assertExport: stmt
@@ -373,14 +363,11 @@ FASTFortranExporterVisitorTest >> testDoStatementNoIncrement [
 
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testDoStatementWithLabel [
-	| stmt init |
+	| stmt |
 
-	init := FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: 'i') ;
-		expression: (self integerLiteral: '1').
-	stmt := self
-		doStatement: (self loopControlInit: init increment: nil limit: 'max')
-		statements: { FASTFortranContinueStatement new label: '110'}.
+	stmt := self doStatement:  #(i 1 max) statements: {
+		FASTFortranContinueStatement new label: '110'}.
+
 	stmt labelReferences: { self labelReference: '110' }.
 
 	self
@@ -550,7 +537,7 @@ FASTFortranExporterVisitorTest >> testFunctionStatement [
 	node := FASTFortranFunctionStatement new.
 	node name: 'fct'.
 	node arguments: (self scalarVariables: #(x y)).
-	node expression: (self binary: '+' left: 'x' right: '2').
+	node expression: (self binary: '+' left: #x right: 2).
 
 	self
 		assertExport: node
@@ -635,7 +622,7 @@ FASTFortranExporterVisitorTest >> testIfBlockStatementEmpty [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testIfBlockStatementEmptyBinaryCondition [
 	| stmt cond |
-	cond := self binary: '.gt.' left: 'a' right: '0'.
+	cond := self binary: '.gt.' left: #a right: 0.
 	stmt := self ifBlock: cond then: #() else:  nil.
 
 	self
@@ -752,11 +739,8 @@ FASTFortranExporterVisitorTest >> testImplicitStatementSeveralRules [
 FASTFortranExporterVisitorTest >> testImpliedDoExpression [
 	| expr init |
 
-	init := FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: 'i') ;
-		expression: (self integerLiteral: '1').
 	expr := FASTFortranImpliedDoExpression new
-		loopControl: (self loopControlInit: init increment: '1' limit: 'max') ;
+		loopControl: (self loopControlInit: #(i 1) increment: 1 limit: #max) ;
 		variables: (self scalarVariables: #(v i)).
 
 	self
@@ -856,7 +840,7 @@ FASTFortranExporterVisitorTest >> testLongFormatLine [
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testLongLine [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: nil) variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
+	stmt := self declarationStatement: #character variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
 
 	self
 		assertExport: stmt
@@ -870,7 +854,7 @@ FASTFortranExporterVisitorTest >> testLongLine [
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testLongLineDontBreak [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: nil) variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
+	stmt := self declarationStatement: #character variables: #(abc1 abc2 abc3 abc4 abc5 abc6 abc7 abc8 abc9 abc10 abc11 abc12 abc13 abc14 abc15 abc16 abc17 abc18 abc19 abc20 abc21 abc22 abc23 abc24 abc25).
 
 	visitor dontBreakLongLines.
 
@@ -900,7 +884,7 @@ FASTFortranExporterVisitorTest >> testMainProgram [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: nil) variables: #(r).
+	stmt := self declarationStatement: #character variables: #(r).
 
 	self
 		assertExport: stmt
@@ -912,7 +896,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterType [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeStarSize [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: '*') variables: #(str).
+	stmt := self declarationStatement: #(character *) variables: #(str).
 
 	self
 		assertExport: stmt
@@ -924,7 +908,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeStarSize [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationCharacterTypeWithSize [
 	| stmt |
-	stmt := self declarationStatement: (self characterType: 10) variables: #(str).
+	stmt := self declarationStatement: #(character 10) variables: #(str).
 
 	self
 		assertExport: stmt
@@ -948,7 +932,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationDoublePrecisionType [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationIntegerTypeWithSize [
 	| stmt |
-	stmt := self declarationStatement: (self integerType: 8) variables: #(i).
+	stmt := self declarationStatement: #(integer 8) variables: #(i).
 
 	self
 		assertExport: stmt
@@ -960,7 +944,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationIntegerTypeWithSize [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationLogicalType [
 	| stmt |
-	stmt := self declarationStatement: (self logicalType: nil) variables: #(r).
+	stmt := self declarationStatement: #logical variables: #(r).
 
 	self
 		assertExport: stmt
@@ -972,7 +956,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationLogicalType [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationRealType [
 	| stmt |
-	stmt := self declarationStatement: (self realType: nil) variables: #(r).
+	stmt := self declarationStatement: #real variables: #(r).
 
 	self
 		assertExport: stmt
@@ -984,7 +968,7 @@ FASTFortranExporterVisitorTest >> testOneDeclarationRealType [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testOneDeclarationTwoVariables [
 	| stmt |
-	stmt := self declarationStatement: (self integerType: nil) variables: #(i j).
+	stmt := self declarationStatement: #integer variables: #(i j).
 
 	self
 		assertExport: stmt
@@ -1014,7 +998,7 @@ FASTFortranExporterVisitorTest >> testOpenStatement [
 FASTFortranExporterVisitorTest >> testOperatorsPrecedenceNoParentheses [
 	
 	| expr |
-	expr := self binary: '+' left: 'v' right: '5'.
+	expr := self binary: '+' left: #v right: 5.
 
 	self assertExport: expr
 		equals: 'v + 5'
@@ -1024,8 +1008,8 @@ FASTFortranExporterVisitorTest >> testOperatorsPrecedenceNoParentheses [
 FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasHigherPrecedence [
 	
 	| expr |
-	expr := self binary: '+' left: 'i' right: '5'.
-	expr right: (self binary: '*' left: 'j' right: '5').
+	expr := self binary: '+' left: #i right: 5.
+	expr right: (self binary: '*' left: #j right: 5).
 
 	self assertExport: expr
 		equals: 'i + j * 5'
@@ -1035,8 +1019,8 @@ FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasHigherPrecedence 
 FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasLowerPrecedence [
 	
 	| expr |
-	expr := self binary: '*' left: 'i' right: '5'.
-	expr right: (self binary: '+' left: 'j' right: '5').
+	expr := self binary: '*' left: #i right: 5.
+	expr right: (self binary: '+' left: #j right: 5).
 
 	self assertExport: expr
 		equals: 'i * (j + 5)'
@@ -1046,8 +1030,7 @@ FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubHasLowerPrecedence [
 FASTFortranExporterVisitorTest >> testOperatorsPrecedenceSubUnary [
 	
 	| expr |
-	expr := self binary: '.and.' left: 'logical1' right: '0'.
-	expr right: (self unary: '.not.' operand: (self scalarVariable: 'logical2')).
+	expr := self binary: '.and.' left: #logical1 right: (self unary: '.not.' operand: #logical2).
 
 	self
 		assertExport: expr
@@ -1210,8 +1193,7 @@ FASTFortranExporterVisitorTest >> testStopStatementWithString [
 { #category : #tests }
 FASTFortranExporterVisitorTest >> testStringConcatOperator [
 	| stmt |
-	stmt := self binary: '//' left: 'texte' right: '1'.
-	stmt right: (self characterLiteral: ' a string').
+	stmt := self binary: '//' left: #texte right: ' a string'.
 
 	self
 		assertExport: stmt
@@ -1236,12 +1218,12 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 	sub := self subroutine: 'blah'.
 
 	stmt := self
-		declarationStatement: (self integerType: nil)
+		declarationStatement: #integer
 		variables: #(i).
 	sub statementBlock addStatement: stmt.
 
 	stmt := self
-		declarationStatement: (self integerType: nil)
+		declarationStatement: #integer
 		variables: #(j).
 	stmt startPos: 11.
 	stmt endPos: 15.
