@@ -14,6 +14,15 @@ Class {
 	#category : #'FAST-Fortran-Visitors-Visitor'
 }
 
+{ #category : #api }
+FASTFortranExporterVisitor class >> export: aFASTNode [
+
+	| visitor |
+	visitor := self new.
+	aFASTNode accept: visitor.
+	^visitor outputStream contents
+]
+
 { #category : #outputting }
 FASTFortranExporterVisitor >> breakLongCommentLines: aBoolean [
 
