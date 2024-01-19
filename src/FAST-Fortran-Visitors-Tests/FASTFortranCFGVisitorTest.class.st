@@ -263,6 +263,31 @@ FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+10	x = 1
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		labelled: 10
+		statement: (self assignementStatement: #x value: 1)).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 1.
+
+	self assert: blocks anyOne firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks anyOne lastStatement equals: blocks anyOne firstStatement
+
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 
 	| blocks  conditional |

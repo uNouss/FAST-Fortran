@@ -9,7 +9,8 @@ Class {
 	#instVars : [
 		'basicBlocks',
 		'startNewBasicBlock',
-		'currentBlock'
+		'currentBlock',
+		'labelledBlocks'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
@@ -22,13 +23,14 @@ FASTFortranCFGVisitor >> basicBlocks [
 
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
-	"if aFASTFortranStatement is labelled we start a new BasicBlock
+	"if aFASTFortranStatement is labelled we start a new BasicBlock except if we are already at the satrt of a new block
 	 if #startNewBasicBlock is true, we are at the start of a new BasicBlock (and aFASTFortranStatement is its #firstStatement)"
 	
 	aFASTFortranStatement label ifNotNil: [
-		"note: #newBasicBlock: sets #startNewBasicBlock to true"
-		self newBasicBlock: FASTFortranBasicBlock
-	].
+		startNewBasicBlock ifFalse: [
+			"could set startNewBasicBlock to false, but #newBasicBlock: will set it back to true"
+			self newBasicBlock: FASTFortranBasicBlock
+	] ].
 	
 	startNewBasicBlock ifFalse: [ ^ self ].
 
