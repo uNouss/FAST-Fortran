@@ -248,8 +248,8 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
 
 	self assert: blocks size equals: 2.
 
-	self assert: blocks first nextBlock equals: nil.
-	self assert: blocks second nextBlock equals: blocks first.
+	self assert: blocks first nextBlock equals: blocks first.
+	self assert: blocks second firstStatement equals: nil
 
 ]
 

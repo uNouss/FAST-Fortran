@@ -56,7 +56,7 @@ FASTFortranCFGVisitor >> findLabelledBlock: label [
 	^basicBlocks
 		detect: [ :bloc |
 			(bloc class = FASTFortranBasicBlock) and:
-			[ bloc lastStatement label = label ]
+			[ bloc firstStatement label = label ]
 		]
 		ifNone: [ nil ]
 ]
