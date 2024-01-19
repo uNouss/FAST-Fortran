@@ -185,7 +185,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
-	"for the THEN-PART"
+	"for the THEN Statement"
 	currentBlock := self newBasicBlock: FASTFortranBasicBlock.
 	self nextStatementStartsBlock.
 	aFASTFortranIfLogicalStatement statement accept: self.

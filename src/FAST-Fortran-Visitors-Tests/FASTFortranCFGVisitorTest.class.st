@@ -336,6 +336,42 @@ FASTFortranCFGVisitorTest >> testIfStatementThenPartIsABasicBlock [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testLabelledIfStatementStartsNewBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something(bool)
+	LOGICAL bool
+10	IF bool RETURN 0
+   RETURN 1
+	END
+	"
+	self function: #something type: #integer.
+	self addParameter: #bool type: #logical.
+	self addStatement: (self
+		labelled: 10
+		statement: (self logicalIf: #bool statement: (self returnStatement: 0))).
+	self addStatement: (self returnStatement: 1).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+	self assert: blocks first class equals: FASTFortranBasicBlock.
+	self assert: blocks first  firstStatement class equals: FASTFortranVariableDeclarationStatement.
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+
+	self assert: blocks third class equals: FASTFortranBasicBlock.
+	self assert: blocks third  firstStatement class equals: FASTFortranReturnStatement.
+
+	self assert: blocks fourth class equals: FASTFortranBasicBlock.
+	self assert: blocks fourth firstStatement class equals: FASTFortranReturnStatement.
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testLabelledStatementStartsNewBlock [
 
 	| blocks |
