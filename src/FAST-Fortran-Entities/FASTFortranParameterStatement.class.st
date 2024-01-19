@@ -5,7 +5,9 @@ I represent Fortran Parameter statement
 ======================
 
 ### Children
-- Relation: #declarators Type: #FASTFortranTVariableDeclarator Opposite: #parentDeclaration Comment: variables declared
+| Relation | Origin | Opposite | Type | Comment |
+| `declarators` | `FASTFortranTWithDeclarators` | `parentDeclaration` | `FASTFortranTVariableDeclarator` | variables declared|
+
 
 
 "

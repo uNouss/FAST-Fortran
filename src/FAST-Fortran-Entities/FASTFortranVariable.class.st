@@ -5,25 +5,30 @@ an abstract Fortran Variable, could be an array or a scalar
 ======================
 
 ### Parents
-- Relation: #entryStatement Type: #FASTFortranEntryStatement Opposite: #entryArguments
-- Relation: #parameterOwner Type: #FASTFortranTWithParameters Opposite: #parameters Comment: parameterOwner
-- Relation: #parentFormatedStatement Type: #FASTFortranTWithFormat Opposite: #format Comment: A format description in a Format/Print/Read/Write statement
-- Relation: #parentIOStatement Type: #FASTFortranTWithIOParameters Opposite: #ioParameters
-- Relation: #parentImpliedExpression Type: #FASTFortranImpliedDoExpression Opposite: #variables
+| Relation | Origin | Opposite | Type | Comment |
+| `entryStatement` | `FASTFortranTEntryStatement` | `entryArguments` | `FASTFortranEntryStatement` | |
+| `parameterOwner` | `FASTFortranTVariableEntity` | `parameters` | `FASTFortranTWithParameters` | parameterOwner|
+| `parentFormatedStatement` | `FASTFortranTFormat` | `format` | `FASTFortranTWithFormat` | A format description in a Format/Print/Read/Write statement|
+| `parentIOStatement` | `FASTFortranTIOParameter` | `ioParameters` | `FASTFortranTWithIOParameters` | |
+| `parentImpliedExpression` | `FASTFortranTVariableEntity` | `variables` | `FASTFortranImpliedDoExpression` | |
+
 ### Other
-- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
-- Relation: #parentAssignmentExpression Type: #FASTFortranTAssignment Opposite: #variable Comment: Optional assignment to the variable
-- Relation: #parentVariableGroup Type: #FASTFortranTVariableGroup Opposite: #variables
+| Relation | Origin | Opposite | Type | Comment |
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
+| `parentAssignmentExpression` | `FASTFortranTVariableEntity` | `variable` | `FASTFortranTAssignment` | Optional assignment to the variable|
+| `parentVariableGroup` | `FASTFortranVariable` | `variables` | `FASTFortranTVariableGroup` | |
+
 
 ## Properties
 ======================
 
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #name Type: String
-- Named: #name Type: String Comment: Determines the variable name
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | Determines the variable name|
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {

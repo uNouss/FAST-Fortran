@@ -5,9 +5,13 @@ I represent an entity with several variables like in a DataStatement or an Equiv
 ======================
 
 ### Parents
-- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+| Relation | Origin | Opposite | Type | Comment |
+| `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
+
 ### Other
-- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+| Relation | Origin | Opposite | Type | Comment |
+| `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
+
 
 
 "

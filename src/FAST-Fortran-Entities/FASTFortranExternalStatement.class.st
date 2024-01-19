@@ -4,7 +4,8 @@ I represent Fortran External statement
 ## Properties
 ======================
 
-- Named: #name Type: String Comment: Name of external procedure, dummy procedure, or block data routine
+| Name | Type | Default value | Comment |
+| `name` | `String` | nil | Name of external procedure, dummy procedure, or block data routine|
 
 "
 Class {

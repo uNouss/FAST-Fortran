@@ -54,37 +54,30 @@ FASTFortranAbstractVisitorTest >> arrayVariable: aName indice: anInteger [
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> assignement: aName expression: value [
-	"end position is approximate, test should adjust if a real value is needed"
+FASTFortranAbstractVisitorTest >> assignementExpression: aName value: value [
 
 	^FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: aName) ;
-		expression: value ;
-		startPos: 1 ;
-		endPos: aName size + 3 ;
+		variable: (self makeSimpleExpression: aName) ;
+		expression: (self makeSimpleExpression: value) ;
 		yourself
 ]
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> assignementStatement: aName value: rhs [
-	"end position is approximate, test should adjust if a real value is needed"
 
 	^FASTFortranAssignmentStatement new
-		variable: (self scalarVariable: aName) ;
-		expression: rhs ;
-		startPos: 1 ;
-		endPos: aName size + 3 ;
+		variable: (self makeSimpleExpression: aName) ;
+		expression: (self makeSimpleExpression: rhs) ;
 		yourself
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> binary: op left: lhsVar right: rhsVal [
-	"a binary operation between a variable (left) and an integer value (right)"
+FASTFortranAbstractVisitorTest >> binary: op left: lhs right: rhs [
 
 	^FASTFortranBinaryExpression new
 		operator: op ;
-		left: (self scalarVariable: lhsVar) ;
-		right: (self integerLiteral: rhsVal) ;
+		left: (self makeSimpleExpression: lhs) ;
+		right: (self makeSimpleExpression: rhs) ;
 		yourself
 ]
 
@@ -124,11 +117,29 @@ FASTFortranAbstractVisitorTest >> comment: text [
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> declarationStatement: type variables: aCollection [
-	"end position is approximate, test should adjust if a real value is needed"
+FASTFortranAbstractVisitorTest >> declarationStatement: name type: typeDescription [
+
+	^self declarationStatement: name type: typeDescription init: nil
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> declarationStatement: aName type: typeDescription init: expression [
+
+	| decl |
+	decl := (self declarationStatement: (self makeType: typeDescription) variables: { aName }).
+	decl declarators anyOne expression: (self makeSimpleExpression: expression).
+
+	^decl
+		
+		
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> declarationStatement: typeDescription variables: aCollection [
+	"Bulk declaration of several variables"
 
 	^FASTFortranVariableDeclarationStatement new
-		type: type ;
+		type: (self makeType: typeDescription) ;
 		declarators: (self variableDeclarators: aCollection)  ;
 		startPos: 1 ;
 		endPos: 10 ;
@@ -137,11 +148,22 @@ FASTFortranAbstractVisitorTest >> declarationStatement: type variables: aCollect
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> doStatement: control statements: stmtBlock [
-	"end position is approximate, test should adjust if a real value is needed"
+	"initDescriptino is a collection of:
+	 - #variable
+	 - initial value expression
+	 - maximum value expression
+	 - optional increment"
 
 	^FASTFortranDoStatement new
-		loopControl: control ;
+		loopControl: (self
+			loopControlInit: (control first: 2)
+			increment: ((control size = 4)
+				ifTrue: [ control fourth ]
+				ifFalse: [ nil ])
+			limit: control third) ;
+
 		statementBlock: (self statementBlock: stmtBlock) ;
+
 		startPos: 1 ;
 		endPos: 20 ;
 		yourself
@@ -185,6 +207,14 @@ FASTFortranAbstractVisitorTest >> functionDeclaration: aName [
 		parameters: {  } ;
 		statementBlock: FASTFortranStatementBlock new
 		yourself.
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> gotoStatement: label [
+
+	^FASTFortranGoToStatement new
+		labelReferences: { self labelReference: label asString } ;
+		yourself
 ]
 
 { #category : #'entity creation' }
@@ -234,9 +264,24 @@ FASTFortranAbstractVisitorTest >> labelReference: aString [
 
 	^FASTFortranLabelReference new
 		label: aString ;
-		startPos: 1 ;
-		endPos: aString size ;
 		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> labelled: label statement: aStatement [
+
+	^aStatement
+		label: label asString ;
+		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> logicalIf: condition statement: statement [
+
+	^ FASTFortranIfLogicalStatement new
+		  condition: (self makeSimpleExpression: condition);
+		  statement: statement;
+		  yourself
 ]
 
 { #category : #'entity creation' }
@@ -253,13 +298,51 @@ FASTFortranAbstractVisitorTest >> logicalType: dimension [
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> loopControlInit: init increment: incr limit: limit [
-	"incr is nil or a integerLiteral, limit is assumed to be a scalarVariable name"
+	"#init is a pair:
+	 - #variable name
+	 - inital value"
 	| entity |
 	entity := FASTFortranLoopControlExpression new.
-	entity init: init.
-	incr ifNotNil: [ entity increment: (self integerLiteral: incr) ].
-	entity limit: (self scalarVariable: limit).
+
+	entity init: (FASTFortranAssignmentExpression new
+		variable: (self makeSimpleExpression: init first) ;
+		expression: (self makeSimpleExpression: init second)).
+
+	incr ifNotNil: [ entity increment: (self makeSimpleExpression: incr) ].
+
+	entity limit: (self makeSimpleExpression: limit).
+
 	^entity
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> makeSimpleExpression: description [
+
+	description ifNil: [ ^nil ].
+	description isInteger ifTrue: [ ^self integerLiteral: description asString ].
+	description isFloat ifTrue: [ ^self realLiteral: description asString ].
+	description isSymbol ifTrue: [ ^self scalarVariable: description asString ].
+	description isString ifTrue: [ ^self characterLiteral: description asString ].
+	description isMooseEntity ifTrue: [ ^description ].
+
+	ShouldBeImplemented signal: 'ExpressionDescription: ' , description class name
+	
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> makeType: typeDescription [
+	"typeDescription can be a symbol (eg. #integer) or a pair: #(character '*')"
+
+	| helper pair |
+
+	typeDescription isMooseEntity ifTrue: [ ^typeDescription ].
+
+	pair := typeDescription isSymbol
+		ifTrue: [ { typeDescription . nil } ]
+		ifFalse: [ typeDescription ].
+
+	helper := (pair first asString , 'Type:') asSymbol.
+	^self perform: helper with: pair second.	
 ]
 
 { #category : #running }
@@ -306,11 +389,10 @@ FASTFortranAbstractVisitorTest >> realType: dimension [
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> returnStatement: expression [
-	"end position is approximate, test should adjust if a real value is needed"
+FASTFortranAbstractVisitorTest >> returnStatement: expressionDescription [
 
 	^FASTFortranReturnStatement new
-		expression: expression ;
+		expression: (self makeSimpleExpression: expressionDescription) ;
 		startPos: 1 ;
 		endPos: 6 ;
 		yourself
@@ -368,7 +450,7 @@ FASTFortranAbstractVisitorTest >> unary: op operand: operand [
 
 	^FASTFortranUnaryExpression new
 		operator: op ;
-		expression: operand ;
+		expression: (self makeSimpleExpression: operand) ;
 		yourself
 ]
 

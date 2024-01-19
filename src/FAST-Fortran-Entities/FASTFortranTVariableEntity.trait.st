@@ -5,20 +5,25 @@ A node for variable name not in a expression (example: assigned variable or para
 ======================
 
 ### Parents
-- Relation: #parameterOwner Type: #FASTFortranTWithParameters Opposite: #parameters Comment: parameterOwner
-- Relation: #parentImpliedExpression Type: #FASTFortranImpliedDoExpression Opposite: #variables
+| Relation | Origin | Opposite | Type | Comment |
+| `parameterOwner` | `FASTFortranTVariableEntity` | `parameters` | `FASTFortranTWithParameters` | parameterOwner|
+| `parentImpliedExpression` | `FASTFortranTVariableEntity` | `variables` | `FASTFortranImpliedDoExpression` | |
+
 ### Other
-- Relation: #invokedIn Type: #FASTFortranTInvocation Opposite: #invoked Comment: Optional invocation where this name is used
-- Relation: #parentAssignmentExpression Type: #FASTFortranTAssignment Opposite: #variable Comment: Optional assignment to the variable
+| Relation | Origin | Opposite | Type | Comment |
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
+| `parentAssignmentExpression` | `FASTFortranTVariableEntity` | `variable` | `FASTFortranTAssignment` | Optional assignment to the variable|
+
 
 ## Properties
 ======================
 
-- Named: #endPos Type: Number
-- Named: #endPos Type: Number
-- Named: #name Type: String
-- Named: #startPos Type: Number
-- Named: #startPos Type: Number
+| Name | Type | Default value | Comment |
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Trait {

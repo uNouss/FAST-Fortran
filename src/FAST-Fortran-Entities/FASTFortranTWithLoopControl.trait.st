@@ -5,7 +5,9 @@ I represent a loop control: initialization/limit/increment
 ======================
 
 ### Children
-- Relation: #loopControl Type: #FASTFortranLoopControlExpression Opposite: #parentLoop Comment: loop control
+| Relation | Origin | Opposite | Type | Comment |
+| `loopControl` | `FASTFortranTWithLoopControl` | `parentLoop` | `FASTFortranLoopControlExpression` | loop control|
+
 
 
 "

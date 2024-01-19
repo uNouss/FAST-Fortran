@@ -5,13 +5,16 @@ I represent a range of characters in an Implicit statement
 ======================
 
 ### Parents
-- Relation: #parentImplicitRule Type: #FASTFortranImplicitTypingRule Opposite: #ranges
+| Relation | Origin | Opposite | Type | Comment |
+| `parentImplicitRule` | `FASTFortranImplicitRange` | `ranges` | `FASTFortranImplicitTypingRule` | |
+
 
 ## Properties
 ======================
 
-- Named: #from Type: String Comment: Start of character range for implicit rule
-- Named: #to Type: String Comment: End of character range for implicit rule
+| Name | Type | Default value | Comment |
+| `from` | `String` | nil | Start of character range for implicit rule|
+| `to` | `String` | nil | End of character range for implicit rule|
 
 "
 Class {

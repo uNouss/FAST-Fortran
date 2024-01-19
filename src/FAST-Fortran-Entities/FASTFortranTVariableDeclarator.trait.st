@@ -5,14 +5,19 @@ I represent a variable declarator: variable declared + optional initial value
 ======================
 
 ### Parents
-- Relation: #parentDeclaration Type: #FASTFortranTWithDeclarators Opposite: #declarators
+| Relation | Origin | Opposite | Type | Comment |
+| `parentDeclaration` | `FASTFortranTVariableDeclarator` | `declarators` | `FASTFortranTWithDeclarators` | |
+
 ### Children
-- Relation: #expression Type: #FASTFortranTExpression Opposite: #variableDeclaratorOwner Comment: Expression assigned to the variable declared
+| Relation | Origin | Opposite | Type | Comment |
+| `expression` | `FASTFortranTVariableDeclarator` | `variableDeclaratorOwner` | `FASTFortranTExpression` | Expression assigned to the variable declared|
+
 
 ## Properties
 ======================
 
-- Named: #variable Type: String Comment: The name of the variable being declared
+| Name | Type | Default value | Comment |
+| `variable` | `String` | nil | The name of the variable being declared|
 
 "
 Trait {

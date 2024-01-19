@@ -5,9 +5,11 @@ I represent Fortran If (BLock) statement
 ======================
 
 ### Children
-- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
-- Relation: #elseStatementBlock Type: #FASTFortranTStatementBlock Opposite: #parentIfBlock Comment: Statement block containing statements of else branch 
-- Relation: #thenStatementBlock Type: #FASTFortranTStatementBlock Opposite: #parentIfBlock Comment: Statement block containing statements of then branch 
+| Relation | Origin | Opposite | Type | Comment |
+| `condition` | `FASTFortranTConditionalStatement` | `parentConditionalStatement` | `FASTFortranTExpression` | Condition|
+| `elseStatementBlock` | `FASTFortranIfBlockStatement` | `parentIfBlock` | `FASTFortranTStatementBlock` | Statement block containing statements of else branch |
+| `thenStatementBlock` | `FASTFortranIfBlockStatement` | `parentIfBlock` | `FASTFortranTStatementBlock` | Statement block containing statements of then branch |
+
 
 
 "

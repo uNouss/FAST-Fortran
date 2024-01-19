@@ -5,11 +5,15 @@ a Fortran Loop Control Expression
 ======================
 
 ### Parents
-- Relation: #parentLoop Type: #FASTFortranTWithLoopControl Opposite: #loopControl Comment: Parent loop
+| Relation | Origin | Opposite | Type | Comment |
+| `parentLoop` | `FASTFortranLoopControlExpression` | `loopControl` | `FASTFortranTWithLoopControl` | Parent loop|
+
 ### Children
-- Relation: #increment Type: #FASTFortranTExpression Opposite: #parentLoopControlIncrement Comment: Loop control increment value
-- Relation: #init Type: #FASTFortranAssignmentExpression Opposite: #parentLoopControlInitialization Comment: initial assignment
-- Relation: #limit Type: #FASTFortranTExpression Opposite: #parentLoopControlLimit Comment: Loop control limit value
+| Relation | Origin | Opposite | Type | Comment |
+| `increment` | `FASTFortranLoopControlExpression` | `parentLoopControlIncrement` | `FASTFortranTExpression` | Loop control increment value|
+| `init` | `FASTFortranLoopControlExpression` | `parentLoopControlInitialization` | `FASTFortranAssignmentExpression` | initial assignment|
+| `limit` | `FASTFortranLoopControlExpression` | `parentLoopControlLimit` | `FASTFortranTExpression` | Loop control limit value|
+
 
 
 "

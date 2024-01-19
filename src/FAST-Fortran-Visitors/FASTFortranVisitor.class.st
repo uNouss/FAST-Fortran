@@ -536,8 +536,7 @@ FASTFortranVisitor >> visitFASTFortranRealType: aFASTFortranRealType [
 { #category : #'visiting - statements' }
 FASTFortranVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
 
-	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement.
-	self visitFASTFortranTStatement: aFASTFortranReturnStatement
+	self visitFASTFortranTReturnStatement: aFASTFortranReturnStatement
 ]
 
 { #category : #'visiting - statements' }

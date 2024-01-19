@@ -6,15 +6,18 @@ I contain the value of the label referred to
 ======================
 
 ### Parents
-- Relation: #parentIfArithmeticEqualBranch Type: #FASTFortranIfArithmeticStatement Opposite: #equalLabel
-- Relation: #parentIfArithmeticLessBranch Type: #FASTFortranIfArithmeticStatement Opposite: #lessLabel
-- Relation: #parentIfArithmeticMoreBranch Type: #FASTFortranIfArithmeticStatement Opposite: #greaterLabel
-- Relation: #referencer Type: #FASTFortranTWithLabelReferences Opposite: #labelReferences Comment: A statement (like goto) referencing this label
+| Relation | Origin | Opposite | Type | Comment |
+| `parentIfArithmeticEqualBranch` | `FASTFortranLabelReference` | `equalLabel` | `FASTFortranIfArithmeticStatement` | |
+| `parentIfArithmeticLessBranch` | `FASTFortranLabelReference` | `lessLabel` | `FASTFortranIfArithmeticStatement` | |
+| `parentIfArithmeticMoreBranch` | `FASTFortranLabelReference` | `greaterLabel` | `FASTFortranIfArithmeticStatement` | |
+| `referencer` | `FASTFortranLabelReference` | `labelReferences` | `FASTFortranTWithLabelReferences` | A statement (like goto) referencing this label|
+
 
 ## Properties
 ======================
 
-- Named: #label Type: String Comment: The value of the label. The value is an integer literal, stored in a String
+| Name | Type | Default value | Comment |
+| `label` | `String` | nil | The value of the label. The value is an integer literal, stored in a String|
 
 "
 Class {

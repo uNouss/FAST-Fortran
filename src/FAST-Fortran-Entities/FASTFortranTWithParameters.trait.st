@@ -5,7 +5,9 @@ I have parameters
 ======================
 
 ### Children
-- Relation: #parameters Type: #FASTFortranTVariableEntity Opposite: #parameterOwner Comment: My parameters
+| Relation | Origin | Opposite | Type | Comment |
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+
 
 
 "

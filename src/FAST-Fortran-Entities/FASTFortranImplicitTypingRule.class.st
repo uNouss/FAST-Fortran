@@ -5,10 +5,14 @@ I represent a rule (ie. Type+letter range) in an Implicit statement
 ======================
 
 ### Parents
-- Relation: #parentImplicitStatement Type: #FASTFortranImplicitStatement Opposite: #typingRules
+| Relation | Origin | Opposite | Type | Comment |
+| `parentImplicitStatement` | `FASTFortranImplicitTypingRule` | `typingRules` | `FASTFortranImplicitStatement` | |
+
 ### Children
-- Relation: #ranges Type: #FASTFortranImplicitRange Opposite: #parentImplicitRule
-- Relation: #type Type: #FASTFortranType Opposite: #parentImplicitRule
+| Relation | Origin | Opposite | Type | Comment |
+| `ranges` | `FASTFortranImplicitTypingRule` | `parentImplicitRule` | `FASTFortranImplicitRange` | |
+| `type` | `FASTFortranImplicitTypingRule` | `parentImplicitRule` | `FASTFortranType` | |
+
 
 
 "

@@ -5,7 +5,9 @@ I represent an argument in an entry statement: it can be a variable name, array 
 ======================
 
 ### Parents
-- Relation: #entryStatement Type: #FASTFortranEntryStatement Opposite: #entryArguments
+| Relation | Origin | Opposite | Type | Comment |
+| `entryStatement` | `FASTFortranTEntryStatement` | `entryArguments` | `FASTFortranEntryStatement` | |
+
 
 
 "

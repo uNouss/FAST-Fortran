@@ -5,7 +5,9 @@ I have arguments
 ======================
 
 ### Children
-- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
+| Relation | Origin | Opposite | Type | Comment |
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+
 
 
 "

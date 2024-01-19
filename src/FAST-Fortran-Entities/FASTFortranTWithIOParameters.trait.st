@@ -3,7 +3,9 @@
 ======================
 
 ### Children
-- Relation: #ioParameters Type: #FASTFortranTIOParameter Opposite: #parentIOStatement Comment: I represent a statement with IO-parameters (read or write)
+| Relation | Origin | Opposite | Type | Comment |
+| `ioParameters` | `FASTFortranTWithIOParameters` | `parentIOStatement` | `FASTFortranTIOParameter` | I represent a statement with IO-parameters (read or write)|
+
 
 
 "

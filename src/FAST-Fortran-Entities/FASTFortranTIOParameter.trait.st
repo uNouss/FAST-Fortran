@@ -5,7 +5,9 @@ I represent a parameter to an IO-statement (read or write)
 ======================
 
 ### Parents
-- Relation: #parentIOStatement Type: #FASTFortranTWithIOParameters Opposite: #ioParameters
+| Relation | Origin | Opposite | Type | Comment |
+| `parentIOStatement` | `FASTFortranTIOParameter` | `ioParameters` | `FASTFortranTWithIOParameters` | |
+
 
 
 "

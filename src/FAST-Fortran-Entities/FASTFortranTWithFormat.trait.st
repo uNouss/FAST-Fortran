@@ -5,7 +5,9 @@ I represent a statement with a format (format, print)
 ======================
 
 ### Children
-- Relation: #format Type: #FASTFortranTFormat Opposite: #parentFormatedStatement Comment: The description of the format
+| Relation | Origin | Opposite | Type | Comment |
+| `format` | `FASTFortranTWithFormat` | `parentFormatedStatement` | `FASTFortranTFormat` | The description of the format|
+
 
 
 "

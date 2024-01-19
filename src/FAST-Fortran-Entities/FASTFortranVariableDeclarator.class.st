@@ -5,15 +5,20 @@ Part of a variable declaration: name of the variable + optional initial value
 ======================
 
 ### Parents
-- Relation: #parentDeclaration Type: #FASTFortranTWithDeclarators Opposite: #declarators
+| Relation | Origin | Opposite | Type | Comment |
+| `parentDeclaration` | `FASTFortranTVariableDeclarator` | `declarators` | `FASTFortranTWithDeclarators` | |
+
 ### Children
-- Relation: #dimensions Type: #FASTFortranArrayRange Opposite: #parentVariableDeclarator Comment: Possible dimensions in case this is an array declaration
-- Relation: #expression Type: #FASTFortranTExpression Opposite: #variableDeclaratorOwner Comment: Expression assigned to the variable declared
+| Relation | Origin | Opposite | Type | Comment |
+| `dimensions` | `FASTFortranVariableDeclarator` | `parentVariableDeclarator` | `FASTFortranArrayRange` | Possible dimensions in case this is an array declaration|
+| `expression` | `FASTFortranTVariableDeclarator` | `variableDeclaratorOwner` | `FASTFortranTExpression` | Expression assigned to the variable declared|
+
 
 ## Properties
 ======================
 
-- Named: #variable Type: String Comment: The name of the variable being declared
+| Name | Type | Default value | Comment |
+| `variable` | `String` | nil | The name of the variable being declared|
 
 "
 Class {

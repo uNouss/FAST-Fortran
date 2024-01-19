@@ -5,8 +5,10 @@ I represent Fortran Print statement
 ======================
 
 ### Children
-- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
-- Relation: #format Type: #FASTFortranTFormat Opposite: #parentFormatedStatement Comment: The description of the format
+| Relation | Origin | Opposite | Type | Comment |
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+| `format` | `FASTFortranTWithFormat` | `parentFormatedStatement` | `FASTFortranTFormat` | The description of the format|
+
 
 
 "

@@ -5,10 +5,12 @@ I represent Fortran If (Arithmetic) statement
 ======================
 
 ### Children
-- Relation: #condition Type: #FASTFortranTExpression Opposite: #parentConditionalStatement Comment: Condition
-- Relation: #equalLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticEqualBranch
-- Relation: #greaterLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticMoreBranch
-- Relation: #lessLabel Type: #FASTFortranLabelReference Opposite: #parentIfArithmeticLessBranch
+| Relation | Origin | Opposite | Type | Comment |
+| `condition` | `FASTFortranTConditionalStatement` | `parentConditionalStatement` | `FASTFortranTExpression` | Condition|
+| `equalLabel` | `FASTFortranIfArithmeticStatement` | `parentIfArithmeticEqualBranch` | `FASTFortranLabelReference` | |
+| `greaterLabel` | `FASTFortranIfArithmeticStatement` | `parentIfArithmeticMoreBranch` | `FASTFortranLabelReference` | |
+| `lessLabel` | `FASTFortranIfArithmeticStatement` | `parentIfArithmeticLessBranch` | `FASTFortranLabelReference` | |
+
 
 
 "

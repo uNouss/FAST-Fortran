@@ -5,13 +5,16 @@ I represent a function statement - a function-like declaration, made in a single
 ======================
 
 ### Children
-- Relation: #arguments Type: #FASTFortranTExpression Opposite: #argumentOwner Comment: My arguments
-- Relation: #expression Type: #FASTFortranTExpression Opposite: #assignementExpressionOwner Comment: Expression thats being assigned upon declaration to the var
+| Relation | Origin | Opposite | Type | Comment |
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+| `expression` | `FASTFortranFunctionStatement` | `assignementExpressionOwner` | `FASTFortranTExpression` | Expression thats being assigned upon declaration to the var|
+
 
 ## Properties
 ======================
 
-- Named: #name Type: String Comment: Name of a function statement
+| Name | Type | Default value | Comment |
+| `name` | `String` | nil | Name of a function statement|
 
 "
 Class {

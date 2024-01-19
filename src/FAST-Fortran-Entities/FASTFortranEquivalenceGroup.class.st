@@ -5,9 +5,13 @@ I represent a group of variables in an Equivalence statement
 ======================
 
 ### Parents
-- Relation: #withVariableGroups Type: #FASTFortranTWithVariableGroups Opposite: #variableGroups
+| Relation | Origin | Opposite | Type | Comment |
+| `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
+
 ### Other
-- Relation: #variables Type: #FASTFortranVariable Opposite: #parentVariableGroup
+| Relation | Origin | Opposite | Type | Comment |
+| `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
+
 
 
 "
