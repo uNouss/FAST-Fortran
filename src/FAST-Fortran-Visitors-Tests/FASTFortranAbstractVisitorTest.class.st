@@ -54,26 +54,20 @@ FASTFortranAbstractVisitorTest >> arrayVariable: aName indice: anInteger [
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> assignement: aName expression: value [
-	"end position is approximate, test should adjust if a real value is needed"
+FASTFortranAbstractVisitorTest >> assignementExpression: aName value: value [
 
 	^FASTFortranAssignmentExpression new
-		variable: (self scalarVariable: aName) ;
-		expression: value ;
-		startPos: 1 ;
-		endPos: aName size + 3 ;
+		variable: (self makeSimpleExpression: aName) ;
+		expression: (self makeSimpleExpression: value) ;
 		yourself
 ]
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> assignementStatement: aName value: rhs [
-	"end position is approximate, test should adjust if a real value is needed"
 
 	^FASTFortranAssignmentStatement new
-		variable: (self scalarVariable: aName) ;
-		expression: rhs ;
-		startPos: 1 ;
-		endPos: aName size + 3 ;
+		variable: (self makeSimpleExpression: aName) ;
+		expression: (self makeSimpleExpression: rhs) ;
 		yourself
 ]
 
@@ -120,6 +114,12 @@ FASTFortranAbstractVisitorTest >> comment: text [
 		startPos: 1 ;
 		endPos: text asString size + 1 ;
 		yourself
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> declarationStatement: name type: typeDescription [
+
+	^self declarationStatement: name type: typeDescription init: nil
 ]
 
 { #category : #'entity creation' }
@@ -262,7 +262,7 @@ FASTFortranAbstractVisitorTest >> labelReference: aString [
 ]
 
 { #category : #'entity creation' }
-FASTFortranAbstractVisitorTest >> logicalIf: statement statement: condition [
+FASTFortranAbstractVisitorTest >> logicalIf: condition statement: statement [
 
 	^ FASTFortranIfLogicalStatement new
 		  condition: (self makeSimpleExpression: condition);

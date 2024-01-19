@@ -91,7 +91,7 @@ FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
 
 	| stmt |
 	stmt := self
-		assignementStatement: 'a' 
+		assignementStatement: #a 
 		value: (self 
 			functionCall: 'fct'
 			arguments: {
@@ -108,8 +108,10 @@ FASTFortranExporterVisitorTest >> testAssignementFunctionCall [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementStatementArrayAssigned [
 	| stmt |
-	stmt := self assignementStatement: 'a' value: (self scalarVariable: 'b').
-	stmt variable: (self array: 'arr' access: { self scalarVariable: 'i' . self integerLiteral: '1'}).
+	stmt := self
+		assignementStatement: (self
+			array: 'arr' access: { self scalarVariable: 'i' . self integerLiteral: '1'})
+		value: #b.
 
 	self
 		assertExport: stmt
@@ -121,7 +123,7 @@ FASTFortranExporterVisitorTest >> testAssignementStatementArrayAssigned [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementStatementLiteralValue [
 	| stmt |
-	stmt := self assignementStatement: 'aVar' value: (self logicalLiteral: '.true.').
+	stmt := self assignementStatement: #aVar value: (self logicalLiteral: '.true.').
 
 	self
 		assertExport: stmt
@@ -133,7 +135,7 @@ FASTFortranExporterVisitorTest >> testAssignementStatementLiteralValue [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testAssignementStatementVariable [
 	| stmt |
-	stmt := self assignementStatement: 'a' value: (self scalarVariable: 'b').
+	stmt := self assignementStatement: #a value: #b.
 
 	self
 		assertExport: stmt
@@ -173,7 +175,7 @@ FASTFortranExporterVisitorTest >> testBlockStatementWithCommentAndStatement [
 	"note: positions are approximate, all we need is that the assignement is after the comment"
 	| stmt cmt block |
 
-	stmt := self assignementStatement: 'i' value: (self integerLiteral: '1').
+	stmt := self assignementStatement: #i value: 1.
 	stmt startPos: 34.
 	stmt endPos: 38.
 
@@ -755,8 +757,8 @@ FASTFortranExporterVisitorTest >> testInquireStatement [
 	stmt := FASTFortranInquireStatement new
 		ioParameters: {
 			self integerLiteral: '3' .
-			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
-			self assignement: 'err' expression: (self integerLiteral: '10')
+			self assignementExpression: #iostat value: #stat .
+			self assignementExpression: #err value: 10
 		}.
 
 	self
@@ -983,8 +985,8 @@ FASTFortranExporterVisitorTest >> testOpenStatement [
 	stmt := FASTFortranOpenStatement new
 		ioParameters: {
 			self integerLiteral: '3' .
-			self assignement: 'file' expression: (self characterLiteral: 'projectA/data.test') .
-			self assignement: 'err' expression: (self integerLiteral: '99')
+			self assignementExpression: #file value: 'projectA/data.test'.
+			self assignementExpression: #err value: 99
 		}.
 
 	self
@@ -1097,9 +1099,9 @@ FASTFortranExporterVisitorTest >> testReadStatement [
 	stmt := self readStatement: { self scalarVariable: 'V' }.
 	stmt ioParameters: {
 		self integerLiteral: '1' .
-		self assignement: 'rec' expression: (self integerLiteral: '3') .
-		self assignement: 'iostat' expression: (self scalarVariable: 'N') .
-		self assignement: 'err' expression: (self integerLiteral: '8') .
+		self assignementExpression: #rec value: 3 .
+		self assignementExpression: #iostat value: #N .
+		self assignementExpression: #err value: 8 .
 	}.
 
 	self
@@ -1139,8 +1141,8 @@ FASTFortranExporterVisitorTest >> testRewindStatement [
 	stmt := FASTFortranRewindStatement new
 		ioParameters: {
 			self integerLiteral: '3' .
-			self assignement: 'iostat' expression: (self scalarVariable: 'stat') .
-			self assignement: 'err' expression: (self integerLiteral: '10')
+			self assignementExpression: #iostat value: #stat.
+			self assignementExpression: #err value: 10
 		}.
 
 	self
