@@ -50,6 +50,17 @@ FASTFortranCFGVisitor >> conditionBlockWith: aFASTFortranExpression [
 	^newBlock
 ]
 
+{ #category : #basicBlocks }
+FASTFortranCFGVisitor >> findLabelledBlock: label [
+
+	^basicBlocks
+		detect: [ :bloc |
+			(bloc class = FASTFortranBasicBlock) and:
+			[ bloc lastStatement label = label ]
+		]
+		ifNone: [ nil ]
+]
+
 { #category : #initialization }
 FASTFortranCFGVisitor >> initialize [
 
@@ -83,6 +94,13 @@ FASTFortranCFGVisitor >> nextStatementStartsBlock [
 	"sets instance variable #isLeader that must be tested in all statements"
 
 	startNewBasicBlock := true
+]
+
+{ #category : #basicBlocks }
+FASTFortranCFGVisitor >> registerLabel: label reference: aBasicBlock [
+
+	(labelledBlocks at: label ifAbsentPut: [ OrderedCollection new ])
+		add: aBasicBlock
 ]
 
 { #category : #'visiting - statements' }
@@ -131,8 +149,15 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 	 - nextBlock of currentBlock is a block starting on the right label
 	"
 
-	self flag: #TODO.
-	super visitFASTFortranGoToStatement: aFASTFortranGoToStatement
+	| label |
+	super visitFASTFortranGoToStatement: aFASTFortranGoToStatement.
+
+	label := aFASTFortranGoToStatement labelReferences anyOne label.
+	(self findLabelledBlock: label)
+		ifNil: [ self registerLabel: label reference: currentBlock ]
+		ifNotNil: [ :labelledBlock | currentBlock nextBlock: labelledBlock ].
+
+	^self newBasicBlock: FASTFortranBasicBlock
 
 ]
 

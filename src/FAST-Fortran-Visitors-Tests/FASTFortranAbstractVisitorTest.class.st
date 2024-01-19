@@ -210,6 +210,14 @@ FASTFortranAbstractVisitorTest >> functionDeclaration: aName [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> gotoStatement: label [
+
+	^FASTFortranGoToStatement new
+		labelReferences: { self labelReference: label asString } ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> ifBlock: condition then: thenBlock else: elseBlock [
 	^FASTFortranIfBlockStatement new
 		condition: condition ;
@@ -256,8 +264,6 @@ FASTFortranAbstractVisitorTest >> labelReference: aString [
 
 	^FASTFortranLabelReference new
 		label: aString ;
-		startPos: 1 ;
-		endPos: aString size ;
 		yourself
 ]
 

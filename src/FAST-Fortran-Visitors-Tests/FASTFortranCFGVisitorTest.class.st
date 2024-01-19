@@ -227,6 +227,33 @@ FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+10	x = 1
+	GOTO 10
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		labelled: 10
+		statement: (self assignementStatement: #x value: 1)).
+	self addStatement: (self gotoStatement: 10).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first nextBlock equals: nil.
+	self assert: blocks second nextBlock equals: blocks first.
+
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 
 	| conditional blocks loop |

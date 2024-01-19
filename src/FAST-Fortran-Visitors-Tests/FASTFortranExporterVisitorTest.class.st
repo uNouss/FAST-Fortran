@@ -580,9 +580,7 @@ FASTFortranExporterVisitorTest >> testGotoComputedStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testGotoStatement [
 	| stmt |
-	stmt := FASTFortranGoToStatement new
-		labelReferences: { self labelReference: '110' } ;
-		yourself.
+	stmt := self gotoStatement: '110'.
 
 	self
 		assertExport: stmt
