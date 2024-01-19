@@ -262,6 +262,14 @@ FASTFortranAbstractVisitorTest >> labelReference: aString [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> labelled: label statement: aStatement [
+
+	^aStatement
+		label: label asString ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> logicalIf: condition statement: statement [
 
 	^ FASTFortranIfLogicalStatement new

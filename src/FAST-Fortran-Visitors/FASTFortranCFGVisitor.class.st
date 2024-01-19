@@ -22,7 +22,14 @@ FASTFortranCFGVisitor >> basicBlocks [
 
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
-
+	"if aFASTFortranStatement is labelled we start a new BasicBlock
+	 if #startNewBasicBlock is true, we are at the start of a new BasicBlock (and aFASTFortranStatement is its #firstStatement)"
+	
+	aFASTFortranStatement label ifNotNil: [
+		"note: #newBasicBlock: sets #startNewBasicBlock to true"
+		self newBasicBlock: FASTFortranBasicBlock
+	].
+	
 	startNewBasicBlock ifFalse: [ ^ self ].
 
 	currentBlock firstStatement: aFASTFortranStatement.
@@ -101,6 +108,30 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	self nextStatementStartsBlock.
 
 	^conditionalBlock
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
+	"breaks out of a loop:
+	 - ends currentBlock (contains this statement)
+	 - nextBlock of currentBlock is nextBlock of 'parent'
+	"
+
+	self flag: #TODO.
+	super visitFASTFortranExitStatement: aFASTFortranExitStatement
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
+
+	"todo:
+	 - end currentBlock (contains this statement)
+	 - nextBlock of currentBlock is a block starting on the right label
+	"
+
+	self flag: #TODO.
+	super visitFASTFortranGoToStatement: aFASTFortranGoToStatement
+
 ]
 
 { #category : #'visiting - statements' }
@@ -189,7 +220,8 @@ FASTFortranCFGVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatement [
 
 { #category : #'visiting - traits' }
 FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
-	"sets the current statement as the lastStatement (for now) of the currentBlock"
+	"if statement is labelled, start a new block (see #checkForNewBasicBlock:)
+	 In all cases, sets the current statement as the lastStatement (for now) of the currentBlock"
 
 	self checkForNewBasicBlock: aFASTFortranTStatement.
 	currentBlock lastStatement: aFASTFortranTStatement.

@@ -336,6 +336,29 @@ FASTFortranCFGVisitorTest >> testIfStatementThenPartIsABasicBlock [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testLabelledStatementStartsNewBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	INTEGER x = 5
+10 RETURN x
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self declarationStatement: #x type: #integer init: 5).
+	self addStatement: (self labelled: 10 statement: (self returnStatement: #x)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+	self assert: blocks first firstStatement class equals: FASTFortranVariableDeclarationStatement.
+	self assert: blocks second firstStatement class equals: FASTFortranReturnStatement.
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 
 	| blocks |
