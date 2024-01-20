@@ -302,6 +302,33 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenBeforeLabelledBlock [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testConditionalBlockSourceCode [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something(x)
+	INTEGER x
+	IF (x .lt. 5) return x
+	END
+	"
+	self function: 'something' type: #integer.
+	self addParameter: #x type: #integer.
+	self addStatement: (self
+		logicalIf: (self binary: '.lt.' left: #x right: 5)
+		statement: (self returnStatement: #x)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+	self assert: blocks second sourceCode equals: '        if (x .lt. 5) '
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 
 	| conditional blocks loop |
