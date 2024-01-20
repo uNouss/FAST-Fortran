@@ -37,6 +37,14 @@ FASTFortranAbstractBasicBlock >> nextBlocks [
 ]
 
 { #category : #accessing }
+FASTFortranAbstractBasicBlock >> sourceCode [
+
+	^FASTFortranExporterVisitor export: (FASTFortranStatementBlock new
+		statements: self statements ;
+		yourself)
+]
+
+{ #category : #accessing }
 FASTFortranAbstractBasicBlock >> statements [
 
 	self subclassResponsibility

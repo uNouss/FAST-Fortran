@@ -539,3 +539,28 @@ FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 	self assert: blocks anyOne lastStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne lastStatement variable name equals: 'x'.
 ]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testSourceCode [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	x = 1
+	y = 1
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self assignementStatement: #x value: 1).
+	self addStatement: (self assignementStatement: #y value: 1).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 1.
+
+	self assert: blocks anyOne sourceCode equals: '        x = 1
+        y = 1
+'
+]
