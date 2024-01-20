@@ -116,10 +116,9 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	 - BasicBlock for the body of the loop
 	 - another BasicBlock for after the LOOP"
 
-	| previousBlock conditionalBlock afterBlock |
-	previousBlock := currentBlock.
-	conditionalBlock := self conditionBlockWith: aFASTFortranDoStatement loopControl.
-	previousBlock nextBlock: conditionalBlock.
+	| conditionalBlock afterBlock |
+	currentBlock nextBlock:
+		(conditionalBlock := self conditionBlockWith: aFASTFortranDoStatement loopControl).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
@@ -185,11 +184,9 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 	 - BasicBlock for the else-part
 	 - another BasicBlock for after the IF"
 
-	| previousBlock conditionalBlock afterBlock |
-	previousBlock := currentBlock.
-	conditionalBlock := self conditionBlockWith: aFASTFortranIfBlockStatement condition.
-
-	previousBlock nextBlock: conditionalBlock.
+	| conditionalBlock afterBlock |
+	currentBlock nextBlock:
+		(conditionalBlock := self conditionBlockWith: aFASTFortranIfBlockStatement condition).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
@@ -210,11 +207,10 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogicalStatement [
 
-	| previousBlock conditionalBlock afterBlock |
-	previousBlock := currentBlock.
-	conditionalBlock := self conditionBlockWith: aFASTFortranIfLogicalStatement condition.
-
-	previousBlock nextBlock: conditionalBlock.
+	| conditionalBlock afterBlock |
+	
+	currentBlock nextBlock:
+		(conditionalBlock := self conditionBlockWith: aFASTFortranIfLogicalStatement condition).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
