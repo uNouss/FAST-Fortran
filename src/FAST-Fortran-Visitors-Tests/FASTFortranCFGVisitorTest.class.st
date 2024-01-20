@@ -216,13 +216,13 @@ FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 
 	basicBlock := conditional nextBlockForValue: true.
 	self assert: basicBlock firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: basicBlock firstStatement equals: basicBlock lastStatement.
+	self assert: basicBlock statements size equals: 1.
 	self assert: basicBlock nextBlock equals: conditional.
 
 	basicBlock := conditional nextBlockForValue: false.
 	self assert: basicBlock firstStatement class equals: FASTFortranReturnStatement.
 	self assert: basicBlock firstStatement expression class equals: FASTFortranScalarVariable.
-	self assert: basicBlock firstStatement equals: basicBlock lastStatement.
+	self assert: basicBlock statements size equals: 1.
 
 ]
 
@@ -253,7 +253,7 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
 	self assert: blocks size equals: 2.
 
 	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: blocks first  lastStatement equals: blocks first  firstStatement.
+	self assert: blocks first statements size equals: 1.
 	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks second lastStatement  class equals: FASTFortranGoToStatement.
 
@@ -287,7 +287,10 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenBeforeLabelledBlock [
 	blocks := visitor basicBlocks.
 
 	self assert: blocks size equals: 3.
-
+	blocks do: [ :block |
+		self assert: block statements size equals: 1.
+	].
+	
 	self assert: blocks first firstStatement class equals: FASTFortranGoToStatement.
 	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks third firstStatement class equals: FASTFortranAssignmentStatement.
@@ -355,8 +358,7 @@ FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
 	self assert: blocks size equals: 1.
 
 	self assert: blocks anyOne firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: blocks anyOne lastStatement equals: blocks anyOne firstStatement
-
+	self assert: blocks anyOne statements size equals: 1
 ]
 
 { #category : #tests }
@@ -408,7 +410,7 @@ FASTFortranCFGVisitorTest >> testIfStatementFollowedByABasicBlock [
 	].
 
 	self assert: blocks size equals: 1.
-	self assert: blocks anyOne firstStatement equals: blocks anyOne lastStatement.
+	self assert: blocks anyOne statements size equals: 1.
 ]
 
 { #category : #tests }
@@ -489,9 +491,9 @@ FASTFortranCFGVisitorTest >> testLabelledStatementFollowingLabelledStatement [
 	self assert: blocks size equals: 2.
 
 	self assert: blocks first firstStatement class equals: FASTFortranVariableDeclarationStatement.
-	self assert: blocks first lastStatement equals: blocks first firstStatement.
+	self assert: blocks first statements size equals: 1.
 	self assert: blocks second firstStatement class equals: FASTFortranReturnStatement.
-	self assert: blocks second lastStatement equals: blocks second firstStatement.
+	self assert: blocks second statements size equals: 1.
 
 	self assert: blocks first  nextBlock equals: blocks second.
 	self assert: blocks second nextBlock equals: nil.
