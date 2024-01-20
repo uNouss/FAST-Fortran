@@ -293,7 +293,7 @@ FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenBeforeLabel [
 	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
 
 	self assert: (blocks first nextBlockForValue: #negative) equals: blocks second.
-	self assert: (blocks first nextBlockForValue: #null) equals: blocks second.
+	self assert: (blocks first nextBlockForValue: #null)     equals: blocks second.
 	self assert: (blocks first nextBlockForValue: #positive) equals: blocks second.
 
 ]

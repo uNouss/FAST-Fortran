@@ -24,7 +24,7 @@ FASTFortranCFGVisitor >> basicBlocks [
 FASTFortranCFGVisitor >> chainRegisteredJumpsTo: aLabel [
 
 	(labelReferences at: aLabel ifAbsent: [ #(  ) ])
-		do: [ :gotoBlock | gotoBlock nextBlock: currentBlock ]
+		do: [ :setterAction | setterAction value: currentBlock ]
 ]
 
 { #category : #basicBlocks }
@@ -43,8 +43,8 @@ FASTFortranCFGVisitor >> checkLabelledStatement: aFASTFortranTStatement [
 
 	aFASTFortranTStatement label ifNil: [ ^ self ].
 
-	currentBlock isEmpty ifFalse: [
-		currentBlock nextBlock: (self newBasicBlock: FASTFortranBasicBlock) ].
+	(currentBlock isNotNil and: [ currentBlock isEmpty not ])
+		ifTrue: [ currentBlock nextBlock: (self newBasicBlock: FASTFortranBasicBlock) ].
 
 	self chainRegisteredJumpsTo: aFASTFortranTStatement label
 ]
@@ -70,15 +70,22 @@ FASTFortranCFGVisitor >> conditional: conditionalBlock branchValue: aValue forNo
 ]
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> findLabelledBlock: aFASTFortranLabelReference [
+FASTFortranCFGVisitor >> findLabelledBlock: aFASTFortranLabelReference setter: settingAction [
 	"search for a block starting with this label. If none found, returns nil and
 	 register currentBlock as wanting this label"
 
-	^basicBlocks
-		detect: [ :bloc | bloc firstStatement label = aFASTFortranLabelReference label ]
+	^ basicBlocks
+		detect: [ :bloc |
+			bloc firstStatement label = aFASTFortranLabelReference label ]
+		ifOne: [ :labeledBlock |
+			settingAction value: labeledBlock.
+			labeledBlock
+		]
 		ifNone: [
-			self registerReference: currentBlock toLabel: aFASTFortranLabelReference label.
-			nil
+			  self
+				  registerReference: settingAction
+				  toLabel: aFASTFortranLabelReference label.
+			  nil
 		]
 ]
 
@@ -123,10 +130,11 @@ FASTFortranCFGVisitor >> newConditionalBlock: aFASTFortranStatement [
 ]
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> registerReference: aBasicBlock toLabel: label [
+FASTFortranCFGVisitor >> registerReference: setterAction toLabel: label [
+	"#setterAction is a Pharo block taking one BasicBlock as argument and seting a jump to this block when executed"
 
 	(labelReferences at: label ifAbsentPut: [ OrderedCollection new ])
-		add: aBasicBlock
+		add: setterAction
 ]
 
 { #category : #basicBlocks }
@@ -196,44 +204,41 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 	 - nextBlock of currentBlock is a block starting on the right label
 	"
 
+	| gotoBlock |
 	self visitFASTFortranTStatement: aFASTFortranGoToStatement.
 
-	currentBlock nextBlock:
-		(self findLabelledBlock: aFASTFortranGoToStatement labelReferences anyOne).
-
+	gotoBlock := currentBlock.
+	self
+		findLabelledBlock: aFASTFortranGoToStatement labelReferences anyOne
+		setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock ].
 
 	^ self newBasicBlock: FASTFortranBasicBlock
 ]
 
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
+	"Note: next statement after an ArithmeticIf should be labelled or there is no way it gets executed"
 
 	| conditionalBlock |
-	
 	currentBlock nextBlock:
-		(conditionalBlock := self newConditionalBlock: aFASTFortranIfArithmeticStatement).
-	self checkLabelledConditionalStatement: aFASTFortranIfArithmeticStatement.
+		(conditionalBlock := self newConditionalBlock:
+			                     aFASTFortranIfArithmeticStatement).
+	self checkLabelledConditionalStatement:
+		aFASTFortranIfArithmeticStatement.
 
 	self
-		conditional: conditionalBlock
-		branchValue: #negative
-		forNode: nil
-		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement lessLabel).
+		findLabelledBlock: aFASTFortranIfArithmeticStatement lessLabel
+		setter: [ :labeledBlock | conditionalBlock nextBlock: labeledBlock onValue: #negative ].
 	self
-		conditional: conditionalBlock
-		branchValue: #null
-		forNode: nil
-		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement equalLabel).
-
+		findLabelledBlock: aFASTFortranIfArithmeticStatement equalLabel
+		setter: [ :labeledBlock | conditionalBlock nextBlock: labeledBlock onValue: #null ].
 	self
-		conditional: conditionalBlock
-		branchValue: #positive
-		forNode: nil
-		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement greaterLabel).
+		findLabelledBlock: aFASTFortranIfArithmeticStatement greaterLabel
+		setter: [ :labeledBlock | conditionalBlock nextBlock: labeledBlock onValue: #positive ].
 
-	self newBasicBlock: FASTFortranBasicBlock.	
+	self newBasicBlock: FASTFortranBasicBlock.
 
-	^conditionalBlock
+	^ conditionalBlock
 ]
 
 { #category : #'visiting - statements' }
