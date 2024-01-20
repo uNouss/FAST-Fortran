@@ -30,14 +30,11 @@ FASTFortranCFGVisitor >> cleanEmptyBlock [
 ]
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> conditionBlockWith: aFASTFortranExpression [
+FASTFortranCFGVisitor >> conditionBlock: aFASTFortranStatement [
 
-	| newBlock |
-	newBlock := self newBasicBlock: FASTFortranConditionalBasicBlock.
-	
-	newBlock 	condition: aFASTFortranExpression.
-
-	^newBlock
+	^(self newBasicBlock: FASTFortranConditionalBasicBlock)
+		statement: aFASTFortranStatement ;
+		yourself
 ]
 
 { #category : #basicBlocks }
@@ -96,7 +93,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	| conditionalBlock afterBlock |
 	currentBlock nextBlock:
-		(conditionalBlock := self conditionBlockWith: aFASTFortranDoStatement loopControl).
+		(conditionalBlock := self conditionBlock: aFASTFortranDoStatement).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
@@ -109,7 +106,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	currentBlock := afterBlock.
 
-	^conditionalBlock
+	^ conditionalBlock
 ]
 
 { #category : #'visiting - statements' }
@@ -142,16 +139,6 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 ]
 
 { #category : #'visiting - statements' }
-FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
-
-	| visit |
-	visit := super visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement.
-	self nextStatementStartsBlock.
-
-	^visit
-]
-
-{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 	"basic blocks for a IF
 	 - ConditionalBlock that need to be chained as #nextBlock of current one
@@ -161,7 +148,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 
 	| conditionalBlock afterBlock |
 	currentBlock nextBlock:
-		(conditionalBlock := self conditionBlockWith: aFASTFortranIfBlockStatement condition).
+		(conditionalBlock := self conditionBlock: aFASTFortranIfBlockStatement).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
@@ -172,10 +159,10 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
 	conditionalBlock nextBlock: currentBlock onValue: false.
 	currentBlock nextBlock: afterBlock.
-	
+
 	currentBlock := afterBlock.
 
-	^conditionalBlock
+	^ conditionalBlock
 ]
 
 { #category : #'visiting - statements' }
@@ -184,7 +171,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 	| conditionalBlock afterBlock |
 	
 	currentBlock nextBlock:
-		(conditionalBlock := self conditionBlockWith: aFASTFortranIfLogicalStatement condition).
+		(conditionalBlock := self conditionBlock: aFASTFortranIfLogicalStatement).
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 

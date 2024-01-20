@@ -2,19 +2,10 @@ Class {
 	#name : #FASTFortranBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,
 	#instVars : [
-		'statements',
 		'nextBlock'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
-
-{ #category : #initialization }
-FASTFortranBasicBlock >> initialize [
-
-	super initialize.
-
-	statements := OrderedCollection new
-]
 
 { #category : #accessing }
 FASTFortranBasicBlock >> nextBlock [
@@ -36,8 +27,10 @@ FASTFortranBasicBlock >> nextBlocks [
 		ifNotNil: [ { nextBlock } ]
 ]
 
-{ #category : #accessing }
-FASTFortranBasicBlock >> statements [
+{ #category : #printing }
+FASTFortranBasicBlock >> sourceCode [
 
-	^statements
+	^FASTFortranExporterVisitor export: (FASTFortranStatementBlock new
+		statements: self statements ;
+		yourself)
 ]

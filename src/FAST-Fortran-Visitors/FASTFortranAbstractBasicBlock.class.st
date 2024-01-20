@@ -2,7 +2,8 @@ Class {
 	#name : #FASTFortranAbstractBasicBlock,
 	#superclass : #Object,
 	#instVars : [
-		'isStart'
+		'isStart',
+		'statements'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
@@ -22,11 +23,12 @@ FASTFortranAbstractBasicBlock >> firstStatement [
 ]
 
 { #category : #initialization }
-FASTFortranAbstractBasicBlock >> initialize [ 
+FASTFortranAbstractBasicBlock >> initialize [
 
 	super initialize.
 
-	isStart := false
+	isStart := false.
+	statements := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -65,16 +67,14 @@ FASTFortranAbstractBasicBlock >> nextBlocks [
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #printing }
 FASTFortranAbstractBasicBlock >> sourceCode [
 
-	^FASTFortranExporterVisitor export: (FASTFortranStatementBlock new
-		statements: self statements ;
-		yourself)
+	self subclassResponsibility 
 ]
 
 { #category : #accessing }
 FASTFortranAbstractBasicBlock >> statements [
 
-	self subclassResponsibility
+	^statements
 ]
