@@ -23,15 +23,7 @@ FASTFortranCFGVisitor >> basicBlocks [
 
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
-	"if aFASTFortranStatement is labelled we start a new BasicBlock except if we are already at the satrt of a new block
-	 if #startNewBasicBlock is true, we are at the start of a new BasicBlock (and aFASTFortranStatement is its #firstStatement)"
-	
-	aFASTFortranStatement label ifNotNil: [
-		startNewBasicBlock ifFalse: [
-			"could set startNewBasicBlock to false, but #newBasicBlock: will set it back to true"
-			currentBlock nextBlock: (self newBasicBlock: FASTFortranBasicBlock)
-	] ].
-	
+
 	startNewBasicBlock ifFalse: [ ^ self ].
 
 	currentBlock firstStatement: aFASTFortranStatement.
@@ -82,9 +74,9 @@ FASTFortranCFGVisitor >> initialize [
 
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
-	"creates a new BasicBlocks and links it (#nextBlock:) the the currentBlocks
-	 We do not change currentBlocks as the new one might replace the old ones are be added to them
-	 This is for the caller to decide"
+	"creates a new BasicBlock and set it to currentBlock
+	 typically called inside: `currentBlock nextBlock: (self newBasicBlock:)` to chain the new block
+	 to the previous currentBlock"
 
 	| newBlock |
 
@@ -234,6 +226,20 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 	^conditionalBlock
 ]
 
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranLabelledstatement: aFASTFortranTStatement [
+	"Labelled statement start a new block (except if we are already at the start of a new one)
+	 Plus need to check whether we met a goto referring to this label"
+
+	startNewBasicBlock ifFalse: [
+		currentBlock nextBlock: (self newBasicBlock: FASTFortranBasicBlock)
+	].
+
+	(labelReferences at: (aFASTFortranTStatement label) ifAbsent: [ #() ])
+	do: [ :gotoBlock | gotoBlock nextBlock: currentBlock ]
+
+]
+
 { #category : #'visiting - programUnits' }
 FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 
@@ -259,9 +265,10 @@ FASTFortranCFGVisitor >> visitFASTFortranStatementBlock: aFASTFortranStatement [
 
 { #category : #'visiting - traits' }
 FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
-	"if statement is labelled, start a new block (see #checkForNewBasicBlock:)
-	 In all cases, sets the current statement as the lastStatement (for now) of the currentBlock"
+	"sets the current statement as the lastStatement (for now) of the currentBlock"
 
+	aFASTFortranTStatement label ifNotNil: [ self visitFASTFortranLabelledstatement: aFASTFortranTStatement ].
+	
 	self checkForNewBasicBlock: aFASTFortranTStatement.
 	currentBlock lastStatement: aFASTFortranTStatement.
 
