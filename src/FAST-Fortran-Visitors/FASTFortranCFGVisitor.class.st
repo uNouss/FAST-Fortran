@@ -10,7 +10,7 @@ Class {
 		'basicBlocks',
 		'startNewBasicBlock',
 		'currentBlock',
-		'labelledBlocks'
+		'labelReferences'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
@@ -43,7 +43,8 @@ FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
 FASTFortranCFGVisitor >> cleanEmptyBlock [
 
 	basicBlocks removeAllSuchThat: [ :block |
-		block firstStatement isNil
+		(block class = FASTFortranBasicBlock)  and:
+		[block firstStatement isNil]
 	]
 ]
 
@@ -76,7 +77,7 @@ FASTFortranCFGVisitor >> initialize [
 
 	basicBlocks := OrderedCollection new.
 	startNewBasicBlock := false.
-	labelledBlocks := Dictionary new
+	labelReferences := Dictionary new
 ]
 
 { #category : #basicBlocks }
@@ -104,9 +105,9 @@ FASTFortranCFGVisitor >> nextStatementStartsBlock [
 ]
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> registerLabel: label reference: aBasicBlock [
+FASTFortranCFGVisitor >> registerReference: aBasicBlock toLabel: label [
 
-	(labelledBlocks at: label ifAbsentPut: [ OrderedCollection new ])
+	(labelReferences at: label ifAbsentPut: [ OrderedCollection new ])
 		add: aBasicBlock
 ]
 
@@ -154,7 +155,6 @@ FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatemen
 
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
-
 	"todo:
 	 - end currentBlock (contains this statement)
 	 - nextBlock of currentBlock is a block starting on the right label
@@ -165,11 +165,10 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 
 	label := aFASTFortranGoToStatement labelReferences anyOne label.
 	(self findLabelledBlock: label)
-		ifNil: [ self registerLabel: label reference: currentBlock ]
+		ifNil: [ self registerReference: currentBlock toLabel: label ]
 		ifNotNil: [ :labelledBlock | currentBlock nextBlock: labelledBlock ].
 
-	^self newBasicBlock: FASTFortranBasicBlock
-
+	^ self newBasicBlock: FASTFortranBasicBlock
 ]
 
 { #category : #'visiting - statements' }
