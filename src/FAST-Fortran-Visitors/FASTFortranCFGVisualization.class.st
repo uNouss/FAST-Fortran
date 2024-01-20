@@ -15,6 +15,20 @@ FASTFortranCFGVisualization class >> on: aFASTFortranCFGVisitor [
 ]
 
 { #category : #'instance creation' }
+FASTFortranCFGVisualization >> buildLegend [
+	| legend |
+	legend := RSLegend new.
+	legend container: canvas.
+	legend onDemand.
+	legend title: 'Legend'.
+	legend text: 'Start block' withShape: self startBlockShape.
+	legend text: 'Final block' withShape: self finalBlockShape.
+	legend text: 'start & final block' withShape: self startAndFinalBlockShape.
+	legend text: 'Normal block' withShape: self normalBlockShape.
+	legend build
+]
+
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> buildLines: shapes [
 
 	RSLineBuilder arrowedLine
@@ -25,27 +39,24 @@ FASTFortranCFGVisualization >> buildLines: shapes [
 ]
 
 { #category : #hooks }
-FASTFortranCFGVisualization >> makeShape: aBasicBlock [
+FASTFortranCFGVisualization >> finalBlockShape [
 
-	^aBasicBlock isStart
-		ifTrue: [ RSEllipse new
-			radius: 10 ;
+	^RSEllipse new
+		radius: 10 ;
+		color: Color transparent ;
+		border: (RSBorder new
+			width: 4 ;
 			color: Color black ;
-		 	yourself
-		]
-		ifFalse: [ 
-			aBasicBlock isFinal
-				ifTrue: [ RSEllipse new
-					radius: 10 ;
-					color: Color transparent ;
-					border: (RSBorder new width: 4 ; color: Color black ; yourself) ;
-					yourself
-				]
-				ifFalse: [ 	RSBox new
-					size: 20 ;
-					yourself
-				]
-		]
+			yourself) ;
+		yourself
+]
+
+{ #category : #hooks }
+FASTFortranCFGVisualization >> normalBlockShape [
+
+	^RSBox new
+		size: 20 ;
+		yourself
 ]
 
 { #category : #'instance creation' }
@@ -60,30 +71,53 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 	canvas addAll: shapes.
 	RSTreeLayout on: shapes.
 
+	self buildLegend.
+
+	canvas @ RSCanvasController new noLegend.
+
 	^ canvas
-]
-
-{ #category : #hooks }
-FASTFortranCFGVisualization >> shapeColorFor: aBasicBlock [
-
-	aBasicBlock isStart
-	ifTrue: [ 
-		^aBasicBlock isFinal
-			ifTrue: [ Color orange ]
-			ifFalse: [ Color green ]
-	].
-
-	aBasicBlock isFinal
-	ifTrue: [ ^Color red ].
-
-	^Color lightGray
 ]
 
 { #category : #hooks }
 FASTFortranCFGVisualization >> shapeFor: aBasicBlock [
 
-	^(self makeShape: aBasicBlock)
-		model: aBasicBlock ;
-		@ (RSPopup text: [ :block | block sourceCode ]) ;
+	| shape |
+	shape := aBasicBlock isStart
+		ifTrue: [ aBasicBlock isFinal
+			ifTrue: [ self startAndFinalBlockShape ]
+			ifFalse: [ self startBlockShape ]
+		]
+		ifFalse: [ 
+			aBasicBlock isFinal
+				ifTrue: [ self finalBlockShape ]
+				ifFalse: [ self normalBlockShape ]
+		].
+	
+	shape model: aBasicBlock.
+	shape @ (RSPopup text: [ :block | block sourceCode ]).
+
+	^shape
+]
+
+{ #category : #hooks }
+FASTFortranCFGVisualization >> startAndFinalBlockShape [
+
+	^RSComposite new
+		add: self finalBlockShape ;
+		add: (RSEllipse new
+			radius: 5;
+			color: Color black;
+			yourself) ;
+		adjustToChildren ;
+		yourself
+
+]
+
+{ #category : #hooks }
+FASTFortranCFGVisualization >> startBlockShape [
+
+	^RSEllipse new
+		radius: 10;
+		color: Color black;
 		yourself
 ]

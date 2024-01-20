@@ -44,7 +44,7 @@ FASTFortranAbstractBasicBlock >> isFinal [
 { #category : #accessing }
 FASTFortranAbstractBasicBlock >> isStart [
 
-	^ isStart
+	^isStart
 ]
 
 { #category : #accessing }
