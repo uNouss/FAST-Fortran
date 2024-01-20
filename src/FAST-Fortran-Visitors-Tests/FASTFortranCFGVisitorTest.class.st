@@ -228,14 +228,14 @@ FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 ]
 
 { #category : #'tests - cfg' }
-FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenAfterLabelledBlock [
+FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenAfterLabel [
 
 	| blocks |
 	"
 	INTEGER FUNCTION something()
 10	x = 1
 20	y = 1
-	IF (x) 10, 20, 20
+	IF (x) 10, 20, 30
 	END
 	"
 	self function: #something type: #integer.
@@ -263,6 +263,38 @@ FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenAfterLabelledBlock [
 	self assert: (blocks third nextBlockForValue: #negative) equals: blocks first.
 	self assert: (blocks third nextBlockForValue: #null) equals: blocks second.
 	self assert: (blocks third nextBlockForValue: #positive) equals: blocks second.
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenBeforeLabel [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	IF (x) 10, 10, 10
+10	x = 1
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self ifArithmetic: #x negative: 10 null: 10 positive: 10).
+	self addStatement:
+		 (self labelled: 10 statement:
+			(self assignementStatement: #x value: 1)).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first class equals: FASTFortranConditionalBasicBlock.
+
+	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
+
+	self assert: (blocks first nextBlockForValue: #negative) equals: blocks second.
+	self assert: (blocks first nextBlockForValue: #null) equals: blocks second.
+	self assert: (blocks first nextBlockForValue: #positive) equals: blocks second.
 
 ]
 
