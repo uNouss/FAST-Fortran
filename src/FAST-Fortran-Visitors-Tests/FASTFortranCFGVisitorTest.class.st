@@ -65,7 +65,8 @@ FASTFortranCFGVisitorTest >> function: name type: typeDescription [
 FASTFortranCFGVisitorTest >> functionWithConditional [
 	"
 	CHARACTER*20 FUNCTION fctBigSmall( x, y)
-	INTEGER x, y
+	INTEGER x
+	INTEGER y
 	CHARACTER*20 str
 
 	x = 1
@@ -562,6 +563,7 @@ FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 	].
 
 	self assert: blocks size equals: 1.
+
 	self assert: blocks anyOne firstStatement declarators size equals: 1.
 	self assert: blocks anyOne lastStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne lastStatement variable name equals: 'x'.
@@ -590,4 +592,32 @@ FASTFortranCFGVisitorTest >> testSourceCode [
 	self assert: blocks anyOne sourceCode equals: '        x = 1
         y = 1
 '
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testStartFinalBlocks [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	INTEGER x = 5
+20 RETURN x
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self declarationStatement: #x type: #integer init: 5).
+	self addStatement: (self labelled: 20 statement: (self returnStatement: #x)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first isStart.
+	self deny:   blocks first isFinal.
+
+	self deny:   blocks second isStart.
+	self assert: blocks second isFinal.
+
 ]

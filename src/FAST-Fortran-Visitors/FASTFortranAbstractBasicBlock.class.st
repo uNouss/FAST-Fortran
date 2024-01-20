@@ -1,6 +1,9 @@
 Class {
 	#name : #FASTFortranAbstractBasicBlock,
 	#superclass : #Object,
+	#instVars : [
+		'isStart'
+	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
 
@@ -18,10 +21,36 @@ FASTFortranAbstractBasicBlock >> firstStatement [
 		ifFalse: [ self statements first ]
 ]
 
+{ #category : #initialization }
+FASTFortranAbstractBasicBlock >> initialize [ 
+
+	super initialize.
+
+	isStart := false
+]
+
 { #category : #testing }
 FASTFortranAbstractBasicBlock >> isEmpty [
 
 	^self statements isEmpty
+]
+
+{ #category : #accessing }
+FASTFortranAbstractBasicBlock >> isFinal [
+
+	^self nextBlocks isEmpty
+]
+
+{ #category : #accessing }
+FASTFortranAbstractBasicBlock >> isStart [
+
+	^ isStart
+]
+
+{ #category : #accessing }
+FASTFortranAbstractBasicBlock >> isStart: anObject [
+
+	isStart := anObject
 ]
 
 { #category : #accessing }

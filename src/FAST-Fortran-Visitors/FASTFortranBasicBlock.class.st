@@ -31,7 +31,9 @@ FASTFortranBasicBlock >> nextBlock: anObject [
 { #category : #accessing }
 FASTFortranBasicBlock >> nextBlocks [
 
-	^{ nextBlock }
+	^nextBlock
+		ifNil: [ #() ]
+		ifNotNil: [ { nextBlock } ]
 ]
 
 { #category : #accessing }

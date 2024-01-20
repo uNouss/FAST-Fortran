@@ -222,6 +222,7 @@ FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 	| visit |
 	visit := super visitFASTFortranProgramUnit: aFASTFortranProgramUnit.
 
+	basicBlocks first isStart: true.
 	self cleanEmptyBlock.
 	
 	^visit
