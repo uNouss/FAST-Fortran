@@ -24,6 +24,14 @@ FASTFortranConditionalBasicBlock >> initialize [
 ]
 
 { #category : #accessing }
+FASTFortranConditionalBasicBlock >> isFinal [
+
+	super isFinal ifTrue: [ ^true ].
+	nextBlocks do: [ :assoc | assoc value ifNil: [ ^true ] ].
+	^false
+]
+
+{ #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlock: aBlock onValue: aValue [
 
 	nextBlocks add: (aValue -> aBlock)
@@ -54,4 +62,12 @@ FASTFortranConditionalBasicBlock >> sourceCode [
 FASTFortranConditionalBasicBlock >> statement: aFASTFortranStatement [
 
 	self addStatement: aFASTFortranStatement 
+]
+
+{ #category : #accessing }
+FASTFortranConditionalBasicBlock >> substituteBlock: oldBlock with: newBlockOrNil [
+
+	nextBlocks do: [ :assoc |
+		(assoc value = oldBlock) ifTrue: [ assoc value: newBlockOrNil ]
+	]
 ]

@@ -34,3 +34,9 @@ FASTFortranBasicBlock >> sourceCode [
 		statements: self statements ;
 		yourself)
 ]
+
+{ #category : #accessing }
+FASTFortranBasicBlock >> substituteBlock: oldBlock with: newBlockOrNil [
+
+	nextBlock := newBlockOrNil
+]

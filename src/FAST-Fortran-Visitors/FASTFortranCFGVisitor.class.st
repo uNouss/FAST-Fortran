@@ -52,10 +52,9 @@ FASTFortranCFGVisitor >> checkLabelledStatement: aFASTFortranTStatement [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> cleanEmptyBlock [
 
-	basicBlocks removeAllSuchThat: [ :block |
-		(block class = FASTFortranBasicBlock)  and:
-		[block firstStatement isNil]
-	]
+	currentBlock := nil.
+	basicBlocks copy do: [ :block |
+		block isEmpty ifTrue: [ self substituteBlock: block with: nil ] ]
 ]
 
 { #category : #basicBlocks }
@@ -110,9 +109,17 @@ FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> newConditionalBlock: aFASTFortranStatement [
 
-	^(self newBasicBlock: FASTFortranConditionalBasicBlock)
-		statement: aFASTFortranStatement ;
-		yourself
+	| conditional previousBlock |
+	previousBlock := currentBlock.
+
+	conditional := (self newBasicBlock: FASTFortranConditionalBasicBlock)
+		               statement: aFASTFortranStatement;
+		               yourself.
+
+	previousBlock isEmpty ifTrue: [
+		self substituteBlock: previousBlock with: nil ].
+
+	^ conditional
 ]
 
 { #category : #basicBlocks }
@@ -120,6 +127,20 @@ FASTFortranCFGVisitor >> registerReference: aBasicBlock toLabel: label [
 
 	(labelReferences at: label ifAbsentPut: [ OrderedCollection new ])
 		add: aBasicBlock
+]
+
+{ #category : #basicBlocks }
+FASTFortranCFGVisitor >> substituteBlock: oldBlock with: newBlockOrNil [
+
+	newBlockOrNil
+	ifNotNil: [ newBlockOrNil isStart: oldBlock isStart].
+
+	basicBlocks do: [ :block |
+		(block nextBlocks includes: oldBlock)
+		ifTrue: [ block substituteBlock: oldBlock with: newBlockOrNil ]
+	].
+
+	basicBlocks remove: oldBlock
 ]
 
 { #category : #'visiting - expressions' }

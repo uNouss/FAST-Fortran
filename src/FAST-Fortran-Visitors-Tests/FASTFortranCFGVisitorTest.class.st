@@ -378,6 +378,32 @@ FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
+
+	| blocks conditional |
+	"
+	INTEGER FUNCTION something()
+	IF (x) return 0
+	RETURN 5
+	END
+	"
+	self function: 'something' type: #integer.
+	self addStatement: (self logicalIf: #x statement: (self returnStatement: 0)).
+	self addStatement: (self returnStatement: 5).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+
+	self assert: conditional isStart
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
 
 	| blocks |
@@ -625,6 +651,34 @@ FASTFortranCFGVisitorTest >> testLabelledStatementStartsNewBlock [
 	self assert: blocks size equals: 2.
 	self assert: blocks first firstStatement class equals: FASTFortranVariableDeclarationStatement.
 	self assert: blocks second firstStatement class equals: FASTFortranReturnStatement.
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testLastStatementIsConditional [
+
+	| blocks conditional |
+	"
+	INTEGER FUNCTION something(x)
+	INTEGER x
+	IF (x) return 0
+	END
+	"
+	self function: 'something' type: #integer.
+	self addParameter: #x type: #integer.
+	self addStatement: (self logicalIf: #x statement: (self returnStatement: 0)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	self assert: blocks first nextBlock equals: conditional.
+
+	self assert: (conditional nextBlockForValue: true) isFinal.
+	self assert: conditional isFinal.
+
 ]
 
 { #category : #'tests - cfg' }
