@@ -29,7 +29,7 @@ FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
 	aFASTFortranStatement label ifNotNil: [
 		startNewBasicBlock ifFalse: [
 			"could set startNewBasicBlock to false, but #newBasicBlock: will set it back to true"
-			self newBasicBlock: FASTFortranBasicBlock
+			currentBlock nextBlock: (self newBasicBlock: FASTFortranBasicBlock)
 	] ].
 	
 	startNewBasicBlock ifFalse: [ ^ self ].
@@ -79,12 +79,10 @@ FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
 	| newBlock |
 
 	newBlock := aBasicBlockClass new.
+	basicBlocks add: newBlock.
+	currentBlock := newBlock.
 
 	self nextStatementStartsBlock.
-
-	basicBlocks add: newBlock.
-
-	currentBlock := newBlock.
 
 	^newBlock
 ]

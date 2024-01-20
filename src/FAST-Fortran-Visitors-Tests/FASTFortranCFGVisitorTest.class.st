@@ -424,6 +424,37 @@ FASTFortranCFGVisitorTest >> testLabelledIfStatementStartsNewBlock [
 ]
 
 { #category : #tests }
+FASTFortranCFGVisitorTest >> testLabelledStatementFollowingLabelledStatement [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+10	INTEGER x = 5
+20 RETURN x
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self labelled: 10 statement: (self declarationStatement: #x type: #integer init: 5)).
+	self addStatement: (self labelled: 20 statement: (self returnStatement: #x)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first firstStatement class equals: FASTFortranVariableDeclarationStatement.
+	self assert: blocks first lastStatement equals: blocks first firstStatement.
+	self assert: blocks second firstStatement class equals: FASTFortranReturnStatement.
+	self assert: blocks second lastStatement equals: blocks second firstStatement.
+
+	self assert: blocks first  nextBlock equals: blocks second.
+	self assert: blocks second nextBlock equals: nil.
+
+
+]
+
+{ #category : #tests }
 FASTFortranCFGVisitorTest >> testLabelledStatementStartsNewBlock [
 
 	| blocks |
