@@ -236,7 +236,12 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 { #category : #'visiting - programUnits' }
 FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 
-	^super visitFASTFortranProgramUnit: aFASTFortranProgramUnit
+	| visit |
+	visit := super visitFASTFortranProgramUnit: aFASTFortranProgramUnit.
+
+	self cleanEmptyBlock.
+	
+	^visit
 ]
 
 { #category : #'visiting - statements' }
