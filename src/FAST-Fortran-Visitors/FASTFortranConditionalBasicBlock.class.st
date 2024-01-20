@@ -54,7 +54,8 @@ FASTFortranConditionalBasicBlock >> statements [
 
 	self flag: 'should contain the real statement that lead to this block'.
 
-	^{ FASTFortranIfBlockStatement new
+	^{ FASTFortranIfLogicalStatement new
 		condition: self condition ;
+		statement: (FASTFortranStatementBlock new) ;
 		yourself }
 ]
