@@ -52,6 +52,9 @@ FASTFortranConditionalBasicBlock >> nextBlocks [
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> statements [
 
-	self flag: 'should conatin the conditional statement that lead to this block'.
-	^#()
+	self flag: 'should contain the real statement that lead to this block'.
+
+	^{ FASTFortranIfBlockStatement new
+		condition: self condition ;
+		yourself }
 ]
