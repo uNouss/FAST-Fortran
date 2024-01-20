@@ -53,10 +53,7 @@ FASTFortranCFGVisitor >> conditional: conditionalBlock branchValue: aValue forNo
 FASTFortranCFGVisitor >> findLabelledBlock: label [
 
 	^basicBlocks
-		detect: [ :bloc |
-			(bloc class = FASTFortranBasicBlock) and:
-			[ bloc firstStatement label = label ]
-		]
+		detect: [ :bloc | bloc firstStatement label = label ]
 		ifNone: [ nil ]
 ]
 
@@ -67,6 +64,14 @@ FASTFortranCFGVisitor >> initialize [
 
 	basicBlocks := OrderedCollection new.
 	labelReferences := Dictionary new
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> jumpStatement: label [
+
+	(self findLabelledBlock: label)
+		ifNil: [ self registerReference: currentBlock toLabel: label ]
+		ifNotNil: [ :labelledBlock | currentBlock nextBlock: labelledBlock ]
 ]
 
 { #category : #basicBlocks }
@@ -144,13 +149,9 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 	 - nextBlock of currentBlock is a block starting on the right label
 	"
 
-	| label |
-	super visitFASTFortranGoToStatement: aFASTFortranGoToStatement.
+	self visitFASTFortranTStatement: aFASTFortranGoToStatement.
 
-	label := aFASTFortranGoToStatement labelReferences anyOne label.
-	(self findLabelledBlock: label)
-		ifNil: [ self registerReference: currentBlock toLabel: label ]
-		ifNotNil: [ :labelledBlock | currentBlock nextBlock: labelledBlock ].
+	self jumpStatement: (aFASTFortranGoToStatement labelReferences anyOne label).
 
 	^ self newBasicBlock: FASTFortranBasicBlock
 ]
