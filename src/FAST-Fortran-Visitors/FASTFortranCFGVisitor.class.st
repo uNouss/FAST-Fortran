@@ -38,6 +38,18 @@ FASTFortranCFGVisitor >> conditionBlock: aFASTFortranStatement [
 ]
 
 { #category : #basicBlocks }
+FASTFortranCFGVisitor >> conditional: conditionalBlock branchValue: aValue forNode: aFASTFortranNode nextBlock: nextBlock [
+
+	aFASTFortranNode
+	ifNil: [ conditionalBlock nextBlock: nextBlock onValue: aValue ]
+	ifNotNil: [
+		aFASTFortranNode accept: self.
+		conditionalBlock nextBlock: currentBlock onValue: aValue.
+		currentBlock nextBlock: nextBlock
+	]
+]
+
+{ #category : #basicBlocks }
 FASTFortranCFGVisitor >> findLabelledBlock: label [
 
 	^basicBlocks
@@ -98,11 +110,16 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
 	"loop body"
-	aFASTFortranDoStatement statementBlock accept: self.
-	conditionalBlock nextBlock: currentBlock onValue: true.
-	currentBlock nextBlock: conditionalBlock.
-
-	conditionalBlock nextBlock: afterBlock onValue: false.
+	self
+		conditional: conditionalBlock
+		branchValue: true
+		forNode: aFASTFortranDoStatement statementBlock
+		nextBlock: conditionalBlock.
+	self
+		conditional: conditionalBlock
+		branchValue: false
+		forNode: nil
+		nextBlock: afterBlock.
 
 	currentBlock := afterBlock.
 
@@ -148,20 +165,21 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 
 	| conditionalBlock afterBlock |
 	currentBlock nextBlock:
-		(conditionalBlock := self conditionBlock: aFASTFortranIfBlockStatement).
-
+		(conditionalBlock := self conditionBlock:
+			                     aFASTFortranIfBlockStatement).
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
-
-	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
-	conditionalBlock nextBlock: currentBlock onValue: true.
-	currentBlock nextBlock: afterBlock.
-
-	aFASTFortranIfBlockStatement elseStatementBlock accept: self.
-	conditionalBlock nextBlock: currentBlock onValue: false.
-	currentBlock nextBlock: afterBlock.
+	self
+		conditional: conditionalBlock
+		branchValue: true
+		forNode: aFASTFortranIfBlockStatement thenStatementBlock
+		nextBlock: afterBlock.
+	self
+		conditional: conditionalBlock
+		branchValue: false
+		forNode: aFASTFortranIfBlockStatement elseStatementBlock
+		nextBlock: afterBlock.
 
 	currentBlock := afterBlock.
-
 	^ conditionalBlock
 ]
 
@@ -175,14 +193,18 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
-	"for the THEN Statement"
+	"create ablock for the THEN statement"
 	currentBlock := self newBasicBlock: FASTFortranBasicBlock.
-
-	aFASTFortranIfLogicalStatement statement accept: self.
-	conditionalBlock nextBlock: currentBlock onValue: true.
-	currentBlock nextBlock: afterBlock.
-
-	conditionalBlock nextBlock: afterBlock onValue: false.
+	self
+		conditional: conditionalBlock
+		branchValue: true
+		forNode: aFASTFortranIfLogicalStatement statement
+		nextBlock: afterBlock.
+	self
+		conditional: conditionalBlock
+		branchValue: false
+		forNode: nil
+		nextBlock: afterBlock.
 
 	currentBlock := afterBlock.
 
