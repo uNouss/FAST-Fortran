@@ -233,6 +233,7 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
 	"
 	INTEGER FUNCTION something()
 10	x = 1
+20	y = 1
 	GOTO 10
 	END
 	"
@@ -240,6 +241,9 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
 	self addStatement: (self
 		labelled: 10
 		statement: (self assignementStatement: #x value: 1)).
+	self addStatement: (self
+		labelled: 20
+		statement: (self assignementStatement: #y value: 1)).
 	self addStatement: (self gotoStatement: 10).
 
 	ast accept: visitor.
@@ -248,8 +252,13 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
 
 	self assert: blocks size equals: 2.
 
-	self assert: blocks first nextBlock equals: blocks first.
-	self assert: blocks second firstStatement equals: nil
+	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first  lastStatement equals: blocks first  firstStatement.
+	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks second lastStatement  class equals: FASTFortranGoToStatement.
+
+	self assert: blocks first nextBlock equals: blocks second.
+	self assert: blocks second nextBlock equals: blocks first
 
 ]
 

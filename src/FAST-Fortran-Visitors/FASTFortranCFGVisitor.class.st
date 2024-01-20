@@ -40,6 +40,14 @@ FASTFortranCFGVisitor >> checkForNewBasicBlock: aFASTFortranStatement [
 ]
 
 { #category : #basicBlocks }
+FASTFortranCFGVisitor >> cleanEmptyBlock [
+
+	basicBlocks removeAllSuchThat: [ :block |
+		block firstStatement isNil
+	]
+]
+
+{ #category : #basicBlocks }
 FASTFortranCFGVisitor >> conditionBlockWith: aFASTFortranExpression [
 
 	| newBlock |
