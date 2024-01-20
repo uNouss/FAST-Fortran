@@ -21,8 +21,31 @@ FASTFortranCFGVisualization >> buildLines: shapes [
 		withBorderAttachPoint;
 		shapes: shapes;
 		canvas: canvas;
-		connectToAll: [ :bb | bb nextBlocks ].
-	canvas edges do: #withBorder
+		connectToAll: [ :block | block nextBlocks ]
+]
+
+{ #category : #hooks }
+FASTFortranCFGVisualization >> makeShape: aBasicBlock [
+
+	^aBasicBlock isStart
+		ifTrue: [ RSEllipse new
+			radius: 10 ;
+			color: Color black ;
+		 	yourself
+		]
+		ifFalse: [ 
+			aBasicBlock isFinal
+				ifTrue: [ RSEllipse new
+					radius: 10 ;
+					color: Color transparent ;
+					border: (RSBorder new width: 4 ; color: Color black ; yourself) ;
+					yourself
+				]
+				ifFalse: [ 	RSBox new
+					size: 20 ;
+					yourself
+				]
+		]
 ]
 
 { #category : #'instance creation' }
@@ -30,8 +53,7 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 
 	| shapes |
 	canvas := RSCanvas new.
-	shapes := aFASTFortranCFGVisitor basicBlocks collect: [ :bb |
-		          self shapeFor: bb ].
+	shapes := aFASTFortranCFGVisitor basicBlocks collect: [ :bb | self shapeFor: bb ].
 
 	self buildLines: shapes.
 
@@ -60,10 +82,8 @@ FASTFortranCFGVisualization >> shapeColorFor: aBasicBlock [
 { #category : #hooks }
 FASTFortranCFGVisualization >> shapeFor: aBasicBlock [
 
-	^RSBox new
+	^(self makeShape: aBasicBlock)
 		model: aBasicBlock ;
-		color: (self shapeColorFor: aBasicBlock) ;
-		size: 20 ;
 		@ (RSPopup text: [ :block | block sourceCode ]) ;
 		yourself
 ]
