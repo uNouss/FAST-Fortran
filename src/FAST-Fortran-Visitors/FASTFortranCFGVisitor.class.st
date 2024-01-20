@@ -28,6 +28,15 @@ FASTFortranCFGVisitor >> chainRegisteredJumpsTo: aLabel [
 ]
 
 { #category : #basicBlocks }
+FASTFortranCFGVisitor >> checkLabelledConditionalStatement: aFASTFortranTStatement [
+	"simlar to #checkLabelledStatement: but does not set the #nextStatement of currentStatement"
+
+	aFASTFortranTStatement label ifNil: [ ^ self ].
+
+	self chainRegisteredJumpsTo: aFASTFortranTStatement label
+]
+
+{ #category : #basicBlocks }
 FASTFortranCFGVisitor >> checkLabelledStatement: aFASTFortranTStatement [
 	"Labelled statement start a new block (except if we are already at the start of a new one)
 	 Plus need to check whether we met a goto referring to this label earlier"
