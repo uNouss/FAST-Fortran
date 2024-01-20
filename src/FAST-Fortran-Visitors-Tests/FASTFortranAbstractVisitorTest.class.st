@@ -218,6 +218,15 @@ FASTFortranAbstractVisitorTest >> gotoStatement: label [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> ifArithmetic: condition negative: negativeLabel  null: nullLabel  positive: positiveLabel [ 
+	^FASTFortranIfArithmeticStatement new
+		condition: (self makeSimpleExpression: condition) ;
+		lessLabel:    (self labelReference: negativeLabel asString) ;
+		equalLabel:   (self labelReference: nullLabel asString) ;
+		greaterLabel: (self labelReference: positiveLabel asString).
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> ifBlock: condition then: thenBlock else: elseBlock [
 	^FASTFortranIfBlockStatement new
 		condition: condition ;

@@ -2,22 +2,17 @@ Class {
 	#name : #FASTFortranConditionalBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,
 	#instVars : [
-		'condition',
 		'nextBlocks'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
 
 { #category : #accessing }
-FASTFortranConditionalBasicBlock >> condition [
+FASTFortranConditionalBasicBlock >> addStatement: aStatement [
 
-	^ condition
-]
+	self isEmpty ifFalse: [ AssertionFailure signal: 'ConditionalBasicBlocks can have only one statement' ].
 
-{ #category : #accessing }
-FASTFortranConditionalBasicBlock >> condition: anObject [
-
-	condition := anObject
+	super addStatement: aStatement
 ]
 
 { #category : #initialization }
@@ -47,4 +42,16 @@ FASTFortranConditionalBasicBlock >> nextBlockForValue: aValue [
 FASTFortranConditionalBasicBlock >> nextBlocks [
 
 	^nextBlocks collect: [ :assoc | assoc value ]
+]
+
+{ #category : #printing }
+FASTFortranConditionalBasicBlock >> sourceCode [
+
+	^self firstStatement exportForBasicBlock
+]
+
+{ #category : #accessing }
+FASTFortranConditionalBasicBlock >> statement: aFASTFortranStatement [
+
+	self addStatement: aFASTFortranStatement 
 ]
