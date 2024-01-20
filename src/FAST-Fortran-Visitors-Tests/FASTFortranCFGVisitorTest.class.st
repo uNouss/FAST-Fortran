@@ -436,6 +436,32 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testFirstStatementIsIfArithmetic [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	IF (x) 10, 10, 10
+	END
+	"
+	self function: 'something' type: #integer.
+	self addStatement: (self
+			 ifArithmetic: #x
+			 negative: 10
+			 null: 10
+			 positive: 10).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 1.
+
+	self assert: blocks anyOne isStart.
+	self assert: blocks anyOne isFinal
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
 
 	| blocks |
