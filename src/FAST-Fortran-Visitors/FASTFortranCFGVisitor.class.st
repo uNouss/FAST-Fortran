@@ -110,6 +110,11 @@ FASTFortranCFGVisitor >> registerLabel: label reference: aBasicBlock [
 		add: aBasicBlock
 ]
 
+{ #category : #'visiting - expressions' }
+FASTFortranCFGVisitor >> visitFASTFortranBinaryExpression: aFASTFortranBinaryExpression [
+	"pruning the visit, no need to go inside expressions"
+]
+
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	"basic blocks for a LOOP
