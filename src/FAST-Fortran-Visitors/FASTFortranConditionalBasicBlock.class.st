@@ -48,3 +48,10 @@ FASTFortranConditionalBasicBlock >> nextBlocks [
 
 	^nextBlocks collect: [ :assoc | assoc value ]
 ]
+
+{ #category : #accessing }
+FASTFortranConditionalBasicBlock >> statements [
+
+	self flag: 'should conatin the conditional statement that lead to this block'.
+	^#()
+]

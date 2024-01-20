@@ -2,35 +2,18 @@ Class {
 	#name : #FASTFortranBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,
 	#instVars : [
-		'firstStatement',
-		'lastStatement',
+		'statements',
 		'nextBlock'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
 
-{ #category : #accessing }
-FASTFortranBasicBlock >> firstStatement [
+{ #category : #initialization }
+FASTFortranBasicBlock >> initialize [
 
-	^ firstStatement
-]
+	super initialize.
 
-{ #category : #accessing }
-FASTFortranBasicBlock >> firstStatement: anObject [
-
-	firstStatement := anObject
-]
-
-{ #category : #accessing }
-FASTFortranBasicBlock >> lastStatement [
-
-	^ lastStatement
-]
-
-{ #category : #accessing }
-FASTFortranBasicBlock >> lastStatement: anObject [
-
-	lastStatement := anObject
+	statements := OrderedCollection new
 ]
 
 { #category : #accessing }
@@ -49,4 +32,10 @@ FASTFortranBasicBlock >> nextBlock: anObject [
 FASTFortranBasicBlock >> nextBlocks [
 
 	^{ nextBlock }
+]
+
+{ #category : #accessing }
+FASTFortranBasicBlock >> statements [
+
+	^statements
 ]
