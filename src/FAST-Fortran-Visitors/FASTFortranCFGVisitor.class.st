@@ -185,6 +185,37 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
+
+	| conditionalBlock |
+	
+	currentBlock nextBlock:
+		(conditionalBlock := self newConditionalBlock: aFASTFortranIfArithmeticStatement).
+	self checkLabelledConditionalStatement: aFASTFortranIfArithmeticStatement.
+
+	self
+		conditional: conditionalBlock
+		branchValue: #negative
+		forNode: nil
+		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement lessLabel).
+	self
+		conditional: conditionalBlock
+		branchValue: #null
+		forNode: nil
+		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement equalLabel).
+
+	self
+		conditional: conditionalBlock
+		branchValue: #positive
+		forNode: nil
+		nextBlock: (self findLabelledBlock: aFASTFortranIfArithmeticStatement greaterLabel).
+
+	self newBasicBlock: FASTFortranBasicBlock.	
+
+	^conditionalBlock
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockStatement [
 	"basic blocks for a IF
 	 - ConditionalBlock that need to be chained as #nextBlock of current one
