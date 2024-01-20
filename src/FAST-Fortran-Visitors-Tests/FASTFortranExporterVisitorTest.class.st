@@ -593,11 +593,7 @@ FASTFortranExporterVisitorTest >> testGotoStatement [
 FASTFortranExporterVisitorTest >> testIfArithmeticStatement [
 	| stmt |
 
-	stmt := FASTFortranIfArithmeticStatement new
-		condition: (self scalarVariable: 'a') ;
-		lessLabel:    (self labelReference: '10') ;
-		equalLabel:   (self labelReference: '20') ;
-		greaterLabel: (self labelReference: '30').
+	stmt := self ifArithmetic: #a negative: 10 null: 20 positive: 30.
 
 	self
 		assertExport: stmt

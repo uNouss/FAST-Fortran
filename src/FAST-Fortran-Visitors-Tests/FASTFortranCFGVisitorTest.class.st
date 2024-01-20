@@ -175,13 +175,13 @@ FASTFortranCFGVisitorTest >> testBlockChainingBeforeConditionalBlock [
 	| blocks |
 	self functionWithConditional accept: visitor.
 
-	blocks := self findBasicBlocks: FASTFortranBasicBlock with: [ :basicBloc |
-		(basicBloc firstStatement class = FASTFortranVariableDeclarationStatement) and:
-		[basicBloc lastStatement class = FASTFortranAssignmentStatement ]
-	].
+	blocks := visitor basicBlocks.
 
-	self assert: blocks size equals: 1.
-	self assert: blocks anyOne nextBlock class equals: FASTFortranConditionalBasicBlock
+	self assert: blocks size equals: 5.
+
+	self assert: blocks first nextBlock equals: blocks second.
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock
+
 ]
 
 { #category : #'tests - cfg' }
@@ -360,6 +360,70 @@ FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
 
 	self assert: blocks anyOne firstStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne statements size equals: 1
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testGotoAfterLabelledIfStatement [
+
+	| blocks conditional jump |
+	"
+	INTEGER FUNCTION something(bool)
+	LOGICAL bool
+10	IF bool RETURN 0
+   GOTO 10
+	END
+	"
+	self function: #something type: #integer.
+	self addParameter: #bool type: #logical.
+	self addStatement:
+		(self labelled: 10 statement:
+			(self logicalIf: #bool statement: (self returnStatement: 0))).
+	self addStatement: (self gotoStatement: 10).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	jump := blocks detect: [ :block | block firstStatement class = FASTFortranGoToStatement ].
+
+	self assert: jump nextBlock equals: conditional
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testGotoBeforeLabelledIfStatement [
+
+	| blocks conditional jump |
+	"
+	INTEGER FUNCTION something(bool)
+	LOGICAL bool
+   GOTO 10
+10	IF bool RETURN 0
+	END
+	"
+	self function: #something type: #integer.
+	self addParameter: #bool type: #logical.
+	self addStatement: (self gotoStatement: 10).
+	self addStatement:
+		(self labelled: 10 statement:
+			(self logicalIf: #bool statement: (self returnStatement: 0))).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	jump := blocks detect: [ :block | block lastStatement class = FASTFortranGoToStatement ].
+
+	self assert: jump nextBlock equals: conditional
 ]
 
 { #category : #'tests - cfg' }
