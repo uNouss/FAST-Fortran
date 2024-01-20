@@ -75,7 +75,8 @@ FASTFortranCFGVisitor >> initialize [
 	super initialize.
 
 	basicBlocks := OrderedCollection new.
-	startNewBasicBlock := false
+	startNewBasicBlock := false.
+	labelledBlocks := Dictionary new
 ]
 
 { #category : #basicBlocks }
