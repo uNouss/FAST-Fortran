@@ -302,33 +302,6 @@ FASTFortranCFGVisitorTest >> testChainingGotoWhenBeforeLabelledBlock [
 
 ]
 
-{ #category : #tests }
-FASTFortranCFGVisitorTest >> testConditionalBlockSourceCode [
-
-	| blocks |
-	"
-	INTEGER FUNCTION something(x)
-	INTEGER x
-	IF (x .lt. 5) return x
-	END
-	"
-	self function: 'something' type: #integer.
-	self addParameter: #x type: #integer.
-	self addStatement: (self
-		logicalIf: (self binary: '.lt.' left: #x right: 5)
-		statement: (self returnStatement: #x)).
-	
-	ast accept: visitor.
-
-	blocks := visitor basicBlocks.
-
-	self assert: blocks size equals: 3.
-
-
-	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
-	self assert: blocks second sourceCode equals: '        if (x .lt. 5) '
-]
-
 { #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 
@@ -591,6 +564,64 @@ FASTFortranCFGVisitorTest >> testSourceCode [
 	self assert: blocks anyOne sourceCode equals: '        x = 1
         y = 1
 '
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testSourceCodeIfBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something(x)
+	INTEGER x
+	IF (x .lt. 5) THEN
+	return 0
+	ELSE
+	return x
+	END
+	"
+	self function: #something type: #integer.
+	self addParameter: #x type: #integer.
+	self addStatement: (self
+		ifBlock: (self binary: '.lt.' left: #x right: 5)
+		then: { self returnStatement: 0 }
+		else:  {self returnStatement: #x}).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+	self assert: blocks second sourceCode equals: 'if (x .lt. 5)'
+]
+
+{ #category : #tests }
+FASTFortranCFGVisitorTest >> testSourceCodeIfLogical [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something(x)
+	INTEGER x
+	IF (x .lt. 5) return x
+	END
+	"
+	self function: 'something' type: #integer.
+	self addParameter: #x type: #integer.
+	self addStatement: (self
+		logicalIf: (self binary: '.lt.' left: #x right: 5)
+		statement: (self returnStatement: #x)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+	self assert: blocks second sourceCode equals: 'if (x .lt. 5)'
 ]
 
 { #category : #tests }
