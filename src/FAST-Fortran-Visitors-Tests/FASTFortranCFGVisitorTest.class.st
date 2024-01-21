@@ -866,3 +866,41 @@ FASTFortranCFGVisitorTest >> testStartFinalBlocks [
 	self assert: blocks second isFinal.
 
 ]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testTwoSuccessiveLogicalIfs [
+
+	| blocks condX condY |
+	"
+	INTEGER FUNCTION something()
+	IF (x) RETURN 0
+	IF (y) RETURN 1
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self logicalIf: #x statement: (self returnStatement: 0)).
+	self addStatement: (self logicalIf: #y statement: (self returnStatement: 1)).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+	condX := blocks detect: [ :block |
+		(block class = FASTFortranConditionalBasicBlock) and: 
+		[block firstStatement condition name = 'x'] ].
+	condY := blocks detect: [ :block |
+		(block class = FASTFortranConditionalBasicBlock) and: 
+		[block firstStatement condition name = 'y'] ].
+
+	self assert: condX isStart.
+	self deny: condX isFinal.
+	self assert: (condX nextBlockForValue: true) nextBlock equals: condY.
+	self assert: (condX nextBlockForValue: false) equals: condY.
+
+	self deny: condY isStart.
+	self assert: condY isFinal.
+	self assert: (condX nextBlockForValue: true) nextBlock isFinal
+
+]

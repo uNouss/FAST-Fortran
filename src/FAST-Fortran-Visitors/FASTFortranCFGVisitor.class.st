@@ -120,11 +120,11 @@ FASTFortranCFGVisitor >> newConditionalBlock: aFASTFortranStatement [
 	previousBlock := currentBlock.
 
 	conditional := (self newBasicBlock: FASTFortranConditionalBasicBlock)
-		               statement: aFASTFortranStatement;
-		               yourself.
+		statement: aFASTFortranStatement;
+		yourself.
 
 	previousBlock isEmpty ifTrue: [
-		self substituteBlock: previousBlock with: nil ].
+		self substituteBlock: previousBlock with: conditional ].
 
 	^ conditional
 ]
