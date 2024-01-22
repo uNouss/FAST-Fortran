@@ -410,6 +410,51 @@ FASTFortranCFGVisitorTest >> testDoLoopCreatesConditionalBlock [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testExitInLoop [
+
+	| blocks loopBlock exitBlock returnBlock |
+	"
+	INTEGER FUNCTION something()
+	DO i = 1, 10
+     EXIT
+	  RETURN 0
+	END DO
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		doStatement:  #(i 1 10)
+		statements: { 
+			self exitStatement: nil .
+			self returnStatement: 0
+		}).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	loopBlock := blocks first.
+	exitBlock := blocks detect: [ :block | block firstStatement class = FASTFortranExitStatement ].
+	returnBlock := blocks detect: [ :block | block firstStatement class = FASTFortranReturnStatement ].
+
+	self assert: loopBlock class equals: FASTFortranConditionalBasicBlock.
+	self assert: loopBlock isStart.
+	self assert: loopBlock isFinal.
+	self assert: (loopBlock nextBlockForValue: true) equals: exitBlock.
+
+	self deny: exitBlock isStart.
+	self deny: exitBlock isFinal.
+	self assert: exitBlock nextBlock equals: blocks first.
+
+	self deny: returnBlock isStart.
+	self deny: returnBlock isFinal.
+	self assert: returnBlock nextBlock equals: loopBlock
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
 
 	| blocks conditional |
@@ -431,8 +476,13 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
 
 	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
 
-	self assert: conditional isStart
+	self assert: conditional isStart.
 
+	self deny: (blocks first nextBlockForValue: true) isStart.
+	self deny: (blocks first nextBlockForValue: true) isFinal.
+
+	self deny: (blocks first nextBlockForValue: false) isStart.
+	self assert: (blocks first nextBlockForValue: false) isFinal.
 ]
 
 { #category : #'tests - cfg' }
@@ -459,6 +509,41 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsIfArithmetic [
 
 	self assert: blocks anyOne isStart.
 	self assert: blocks anyOne isFinal
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testFirstStatementIsLoop [
+
+	| blocks conditional |
+	"
+	INTEGER FUNCTION something()
+	DO i = 1, 10
+	  RETURN 0
+	END DO
+	RETURN 5
+	END
+	"
+	self function: 'something' type: #integer.
+	self addStatement: (self
+		doStatement:  #(i 1 10)
+		statements: { self returnStatement: 0}).
+	self addStatement: (self returnStatement: 5).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+
+	self assert: conditional isStart.
+.
+	self deny: (blocks first nextBlockForValue: true) isStart.
+	self deny: (blocks first nextBlockForValue: true) isFinal.
+
+	self deny: (blocks first nextBlockForValue: false) isStart.
+	self assert: (blocks first nextBlockForValue: false) isFinal.
 ]
 
 { #category : #'tests - cfg' }

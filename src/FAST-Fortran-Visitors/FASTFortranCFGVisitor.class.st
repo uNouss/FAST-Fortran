@@ -9,7 +9,8 @@ Class {
 	#instVars : [
 		'basicBlocks',
 		'currentBlock',
-		'labelReferences'
+		'labelReferences',
+		'parentLoopBlocks'
 	],
 	#category : #'FAST-Fortran-Visitors-CFG'
 }
@@ -60,11 +61,12 @@ FASTFortranCFGVisitor >> cleanEmptyBlock [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> conditional: conditionalBlock branchValue: aValue forNode: aFASTFortranNode nextBlock: nextBlock [
 
+	| bodyBlock |
 	aFASTFortranNode
 	ifNil: [ conditionalBlock nextBlock: nextBlock onValue: aValue ]
 	ifNotNil: [
-		aFASTFortranNode accept: self.
-		conditionalBlock nextBlock: currentBlock onValue: aValue.
+		bodyBlock := aFASTFortranNode accept: self.
+		conditionalBlock nextBlock: bodyBlock onValue: aValue.
 		currentBlock nextBlock: nextBlock
 	]
 ]
@@ -89,13 +91,23 @@ FASTFortranCFGVisitor >> findLabelledBlock: aFASTFortranLabelReference setter: s
 		]
 ]
 
+{ #category : #basicBlocks }
+FASTFortranCFGVisitor >> findParentLoopBlock: aLabel [
+	"if there is no label to the EXIT, take the first loop block in the stack
+	 otherwise, search for the loop with the right label"
+
+	aLabel ifNil: [ ^parentLoopBlocks top ].
+	^nil
+]
+
 { #category : #initialization }
 FASTFortranCFGVisitor >> initialize [
 
 	super initialize.
 
 	basicBlocks := OrderedCollection new.
-	labelReferences := Dictionary new
+	labelReferences := Dictionary new.
+	parentLoopBlocks := Stack new
 ]
 
 { #category : #basicBlocks }
@@ -140,9 +152,6 @@ FASTFortranCFGVisitor >> registerReference: setterAction toLabel: label [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> substituteBlock: oldBlock with: newBlockOrNil [
 
-	newBlockOrNil
-	ifNotNil: [ newBlockOrNil isStart: oldBlock isStart].
-
 	basicBlocks do: [ :block |
 		(block nextBlocks includes: oldBlock)
 		ifTrue: [ block substituteBlock: oldBlock with: newBlockOrNil ]
@@ -166,6 +175,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 	| conditionalBlock afterBlock |
 	currentBlock nextBlock:
 		(conditionalBlock := self newConditionalBlock: aFASTFortranDoStatement).
+	parentLoopBlocks push: conditionalBlock.
 
 	afterBlock := self newBasicBlock: FASTFortranBasicBlock.
 
@@ -181,6 +191,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 		forNode: nil
 		nextBlock: afterBlock.
 
+	parentLoopBlocks pop.
 	currentBlock := afterBlock.
 
 	^ conditionalBlock
@@ -188,13 +199,16 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 { #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatement [
-	"breaks out of a loop:
-	 - ends currentBlock (contains this statement)
-	 - nextBlock of currentBlock is nextBlock of 'parent'
-	"
+	"looks a bit like a GOTO, but don'e need tospecify the label (goes to enclosing loop)"
 
-	self flag: #TODO.
-	super visitFASTFortranExitStatement: aFASTFortranExitStatement
+	| exitBlock |
+	self visitFASTFortranTStatement: aFASTFortranExitStatement.
+
+	exitBlock := currentBlock.
+
+	exitBlock nextBlock: (self findParentLoopBlock: nil"aFASTFortranExitStatement label").
+
+	^ self newBasicBlock: FASTFortranBasicBlock
 ]
 
 { #category : #'visiting - statements' }

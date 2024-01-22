@@ -177,6 +177,14 @@ FASTFortranAbstractVisitorTest >> entity: owner parameters: aCollection [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> exitStatement: label [
+
+	^FASTFortranExitStatement new
+		"label: (self makeSimpleExpression: label) ;
+		yourself"
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> externalStatement: aName [
 	^FASTFortranExternalStatement new
 		name: aName ;
