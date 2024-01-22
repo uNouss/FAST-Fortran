@@ -707,6 +707,47 @@ FASTFortranCFGVisitorTest >> testIfStatementThenPartIsABasicBlock [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testIfStatementWithoutElsePart [
+
+	| conditional blocks then last |
+	"
+	CHARACTER*20 FUNCTION fctBigSmall( x)
+	INTEGER x
+
+	IF x .gt. 5 THEN
+	x = 0
+	END IF
+
+	RETURN '""done""'
+	END
+	"
+	self function: #fctBigSmall type: #(character 20).
+	self addParameter: #x type: #integer.
+	self addStatement:
+		(self
+			ifBlock: (self binary: '.gt.' left: #x right: 5)
+			then: { self assignementStatement: #x value: 0 } 
+			else: nil).
+	self addStatement: (self returnStatement: '"done"').
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	then := blocks detect: [ :block | block firstStatement class = FASTFortranAssignmentStatement ].
+	last := blocks detect: [ :block | block firstStatement class = FASTFortranReturnStatement ].
+
+	self assert: (conditional nextBlockForValue: true) equals: then.
+	self assert: (conditional nextBlockForValue: false) equals: last.
+
+	self assert: then nextBlock equals: last.
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testLabelledIfStatementStartsNewBlock [
 
 	| blocks |
