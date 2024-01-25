@@ -87,7 +87,7 @@ FASTFortranAbstractVisitorTest >> callStatement: aName arguments: aCollection [
 
 	^FASTFortranCallStatement new
 		name: aName ;
-		arguments: aCollection ;
+		arguments: (aCollection collect: [ :expr | self makeSimpleExpression: expr]) ;
 		startPos: 1 ;
 		endPos: aName size + 4 ;
 		yourself
@@ -195,13 +195,10 @@ FASTFortranAbstractVisitorTest >> externalStatement: aName [
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> functionCall: aName arguments: aCollection [
-	"end position is approximate, test should adjust if a real value is needed"
 
 	^FASTFortranFunctionCall new
 		name: aName ;
-		arguments: aCollection ;
-		startPos: 1 ;
-		endPos: aName size + 3 ;
+		arguments: (aCollection collect: [:exp | self makeSimpleExpression: exp]) ;
 		yourself
 ]
 

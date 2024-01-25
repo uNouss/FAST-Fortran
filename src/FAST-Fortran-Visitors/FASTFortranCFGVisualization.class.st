@@ -25,6 +25,7 @@ FASTFortranCFGVisualization >> buildLegend [
 	legend text: 'Final block' withShape: self finalBlockShape.
 	legend text: 'start & final block' withShape: self startAndFinalBlockShape.
 	legend text: 'Normal block' withShape: self normalBlockShape.
+	legend text: 'Conditional block' withShape: (self normalBlockShape color: self conditionalBlockColor).
 	legend build
 ]
 
@@ -38,7 +39,12 @@ FASTFortranCFGVisualization >> buildLines: shapes [
 		connectToAll: [ :block | block nextBlocks ]
 ]
 
-{ #category : #hooks }
+{ #category : #'accessing - shapes' }
+FASTFortranCFGVisualization >> conditionalBlockColor [
+	^Color blue
+]
+
+{ #category : #'accessing - shapes' }
 FASTFortranCFGVisualization >> finalBlockShape [
 
 	^RSEllipse new
@@ -51,7 +57,7 @@ FASTFortranCFGVisualization >> finalBlockShape [
 		yourself
 ]
 
-{ #category : #hooks }
+{ #category : #'accessing - shapes' }
 FASTFortranCFGVisualization >> normalBlockShape [
 
 	^RSBox new
@@ -78,7 +84,7 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 	^ canvas
 ]
 
-{ #category : #hooks }
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> shapeFor: aBasicBlock [
 
 	| shape |
@@ -92,14 +98,17 @@ FASTFortranCFGVisualization >> shapeFor: aBasicBlock [
 				ifTrue: [ self finalBlockShape ]
 				ifFalse: [ self normalBlockShape ]
 		].
-	
+	(aBasicBlock class = FASTFortranConditionalBasicBlock)
+		ifTrue: [ shape color: self conditionalBlockColor ].
+
 	shape model: aBasicBlock.
 	shape @ (RSPopup text: [ :block | block sourceCode ]).
+	shape @ RSDraggable.
 
 	^shape
 ]
 
-{ #category : #hooks }
+{ #category : #'accessing - shapes' }
 FASTFortranCFGVisualization >> startAndFinalBlockShape [
 
 	^RSComposite new
@@ -113,7 +122,7 @@ FASTFortranCFGVisualization >> startAndFinalBlockShape [
 
 ]
 
-{ #category : #hooks }
+{ #category : #'accessing - shapes' }
 FASTFortranCFGVisualization >> startBlockShape [
 
 	^RSEllipse new

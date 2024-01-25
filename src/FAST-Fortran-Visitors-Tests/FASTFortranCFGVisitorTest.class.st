@@ -121,8 +121,56 @@ FASTFortranCFGVisitorTest >> newVisitor [
 	^FASTFortranCFGVisitor new
 ]
 
+{ #category : #'entity creation' }
+FASTFortranCFGVisitorTest >> subroutine: name [
+
+	ast := super subroutine: name.
+
+	^ast
+
+]
+
 { #category : #'tests - cfg' }
-FASTFortranCFGVisitorTest >> testBlockChainingAfterConditionalBlock [
+FASTFortranCFGVisitorTest >> testArithmeticGotoAfterLabel [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+10	x = 1
+20	y = 1
+	IF (x) 10, 20, 30
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement:
+		 (self labelled: 10 statement:
+			(self assignementStatement: #x value: 1)).
+	self addStatement:
+		(self labelled: 20 statement:
+			(self assignementStatement: #y value: 1)).
+	self addStatement: (self ifArithmetic: #x negative: 10 null: 20 positive: 20).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first  statements size equals: 1.
+
+	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks second statements size equals: 1.
+
+	self assert: blocks third class equals: FASTFortranConditionalBasicBlock.
+	self assert: (blocks third nextBlockForValue: #negative) equals: blocks first.
+	self assert: (blocks third nextBlockForValue: #null) equals: blocks second.
+	self assert: (blocks third nextBlockForValue: #positive) equals: blocks second.
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testBlockAfterConditionalBlock [
 
 	| conditional |
 	self functionWithConditional accept: visitor.
@@ -164,8 +212,8 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
 
 	self assert: conditional nextBlocks size equals: 2.
 	self
-		assert: conditional nextBlocks first nextBlock
-		equals: conditional nextBlocks second
+		assert: (conditional nextBlockForValue: true) nextBlock
+		equals: (conditional nextBlockForValue: false)
 	
 ]
 
@@ -228,42 +276,49 @@ FASTFortranCFGVisitorTest >> testBlockChainingForDoLoopConditional [
 ]
 
 { #category : #'tests - cfg' }
-FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenAfterLabel [
+FASTFortranCFGVisitorTest >> testCallStatement [
 
-	| blocks |
 	"
-	INTEGER FUNCTION something()
-10	x = 1
-20	y = 1
-	IF (x) 10, 20, 30
-	END
-	"
-	self function: #something type: #integer.
-	self addStatement:
-		 (self labelled: 10 statement:
-			(self assignementStatement: #x value: 1)).
-	self addStatement:
-		(self labelled: 20 statement:
-			(self assignementStatement: #y value: 1)).
-	self addStatement: (self ifArithmetic: #x negative: 10 null: 20 positive: 20).
+      SUBROUTINE TXT2TB
+      INTEGER*8OOT
+      IF (.NOT.GETCLE('MODE')) CALL ERREUR(4,'MOT-CLE MODE ATTENDU...')
+      CALL GETENT(MODE,0.,10000,4,IERR,'Mode de lecture-traitement des donnees ')
+      END
+"
+	| blocks callErreur callGetent |
+	self subroutine: 'TXT2TB'.
+	self addStatement: (self declarationStatement: #OOT type: #(integer 8)).
+	self addStatement: (self
+		logicalIf: (self unary: '.not.' operand: (self functionCall: 'GETCLE' arguments: { 'mode' } ))
+		statement: (self callStatement: 'erreur' arguments: {4 . 'MOT-CLE MODE ATTENDU...'}) ).
+	self addStatement: (self
+		callStatement: 'getent'
+		arguments: { #MODE . 0 . 10000 . 4 . #IERR .'Mode de lecture-traitement des donnees '}).
 
 	ast accept: visitor.
 
 	blocks := visitor basicBlocks.
 
-	self assert: blocks size equals: 3.
+	self assert: blocks size equals: 4.
 
-	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first  firstStatement class equals: FASTFortranVariableDeclarationStatement.
 	self assert: blocks first  statements size equals: 1.
 
-	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: blocks second statements size equals: 1.
+	callErreur := blocks detect: [ :block |
+		(block firstStatement class = FASTFortranCallStatement) and:
+		[ block firstStatement name = 'erreur' ] ].
+	callGetent := blocks detect: [ :block |
+		(block firstStatement class = FASTFortranCallStatement) and:
+		[ block firstStatement name = 'getent' ] ].
 
-	self assert: blocks third class equals: FASTFortranConditionalBasicBlock.
-	self assert: (blocks third nextBlockForValue: #negative) equals: blocks first.
-	self assert: (blocks third nextBlockForValue: #null) equals: blocks second.
-	self assert: (blocks third nextBlockForValue: #positive) equals: blocks second.
+	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
 
+	self assert: (blocks second nextBlockForValue: true) equals: callErreur.
+	self assert: (blocks second nextBlockForValue: false) equals: callGetent.
+
+	self assert: callErreur nextBlock equals: callGetent.
+
+	self assert: callGetent isFinal
 ]
 
 { #category : #'tests - cfg' }
@@ -295,42 +350,6 @@ FASTFortranCFGVisitorTest >> testChainingArithmeticGotoWhenBeforeLabel [
 	self assert: (blocks first nextBlockForValue: #negative) equals: blocks second.
 	self assert: (blocks first nextBlockForValue: #null)     equals: blocks second.
 	self assert: (blocks first nextBlockForValue: #positive) equals: blocks second.
-
-]
-
-{ #category : #'tests - cfg' }
-FASTFortranCFGVisitorTest >> testChainingGotoWhenAfterLabelledBlock [
-
-	| blocks |
-	"
-	INTEGER FUNCTION something()
-10	x = 1
-20	y = 1
-	GOTO 10
-	END
-	"
-	self function: #something type: #integer.
-	self addStatement: (self
-		labelled: 10
-		statement: (self assignementStatement: #x value: 1)).
-	self addStatement: (self
-		labelled: 20
-		statement: (self assignementStatement: #y value: 1)).
-	self addStatement: (self gotoStatement: 10).
-
-	ast accept: visitor.
-
-	blocks := visitor basicBlocks.
-
-	self assert: blocks size equals: 2.
-
-	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: blocks first statements size equals: 1.
-	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
-	self assert: blocks second lastStatement  class equals: FASTFortranGoToStatement.
-
-	self assert: blocks first nextBlock equals: blocks second.
-	self assert: blocks second nextBlock equals: blocks first
 
 ]
 
@@ -568,6 +587,42 @@ FASTFortranCFGVisitorTest >> testFirstStatementOfBlockIsLabelled [
 
 	self assert: blocks anyOne firstStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne statements size equals: 1
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testGotoAfterLabelledBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+10	x = 1
+20	y = 1
+	GOTO 10
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		labelled: 10
+		statement: (self assignementStatement: #x value: 1)).
+	self addStatement: (self
+		labelled: 20
+		statement: (self assignementStatement: #y value: 1)).
+	self addStatement: (self gotoStatement: 10).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first statements size equals: 1.
+	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks second lastStatement  class equals: FASTFortranGoToStatement.
+
+	self assert: blocks first nextBlock equals: blocks second.
+	self assert: blocks second nextBlock equals: blocks first
+
 ]
 
 { #category : #'tests - cfg' }
@@ -991,6 +1046,63 @@ FASTFortranCFGVisitorTest >> testStartFinalBlocks [
 	self deny:   blocks second isStart.
 	self assert: blocks second isFinal.
 
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testThenWithConditionalAndBasicBlock [
+
+	"
+      SUBROUTINE TXT2TB
+      ITAB1 = 0
+      IF (MODE.EQ.5) THEN
+      IF (.NOT.GETCLE('ITABT')) CALL ERREUR(4,'MOT-CLE ITABT...')
+      CALL GETOBJ('TABLE   ',ITAB1)
+      ENDIF
+      END
+"
+	| blocks ifMode ifGetcle callErreur callGetobj astThenStatementBlock |
+	astThenStatementBlock := {
+		self
+			logicalIf: (self unary: '.not.' operand: (self functionCall: 'GETCLE' arguments: { 'ITABT' } ))
+			statement: (self callStatement: 'erreur' arguments: {4 . 'MOT-CLE ATTENDU...'})
+		.
+		self callStatement: 'GETOBJ' arguments: {'TABLE   ' . #ITAB1 }
+		}.
+
+	self subroutine: 'TXT2TB'.
+	self addStatement: (self assignementStatement: #ITAB1 value: 0).
+	self addStatement: (self ifBlock: (self binary: '.eq.' left: #mode right: 5) then: astThenStatementBlock else: nil	).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 5.
+
+	self assert: blocks first  firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first  statements size equals: 1.
+
+	ifMode := blocks detect: [ :block |
+		(block class = FASTFortranConditionalBasicBlock) and:
+		[ block firstStatement condition class = FASTFortranBinaryExpression ] ].
+	ifGetcle := blocks detect: [ :block |
+		(block class = FASTFortranConditionalBasicBlock) and:
+		[ block firstStatement condition class = FASTFortranUnaryExpression ] ].
+	callErreur := blocks detect: [ :block |
+		(block firstStatement class = FASTFortranCallStatement) and:
+		[ block firstStatement name = 'erreur' ] ].
+	callGetobj := blocks detect: [ :block |
+		(block firstStatement class = FASTFortranCallStatement) and:
+		[ block firstStatement name = 'GETOBJ' ] ].
+
+	self assert: blocks second equals: ifMode.
+	self assert: ifMode isFinal.
+	self assert: (ifMode nextBlockForValue: true) equals: ifGetcle.
+
+	self assert: (ifGetcle nextBlockForValue: true) equals: callErreur.
+	self assert: (ifGetcle nextBlockForValue: false) equals: callGetobj.
+
+	self assert: callGetobj isFinal
 ]
 
 { #category : #'tests - cfg' }
