@@ -347,7 +347,7 @@ FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
 	].
 	currentBlock addStatement: aFASTFortranTStatement.
 
-	super visitFASTFortranTStatement: aFASTFortranTStatement.
+	"super visitFASTFortranTStatement: aFASTFortranTStatement."
 ]
 
 { #category : #'visiting - expressions' }
