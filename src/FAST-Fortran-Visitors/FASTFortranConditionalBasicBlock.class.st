@@ -20,28 +20,33 @@ FASTFortranConditionalBasicBlock >> initialize [
 
 	super initialize.
 
-	nextBlocks := OrderedCollection new: 2
+	nextBlocks := Dictionary new: 3
+]
+
+{ #category : #accessing }
+FASTFortranConditionalBasicBlock >> isFinal [
+
+	super isFinal ifTrue: [ ^true ].
+	nextBlocks valuesDo: [ :nextBlock | nextBlock ifNil: [ ^true ] ].
+	^false
 ]
 
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlock: aBlock onValue: aValue [
 
-	nextBlocks add: (aValue -> aBlock)
+	nextBlocks at: aValue put: aBlock
 ]
 
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlockForValue: aValue [
 
-	^nextBlocks
-		detect: [ :assoc | assoc key = aValue ]
-		ifOne: [  :assoc | assoc value ]
-		ifNone: [ nil ]
+	^nextBlocks at: aValue ifAbsent: [ nil ]
 ]
 
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlocks [
 
-	^nextBlocks collect: [ :assoc | assoc value ]
+	^nextBlocks values
 ]
 
 { #category : #printing }
@@ -54,4 +59,12 @@ FASTFortranConditionalBasicBlock >> sourceCode [
 FASTFortranConditionalBasicBlock >> statement: aFASTFortranStatement [
 
 	self addStatement: aFASTFortranStatement 
+]
+
+{ #category : #accessing }
+FASTFortranConditionalBasicBlock >> substituteBlock: oldBlock with: newBlockOrNil [
+
+	nextBlocks do: [ :assoc |
+		(assoc value = oldBlock) ifTrue: [ assoc value: newBlockOrNil ]
+	]
 ]

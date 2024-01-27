@@ -453,7 +453,7 @@ FASTFortranExporterVisitorTest >> testEquivalenceStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testExitStatement [
 	| stmt |
-	stmt := FASTFortranExitStatement new.
+	stmt := self exitStatement: nil.
 
 	self
 		assertExport: stmt

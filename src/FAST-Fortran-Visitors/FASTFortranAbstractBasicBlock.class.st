@@ -78,3 +78,9 @@ FASTFortranAbstractBasicBlock >> statements [
 
 	^statements
 ]
+
+{ #category : #convenience }
+FASTFortranAbstractBasicBlock >> substituteBlock: oldBlock with: newBlock [
+
+	self subclassResponsibility 
+]
