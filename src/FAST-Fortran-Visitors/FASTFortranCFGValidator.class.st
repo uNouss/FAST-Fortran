@@ -1,6 +1,6 @@
 Class {
 	#name : #FASTFortranCFGValidator,
-	#superclass : #FASTAbstractValidator,
+	#superclass : #AnObsoleteFASTAbstractValidator,
 	#instVars : [
 		'importer'
 	],
@@ -9,7 +9,7 @@ Class {
 
 { #category : #utilities }
 FASTFortranCFGValidator >> getASTFromString: string [
-	^importer getFASTFor: string
+	^(importer getFASTFor: string) first
 ]
 
 { #category : #initialization }
@@ -30,17 +30,15 @@ FASTFortranCFGValidator >> isSourceFile: aFileReference [
 { #category : #testing }
 FASTFortranCFGValidator >> runOnSourceFile: aFileReference [
 
-	| ast cfg |
+	| ast |
 	aFileReference fullName traceCr.
 
-	[
+	["1halt."
 		ast := self getASTFromFileReference: aFileReference.
-
-		cfg := ast accept: FASTFortranCFGVisitor new.
-		(FASTFortranCFGChecker on: cfg)
-		ifNotEmpty: [ '  ** Found errors **' traceCr ].
 	]
 	on: Error
 	do: [ '  ** NOT PARSEABLE **' traceCr ].
 
+	(FASTFortranCFGChecker on: (ast accept: FASTFortranCFGVisitor new))
+	ifNotEmpty: [ '  ** Found errors **' traceCr ].
 ]

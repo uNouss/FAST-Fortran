@@ -5,6 +5,15 @@ Class {
 }
 
 { #category : #comparison }
+FASTFortranModelComparator >> ast: node1 acceptableDifferenceTo: node2 [
+	"import not complete:
+	 - close statement
+	 - save statement"
+
+	^{FASTFortranCloseStatement }	 includes: node1 class
+]
+
+{ #category : #comparison }
 FASTFortranModelComparator >> ast: node1 acceptableDifferenceTo: node2 property: property [
 	"returns nil if the difference is not acceptable
 	 otherwise, must return  a block testing where the comparison process might resume"
