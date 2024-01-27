@@ -15,6 +15,24 @@ FASTFortranCFGVisualization class >> on: aFASTFortranCFGVisitor [
 ]
 
 { #category : #'instance creation' }
+FASTFortranCFGVisualization >> basicBlockShape: aBasicBlock [
+
+	| shape |
+	shape := aBasicBlock isStart
+		         ifTrue: [
+			         aBasicBlock isFinal
+				         ifTrue: [ self startAndFinalBlockShape ]
+				         ifFalse: [ self startBlockShape ] ]
+		         ifFalse: [
+			         aBasicBlock isFinal
+				         ifTrue: [ self finalBlockShape ]
+				         ifFalse: [ self normalBlockShape ] ].
+	aBasicBlock class = FASTFortranConditionalBasicBlock ifTrue: [
+		shape color: self conditionalBlockColor ].
+	^ shape
+]
+
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> buildLegend [
 	| legend |
 	legend := RSLegend new.
@@ -32,11 +50,20 @@ FASTFortranCFGVisualization >> buildLegend [
 { #category : #'instance creation' }
 FASTFortranCFGVisualization >> buildLines: shapes [
 
-	RSLineBuilder arrowedLine
+	| marker bldr |
+	marker := RSArrowedLine new defaultHead.
+
+	bldr := RSLineBuilder arrowedLine.
+	bldr
+		verticalBezier ;  "Bezier lines"
+		markerEnd: marker ;  "Bezier lines"
+		markerStart: (RSLabel new text: 'true') ;
 		withBorderAttachPoint;
 		shapes: shapes;
 		canvas: canvas;
-		connectToAll: [ :block | block nextBlocks ]
+		connectToAll: [ :block | block nextBlocks ].
+	
+	bldr shape markerMid: (RSLabel new text: 'true')
 ]
 
 { #category : #'accessing - shapes' }
@@ -88,24 +115,13 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 FASTFortranCFGVisualization >> shapeFor: aBasicBlock [
 
 	| shape |
-	shape := aBasicBlock isStart
-		ifTrue: [ aBasicBlock isFinal
-			ifTrue: [ self startAndFinalBlockShape ]
-			ifFalse: [ self startBlockShape ]
-		]
-		ifFalse: [ 
-			aBasicBlock isFinal
-				ifTrue: [ self finalBlockShape ]
-				ifFalse: [ self normalBlockShape ]
-		].
-	(aBasicBlock class = FASTFortranConditionalBasicBlock)
-		ifTrue: [ shape color: self conditionalBlockColor ].
+	shape := self basicBlockShape: aBasicBlock.
 
 	shape model: aBasicBlock.
 	shape @ (RSPopup text: [ :block | block sourceCode ]).
 	shape @ RSDraggable.
 
-	^shape
+	^ shape
 ]
 
 { #category : #'accessing - shapes' }
