@@ -1,3 +1,6 @@
+"
+Calls `FASTFortranCFGChecker` on all Fortran files in a directory and reports errors
+"
 Class {
 	#name : #FASTFortranCFGValidator,
 	#superclass : #FASTAbstractValidator,

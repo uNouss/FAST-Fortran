@@ -1,3 +1,11 @@
+"
+A conditional or branching block in the CFG
+
+It contains one statement which is a conditional or branching statement
+
+It has several successors, each associated to a value
+For example an if-statement will be represented has a ConditionalBasicBlock and will have two succesors associated respectively to the `true` and `false` values
+"
 Class {
 	#name : #FASTFortranConditionalBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,

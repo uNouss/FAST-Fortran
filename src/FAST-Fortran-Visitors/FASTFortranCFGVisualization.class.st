@@ -1,3 +1,6 @@
+"
+Creates a Roassal visualization of a CFG
+"
 Class {
 	#name : #FASTFortranCFGVisualization,
 	#superclass : #Object,

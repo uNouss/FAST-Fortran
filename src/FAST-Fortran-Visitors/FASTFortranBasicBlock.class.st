@@ -1,3 +1,8 @@
+"
+A ""normal"" basic block in the CFG
+
+it contains a list of statement (without branching) and have a successor block (#nextBlock)
+"
 Class {
 	#name : #FASTFortranBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,

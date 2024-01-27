@@ -1,3 +1,13 @@
+"
+Represent a block in the control flow graph
+
+a block has
+- #statements in a FAST ast that it contains
+- properties
+  - #start: for starting block in the CFG
+  - #final for final blocks in the CFG
+- #nextBlocks that come after it in the CFG
+"
 Class {
 	#name : #FASTFortranAbstractBasicBlock,
 	#superclass : #Object,

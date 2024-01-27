@@ -1,3 +1,9 @@
+"
+Checks some well-formedness rules on a CFG
+
+- #oneStart: there is only one startBlock in the CFG
+- #dead rule: All BasicBlocks in the CFG have an ancestor except the startBlock
+"
 Class {
 	#name : #FASTFortranCFGChecker,
 	#superclass : #Object,
