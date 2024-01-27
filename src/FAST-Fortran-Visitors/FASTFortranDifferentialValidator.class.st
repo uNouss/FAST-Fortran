@@ -1,6 +1,6 @@
 Class {
 	#name : #FASTFortranDifferentialValidator,
-	#superclass : #AnObsoleteFASTAbstractDifferentialValidator,
+	#superclass : #FASTAbstractDifferentialValidator,
 	#instVars : [
 		'importer'
 	],
