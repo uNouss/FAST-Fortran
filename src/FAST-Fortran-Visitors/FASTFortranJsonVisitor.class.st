@@ -262,6 +262,16 @@ FASTFortranJsonVisitor >> visitCharacterBaseType: aString [
 ]
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitCloseStatement: aCloseNode [
+
+	| data |
+	data := super visitCloseStatement: aCloseNode.
+
+	^self newEntity: FASTFortranCloseStatement atPosition: data first
+
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitCommonGroup: aCommonGroupNode [
 	"#(span name varList)"
 
@@ -1097,6 +1107,16 @@ FASTFortranJsonVisitor >> visitRewindStatement: aRewindStatementNode [
 	^(self newEntity: FASTFortranRewindStatement atPosition: data first)
 		ioParameters: data second ;
 		yourself
+
+]
+
+{ #category : #'visiting statement' }
+FASTFortranJsonVisitor >> visitSaveStatement: aSaveNode [
+
+	| data |
+	data := super visitSaveStatement: aSaveNode.
+
+	^self newEntity: FASTFortranSaveStatement atPosition: data first
 
 ]
 
