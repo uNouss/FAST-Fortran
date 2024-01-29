@@ -30,7 +30,7 @@ FASTFortranCFGVisualization >> basicBlockShape: aBasicBlock [
 			         aBasicBlock isFinal
 				         ifTrue: [ self finalBlockShape ]
 				         ifFalse: [ self normalBlockShape ] ].
-	aBasicBlock class = FASTFortranConditionalBasicBlock ifTrue: [
+	aBasicBlock isConditional ifTrue: [
 		shape color: self conditionalBlockColor ].
 	^ shape
 ]

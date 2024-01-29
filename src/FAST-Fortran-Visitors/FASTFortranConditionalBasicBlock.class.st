@@ -31,6 +31,12 @@ FASTFortranConditionalBasicBlock >> initialize [
 	nextBlocks := Dictionary new: 3
 ]
 
+{ #category : #testing }
+FASTFortranConditionalBasicBlock >> isConditional [
+
+	^true
+]
+
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> isFinal [
 

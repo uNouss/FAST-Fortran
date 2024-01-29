@@ -42,6 +42,12 @@ FASTFortranAbstractBasicBlock >> initialize [
 ]
 
 { #category : #testing }
+FASTFortranAbstractBasicBlock >> isConditional [
+
+	^false
+]
+
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isEmpty [
 
 	^self statements isEmpty

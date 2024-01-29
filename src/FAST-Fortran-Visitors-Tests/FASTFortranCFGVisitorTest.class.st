@@ -493,7 +493,7 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
 
 	self assert: blocks size equals: 3.
 
-	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	conditional := blocks detect: [ :block | block isConditional ].
 
 	self assert: conditional isStart.
 
@@ -554,7 +554,7 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsLoop [
 
 	self assert: blocks size equals: 3.
 
-	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	conditional := blocks detect: [ :block | block isConditional ].
 
 	self assert: conditional isStart.
 .
@@ -791,7 +791,7 @@ FASTFortranCFGVisitorTest >> testIfStatementWithoutElsePart [
 
 	self assert: blocks size equals: 4.
 
-	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	conditional := blocks detect: [ :block | block isConditional ].
 	then := blocks detect: [ :block | block firstStatement class = FASTFortranAssignmentStatement ].
 	last := blocks detect: [ :block | block firstStatement class = FASTFortranReturnStatement ].
 
@@ -912,7 +912,7 @@ FASTFortranCFGVisitorTest >> testLastStatementIsConditional [
 
 	self assert: blocks size equals: 3.
 
-	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
+	conditional := blocks detect: [ :block | block isConditional ].
 	self assert: blocks first nextBlock equals: conditional.
 
 	self assert: (conditional nextBlockForValue: true) isFinal.
@@ -1083,10 +1083,10 @@ FASTFortranCFGVisitorTest >> testThenWithConditionalAndBasicBlock [
 	self assert: blocks first  statements size equals: 1.
 
 	ifMode := blocks detect: [ :block |
-		(block class = FASTFortranConditionalBasicBlock) and:
+		(block isConditional) and:
 		[ block firstStatement condition class = FASTFortranBinaryExpression ] ].
 	ifGetcle := blocks detect: [ :block |
-		(block class = FASTFortranConditionalBasicBlock) and:
+		(block isConditional) and:
 		[ block firstStatement condition class = FASTFortranUnaryExpression ] ].
 	callErreur := blocks detect: [ :block |
 		(block firstStatement class = FASTFortranCallStatement) and:
@@ -1126,10 +1126,10 @@ FASTFortranCFGVisitorTest >> testTwoSuccessiveLogicalIfs [
 	self assert: blocks size equals: 4.
 
 	condX := blocks detect: [ :block |
-		(block class = FASTFortranConditionalBasicBlock) and: 
+		(block isConditional) and: 
 		[block firstStatement condition name = 'x'] ].
 	condY := blocks detect: [ :block |
-		(block class = FASTFortranConditionalBasicBlock) and: 
+		(block isConditional) and: 
 		[block firstStatement condition name = 'y'] ].
 
 	self assert: condX isStart.
