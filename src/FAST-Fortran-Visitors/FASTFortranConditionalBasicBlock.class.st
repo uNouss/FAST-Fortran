@@ -58,6 +58,12 @@ FASTFortranConditionalBasicBlock >> nextBlockForValue: aValue [
 ]
 
 { #category : #accessing }
+FASTFortranConditionalBasicBlock >> nextBlockForValues [
+
+	^nextBlocks associations
+]
+
+{ #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlocks [
 
 	^nextBlocks values

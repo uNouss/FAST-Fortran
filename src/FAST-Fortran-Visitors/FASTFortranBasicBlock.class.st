@@ -25,6 +25,12 @@ FASTFortranBasicBlock >> nextBlock: anObject [
 ]
 
 { #category : #accessing }
+FASTFortranBasicBlock >> nextBlockForValues [
+
+	^{ #next -> self nextBlock }
+]
+
+{ #category : #accessing }
 FASTFortranBasicBlock >> nextBlocks [
 
 	^nextBlock

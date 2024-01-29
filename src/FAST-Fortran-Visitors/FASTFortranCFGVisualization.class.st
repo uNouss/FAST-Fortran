@@ -18,6 +18,20 @@ FASTFortranCFGVisualization class >> on: aFASTFortranCFGVisitor [
 ]
 
 { #category : #'instance creation' }
+FASTFortranCFGVisualization >> attachLineText: lineShape [
+
+	lineShape model key nextBlockForValues do: [ :valueNextBlock || label |
+		(valueNextBlock value = lineShape model value)
+			ifTrue: [
+				label := RSLabel new text: valueNextBlock key asString.
+				RSLocation new center ; stick: label on: lineShape.
+				canvas add: label
+			]
+	]
+	
+]
+
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> basicBlockShape: aBasicBlock [
 
 	| shape |
@@ -60,13 +74,16 @@ FASTFortranCFGVisualization >> buildLines: shapes [
 	bldr
 		verticalBezier ;  "Bezier lines"
 		markerEnd: marker ;  "Bezier lines"
-		markerStart: (RSLabel new text: 'true') ;
 		withBorderAttachPoint;
 		shapes: shapes;
 		canvas: canvas;
 		connectToAll: [ :block | block nextBlocks ].
 	
-	bldr shape markerMid: (RSLabel new text: 'true')
+	bldr shape markerMid: (RSLabel new text: 'true').
+
+	canvas lines do: [ :lineModel |
+		lineModel model key isConditional
+		ifTrue: [ self attachLineText: lineModel ] ]
 ]
 
 { #category : #'accessing - shapes' }
