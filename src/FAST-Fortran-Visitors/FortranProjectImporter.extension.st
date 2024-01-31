@@ -35,6 +35,6 @@ FortranProjectImporter >> jsonASTToFAST [
 	jsonAST := (self fortranFolderToASTFolder: fortranFile parent) / (fortranFile basename , '.json').
 
 	^FASTFortranJsonVisitor new visitProgramFile:
-		  (jsonAST readStreamDo: [ :str | 
+		  (jsonAST readStreamEncoded: self defaultFileEncoding do: [ :str | 
 			   NeoJSONReader fromString: str contents ])
 ]
