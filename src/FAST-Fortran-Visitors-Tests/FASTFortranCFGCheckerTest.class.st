@@ -67,8 +67,7 @@ FASTFortranCFGCheckerTest >> testCFGDeadBlock [
 	check := FASTFortranCFGChecker on: cfg.
 
 	self assert: check size equals: 1.
-	self assert: check anyOne key equals: #dead.
-	self assert: check anyOne value equals: (blocks at: #b3).
+	self assert: check anyOne equals: (blocks at: #b3).
 ]
 
 { #category : #tests }
