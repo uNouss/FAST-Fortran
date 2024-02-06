@@ -186,6 +186,40 @@ FASTFortranCFGVisitorTest >> testBlockAfterConditionalBlock [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testBlockAfterGotoIsNotNext [
+
+	| blocks doLoop block |
+	"
+      PROGRAM TEST
+		x = 1
+      goto 10
+      x = 2
+      END 
+	"
+	doLoop := self doStatement: #(i 1 n) statements: {self assignementStatement: #i value: 0}.
+	doLoop labelReferences: { self labelReference: 110 }.
+
+	self subroutine: 'TEST'.
+	self addStatement: (self assignementStatement: #x value: 1).
+	self addStatement: (self gotoStatement: 10).
+	self addStatement: (self assignementStatement: #x value: 2).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	block := blocks first.
+	self assert: block nextBlock isNil.
+
+	block := blocks second.
+	self assert: block firstStatement expression primitiveValue equals: '2'.
+	self assert: block nextBlock isNil
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
 
 	| conditional blocks |
