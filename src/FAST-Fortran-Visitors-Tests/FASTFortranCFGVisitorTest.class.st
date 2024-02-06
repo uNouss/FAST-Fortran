@@ -681,7 +681,7 @@ FASTFortranCFGVisitorTest >> testGotoBeforeLabelledIfStatement [
 
 	self assert: blocks size equals: 3.
 
-	self assert: blocks second class equals: FASTFortranConditionalBasicBlock.
+	self assert: blocks second isConditional.
 
 	conditional := blocks detect: [ :block | block class = FASTFortranConditionalBasicBlock ].
 	jump := blocks detect: [ :block | block lastStatement class = FASTFortranGoToStatement ].
