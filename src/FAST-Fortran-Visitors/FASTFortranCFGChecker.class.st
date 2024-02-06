@@ -34,7 +34,6 @@ FASTFortranCFGChecker >> reachableBlocks: blockCollection [
 	[nbPastReachables < reachable size]
 	whileTrue: [
 		nbPastReachables := reachable size.
-1 haltIf: [ newReachables anySatisfy: [ :b | b nextBlocks anySatisfy: #isNil ] ].
 		newReachables := (newReachables flatCollectAsSet: #nextBlocks) reject: #isNil.
 		reachable addAll: newReachables
 	].
