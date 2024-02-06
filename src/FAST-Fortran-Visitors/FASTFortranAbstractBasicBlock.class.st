@@ -59,7 +59,7 @@ FASTFortranAbstractBasicBlock >> isFinal [
 	^self nextBlocks isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isStart [
 
 	^isStart
@@ -93,10 +93,4 @@ FASTFortranAbstractBasicBlock >> sourceCode [
 FASTFortranAbstractBasicBlock >> statements [
 
 	^statements
-]
-
-{ #category : #convenience }
-FASTFortranAbstractBasicBlock >> substituteBlock: oldBlock with: newBlock [
-
-	self subclassResponsibility 
 ]
