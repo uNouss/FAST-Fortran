@@ -215,6 +215,15 @@ FASTFortranAbstractVisitorTest >> functionDeclaration: aName [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> gotoComputedStatement: labels expression: expr [
+
+	^FASTFortranGoToComputedStatement new
+		labelReferences: (labels collect: [:label | self labelReference: label asString]) ;
+		selectorExpression: (self makeSimpleExpression: expr) ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> gotoStatement: label [
 
 	^FASTFortranGoToStatement new

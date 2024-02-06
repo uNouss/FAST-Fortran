@@ -690,6 +690,54 @@ FASTFortranCFGVisitorTest >> testGotoBeforeLabelledIfStatement [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testGotoComputedBeforeLabels [
+
+	| blocks labeledBlock |
+	"
+	INTEGER FUNCTION something()
+   GOTO(10,20,30) x
+10	x = 1
+20	x = 2
+30	x = 3
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self gotoComputedStatement: #(10 20 30) expression: #x).
+	self addStatement:
+		(self labelled: 10 statement:
+			(self assignementStatement: #x value: 1)).
+	self addStatement:
+		(self labelled: 20 statement:
+			(self assignementStatement: #x value: 2)).
+	self addStatement:
+		(self labelled: 30 statement:
+			(self assignementStatement: #x value: 3)).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 4.
+
+	self assert: blocks first isConditional.
+	self assert: blocks first nextBlocks size equals: 3.
+
+	labeledBlock := blocks first nextBlockForValue: '10'.
+	self assert: labeledBlock firstStatement expression primitiveValue equals: '1'.
+	self deny: labeledBlock isFinal.
+
+	labeledBlock := labeledBlock nextBlock.
+	self assert: labeledBlock equals: (blocks first nextBlockForValue: '20').
+	self assert: labeledBlock firstStatement expression primitiveValue equals: '2'.
+	self deny: labeledBlock isFinal.
+
+	labeledBlock := labeledBlock nextBlock.
+	self assert: labeledBlock equals: (blocks first nextBlockForValue: '30').
+	self assert: labeledBlock firstStatement expression primitiveValue equals: '3'.
+	self assert: labeledBlock isFinal.
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 
 	| blocks  conditional |

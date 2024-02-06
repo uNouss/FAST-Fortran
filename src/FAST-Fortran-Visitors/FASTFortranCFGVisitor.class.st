@@ -217,11 +217,33 @@ FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatemen
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
+	"GoTo with several possible target labels
+	 - new ConditionalBlock (#nextBlock of current one)
+	 - need to chain labelled blocks to each target label"
+
+	| conditionalBlock gotoBlock |
+	conditionalBlock := self newConditionalBlock: aFASTFortranGoToComputedStatement.
+	self checkLabelledConditionalStatement: aFASTFortranGoToComputedStatement.
+
+	gotoBlock := currentBlock.
+	aFASTFortranGoToComputedStatement labelReferences do: [ :labelReference |
+		self
+			findLabelledBlock: labelReference
+			setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock onValue: labelReference label ].
+	].
+
+	self closeCurrentBlock
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
 	"todo:
 	 - end currentBlock (contains this statement)
 	 - nextBlock of currentBlock is a block starting on the right label
-	"
+	Note: need to introduce a local variable because the setter block can be evaluated later
+	and we want it to reference the current value of #currentBlock, not the value it will have
+	at this later time"
 
 	| gotoBlock |
 	self visitFASTFortranTStatement: aFASTFortranGoToStatement.
