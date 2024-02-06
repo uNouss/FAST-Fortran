@@ -122,7 +122,7 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 	self buildLines: shapes.
 
 	canvas addAll: shapes.
-	RSTreeLayout on: shapes.
+	[RSTreeLayout on: shapes] valueWithin: 5 seconds onTimeout: [ self inform: 'Tree layout computation takes too long. Aborted' ].
 
 	self buildLegend.
 
