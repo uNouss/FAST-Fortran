@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> addPendingNextBlock: settingAction [
+FASTFortranCFGVisitor >> addPendingNextBlockAction: settingAction [
 	"settingAction is a pharo block with one argument (a BasicBlock) and is used to set the successor of another block
 	 when we will know it
 	 For not, sets the nextBlock to nil and register the settingAction for future use"
@@ -70,14 +70,14 @@ FASTFortranCFGVisitor >> checkLabelledStatement: aFASTFortranTStatement [
 	aFASTFortranTStatement label ifNil: [ ^ self ].
 
 	newBlock := self newBasicBlock: FASTFortranBasicBlock.
-	self addPendingNextBlock: [ :nextBlock | newBlock nextBlock: nextBlock ].
+	self addPendingNextBlockAction: [ :nextBlock | newBlock nextBlock: nextBlock ].
 
 	self
 		chainRegisteredJumps: aFASTFortranTStatement label
 		toBlock: newBlock
 ]
 
-{ #category : #'visiting - statements' }
+{ #category : #basicBlocks }
 FASTFortranCFGVisitor >> closeCurrentBlock [
 
 	currentBlock := nil
@@ -190,7 +190,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	"loop body"
 	self assert: pendingNextBlock isEmpty.
-	self addPendingNextBlock: [ :bodyBlock |
+	self addPendingNextBlockAction: [ :bodyBlock |
 		conditionalBlock nextBlock: bodyBlock onValue: true ].
 	self closeCurrentBlock.
 	aFASTFortranDoStatement statementBlock accept: self.
@@ -198,7 +198,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	"after loop"
 	self assert: pendingNextBlock isEmpty.
-	self addPendingNextBlock: [ :afterBlock |
+	self addPendingNextBlockAction: [ :afterBlock |
 		conditionalBlock nextBlock: afterBlock onValue: false ].
 
 	parentLoopBlocks pop.
@@ -217,11 +217,33 @@ FASTFortranCFGVisitor >> visitFASTFortranExitStatement: aFASTFortranExitStatemen
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoToComputedStatement [
+	"GoTo with several possible target labels
+	 - new ConditionalBlock (#nextBlock of current one)
+	 - need to chain labelled blocks to each target label"
+
+	| conditionalBlock gotoBlock |
+	conditionalBlock := self newConditionalBlock: aFASTFortranGoToComputedStatement.
+	self checkLabelledConditionalStatement: aFASTFortranGoToComputedStatement.
+
+	gotoBlock := currentBlock.
+	aFASTFortranGoToComputedStatement labelReferences do: [ :labelReference |
+		self
+			findLabelledBlock: labelReference
+			setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock onValue: labelReference label ].
+	].
+
+	self closeCurrentBlock
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatement [
 	"todo:
 	 - end currentBlock (contains this statement)
 	 - nextBlock of currentBlock is a block starting on the right label
-	"
+	Note: need to introduce a local variable because the setter block can be evaluated later
+	and we want it to reference the current value of #currentBlock, not the value it will have
+	at this later time"
 
 	| gotoBlock |
 	self visitFASTFortranTStatement: aFASTFortranGoToStatement.
@@ -272,7 +294,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 
 	"then-part"
 	self assert: pendingNextBlock isEmpty.
-	self addPendingNextBlock: [ :thenBlock |
+	self addPendingNextBlockAction: [ :thenBlock |
 		conditionalBlock nextBlock: thenBlock onValue: true ].
 	self closeCurrentBlock.
 	aFASTFortranIfBlockStatement thenStatementBlock accept: self.
@@ -281,7 +303,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 	 need to empty the pendingNextBlocks from then-part while processing else-part"
 	thenLastBlock := pendingNextBlock copy.
 	pendingNextBlock removeAll.
-	self addPendingNextBlock: [ :elseBlock |
+	self addPendingNextBlockAction: [ :elseBlock |
 		conditionalBlock nextBlock: elseBlock onValue: false ].
 	self closeCurrentBlock.
 	aFASTFortranIfBlockStatement elseStatementBlock ifNotNil: [ :elsePart |
@@ -303,13 +325,13 @@ FASTFortranCFGVisitor >> visitFASTFortranIfLogicalStatement: aFASTFortranIfLogic
 
 	"then-statement"
 	self assert: pendingNextBlock isEmpty.
-	self addPendingNextBlock: [ :thenBlock |
+	self addPendingNextBlockAction: [ :thenBlock |
 		conditionalBlock nextBlock: thenBlock onValue: true ].
 	self closeCurrentBlock.
 	aFASTFortranIfLogicalStatement statement accept: self.
 
 	"else part"
-	self addPendingNextBlock: [ :elseBlock |
+	self addPendingNextBlockAction: [ :elseBlock |
 		conditionalBlock nextBlock: elseBlock onValue: false ].
 	self closeCurrentBlock
 ]
@@ -352,7 +374,7 @@ FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
 
 	currentBlock ifNil: [
 		newBlock := self newBasicBlock: FASTFortranBasicBlock.
-		self addPendingNextBlock: [ :nextBlock | newBlock nextBlock: nextBlock ]
+		self addPendingNextBlockAction: [ :nextBlock | newBlock nextBlock: nextBlock ]
 	].
 	currentBlock addStatement: aFASTFortranTStatement.
 

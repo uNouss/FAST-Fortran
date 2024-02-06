@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : #'visiting statement' }
+FASTFortranJsonVisitor >> checkLabel: label forStatement: statement [
+
+	label ifNotNil: [ statement label: label primitiveValue ]
+]
+
+{ #category : #'visiting statement' }
 FASTFortranJsonVisitor >> createContinueStatement: endLabel [
 
 	| lastStatement |
@@ -761,6 +767,8 @@ FASTFortranJsonVisitor >> visitIf: anIfNode [
 		ifEmpty: [ nil ]
 		ifNotEmpty: [ data fourth ]).
 
+	self checkLabel: data second forStatement: data third.
+
 	^ data third
 ]
 
@@ -1155,9 +1163,7 @@ FASTFortranJsonVisitor >> visitStatement: aStatementNode [
 
 	| data |
 	data := super visitStatement: aStatementNode.
-
-	data second ifNotNil: [
-		data third label: data second primitiveValue ].
+	self checkLabel: data second forStatement: data third.
 
 	^ data third
 ]
