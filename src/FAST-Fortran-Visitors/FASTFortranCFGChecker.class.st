@@ -20,13 +20,29 @@ FASTFortranCFGChecker class >> on: aCFG [
 { #category : #'instance creation' }
 FASTFortranCFGChecker >> on: aCFGVisitor [
 
-	| reachable |
-	reachable := Set new: aCFGVisitor basicBlocks size.
+	^self unreachableBlocks: (aCFGVisitor basicBlocks).
+]
 
-	aCFGVisitor basicBlocks do: [ :block |
-		block isStart ifTrue: [ reachable add: block ].
-		reachable addAll: block nextBlocks ].
+{ #category : #'instance creation' }
+FASTFortranCFGChecker >> reachableBlocks: blockCollection [
+	| reachable nbPastReachables newReachables |
 
-	^(aCFGVisitor basicBlocks difference: reachable)
-		collect: [ :block | #dead -> block ]
+	nbPastReachables := 0.
+	reachable := blockCollection selectAsSet: #isStart.
+
+	newReachables := reachable.
+	[nbPastReachables < reachable size]
+	whileTrue: [
+		nbPastReachables := reachable size.
+1 haltIf: [ newReachables anySatisfy: [ :b | b nextBlocks anySatisfy: #isNil ] ].
+		newReachables := (newReachables flatCollectAsSet: #nextBlocks) reject: #isNil.
+		reachable addAll: newReachables
+	].
+	^ reachable
+]
+
+{ #category : #'instance creation' }
+FASTFortranCFGChecker >> unreachableBlocks: blockCollection [
+
+	^ blockCollection difference: (self reachableBlocks: blockCollection)
 ]

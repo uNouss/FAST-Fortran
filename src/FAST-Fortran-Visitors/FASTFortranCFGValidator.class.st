@@ -37,7 +37,7 @@ FASTFortranCFGValidator >> runOnSourceFile: aFileReference [
 	aFileReference fullName traceCr.
 
 	ast := 
-		["1halt."
+		[
 			self getASTFromFileReference: aFileReference.
 		]
 		on: Error
@@ -48,6 +48,6 @@ FASTFortranCFGValidator >> runOnSourceFile: aFileReference [
 
 	ast ifNotNil: [
 		(FASTFortranCFGChecker on: (ast accept: FASTFortranCFGVisitor new))
-			ifNotEmpty: [ '  ** Found errors **' traceCr ]
+			ifNotEmpty: [ '  ** Found dead blocks **' traceCr ]
 	].
 ]
