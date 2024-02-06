@@ -2287,6 +2287,44 @@ FortranToFASTTests >> testIntrinsicStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testLabeledIfBlockStatement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+10     IF(x .lt. 5)THEN
+      ELSE
+      END IF
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"/home/anquetil/Pharo/images/fast-slicing-240116/FastTmp/tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"blocks":[],"conditions":[[{"anno":[],"left":{"anno":[],"span":"(2:11)-(2:11)","tag":"value","value":{"contents":"x","tag":"variable"}},"op":{"tag":"lt"},"right":{"anno":[],"span":"(2:18)-(2:18)","tag":"value","value":{"contents":["5",null],"tag":"integer"}},"span":"(2:11)-(2:18)","tag":"binary"},[]]],"end_label":null,"label":{"anno":[],"span":"(2:1)-(2:2)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"name":null,"span":"(2:1)-(4:12)","tag":"if"}],"name":"testalt","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}tmpJson'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranIfBlockStatement.
+	self assert: stmt label equals: '10'.
+]
+
+{ #category : #'tests-statement' }
+FortranToFASTTests >> testLabeledStatement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+10     STOP
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:2)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:1)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 1.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranStopStatement.
+	self assert: stmt label equals: '10'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testLogicalIfEmpty [
 
 	| result conditional |
@@ -2678,24 +2716,6 @@ FortranToFASTTests >> testRewindStatementUnit [
 	self assert: stmt ioParameters first class equals: FASTFortranIntegerLiteral.
 	self assert: stmt ioParameters first startPos equals: 33.
 	self assert: stmt ioParameters first primitiveValue equals: '3'
-]
-
-{ #category : #'tests-statement' }
-FortranToFASTTests >> testStatementWithLabel [
-
-	| result stmt |
-	fortranCode := '      PROGRAM TESTALT
-10     STOP
-      END 
-'.
-	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"./fortran77.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"label":{"anno":[],"span":"(2:1)-(2:2)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"span":"(2:1)-(2:11)","statement":{"anno":[],"message":null,"span":"(2:8)-(2:11)","tag":"stop"},"tag":"statement"}],"name":"testalt","span":"(1:7)-(3:9)","subprograms":null,"tag":"main"}]}'.
-	result := self visitJsonCode.
-
-	self assert: result first statementBlock statements size equals: 1.
-
-	stmt := result first statementBlock statements first.	
-	self assert: stmt class equals: FASTFortranStopStatement.
-	self assert: stmt label equals: '10'.
 ]
 
 { #category : #'tests-statement' }
