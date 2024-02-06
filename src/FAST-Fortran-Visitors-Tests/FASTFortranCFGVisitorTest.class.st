@@ -885,6 +885,81 @@ FASTFortranCFGVisitorTest >> testIfStatementWithoutElsePart [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testLabelledDoStatementAfterGoto [
+
+	| blocks doLoop block |
+	"
+      PROGRAM TESTALT
+      goto 10
+   10 do 110 i = 1,n
+  110   i = 0
+      END 
+	"
+	doLoop := self doStatement: #(i 1 n) statements: {self assignementStatement: #i value: 0}.
+	doLoop labelReferences: { self labelReference: 110 }.
+
+	self function: #something type: #integer.
+	self addStatement: (self gotoStatement: 10).
+	self addStatement: (self labelled: 10 statement: doLoop).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	block := blocks first.
+	self deny: block isConditional.
+	self assert: block nextBlock equals: blocks second.
+
+	block := blocks second.
+	self assert: block isConditional.
+	self assert: block isFinal.
+
+	block := blocks second nextBlockForValue: true.
+	self deny: block isConditional.
+	self assert: block nextBlock equals: blocks second
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testLabelledDoStatementBeforeGoto [
+
+	| blocks doLoop block |
+	"
+      PROGRAM TESTALT
+   10 do 110 i = 1,n
+  110   i = 0
+      goto 10
+      END 
+	"
+	doLoop := self doStatement: #(i 1 n) statements: {self assignementStatement: #i value: 0}.
+	doLoop labelReferences: { self labelReference: 110 }.
+
+	self function: #something type: #integer.
+	self addStatement: (self labelled: 10 statement: doLoop).
+	self addStatement: (self gotoStatement: 10).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	block := blocks first.
+	self assert: block isConditional.
+
+	block := blocks first nextBlockForValue: true.
+	self deny: block isConditional.
+	self assert: block nextBlock equals: blocks first.
+
+	block := blocks first nextBlockForValue: false.
+	self deny: block isConditional.
+	self assert: block nextBlock equals: blocks first.
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testLabelledIfStatementStartsNewBlock [
 
 	| blocks |
