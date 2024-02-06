@@ -192,7 +192,7 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
 	"
 	INTEGER FUNCTION something( x)
 	INTEGER x
-	IF (x .lt. 5) return x
+	IF (x .lt. 5) x = 5
 	RETURN x - 5
 	END
 	"
@@ -200,7 +200,7 @@ FASTFortranCFGVisitorTest >> testBlockChainingAfterIfLogical [
 	self addParameter: #x type: #integer.
 	self addStatement: (self
 		logicalIf: (self binary: '.lt.' left: #x right: 5)
-		statement: (self returnStatement: #x)).
+		statement: (self assignementStatement: #x value: 5)).
 	self addStatement: (self returnStatement: (self binary: '-' left: #x right: 5)).
 	
 	ast accept: visitor.
@@ -436,7 +436,7 @@ FASTFortranCFGVisitorTest >> testExitInLoop [
 	INTEGER FUNCTION something()
 	DO i = 1, 10
      EXIT
-	  RETURN 0
+	  i = 10
 	END DO
 	END
 	"
@@ -445,7 +445,7 @@ FASTFortranCFGVisitorTest >> testExitInLoop [
 		doStatement:  #(i 1 10)
 		statements: { 
 			self exitStatement: nil .
-			self returnStatement: 0
+			self assignementStatement: #i value: 10
 		}).
 
 	ast accept: visitor.
@@ -456,7 +456,7 @@ FASTFortranCFGVisitorTest >> testExitInLoop [
 
 	loopBlock := blocks first.
 	exitBlock := blocks detect: [ :block | block firstStatement class = FASTFortranExitStatement ].
-	returnBlock := blocks detect: [ :block | block firstStatement class = FASTFortranReturnStatement ].
+	returnBlock := blocks detect: [ :block | block firstStatement class = FASTFortranAssignmentStatement ].
 
 	self assert: loopBlock class equals: FASTFortranConditionalBasicBlock.
 	self assert: loopBlock isStart.
@@ -479,12 +479,12 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsConditional [
 	| blocks conditional |
 	"
 	INTEGER FUNCTION something()
-	IF (x) return 0
+	IF (x) x = 0
 	RETURN 5
 	END
 	"
 	self function: 'something' type: #integer.
-	self addStatement: (self logicalIf: #x statement: (self returnStatement: 0)).
+	self addStatement: (self logicalIf: #x statement: (self assignementStatement: #x value: 0)).
 	self addStatement: (self returnStatement: 5).
 	
 	ast accept: visitor.
@@ -537,7 +537,7 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsLoop [
 	"
 	INTEGER FUNCTION something()
 	DO i = 1, 10
-	  RETURN 0
+	  i = 10
 	END DO
 	RETURN 5
 	END
@@ -545,7 +545,7 @@ FASTFortranCFGVisitorTest >> testFirstStatementIsLoop [
 	self function: 'something' type: #integer.
 	self addStatement: (self
 		doStatement:  #(i 1 10)
-		statements: { self returnStatement: 0}).
+		statements: { self assignementStatement: #i value: 10 }).
 	self addStatement: (self returnStatement: 5).
 	
 	ast accept: visitor.
@@ -864,7 +864,7 @@ FASTFortranCFGVisitorTest >> testLabelledStatementFollowingLabelledStatement [
 	self assert: blocks second statements size equals: 1.
 
 	self assert: blocks first  nextBlock equals: blocks second.
-	self assert: blocks second nextBlock equals: nil.
+	self assert: blocks second isFinal
 
 
 ]
@@ -935,6 +935,153 @@ FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 	self assert: blocks anyOne firstStatement declarators size equals: 1.
 	self assert: blocks anyOne lastStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne lastStatement variable name equals: 'x'.
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testReturnDoesNotHaveNextBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	integer x
+	RETURN
+	x = 1
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self declarationStatement: #x type: #integer).
+	self addStatement: (self returnStatement: nil).
+	self addStatement: (self assignementStatement: #x value: 1).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first firstStatement class equals: FASTFortranVariableDeclarationStatement.
+	self assert: blocks first statements size equals: 2.
+	self assert: blocks first isFinal.
+	self assert: blocks first nextBlock isNullBlock.
+
+	self assert: blocks second firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks second statements size equals: 1.
+	self assert: blocks second isFinal.
+	self assert: blocks second nextBlock isNil
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testReturnInThen [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	IF (x .le. 5) THEN
+	  RETURN
+	ELSE
+	  x = 5
+	END IF
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		ifBlock: (self binary: '.le.' left: #x right: 5)
+		then: { self returnStatement: nil } 
+		else: { self assignementStatement: #x value: 5 } ).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	self assert: blocks first isStart.
+	self assert: blocks first isConditional.
+	self deny: blocks first isFinal.
+
+	self assert: (blocks first nextBlockForValue: true) statements size equals: 1.
+	self
+		assert: (blocks first nextBlockForValue: true) firstStatement class
+		equals: FASTFortranReturnStatement.
+	self assert: (blocks first nextBlockForValue: true) isFinal.
+
+	self assert: (blocks first nextBlockForValue: false) statements size equals: 1.
+	self
+		assert: (blocks first nextBlockForValue: false) firstStatement class
+		equals: FASTFortranAssignmentStatement.
+	self assert: (blocks first nextBlockForValue: false) isFinal.
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testReturnInThenFollowedByStatement [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	IF (x .le. 5) THEN
+	  RETURN
+	END IF
+	x = 5
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self
+		ifBlock: (self binary: '.le.' left: #x right: 5)
+		then: { self returnStatement: nil } 
+		else: nil).
+	self addStatement: (self assignementStatement: #x value: 5).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	self assert: blocks first isStart.
+	self assert: blocks first isConditional.
+	self deny: blocks first isFinal.
+
+	self assert: (blocks first nextBlockForValue: true) statements size equals: 1.
+	self
+		assert: (blocks first nextBlockForValue: true) firstStatement class
+		equals: FASTFortranReturnStatement.
+	self assert: (blocks first nextBlockForValue: true) isFinal.
+
+	self assert: (blocks first nextBlockForValue: false) statements size equals: 1.
+	self
+		assert: (blocks first nextBlockForValue: false) firstStatement class
+		equals: FASTFortranAssignmentStatement.
+	self assert: (blocks first nextBlockForValue: false) isFinal.
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testReturnIntroducesNullBlock [
+
+	| blocks |
+	"
+	INTEGER FUNCTION something()
+	x = 1
+	RETURN
+	END
+	"
+	self function: #something type: #integer.
+	self addStatement: (self assignementStatement: #x value: 1).
+	self addStatement: (self returnStatement: nil).
+
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 1.
+
+	self assert: blocks anyOne firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks anyOne statements size equals: 2.
+	self assert: blocks anyOne isFinal.
+	self assert: blocks anyOne nextBlock isNullBlock
+
 ]
 
 { #category : #tests }
@@ -1134,11 +1281,11 @@ FASTFortranCFGVisitorTest >> testTwoSuccessiveLogicalIfs [
 
 	self assert: condX isStart.
 	self deny: condX isFinal.
-	self assert: (condX nextBlockForValue: true) nextBlock equals: condY.
+	self assert: (condX nextBlockForValue: true) isFinal.
 	self assert: (condX nextBlockForValue: false) equals: condY.
 
 	self deny: condY isStart.
 	self assert: condY isFinal.
-	self assert: (condX nextBlockForValue: true) nextBlock isFinal
+	self assert: (condX nextBlockForValue: true) isFinal
 
 ]
