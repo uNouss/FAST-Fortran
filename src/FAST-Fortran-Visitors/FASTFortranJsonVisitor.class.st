@@ -448,7 +448,7 @@ FASTFortranJsonVisitor >> visitDivision: aDivisionOperatorNode [
 
 { #category : #'visiting statement' }
 FASTFortranJsonVisitor >> visitDo: aDoNode [
-	"The visiting order in the super class is: #(span do_spec target body end_label)
+	"The visiting order in the super class is: #(span label do_spec target body end_label)
 	We change it here do deal with nested loops
 	- target is a label number (optional)
 	- end_label is the 'terminal label' typically for a CONTINUE statement
@@ -466,14 +466,14 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 	think when to put the label in nestedDoEndLabel"
 
 	| data doStatement body inNestedLoop |
-	data := self visitJsonMap: aDoNode keys: #(span do_spec target end_label body).
+	data := self visitJsonMap: aDoNode keys: #(span label do_spec target end_label body).
 
 	doStatement := self
 		newEntity: FASTFortranDoStatement
 		atPosition: data first.
-	doStatement loopControl: data second.
+	doStatement loopControl: data third.
 
-	data third
+	data fourth
 	ifNil: [ inNestedLoop := false ]
 	ifNotNil: [ :target |
 		"the same 'target' was also pushed on top of #nestedDoEndLabel"
@@ -484,17 +484,19 @@ FASTFortranJsonVisitor >> visitDo: aDoNode [
 		inNestedLoop := nestedDoEndLabel notEmpty and: [nestedDoEndLabel top = target primitiveValue]
 	].
 
-	body := data fifth.
+	body := data sixth.
 
 	(inNestedLoop not and: [
-		(data fourth notNil) and: [
-		(data fourth endPos > doStatement endPos) ] ] )
+		(data fifth notNil) and: [
+		(data fifth endPos > doStatement endPos) ] ] )
 	ifTrue: [
 		"need to create a CONTINUE statement to close the loop"
-		body addStatement: (self createContinueStatement: (data fourth))
+		body addStatement: (self createContinueStatement: (data fifth))
 	].
 
 	doStatement statementBlock: body.
+	
+	self checkLabel: data second forStatement: doStatement.
 
 	^ doStatement
 ]
