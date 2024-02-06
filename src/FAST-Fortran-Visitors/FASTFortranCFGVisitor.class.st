@@ -199,6 +199,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	| conditionalBlock |
 	conditionalBlock := self newConditionalBlock: aFASTFortranDoStatement.
+	self checkLabelledConditionalStatement: aFASTFortranDoStatement.
 	parentLoopBlocks push: conditionalBlock.
 
 	"loop body"
