@@ -35,7 +35,8 @@ FASTFortranCFGVisitor >> basicBlocks [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> chainPendingBlocksTo: newBlock [
 
-	pendingNextBlock copy do: [ :settingAction | self runChainAction: settingAction with: newBlock ].
+	pendingNextBlock copy do: [ :settingAction |
+		self runChainAction: settingAction with: newBlock ].
 
 ]
 
@@ -159,6 +160,18 @@ FASTFortranCFGVisitor >> registerReference: setterAction toLabel: label [
 ]
 
 { #category : #basicBlocks }
+FASTFortranCFGVisitor >> removePendingActionFor: aBlock [
+	"pending action are pharo blocks with no clear link to the BasicBlock they modify
+	 We use #copiedValueAt: to get this information from the pharo block
+	 This is an ugly hack"
+
+	pendingNextBlock copy do: [ :action |
+		((action copiedValueAt: 1) = aBlock) 
+		ifTrue: [pendingNextBlock remove: action]
+	]
+]
+
+{ #category : #basicBlocks }
 FASTFortranCFGVisitor >> runChainAction: settingAction with: aBasicBlock [
 
 	settingAction value: aBasicBlock.
@@ -186,6 +199,7 @@ FASTFortranCFGVisitor >> visitFASTFortranDoStatement: aFASTFortranDoStatement [
 
 	| conditionalBlock |
 	conditionalBlock := self newConditionalBlock: aFASTFortranDoStatement.
+	self checkLabelledConditionalStatement: aFASTFortranDoStatement.
 	parentLoopBlocks push: conditionalBlock.
 
 	"loop body"
@@ -253,6 +267,8 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 		findLabelledBlock: aFASTFortranGoToStatement labelReferences anyOne
 		setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock ].
 
+	self removePendingActionFor: currentBlock.
+	self closeCurrentBlock.
 ]
 
 { #category : #'visiting - statements' }

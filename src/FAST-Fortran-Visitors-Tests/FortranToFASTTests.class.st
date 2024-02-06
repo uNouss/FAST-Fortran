@@ -2287,6 +2287,26 @@ FortranToFASTTests >> testIntrinsicStatement [
 ]
 
 { #category : #'tests-statement' }
+FortranToFASTTests >> testLabeledDoStatement [
+
+	| result stmt |
+	fortranCode := '      PROGRAM TESTALT
+   10 do 110 i = 1,n
+  110   x(i) = i*2
+      return
+      END 
+'.
+	jsonCode := '{"meta":{"miVersion":"fortran77","miFilename":"/home/anquetil/Pharo/images/fast-slicing-240116/FastTmp/tmpFASTSource.f"},"program_units":[{"anno":[],"blocks":[{"anno":[],"body":[{"anno":[],"label":{"anno":[],"span":"(3:3)-(3:5)","tag":"value","value":{"contents":["110",null],"tag":"integer"}},"span":"(3:3)-(3:18)","statement":{"anno":[],"arguments":{"anno":[],"list":[{"anno":[],"span":"(3:11)-(3:11)","tag":"value","value":{"contents":"i","tag":"variable"}}],"span":"(3:11)-(3:11)"},"body":{"anno":[],"left":{"anno":[],"span":"(3:16)-(3:16)","tag":"value","value":{"contents":"i","tag":"variable"}},"op":{"tag":"multiplication"},"right":{"anno":[],"span":"(3:18)-(3:18)","tag":"value","value":{"contents":["2",null],"tag":"integer"}},"span":"(3:16)-(3:18)","tag":"binary"},"name":{"anno":[],"span":"(3:9)-(3:9)","tag":"value","value":{"contents":"x","tag":"variable"}},"span":"(3:9)-(3:18)","tag":"function"},"tag":"statement"}],"do_spec":{"anno":[],"increment":null,"initial":{"anno":[],"expression":{"anno":[],"span":"(2:18)-(2:18)","tag":"value","value":{"contents":["1",null],"tag":"integer"}},"span":"(2:14)-(2:18)","tag":"assign_expression","target":{"anno":[],"span":"(2:14)-(2:14)","tag":"value","value":{"contents":"i","tag":"variable"}}},"limit":{"anno":[],"span":"(2:20)-(2:20)","tag":"value","value":{"contents":"n","tag":"variable"}},"span":"(2:14)-(2:20)"},"end_label":{"anno":[],"span":"(3:3)-(3:5)","tag":"value","value":{"contents":["110",null],"tag":"integer"}},"label":{"anno":[],"span":"(2:4)-(2:5)","tag":"value","value":{"contents":["10",null],"tag":"integer"}},"name":null,"span":"(2:4)-(3:18)","tag":"do","target":{"anno":[],"span":"(2:10)-(2:12)","tag":"value","value":{"contents":["110",null],"tag":"integer"}}},{"anno":[],"label":null,"span":"(4:7)-(4:12)","statement":{"anno":[],"span":"(4:7)-(4:12)","tag":"return","target":null},"tag":"statement"}],"name":"testalt","span":"(1:7)-(5:9)","subprograms":null,"tag":"main"}]}'.
+	result := self visitJsonCode.
+
+	self assert: result first statementBlock statements size equals: 2.
+
+	stmt := result first statementBlock statements first.	
+	self assert: stmt class equals: FASTFortranDoStatement.
+	self assert: stmt label equals: '10'.
+]
+
+{ #category : #'tests-statement' }
 FortranToFASTTests >> testLabeledIfBlockStatement [
 
 	| result stmt |

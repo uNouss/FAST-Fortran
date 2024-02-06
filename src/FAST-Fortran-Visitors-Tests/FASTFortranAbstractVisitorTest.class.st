@@ -148,7 +148,7 @@ FASTFortranAbstractVisitorTest >> declarationStatement: typeDescription variable
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> doStatement: control statements: stmtBlock [
-	"initDescriptino is a collection of:
+	"control is a collection of:
 	 - #variable
 	 - initial value expression
 	 - maximum value expression
