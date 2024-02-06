@@ -267,8 +267,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfBlockStatement: aFASTFortranIfBlockSt
 	 - bth then and else part will be chained to whatever follows"
 
 	| conditionalBlock thenLastBlock |
-	conditionalBlock := self newConditionalBlock:
-		                    aFASTFortranIfBlockStatement.
+	conditionalBlock := self newConditionalBlock: aFASTFortranIfBlockStatement.
 	self checkLabelledConditionalStatement: aFASTFortranIfBlockStatement.
 
 	"then-part"
@@ -324,6 +323,16 @@ FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 	basicBlocks first isStart: true.
 	
 	^visit
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
+	"Ends the current basicBlock and has no nextBlock"
+
+	self visitFASTFortranTStatement: aFASTFortranReturnStatement.
+
+	currentBlock nextBlock: FASTFortranNullBlock new.
+	self closeCurrentBlock.
 ]
 
 { #category : #'visiting - statements' }

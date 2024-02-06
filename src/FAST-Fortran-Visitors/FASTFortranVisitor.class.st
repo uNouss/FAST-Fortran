@@ -432,7 +432,7 @@ FASTFortranVisitor >> visitFASTFortranLoopControlExpression: aFASTFortranLoopCon
 
 	self visitFASTFortranTExpression: aFASTFortranLoopControlExpression.
 	aFASTFortranLoopControlExpression init accept: self.
-	aFASTFortranLoopControlExpression increment accept: self.
+	aFASTFortranLoopControlExpression increment ifNotNil: [ :increment | increment accept: self ].
 	aFASTFortranLoopControlExpression limit accept: self.
 ]
 

@@ -47,6 +47,13 @@ FASTFortranConditionalBasicBlock >> isFinal [
 
 { #category : #accessing }
 FASTFortranConditionalBasicBlock >> nextBlock: aBlock onValue: aValue [
+	"if the next block for aValue is not a NullBlock, then set it to aBlock, otherwise leave the NullBlock"
+	| currentNext |
+
+	currentNext := nextBlocks at: aValue ifAbsent: [ self ].
+	currentNext ifNil: [ currentNext := self ].
+
+	currentNext isNullBlock ifTrue: [ ^self ].
 
 	nextBlocks at: aValue put: aBlock
 ]

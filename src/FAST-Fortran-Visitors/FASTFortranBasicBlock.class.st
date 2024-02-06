@@ -19,9 +19,13 @@ FASTFortranBasicBlock >> nextBlock [
 ]
 
 { #category : #accessing }
-FASTFortranBasicBlock >> nextBlock: anObject [
+FASTFortranBasicBlock >> nextBlock: aBlock [
+	"puts aBlock in #nextBlock unless it already contains aNullBlock"
 
-	nextBlock := anObject
+	(nextBlock isNotNil and: [ nextBlock isNullBlock ])
+	ifTrue: [ ^self ].
+	
+	nextBlock := aBlock
 ]
 
 { #category : #accessing }
