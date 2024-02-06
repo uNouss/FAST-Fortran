@@ -53,10 +53,18 @@ FASTFortranAbstractBasicBlock >> isEmpty [
 	^self statements isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isFinal [
+	"The block last statement is also the last executed one in the CFG"
 
-	^self nextBlocks isEmpty
+	^(self nextBlocks isEmpty) or:
+	[ self nextBlocks anySatisfy: [ :block | block isNil or: [ block isNullBlock]] ]
+]
+
+{ #category : #testing }
+FASTFortranAbstractBasicBlock >> isNullBlock [
+
+	^false
 ]
 
 { #category : #testing }
