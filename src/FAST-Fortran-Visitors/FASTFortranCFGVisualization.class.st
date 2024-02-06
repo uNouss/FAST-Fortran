@@ -18,6 +18,13 @@ FASTFortranCFGVisualization class >> on: aFASTFortranCFGVisitor [
 ]
 
 { #category : #'instance creation' }
+FASTFortranCFGVisualization class >> onFilename: aFilename [
+
+	^self new
+		openOnFilename: aFilename 
+]
+
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> attachLineText: lineShape [
 
 	lineShape model key nextBlockForValues do: [ :valueNextBlock || label |
@@ -129,6 +136,15 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 	canvas @ RSCanvasController new noLegend.
 
 	^ canvas
+]
+
+{ #category : #'instance creation' }
+FASTFortranCFGVisualization >> openOnFilename: aFilename [
+
+	^self openOn: (((aFilename asFileReference
+		readStreamEncoded: 'iso-8859-1'
+		do: [ :st | FortranProjectImporter new getFASTFor: st contents ]) first)
+			accept: FASTFortranCFGVisitor new)
 ]
 
 { #category : #'instance creation' }
