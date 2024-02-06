@@ -1,3 +1,13 @@
+"
+Represent a block in the control flow graph
+
+a block has
+- #statements in a FAST ast that it contains
+- properties
+  - #start: for starting block in the CFG
+  - #final for final blocks in the CFG
+- #nextBlocks that come after it in the CFG
+"
 Class {
 	#name : #FASTFortranAbstractBasicBlock,
 	#superclass : #Object,
@@ -32,18 +42,32 @@ FASTFortranAbstractBasicBlock >> initialize [
 ]
 
 { #category : #testing }
+FASTFortranAbstractBasicBlock >> isConditional [
+
+	^false
+]
+
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isEmpty [
 
 	^self statements isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isFinal [
+	"The block last statement is also the last executed one in the CFG"
 
-	^self nextBlocks isEmpty
+	^(self nextBlocks isEmpty) or:
+	[ self nextBlocks anySatisfy: [ :block | block isNil or: [ block isNullBlock]] ]
 ]
 
-{ #category : #accessing }
+{ #category : #testing }
+FASTFortranAbstractBasicBlock >> isNullBlock [
+
+	^false
+]
+
+{ #category : #testing }
 FASTFortranAbstractBasicBlock >> isStart [
 
 	^isStart
@@ -77,10 +101,4 @@ FASTFortranAbstractBasicBlock >> sourceCode [
 FASTFortranAbstractBasicBlock >> statements [
 
 	^statements
-]
-
-{ #category : #convenience }
-FASTFortranAbstractBasicBlock >> substituteBlock: oldBlock with: newBlock [
-
-	self subclassResponsibility 
 ]

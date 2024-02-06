@@ -1,3 +1,6 @@
+"
+Creates a Roassal visualization of a CFG
+"
 Class {
 	#name : #FASTFortranCFGVisualization,
 	#superclass : #Object,
@@ -15,6 +18,27 @@ FASTFortranCFGVisualization class >> on: aFASTFortranCFGVisitor [
 ]
 
 { #category : #'instance creation' }
+FASTFortranCFGVisualization class >> onFilename: aFilename [
+
+	^self new
+		openOnFilename: aFilename 
+]
+
+{ #category : #'instance creation' }
+FASTFortranCFGVisualization >> attachLineText: lineShape [
+
+	lineShape model key nextBlockForValues do: [ :valueNextBlock || label |
+		(valueNextBlock value = lineShape model value)
+			ifTrue: [
+				label := RSLabel new text: valueNextBlock key asString.
+				RSLocation new center ; stick: label on: lineShape.
+				canvas add: label
+			]
+	]
+	
+]
+
+{ #category : #'instance creation' }
 FASTFortranCFGVisualization >> basicBlockShape: aBasicBlock [
 
 	| shape |
@@ -27,7 +51,7 @@ FASTFortranCFGVisualization >> basicBlockShape: aBasicBlock [
 			         aBasicBlock isFinal
 				         ifTrue: [ self finalBlockShape ]
 				         ifFalse: [ self normalBlockShape ] ].
-	aBasicBlock class = FASTFortranConditionalBasicBlock ifTrue: [
+	aBasicBlock isConditional ifTrue: [
 		shape color: self conditionalBlockColor ].
 	^ shape
 ]
@@ -57,13 +81,16 @@ FASTFortranCFGVisualization >> buildLines: shapes [
 	bldr
 		verticalBezier ;  "Bezier lines"
 		markerEnd: marker ;  "Bezier lines"
-		markerStart: (RSLabel new text: 'true') ;
 		withBorderAttachPoint;
 		shapes: shapes;
 		canvas: canvas;
 		connectToAll: [ :block | block nextBlocks ].
 	
-	bldr shape markerMid: (RSLabel new text: 'true')
+	bldr shape markerMid: (RSLabel new text: 'true').
+
+	canvas lines do: [ :lineModel |
+		lineModel model key isConditional
+		ifTrue: [ self attachLineText: lineModel ] ]
 ]
 
 { #category : #'accessing - shapes' }
@@ -102,13 +129,22 @@ FASTFortranCFGVisualization >> openOn: aFASTFortranCFGVisitor [
 	self buildLines: shapes.
 
 	canvas addAll: shapes.
-	RSTreeLayout on: shapes.
+	[RSTreeLayout on: shapes] valueWithin: 5 seconds onTimeout: [ self inform: 'Tree layout computation takes too long. Aborted' ].
 
 	self buildLegend.
 
 	canvas @ RSCanvasController new noLegend.
 
 	^ canvas
+]
+
+{ #category : #'instance creation' }
+FASTFortranCFGVisualization >> openOnFilename: aFilename [
+
+	^self openOn: (((aFilename asFileReference
+		readStreamEncoded: 'iso-8859-1'
+		do: [ :st | FortranProjectImporter new getFASTFor: st contents ]) first)
+			accept: FASTFortranCFGVisitor new)
 ]
 
 { #category : #'instance creation' }

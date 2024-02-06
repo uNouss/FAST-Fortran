@@ -1,3 +1,8 @@
+"
+A ""normal"" basic block in the CFG
+
+it contains a list of statement (without branching) and have a successor block (#nextBlock)
+"
 Class {
 	#name : #FASTFortranBasicBlock,
 	#superclass : #FASTFortranAbstractBasicBlock,
@@ -14,9 +19,19 @@ FASTFortranBasicBlock >> nextBlock [
 ]
 
 { #category : #accessing }
-FASTFortranBasicBlock >> nextBlock: anObject [
+FASTFortranBasicBlock >> nextBlock: aBlock [
+	"puts aBlock in #nextBlock unless it already contains aNullBlock"
 
-	nextBlock := anObject
+	(nextBlock isNotNil and: [ nextBlock isNullBlock ])
+	ifTrue: [ ^self ].
+	
+	nextBlock := aBlock
+]
+
+{ #category : #accessing }
+FASTFortranBasicBlock >> nextBlockForValues [
+
+	^{ #next -> self nextBlock }
 ]
 
 { #category : #accessing }
@@ -33,10 +48,4 @@ FASTFortranBasicBlock >> sourceCode [
 	^FASTFortranExporterVisitor export: (FASTFortranStatementBlock new
 		statements: self statements ;
 		yourself)
-]
-
-{ #category : #accessing }
-FASTFortranBasicBlock >> substituteBlock: oldBlock with: newBlockOrNil [
-
-	nextBlock := newBlockOrNil
 ]
