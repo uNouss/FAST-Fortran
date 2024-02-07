@@ -245,15 +245,14 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoTo
 	 - new ConditionalBlock (#nextBlock of current one)
 	 - need to chain labelled blocks to each target label"
 
-	| conditionalBlock gotoBlock |
+	| conditionalBlock |
 	conditionalBlock := self newConditionalBlock: aFASTFortranGoToComputedStatement.
 	self checkLabelledConditionalStatement: aFASTFortranGoToComputedStatement.
 
-	gotoBlock := currentBlock.
 	aFASTFortranGoToComputedStatement labelReferences do: [ :labelReference |
 		self
 			findLabelledBlock: labelReference label
-			setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock onValue: labelReference label ].
+			setter: [ :labeledBlock | conditionalBlock nextBlock: labeledBlock onValue: labelReference label ].
 	].
 
 	self closeCurrentBlock
