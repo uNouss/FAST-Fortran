@@ -85,13 +85,13 @@ FASTFortranCFGVisitor >> closeCurrentBlock [
 ]
 
 { #category : #basicBlocks }
-FASTFortranCFGVisitor >> findLabelledBlock: aFASTFortranLabelReference setter: settingAction [
+FASTFortranCFGVisitor >> findLabelledBlock: label setter: settingAction [
 	"search for a block starting with this label. If none found, returns nil and
 	 register currentBlock as wanting this label"
 
 	^basicBlocks
 		detect: [ :bloc |
-			bloc firstStatement label = aFASTFortranLabelReference label ]
+			bloc firstStatement label = label ]
 		ifOne: [ :labeledBlock |
 			settingAction value: labeledBlock.
 			labeledBlock
@@ -100,7 +100,7 @@ FASTFortranCFGVisitor >> findLabelledBlock: aFASTFortranLabelReference setter: s
 			settingAction value: nil.
 			self
 				registerReference: settingAction
-				toLabel: aFASTFortranLabelReference label
+				toLabel: label
 		]
 ]
 
@@ -143,12 +143,9 @@ FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> newConditionalBlock: aFASTFortranStatement [
 
-	| newBlock |
-	newBlock := (self newBasicBlock: FASTFortranConditionalBasicBlock)
+	^(self newBasicBlock: FASTFortranConditionalBasicBlock)
 		statement: aFASTFortranStatement;
-		yourself.
-
-	^ newBlock
+		yourself
 ]
 
 { #category : #basicBlocks }
@@ -243,7 +240,7 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToComputedStatement: aFASTFortranGoTo
 	gotoBlock := currentBlock.
 	aFASTFortranGoToComputedStatement labelReferences do: [ :labelReference |
 		self
-			findLabelledBlock: labelReference
+			findLabelledBlock: labelReference label
 			setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock onValue: labelReference label ].
 	].
 
@@ -264,7 +261,7 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 
 	gotoBlock := currentBlock.
 	self
-		findLabelledBlock: aFASTFortranGoToStatement labelReferences anyOne
+		findLabelledBlock: aFASTFortranGoToStatement labelReferences anyOne label
 		setter: [ :labeledBlock | gotoBlock nextBlock: labeledBlock ].
 
 	self removePendingActionFor: currentBlock.
@@ -282,15 +279,15 @@ FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfAr
 		aFASTFortranIfArithmeticStatement.
 
 	self
-		findLabelledBlock: aFASTFortranIfArithmeticStatement lessLabel
+		findLabelledBlock: aFASTFortranIfArithmeticStatement lessLabel label
 		setter: [ :labeledBlock |
 			conditionalBlock nextBlock: labeledBlock onValue: #negative ].
 	self
-		findLabelledBlock: aFASTFortranIfArithmeticStatement equalLabel
+		findLabelledBlock: aFASTFortranIfArithmeticStatement equalLabel label
 		setter: [ :labeledBlock |
 			conditionalBlock nextBlock: labeledBlock onValue: #null ].
 	self
-		findLabelledBlock: aFASTFortranIfArithmeticStatement greaterLabel
+		findLabelledBlock: aFASTFortranIfArithmeticStatement greaterLabel label
 		setter: [ :labeledBlock |
 			conditionalBlock nextBlock: labeledBlock onValue: #positive ].
 	self closeCurrentBlock
