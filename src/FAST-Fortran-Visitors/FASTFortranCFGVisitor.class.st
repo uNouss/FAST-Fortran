@@ -124,6 +124,18 @@ FASTFortranCFGVisitor >> initialize [
 	pendingNextBlock := OrderedCollection new
 ]
 
+{ #category : #private }
+FASTFortranCFGVisitor >> ioStatementBranches: anIOStatement [
+
+	"IO Statements are  BACKSPACE, CLOSE, DECODE, ENCODE, ENDFILE, OPEN, READ, REWIND, WRITE
+	 They can be branching statements if they have END=<label> or ERR=<label> io parameters"
+
+	^anIOStatement ioParameters select: [ :parameter |
+		(parameter class = FASTFortranAssignmentExpression) and:
+		[ #('end' 'err') anySatisfy: [ :specialVar | parameter variable name = specialVar ] ]
+	]
+]
+
 { #category : #basicBlocks }
 FASTFortranCFGVisitor >> newBasicBlock: aBasicBlockClass [
 	"creates a new BasicBlock and set it to currentBlock
@@ -269,6 +281,35 @@ FASTFortranCFGVisitor >> visitFASTFortranGoToStatement: aFASTFortranGoToStatemen
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranIOStatement: aFASTFortranIOStatement [
+	"IOStatements (see #ioStatementBranches:) can be regular statements or branching statements
+	 depending on their IO-parameters.
+	 If they are branching statements they are similar to ComputedGotos (several targets):
+	 - proceed : proceed to next statement after read (no end, no err)
+	 - end : goto specified label upon end-of-file
+	 - err : goto specified label upon error"
+
+	| branches ioBlock |
+	branches := (self ioStatementBranches: aFASTFortranIOStatement).
+	branches ifEmpty: [
+		^self visitFASTFortranTStatement: aFASTFortranIOStatement
+	].
+
+	ioBlock := self newConditionalBlock: aFASTFortranIOStatement.
+	self checkLabelledConditionalStatement: aFASTFortranIOStatement.
+
+	branches do: [ :assignExpr |
+		self
+			findLabelledBlock: assignExpr expression primitiveValue
+			setter: [ :labeledBlock | ioBlock nextBlock: labeledBlock onValue: assignExpr variable name ].
+	].
+	self addPendingNextBlockAction: [ :nextBlock |
+		ioBlock nextBlock: nextBlock onValue: 'proceed' ].
+
+	self closeCurrentBlock
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfArithmeticStatement [
 	"Note: next statement after an ArithmeticIf should be labelled or there is no way it gets executed"
 
@@ -361,6 +402,12 @@ FASTFortranCFGVisitor >> visitFASTFortranProgramUnit: aFASTFortranProgramUnit [
 ]
 
 { #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranReadStatement: aFASTFortranReadStatement [
+
+	self visitFASTFortranIOStatement: aFASTFortranReadStatement
+]
+
+{ #category : #'visiting - statements' }
 FASTFortranCFGVisitor >> visitFASTFortranReturnStatement: aFASTFortranReturnStatement [
 	"Ends the current basicBlock and has no nextBlock"
 
@@ -397,4 +444,10 @@ FASTFortranCFGVisitor >> visitFASTFortranTStatement: aFASTFortranTStatement [
 { #category : #'visiting - expressions' }
 FASTFortranCFGVisitor >> visitFASTFortranUnaryExpression: aFASTFortranUnaryExpression [
 	"pruning the visit, no need to go inside expressions"
+]
+
+{ #category : #'visiting - statements' }
+FASTFortranCFGVisitor >> visitFASTFortranWriteStatement: aFASTFortranWriteStatement [
+
+	self visitFASTFortranIOStatement: aFASTFortranWriteStatement
 ]
