@@ -283,6 +283,17 @@ FASTFortranAbstractVisitorTest >> integerType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> ioStatement: aClass ioParams: params arguments: args [
+
+	^aClass new
+		ioParameters: (params collect: [:each | self makeSimpleExpression: each]) ;
+		arguments: (args collect: [:each | self makeSimpleExpression: each]) ;
+		startPos: 1 ;
+		endPos: 30 ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> labelReference: aString [
 
 	^FASTFortranLabelReference new
