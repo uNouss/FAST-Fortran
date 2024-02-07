@@ -772,6 +772,129 @@ FASTFortranCFGVisitorTest >> testGotoComputedBeforeLabels [
 ]
 
 { #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testIOStatementWithEndAndErr [
+
+	| blocks readStatement |
+	"
+	INTEGER FUNCTION something()
+10 x = 1
+	READ( 1, 2, END=10, ERR=20, IOSTAT=N ) x, y
+20 x = 2
+	END
+	"
+	readStatement := self
+		writeStatement: #(x y)
+		ioParams: {
+			1 .
+			2 .
+			self assignementExpression: #end value: 10 .
+			self assignementExpression: #err value: 20 .
+			self assignementExpression: #iostat value: #N
+		}.
+
+	self function: 'something' type: #integer.
+	self addStatement: (self labelled: 10 statement: (self assignementStatement: #x value: 1)).
+	self addStatement: readStatement.
+	self addStatement: (self labelled: 20 statement: (self assignementStatement: #x value: 2)).
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 3.
+
+	self assert: blocks first firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first nextBlock equals: blocks second.
+
+	self assert: blocks second isConditional.
+	self assert: (blocks second nextBlockForValue: 'end') equals: blocks first.
+	self assert: (blocks second nextBlockForValue: 'err') equals: blocks third.
+	self assert: (blocks second nextBlockForValue: 'proceed') equals: blocks third.
+
+	self assert: blocks third firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks third isFinal
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testIOStatementWithEndLabel [
+
+	| blocks readStatement |
+	"
+	INTEGER FUNCTION something()
+10 x = 1
+	READ( 1, 2, END=10, IOSTAT=N ) x, y
+	END
+	"
+	readStatement := self
+		readStatement: #(x y)
+		ioParams: {
+			1 .
+			2 .
+			self assignementExpression: #end value: 10 .
+			self assignementExpression: #iostat value: #N
+		}.
+
+	self function: 'something' type: #integer.
+	self addStatement: (self labelled: 10 statement: (self assignementStatement: #x value: 1)).
+	self addStatement: readStatement.
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first nextBlock equals: blocks second.
+
+	self assert: blocks second isConditional.
+	self assert: blocks second isFinal.
+	self assert: (blocks second nextBlockForValue: 'end') equals: blocks first.
+	self assert: (blocks second nextBlockForValue: 'proceed') equals: nil.
+
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testIOStatementWithErrLabel [
+
+	| blocks readStatement |
+	"
+	INTEGER FUNCTION something()
+10 x = 1
+	WRITE( 1, 2, ERR=10, IOSTAT=N ) x, y
+	END
+	"
+	readStatement := self
+		writeStatement: #(x y)
+		ioParams: {
+			1 .
+			2 .
+			self assignementExpression: #err value: 10 .
+			self assignementExpression: #iostat value: #N
+		}.
+
+	self function: 'something' type: #integer.
+	self addStatement: (self labelled: 10 statement: (self assignementStatement: #x value: 1)).
+	self addStatement: readStatement.
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 2.
+
+	self assert: blocks first firstStatement class equals: FASTFortranAssignmentStatement.
+	self assert: blocks first nextBlock equals: blocks second.
+
+	self assert: blocks second isConditional.
+	self assert: blocks second isFinal.
+	self assert: (blocks second nextBlockForValue: 'err') equals: blocks first.
+	self assert: (blocks second nextBlockForValue: 'proceed') equals: nil.
+
+]
+
+{ #category : #'tests - cfg' }
 FASTFortranCFGVisitorTest >> testIfStatementCreatesConditionalBlock [
 
 	| blocks  conditional |
@@ -1092,6 +1215,39 @@ FASTFortranCFGVisitorTest >> testProgramUnitBodyStartsABasicBlock [
 	self assert: blocks anyOne firstStatement declarators size equals: 1.
 	self assert: blocks anyOne lastStatement class equals: FASTFortranAssignmentStatement.
 	self assert: blocks anyOne lastStatement variable name equals: 'x'.
+]
+
+{ #category : #'tests - cfg' }
+FASTFortranCFGVisitorTest >> testReadStatementNoLabel [
+
+	| blocks readStatement |
+	"
+	INTEGER FUNCTION something()
+10 x = 1
+	READ( 1, 2, IOSTAT=N ) x, y
+	END
+	"
+	readStatement := self
+		readStatement: #(x y)
+		ioParams: {
+			1 .
+			2 .
+			self assignementExpression: #iostat value: #N
+		}.
+
+	self function: 'something' type: #integer.
+	self addStatement: (self labelled: 10 statement: (self assignementStatement: #x value: 1)).
+	self addStatement: readStatement.
+	
+	ast accept: visitor.
+
+	blocks := visitor basicBlocks.
+
+	self assert: blocks size equals: 1.
+
+	self assert: blocks anyOne statements size equals: 2.
+	self assert: blocks anyOne isFinal.
+
 ]
 
 { #category : #'tests - cfg' }

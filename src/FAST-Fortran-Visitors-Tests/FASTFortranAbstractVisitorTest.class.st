@@ -283,6 +283,17 @@ FASTFortranAbstractVisitorTest >> integerType: dimension [
 ]
 
 { #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> ioStatement: aClass ioParams: params arguments: args [
+
+	^aClass new
+		ioParameters: (params collect: [:each | self makeSimpleExpression: each]) ;
+		arguments: (args collect: [:each | self makeSimpleExpression: each]) ;
+		startPos: 1 ;
+		endPos: 30 ;
+		yourself
+]
+
+{ #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> labelReference: aString [
 
 	^FASTFortranLabelReference new
@@ -342,6 +353,7 @@ FASTFortranAbstractVisitorTest >> loopControlInit: init increment: incr limit: l
 FASTFortranAbstractVisitorTest >> makeSimpleExpression: description [
 
 	description ifNil: [ ^nil ].
+	(description = $*) ifTrue: [ ^FASTFortranAsterisk new ].
 	description isInteger ifTrue: [ ^self integerLiteral: description asString ].
 	description isFloat ifTrue: [ ^self realLiteral: description asString ].
 	description isSymbol ifTrue: [ ^self scalarVariable: description asString ].
@@ -387,14 +399,14 @@ FASTFortranAbstractVisitorTest >> printStatement: aCollection [
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> readStatement: aCollection [
-	"end position is approximate, test should adjust if a real value is needed"
 
-	^FASTFortranReadStatement new
-		ioParameters: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
-		arguments: aCollection ;
-		startPos: 1 ;
-		endPos: 30 ;
-		yourself
+	^self readStatement: aCollection ioParams: #( * * )
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> readStatement: args ioParams: params [
+
+	^self ioStatement: FASTFortranReadStatement ioParams: params arguments: args
 ]
 
 { #category : #'entity creation' }
@@ -491,12 +503,12 @@ FASTFortranAbstractVisitorTest >> variableDeclarators: aCollectionOfString [
 
 { #category : #'entity creation' }
 FASTFortranAbstractVisitorTest >> writeStatement: aCollection [
-	"end position is approximate, test should adjust if a real value is needed"
 
-	^FASTFortranWriteStatement new
-		ioParameters: { FASTFortranAsterisk new . FASTFortranAsterisk new  } ;
-		arguments: aCollection ;
-		startPos: 1 ;
-		endPos: 30 ;
-		yourself
+	^self writeStatement: aCollection ioParams: #( * * )
+]
+
+{ #category : #'entity creation' }
+FASTFortranAbstractVisitorTest >> writeStatement: args ioParams: params [
+
+	^self ioStatement: FASTFortranWriteStatement ioParams: params arguments: args
 ]

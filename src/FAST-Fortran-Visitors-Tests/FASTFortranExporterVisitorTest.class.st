@@ -1090,13 +1090,14 @@ FASTFortranExporterVisitorTest >> testPrintStatement [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testReadStatement [
 	| stmt |
-	stmt := self readStatement: { self scalarVariable: 'V' }.
-	stmt ioParameters: {
-		self integerLiteral: '1' .
-		self assignementExpression: #rec value: 3 .
-		self assignementExpression: #iostat value: #N .
-		self assignementExpression: #err value: 8 .
-	}.
+	stmt := self
+		readStatement: #(V)
+		ioParams: {
+			1 .
+			self assignementExpression: #rec value: 3 .
+			self assignementExpression: #iostat value: #N .
+			self assignementExpression: #err value: 8
+		}.
 
 	self
 		assertExport: stmt
@@ -1238,7 +1239,7 @@ FASTFortranExporterVisitorTest >> testTwoDeclarationsTwoVariables [
 { #category : #'tests - statements' }
 FASTFortranExporterVisitorTest >> testWriteStatement [
 	| stmt |
-	stmt := self writeStatement: { self characterLiteral: 'message' }.
+	stmt := self writeStatement: #( 'message' ).
 
 	self
 		assertExport: stmt
