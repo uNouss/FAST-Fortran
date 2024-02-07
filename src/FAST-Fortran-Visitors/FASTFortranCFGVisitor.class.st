@@ -314,8 +314,7 @@ FASTFortranCFGVisitor >> visitFASTFortranIfArithmeticStatement: aFASTFortranIfAr
 	"Note: next statement after an ArithmeticIf should be labelled or there is no way it gets executed"
 
 	| conditionalBlock |
-	conditionalBlock := self newConditionalBlock:
-		                    aFASTFortranIfArithmeticStatement.
+	conditionalBlock := self newConditionalBlock: aFASTFortranIfArithmeticStatement.
 	self checkLabelledConditionalStatement:
 		aFASTFortranIfArithmeticStatement.
 
