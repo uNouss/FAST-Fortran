@@ -6,6 +6,7 @@ For entities with comments. In FAST, they are called containers.
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `comments` | `FASTFortranTWithComments` | `container` | `FASTFortranTComment` | list of comments defined in the entity|
 
 

@@ -6,27 +6,38 @@ I represent Common group inside a Common statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentCommonStatement` | `FASTFortranCommonGroup` | `groups` | `FASTFortranCommonStatement` | Parent common statement I belong to|
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `declarators` | `FASTFortranTWithDeclarators` | `parentDeclaration` | `FASTFortranTVariableDeclarator` | variables declared|
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
 
 
 ## Properties
 ======================
 
 | Name | Type | Default value | Comment |
-| `name` | `String` | nil | The name of this Common group, might be ommited|
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {
 	#name : #FASTFortranCommonGroup,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithDeclarators',
-	#classTraits : 'FASTFortranTWithDeclarators classTrait',
+	#traits : 'FASTFortranTNamedEntity + FASTFortranTWithDeclarators',
+	#classTraits : 'FASTFortranTNamedEntity classTrait + FASTFortranTWithDeclarators classTrait',
 	#instVars : [
-		'#name => FMProperty',
 		'#parentCommonStatement => FMOne type: #FASTFortranCommonStatement opposite: #groups'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -39,21 +50,6 @@ FASTFortranCommonGroup class >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranCommonGroup >> name [
-
-	<FMProperty: #name type: #String>
-	<generated>
-	<FMComment: 'The name of this Common group, might be ommited'>
-	^ name
-]
-
-{ #category : #accessing }
-FASTFortranCommonGroup >> name: anObject [
-	<generated>
-	name := anObject
 ]
 
 { #category : #accessing }

@@ -6,24 +6,34 @@ I represent a function statement - a function-like declaration, made in a single
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
 | `expression` | `FASTFortranFunctionStatement` | `assignementExpressionOwner` | `FASTFortranTExpression` | Expression thats being assigned upon declaration to the var|
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
 
 
 ## Properties
 ======================
 
 | Name | Type | Default value | Comment |
-| `name` | `String` | nil | Name of a function statement|
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
 
 "
 Class {
 	#name : #FASTFortranFunctionStatement,
 	#superclass : #FASTFortranAbstractStatement,
-	#traits : 'FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTWithArguments classTrait',
+	#traits : 'FASTFortranTNamedEntity + FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTNamedEntity classTrait + FASTFortranTWithArguments classTrait',
 	#instVars : [
-		'#name => FMProperty',
 		'#expression => FMOne type: #FASTFortranTExpression opposite: #assignementExpressionOwner'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -59,19 +69,4 @@ FASTFortranFunctionStatement >> expressionGroup [
 	<generated>
 	<navigation: 'Expression'>
 	^ MooseSpecializedGroup with: self expression
-]
-
-{ #category : #accessing }
-FASTFortranFunctionStatement >> name [
-
-	<FMProperty: #name type: #String>
-	<generated>
-	<FMComment: 'Name of a function statement'>
-	^ name
-]
-
-{ #category : #accessing }
-FASTFortranFunctionStatement >> name: anObject [
-	<generated>
-	name := anObject
 ]

@@ -6,10 +6,12 @@ I represent Fortran Intrinsic statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
 
 

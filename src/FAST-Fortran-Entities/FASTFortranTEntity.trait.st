@@ -5,6 +5,7 @@ any entity
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `startPos` | `Number` | nil | |

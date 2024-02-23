@@ -7,6 +7,7 @@ I contain the value of the label referred to
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentIfArithmeticEqualBranch` | `FASTFortranLabelReference` | `equalLabel` | `FASTFortranIfArithmeticStatement` | |
 | `parentIfArithmeticLessBranch` | `FASTFortranLabelReference` | `lessLabel` | `FASTFortranIfArithmeticStatement` | |
 | `parentIfArithmeticMoreBranch` | `FASTFortranLabelReference` | `greaterLabel` | `FASTFortranIfArithmeticStatement` | |
@@ -17,6 +18,7 @@ I contain the value of the label referred to
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `label` | `String` | nil | The value of the label. The value is an integer literal, stored in a String|
 
 "

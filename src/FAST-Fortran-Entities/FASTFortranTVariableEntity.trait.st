@@ -6,11 +6,13 @@ A node for variable name not in a expression (example: assigned variable or para
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parameterOwner` | `FASTFortranTVariableEntity` | `parameters` | `FASTFortranTWithParameters` | parameterOwner|
 | `parentImpliedExpression` | `FASTFortranTVariableEntity` | `variables` | `FASTFortranImpliedDoExpression` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
 | `parentAssignmentExpression` | `FASTFortranTVariableEntity` | `variable` | `FASTFortranTAssignment` | Optional assignment to the variable|
 
@@ -19,6 +21,7 @@ A node for variable name not in a expression (example: assigned variable or para
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `name` | `String` | nil | |

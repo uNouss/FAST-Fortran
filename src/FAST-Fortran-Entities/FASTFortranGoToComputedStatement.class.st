@@ -6,10 +6,12 @@ I represent Fortran Go To (Computed) statement
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `labelReferences` | `FASTFortranTWithLabelReferences` | `referencer` | `FASTFortranLabelReference` | the label(s) referenced|
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `selectorExpression` | `FASTFortranGoToComputedStatement` | `parentGotoComputedStatement` | `FASTFortranTExpression` | The expression which value selects the label to go to|
 
 

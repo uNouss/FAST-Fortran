@@ -6,6 +6,7 @@ I represent a declaration with several variable declarators
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `declarators` | `FASTFortranTWithDeclarators` | `parentDeclaration` | `FASTFortranTVariableDeclarator` | variables declared|
 
 
