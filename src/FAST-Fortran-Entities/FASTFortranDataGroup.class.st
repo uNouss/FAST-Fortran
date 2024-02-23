@@ -6,10 +6,12 @@ I represent a Fortran Data group in a Data statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `dataConstants` | `FASTFortranDataGroup` | `parentDataStatement` | `FASTFortranTExpression` | |
 | `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
 

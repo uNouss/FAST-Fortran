@@ -6,6 +6,7 @@ I represent an argument in an entry statement: it can be a variable name, array 
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `entryStatement` | `FASTFortranTEntryStatement` | `entryArguments` | `FASTFortranEntryStatement` | |
 
 

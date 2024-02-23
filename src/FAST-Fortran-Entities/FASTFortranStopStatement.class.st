@@ -5,6 +5,7 @@ I represent Fortran Stop statement
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `displayArgument` | `String` | nil | Optional. Displayed when the program stops. String of no more that 5 digits or a character constant|
 
 "

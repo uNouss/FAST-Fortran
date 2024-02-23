@@ -11,11 +11,13 @@ Assumed to correspond to a function or a method
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
 | `statementBlock` | `FASTFortranTBehaviouralEntity` | `fastBehaviouralParent` | `FASTFortranTStatementBlock` | Statements block of the behavioural entity|
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
 
 
@@ -23,6 +25,7 @@ Assumed to correspond to a function or a method
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `name` | `String` | nil | |

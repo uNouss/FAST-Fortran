@@ -6,6 +6,7 @@ I represent Fortran Implicit statement
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `typingRules` | `FASTFortranImplicitStatement` | `parentImplicitStatement` | `FASTFortranImplicitTypingRule` | |
 
 

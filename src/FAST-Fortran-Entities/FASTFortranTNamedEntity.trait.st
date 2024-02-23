@@ -6,6 +6,7 @@ A entity with a name
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
 
 
@@ -13,6 +14,7 @@ A entity with a name
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `name` | `String` | nil | |

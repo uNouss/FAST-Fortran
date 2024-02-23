@@ -6,12 +6,14 @@ I represent Fortran Type statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentDeclaration` | `FASTFortranType` | `type` | `FASTFortranVariableDeclarationStatement` | Parent declaration|
 | `parentImplicitRule` | `FASTFortranType` | `type` | `FASTFortranImplicitTypingRule` | |
 | `typedFunctions` | `FASTFortranType` | `returnType` | `FASTFortranFunction` | |
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `size` | `FASTFortranType` | `parentTypeSize` | `FASTFortranTNumericalLiteral` | a data size in bytes|
 
 

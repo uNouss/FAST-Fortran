@@ -6,10 +6,12 @@ Part of a variable declaration: name of the variable + optional initial value
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentDeclaration` | `FASTFortranTVariableDeclarator` | `declarators` | `FASTFortranTWithDeclarators` | |
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `dimensions` | `FASTFortranVariableDeclarator` | `parentVariableDeclarator` | `FASTFortranArrayRange` | Possible dimensions in case this is an array declaration|
 | `expression` | `FASTFortranTVariableDeclarator` | `variableDeclaratorOwner` | `FASTFortranTExpression` | Expression assigned to the variable declared|
 
@@ -18,6 +20,7 @@ Part of a variable declaration: name of the variable + optional initial value
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `variable` | `String` | nil | The name of the variable being declared|
 
 "

@@ -6,6 +6,7 @@ I represent a type declaration for one or many scalar variables or arrays
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `declarators` | `FASTFortranTWithDeclarators` | `parentDeclaration` | `FASTFortranTVariableDeclarator` | variables declared|
 | `type` | `FASTFortranVariableDeclarationStatement` | `parentDeclaration` | `FASTFortranType` | type|
 

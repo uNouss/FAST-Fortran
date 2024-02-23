@@ -5,6 +5,7 @@ any entity
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `startPos` | `Number` | nil | |
@@ -41,6 +42,13 @@ FASTFortranEntity class >> metamodel [
 
 	<generated>
 	^ FASTFortranModel metamodel
+]
+
+{ #category : #testing }
+FASTFortranEntity >> isQueryable [
+
+	<generated>
+	^ false
 ]
 
 { #category : #testing }

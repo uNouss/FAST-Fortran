@@ -12,6 +12,7 @@ Local variables are intended to be stored in the local entities of the body
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
 | `statementBlock` | `FASTFortranTBehaviouralEntity` | `fastBehaviouralParent` | `FASTFortranTStatementBlock` | Statements block of the behavioural entity|
 
@@ -20,6 +21,7 @@ Local variables are intended to be stored in the local entities of the body
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `endPos` | `Number` | nil | |
 | `endPos` | `Number` | nil | |
 | `startPos` | `Number` | nil | |

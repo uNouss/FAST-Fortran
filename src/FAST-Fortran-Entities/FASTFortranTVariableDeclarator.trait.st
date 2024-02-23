@@ -6,10 +6,12 @@ I represent a variable declarator: variable declared + optional initial value
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentDeclaration` | `FASTFortranTVariableDeclarator` | `declarators` | `FASTFortranTWithDeclarators` | |
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `expression` | `FASTFortranTVariableDeclarator` | `variableDeclaratorOwner` | `FASTFortranTExpression` | Expression assigned to the variable declared|
 
 
@@ -17,6 +19,7 @@ I represent a variable declarator: variable declared + optional initial value
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `variable` | `String` | nil | The name of the variable being declared|
 
 "

@@ -6,6 +6,7 @@ I represent a range of characters in an Implicit statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentImplicitRule` | `FASTFortranImplicitRange` | `ranges` | `FASTFortranImplicitTypingRule` | |
 
 
@@ -13,6 +14,7 @@ I represent a range of characters in an Implicit statement
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `from` | `String` | nil | Start of character range for implicit rule|
 | `to` | `String` | nil | End of character range for implicit rule|
 

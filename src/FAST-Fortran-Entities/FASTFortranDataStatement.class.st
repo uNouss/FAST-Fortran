@@ -6,6 +6,7 @@ I represent a Fortran Data statement
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `variableGroups` | `FASTFortranTWithVariableGroups` | `withVariableGroups` | `FASTFortranTVariableGroup` | |
 
 

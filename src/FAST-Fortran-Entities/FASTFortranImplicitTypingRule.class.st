@@ -6,10 +6,12 @@ I represent a rule (ie. Type+letter range) in an Implicit statement
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `parentImplicitStatement` | `FASTFortranImplicitTypingRule` | `typingRules` | `FASTFortranImplicitStatement` | |
 
 ### Children
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `ranges` | `FASTFortranImplicitTypingRule` | `parentImplicitRule` | `FASTFortranImplicitRange` | |
 | `type` | `FASTFortranImplicitTypingRule` | `parentImplicitRule` | `FASTFortranType` | |
 

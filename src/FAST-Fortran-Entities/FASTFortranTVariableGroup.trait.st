@@ -6,10 +6,12 @@ I represent an entity with several variables like in a DataStatement or an Equiv
 
 ### Parents
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
 
 

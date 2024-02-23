@@ -6,6 +6,7 @@ FASTComment represents one instance of a comment (in the sense of programming la
 
 ### Other
 | Relation | Origin | Opposite | Type | Comment |
+|---|
 | `container` | `FASTFortranTComment` | `comments` | `FASTFortranTWithComments` | Source code entity containing the comment|
 
 
@@ -13,6 +14,7 @@ FASTComment represents one instance of a comment (in the sense of programming la
 ======================
 
 | Name | Type | Default value | Comment |
+|---|
 | `content` | `String` | nil | Content of the comment as a String|
 
 "

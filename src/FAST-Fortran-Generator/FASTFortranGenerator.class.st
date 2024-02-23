@@ -450,10 +450,12 @@ FASTFortranGenerator >> defineHierarchy [
 	equivalenceStatement --|> tWithVariableGroup.
 	exitStatement --|> abstractStatement.
 	externalStatement --|> abstractStatement.
+	externalStatement --|> tNamedEntity.
 	formatStatement --|> abstractStatement.
 	formatStatement --|> tWithFormat.
 	functionStatement --|> abstractStatement.
 	functionStatement --|> tWithArguments.
+	functionStatement --|> tNamedEntity.
 	goToStatement --|> abstractStatement.
 	goToStatement --|> tWithLabelReferences.
 	goToAssignedStatement --|> abstractStatement.
@@ -524,6 +526,7 @@ FASTFortranGenerator >> defineHierarchy [
 	characterConstant --|> tCharacterLiteral.
 	characterConstant --|> tFormat.
 	commonGroup  --|> tWithDeclarators.
+	commonGroup  --|> tNamedEntity.
 	complexConstant --|> abstractLiteral.
 	complexConstant --|> tNumericalLiteral.
 	dataGroup --|> tVariableGroup.
@@ -580,19 +583,10 @@ FASTFortranGenerator >> defineProperties [
 	(comment property: #content type: #String) comment:
 		'Determines a content of a comment'.
 
-	(commonGroup property: #name type: #String) comment:
-		'The name of this Common group, might be ommited'.
-
-	(externalStatement property: #name type: #String) comment:
-		'Name of external procedure, dummy procedure, or block data routine'.
-
 	(formatStatement property: #formatDescription type: #String).
 
 	(functionCall property: #name type: #String) comment:
 		'Name of called function'.
-
-	(functionStatement property: #name type: #String) comment:
-		'Name of a function statement'.
 
 	(implicitRange property: #from type: #String) comment:
 		'Start of character range for implicit rule'.
@@ -619,9 +613,6 @@ FASTFortranGenerator >> defineProperties [
 
 	(tUnaryExpression property: #operator type: #String) comment:
 		'Unary expression operator'.
-
-	(variable property: #name type: #String) comment:
-		'Determines the variable name'.
 
 	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
 
