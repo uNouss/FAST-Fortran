@@ -1,6 +1,8 @@
 "
 This trait is used by Famix models.
 It provides an API for creating entities and adding them to the model.
+
+
 "
 Trait {
 	#name : #FASTFortranTEntityCreator,
@@ -14,6 +16,27 @@ FASTFortranTEntityCreator classSide >> annotation [
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractExpression [
+
+	<generated>
+	^ self add: FASTFortranAbstractExpression new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractLiteral [
+
+	<generated>
+	^ self add: FASTFortranAbstractLiteral new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAbstractStatement [
+
+	<generated>
+	^ self add: FASTFortranAbstractStatement new
 ]
 
 { #category : #'entity creation' }
@@ -31,10 +54,10 @@ FASTFortranTEntityCreator >> newAmpersand [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newArrayDimensionDeclarator [
+FASTFortranTEntityCreator >> newArrayRange [
 
 	<generated>
-	^ self add: FASTFortranArrayDimensionDeclarator new
+	^ self add: FASTFortranArrayRange new
 ]
 
 { #category : #'entity creation' }
@@ -42,6 +65,13 @@ FASTFortranTEntityCreator >> newArrayVariable [
 
 	<generated>
 	^ self add: FASTFortranArrayVariable new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newAssignmentExpression [
+
+	<generated>
+	^ self add: FASTFortranAssignmentExpression new
 ]
 
 { #category : #'entity creation' }
@@ -136,6 +166,13 @@ FASTFortranTEntityCreator >> newComment [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newCommonGroup [
+
+	<generated>
+	^ self add: FASTFortranCommonGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newCommonStatement [
 
 	<generated>
@@ -164,17 +201,17 @@ FASTFortranTEntityCreator >> newContinueStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newDataGroup [
+
+	<generated>
+	^ self add: FASTFortranDataGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newDataStatement [
 
 	<generated>
 	^ self add: FASTFortranDataStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newDeclarationStatement [
-
-	<generated>
-	^ self add: FASTFortranDeclarationStatement new
 ]
 
 { #category : #'entity creation' }
@@ -262,6 +299,13 @@ FASTFortranTEntityCreator >> newEntryStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newEquivalenceGroup [
+
+	<generated>
+	^ self add: FASTFortranEquivalenceGroup new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newEquivalenceStatement [
 
 	<generated>
@@ -332,13 +376,6 @@ FASTFortranTEntityCreator >> newGoToStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newGoToUnconditionalStatement [
-
-	<generated>
-	^ self add: FASTFortranGoToUnconditionalStatement new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newIfArithmeticStatement [
 
 	<generated>
@@ -360,10 +397,31 @@ FASTFortranTEntityCreator >> newIfLogicalStatement [
 ]
 
 { #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImplicitRange [
+
+	<generated>
+	^ self add: FASTFortranImplicitRange new
+]
+
+{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newImplicitStatement [
 
 	<generated>
 	^ self add: FASTFortranImplicitStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImplicitTypingRule [
+
+	<generated>
+	^ self add: FASTFortranImplicitTypingRule new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newImpliedDoExpression [
+
+	<generated>
+	^ self add: FASTFortranImpliedDoExpression new
 ]
 
 { #category : #'entity creation' }
@@ -399,6 +457,13 @@ FASTFortranTEntityCreator >> newIntrinsicStatement [
 
 	<generated>
 	^ self add: FASTFortranIntrinsicStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newLabelReference [
+
+	<generated>
+	^ self add: FASTFortranLabelReference new
 ]
 
 { #category : #'entity creation' }
@@ -455,13 +520,6 @@ FASTFortranTEntityCreator >> newPauseStatement [
 
 	<generated>
 	^ self add: FASTFortranPauseStatement new
-]
-
-{ #category : #'entity creation' }
-FASTFortranTEntityCreator >> newPointer [
-
-	<generated>
-	^ self add: FASTFortranPointer new
 ]
 
 { #category : #'entity creation' }
@@ -528,13 +586,6 @@ FASTFortranTEntityCreator >> newRealType [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newRecord [
-
-	<generated>
-	^ self add: FASTFortranRecord new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newReturnStatement [
 
 	<generated>
@@ -584,13 +635,6 @@ FASTFortranTEntityCreator >> newStopStatement [
 ]
 
 { #category : #'entity creation' }
-FASTFortranTEntityCreator >> newStructure [
-
-	<generated>
-	^ self add: FASTFortranStructure new
-]
-
-{ #category : #'entity creation' }
 FASTFortranTEntityCreator >> newSubprogram [
 
 	<generated>
@@ -637,6 +681,20 @@ FASTFortranTEntityCreator >> newVariable [
 
 	<generated>
 	^ self add: FASTFortranVariable new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarationStatement [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarationStatement new
+]
+
+{ #category : #'entity creation' }
+FASTFortranTEntityCreator >> newVariableDeclarator [
+
+	<generated>
+	^ self add: FASTFortranVariableDeclarator new
 ]
 
 { #category : #'entity creation' }

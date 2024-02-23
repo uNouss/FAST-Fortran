@@ -1,5 +1,16 @@
 "
 I have arguments
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+
+
+
 "
 Trait {
 	#name : #FASTFortranTWithArguments,

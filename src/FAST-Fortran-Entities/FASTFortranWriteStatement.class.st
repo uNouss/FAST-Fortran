@@ -1,37 +1,31 @@
 "
 I represent Fortran Write statement
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+| `ioParameters` | `FASTFortranTWithIOParameters` | `parentIOStatement` | `FASTFortranTIOParameter` | I represent a statement with IO-parameters (read or write)|
+
+
+
 "
 Class {
 	#name : #FASTFortranWriteStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTWithArguments + FASTFortranTWithFormatIdentifier + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithFormatIdentifier classTrait + FASTFortranTLabelledStatement classTrait',
-	#instVars : [
-		'#format => FMProperty'
-	],
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithArguments + FASTFortranTWithIOParameters',
+	#classTraits : 'FASTFortranTWithArguments classTrait + FASTFortranTWithIOParameters classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranWriteStatement class >> annotation [
 
-	<FMClass: #WriteStatement super: #FASTFortranEntity>
+	<FMClass: #WriteStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranWriteStatement >> format [
-
-	<FMProperty: #format type: #String>
-	<generated>
-	<FMComment: 'Format identifier. '>
-	^ format
-]
-
-{ #category : #accessing }
-FASTFortranWriteStatement >> format: anObject [
-	<generated>
-	format := anObject
 ]

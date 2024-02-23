@@ -1,18 +1,18 @@
 "
 I represent Fortran End File statement
+
+
 "
 Class {
 	#name : #FASTFortranEndFileStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranEndFileStatement class >> annotation [
 
-	<FMClass: #EndFileStatement super: #FASTFortranEntity>
+	<FMClass: #EndFileStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

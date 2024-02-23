@@ -1,11 +1,17 @@
 "
 I represent Fortran Stop statement
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `displayArgument` | `String` | nil | Optional. Displayed when the program stops. String of no more that 5 digits or a character constant|
+
 "
 Class {
 	#name : #FASTFortranStopStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#instVars : [
 		'#displayArgument => FMProperty'
 	],
@@ -15,7 +21,7 @@ Class {
 { #category : #meta }
 FASTFortranStopStatement class >> annotation [
 
-	<FMClass: #StopStatement super: #FASTFortranEntity>
+	<FMClass: #StopStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

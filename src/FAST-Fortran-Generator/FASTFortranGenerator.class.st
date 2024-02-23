@@ -2,20 +2,14 @@ Class {
 	#name : #FASTFortranGenerator,
 	#superclass : #FASTMetamodelGenerator,
 	#instVars : [
-		'programUnit',
-		'comment',
-		'procedure',
-		'subprogram',
-		'blockData',
-		'function',
-		'mainprogram',
-		'subroutine',
 		'acceptStatement',
 		'assignmentStatement',
 		'automaticStatement',
 		'backspaceStatement',
+		'blockData',
 		'callStatement',
 		'closeStatement',
+		'comment',
 		'commonStatement',
 		'continueStatement',
 		'dataStatement',
@@ -30,10 +24,10 @@ Class {
 		'equivalenceStatement',
 		'externalStatement',
 		'formatStatement',
+		'function',
 		'goToStatement',
 		'goToAssignedStatement',
 		'goToComputed',
-		'goToUnconditional',
 		'ifArithmeticStatement',
 		'ifBlockStatement',
 		'ifLogicalStatement',
@@ -41,6 +35,8 @@ Class {
 		'includeStatement',
 		'inquireStatement',
 		'intrinsicStatement',
+		'loopControlExpression',
+		'mainprogram',
 		'mapStatement',
 		'nameListStatement',
 		'openStatement',
@@ -49,21 +45,20 @@ Class {
 		'pauseStatement',
 		'pragmaStatement',
 		'printStatement',
+		'procedure',
+		'programUnit',
 		'readStatement',
 		'rewindStatement',
 		'saveStatement',
 		'staticStatement',
+		'subprogram',
+		'substring',
 		'stopStatement',
+		'subroutine',
 		'unionStatement',
 		'virtualStatement',
 		'volatileStatement',
 		'writeStatement',
-		'loopControlExpression',
-		'arrayDimensionDeclarator',
-		'substring',
-		'pointer',
-		'record',
-		'structure',
 		'complexConstant',
 		'type',
 		'byteType',
@@ -79,26 +74,46 @@ Class {
 		'doublePrecisionConstant',
 		'integerConstant',
 		'realConstant',
-		'tWithFormatIdentifier',
-		'tFormatIdentifier',
 		'asterisk',
 		'ampersand',
 		'functionStatement',
 		'returnStatement',
-		'declarationStatement',
 		'variable',
-		'variableArray',
-		'variableScalar',
 		'binaryExpression',
 		'unaryExpression',
 		'programFile',
 		'functionCall',
-		'tFortranLabelledStatement',
-		'tFortranBinaryExpression',
-		'tFortranUnaryExpression',
 		'booleanConstant',
 		'characterConstant',
-		'statementBlock'
+		'statementBlock',
+		'assignmentExpression',
+		'tConditionalStatement',
+		'tEntryArgument',
+		'dataGroup',
+		'labelReference',
+		'abstractStatement',
+		'abstractExpression',
+		'abstractLiteral',
+		'scalarVariable',
+		'arrayVariable',
+		'variableDeclarationStatement',
+		'tWithDeclarators',
+		'tVariableDeclarator',
+		'variableDeclarator',
+		'commonGroup',
+		'tWithLabelReferences',
+		'equivalenceGroup',
+		'tVariableGroup',
+		'tWithVariableGroup',
+		'tWithFormat',
+		'tFormat',
+		'tIOParameter',
+		'tWithIOParameters',
+		'arrayRange',
+		'implicitTypingRule',
+		'implicitRange',
+		'impliedDoExpression',
+		'tWithLoopControl'
 	],
 	#category : #'FAST-Fortran-Generator'
 }
@@ -142,43 +157,171 @@ FASTFortranGenerator >> defineClasses [
 
 { #category : #definition }
 FASTFortranGenerator >> defineData [
-	" DelarationStatement is used instead
-	variableDeclaration := builder
-		                       newClassNamed: #VariablesDeclaration
-		                       comment:
-		                       'I represent a declaration statement for one or many variables'."
+	"sorted alphabetically, please keep the order"
 
-	declarationStatement := builder
-		                        newClassNamed: #DeclarationStatement
+	abstractExpression := builder
+		                   newClassNamed: #AbstractExpression
+		                   comment: 'I am the super class of all Fortran expressions'.
+
+	abstractLiteral := builder
+		                   newClassNamed: #AbstractLiteral
+		                   comment: 'I am the super class of all Fortran Literals'.
+
+	ampersand := builder
+		             newClassNamed: #Ampersand
+		             comment:
+		             'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
+
+	arrayRange := builder
+		                            newClassNamed: #ArrayRange
+		                            comment:
+		                            'I represent an array lower/upper bounds'.
+
+	arrayVariable := builder
+		                            newClassNamed: #ArrayVariable
+		                            comment:
+		                            'An array Fortran Variable, accessed in the code'.
+
+	assignmentExpression := builder
+		                        newClassNamed: #AssignmentExpression
 		                        comment:
-		                        'I represent a declaration statement for one or many variables'.
+		                        'I represent an assignment expression as a part of assignment statement'.
 
-	"EXPRESSIONS"
-
-	variable := builder
-		            newClassNamed: #Variable
+	asterisk := builder
+		            newClassNamed: #Asterisk
 		            comment:
-		            'an abstract Fortran Variable, could be an array or a scalar'.
-
-	variableArray := builder
-		                 newClassNamed: #ArrayVariable
-		                 comment:
-		                 'an array Fortran Variable, used in declarations'.
-
-	variableScalar := builder
-		                  newClassNamed: #ScalarVariable
-		                  comment:
-		                  'a scalar Fortran Variable, used in declarations'.
+		            'I represent an Asterisk Character Literal (Constant) that is often used as a format identifier'.
 
 	binaryExpression := builder
 		                    newClassNamed: #BinaryExpression
 		                    comment:
 		                    'a Fortran Binary Expression (arithmetic, logical)'.
 
+	booleanConstant := builder
+		                   newClassNamed: #BooleanLiteral
+		                   comment:
+		                   'I represent Fortran Boolean Literal (Constant) statement'.
+
+	byteType := builder
+		            newClassNamed: #ByteType
+		            comment:
+			            'I represent Fortran Byte statement. The BYTE data type provides a data type that uses only one byte of storage. It is a logical data type, and has the synonym,
+LOGICAL*1. A variable of type BYTE can hold any of the following: 1)one character, 2)an integer between -128 and 127, 3)the logical values, .TRUE. or .FALSE. If it is interpreted as a logical value, a value of 0 represents .FALSE., and any other value is interpreted as .TRUE.
+f77 allows the BYTE type as an array index, just as it allows the REAL type, but it does not allow BYTE as a DO loop index (where it allows only INTEGER, REAL, and DOUBLE PRECISION). Wherever the compiler expects INTEGER explicitly, it will not allow BYTE.'.
+
+	characterConstant := builder
+		                     newClassNamed: #CharacterLiteral
+		                     comment:
+		                     'I represent Fortran Character Literal (Constant) statement'.
+
+	characterType := builder
+		                 newClassNamed: #CharacterType
+		                 comment:
+		                 'I represent Fortran Character statement. The character data type, CHARACTER, which has the synonym, CHARACTER*1, holds one character. The character is enclosed in apostrophes ('') or quotes (""). @ Allowing quotes ("") is nonstandard; if you compile with the -xl option, quotes mean something else, and you must use apostrophes to enclose a string. The data of type CHARACTER is always unsigned. A CHARACTER item occupies 1 byte (8 bits) of storage and is aligned on 1-byte boundaries.'.
+
+	commonGroup := builder
+		                   newClassNamed: #CommonGroup
+		                   comment: 'I represent Common group inside a Common statement'.
+
+	complexConstant := builder
+		                   newClassNamed: #ComplexLiteral
+		                   comment:
+		                   'I represent Fortran Arithmetic Complex Literal (Constant) statement'.
+
+	complexType := builder
+		               newClassNamed: #ComplexType
+		               comment:
+		               'I represent Fortran Complex statement. A complex datum is an approximation of a complex number. The complex data type, COMPLEX, which defaults to a synonym for COMPLEX*8, is a pair of REAL*4 values that represent a complex number. The first element represents the real part and the second represents the imaginary part.The default size for a COMPLEX item (no size specified) is 8 bytes. The default alignment is on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options'.
+
+	doubleComplexConstant := builder
+		                         newClassNamed: #DoubleComplexLiteral
+		                         comment:
+		                         'I represent Fortran Arithmetic Double Complex Literal (Constant) statement'.
+
+	doubleComplexType := builder
+		                     newClassNamed: #DoubleComplexType
+		                     comment:
+		                     'I represent Fortran Double Complex statement. The complex data type, DOUBLE COMPLEX, which usually has the synonym, COMPLEX*16, is a pair of DOUBLE PRECISION (REAL*8)values that represents a complex number. The first element represents the real part; the second represents the imaginary part.The default size for DOUBLE COMPLEX with no size specified is 16.'.
+
+	doublePrecisionConstant := builder
+		                           newClassNamed: #DoublePrecisionLiteral
+		                           comment:
+		                           'I represent Fortran Arithmetic Double Precision Literal (Constant) statement'.
+
+	doublePrecisionType := builder
+		                       newClassNamed: #DoublePrecisionType
+		                       comment:
+		                       'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
+
+	impliedDoExpression := builder
+		                   newClassNamed: #ImpliedDoExpression
+		                   comment:
+		                   'I represent a Fortran "implied do" expression'.
+
+	integerConstant := builder
+		                   newClassNamed: #IntegerLiteral
+		                   comment:
+		                   'I represent Fortran Arithmetic Integer Literal (Constant) statement'.
+
+	integerType := builder
+		               newClassNamed: #IntegerType
+		               comment:
+			               'I represent Fortran Integer statement. The integer data type, INTEGER, holds a signed integer.
+The default size for INTEGER with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be
+changed by compiling with certain special options.'.
+
+	labelReference := builder
+		newClassNamed: #LabelReference
+		comment: 'I represent a reference to a Fortran label, like in a GoTo statement.
+I contain the value of the label referred to'.
+
+	logicalType := builder
+		               newClassNamed: #LogicalType
+		               comment:
+		               'I represent Fortran Logical statement. The logical data type, LOGICAL, holds a logical value .TRUE. or .FALSE. The value 0 represents .FALSE.; any other value represents .TRUE.The usual default size for an LOGICAL item with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.'.
+
+	loopControlExpression := builder
+		                         newClassNamed: #LoopControlExpression
+		                         comment:
+		                         'a Fortran Loop Control Expression'.
+
+	realConstant := builder
+		                newClassNamed: #RealLiteral
+		                comment:
+		                'I represent Fortran Arithmetic Real Literal (Constant) statement'.
+
+	realType := builder
+		            newClassNamed: #RealType
+		            comment:
+		            'I represent Fortran Real statement. A real datum is an approximation of a real number. The real data type, REAL, which usually has the synonym, REAL*4, holds one real datum.The usual default size for a REAL item with no size specified is 4 bytes, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.A REAL element has a sign bit, an 8-bit exponent, and a 23-bit fraction. These REAL elements in f77 conform to the IEEE standard.'.
+
+	scalarVariable := builder
+		                             newClassNamed: #ScalarVariable
+		                             comment:
+		                             'a scalar Fortran Variable, used in declarations'.
+
+	substring := builder
+		             newClassNamed: #Substring
+		             comment: 'I represent Fortran Substring'.
+
+	type := builder
+		        newClassNamed: #Type
+		        comment: 'I represent Fortran Type statement'.
+
+	variable := builder
+		            newClassNamed: #Variable
+		            comment:
+		            'an abstract Fortran Variable, could be an array or a scalar'.
+
+	variableDeclarator := builder
+		            newClassNamed: #VariableDeclarator
+		            comment:
+		            'Part of a variable declaration: name of the variable + optional initial value'.
+
 	unaryExpression := builder
 		                   newClassNamed: #UnaryExpression
 		                   comment:
-		                   'a Fortran Unary Expression (arithmetic, logical, character)'.
+		                   'a Fortran Unary Expression (arithmetic, logical, character)'
 
 	"
 	arithmeticExpression := builder
@@ -190,133 +333,6 @@ FASTFortranGenerator >> defineData [
 	logicalExpression := builder
 		                     newClassNamed: #LogicalExpression
 		                     comment: 'a Fortran Logical Expression'."
-
-	loopControlExpression := builder
-		                         newClassNamed: #LoopControlExpression
-		                         comment:
-		                         'a Fortran Loop Control Expression'.
-
-
-	"OTHER DATA TYPES"
-	arrayDimensionDeclarator := builder
-		                            newClassNamed: #ArrayDimensionDeclarator
-		                            comment:
-		                            'I represent Fortran Array dimension declaration'.
-
-	substring := builder
-		             newClassNamed: #Substring
-		             comment: 'I represent Fortran Substring'.
-
-	pointer := builder
-		           newClassNamed: #Pointer
-		           comment: 'I represent Fortran Pointer statement'.
-
-	record := builder
-		          newClassNamed: #Record
-		          comment: 'I represent Fortran Record statement'.
-
-	structure := builder
-		             newClassNamed: #Structure
-		             comment: 'I represent Fortran Structure statement'.
-
-
-	"CONSTANTS"
-
-	asterisk := builder
-		            newClassNamed: #Asterisk
-		            comment:
-		            'I represent an Asterisk Character Literal (Constant) that is often used as a format identifier'.
-
-	ampersand := builder
-		             newClassNamed: #Ampersand
-		             comment:
-		             'I represent an Ampersand Character Literal (Constant) that is often used in parameters and format identifiers'.
-
-	complexConstant := builder
-		                   newClassNamed: #ComplexLiteral
-		                   comment:
-		                   'I represent Fortran Arithmetic Complex Literal (Constant) statement'.
-
-	doubleComplexConstant := builder
-		                         newClassNamed: #DoubleComplexLiteral
-		                         comment:
-		                         'I represent Fortran Arithmetic Double Complex Literal (Constant) statement'.
-
-	doublePrecisionConstant := builder
-		                           newClassNamed: #DoublePrecisionLiteral
-		                           comment:
-		                           'I represent Fortran Arithmetic Double Precision Literal (Constant) statement'.
-
-	integerConstant := builder
-		                   newClassNamed: #IntegerLiteral
-		                   comment:
-		                   'I represent Fortran Arithmetic Integer Literal (Constant) statement'.
-
-	realConstant := builder
-		                newClassNamed: #RealLiteral
-		                comment:
-		                'I represent Fortran Arithmetic Real Literal (Constant) statement'.
-
-	booleanConstant := builder
-		                   newClassNamed: #BooleanLiteral
-		                   comment:
-		                   'I represent Fortran Boolean Literal (Constant) statement'.
-
-	characterConstant := builder
-		                     newClassNamed: #CharacterLiteral
-		                     comment:
-		                     'I represent Fortran Character Literal (Constant) statement'.
-
-
-	"TYPES"
-
-	type := builder
-		        newClassNamed: #Type
-		        comment: 'I represent Fortran Type statement'.
-
-	byteType := builder
-		            newClassNamed: #ByteType
-		            comment:
-			            'I represent Fortran Byte statement. The BYTE data type provides a data type that uses only one byte of storage. It is a logical data type, and has the synonym,
-LOGICAL*1. A variable of type BYTE can hold any of the following: 1)one character, 2)an integer between -128 and 127, 3)the logical values, .TRUE. or .FALSE. If it is interpreted as a logical value, a value of 0 represents .FALSE., and any other value is interpreted as .TRUE.
-f77 allows the BYTE type as an array index, just as it allows the REAL type, but it does not allow BYTE as a DO loop index (where it allows only INTEGER, REAL, and DOUBLE PRECISION). Wherever the compiler expects INTEGER explicitly, it will not allow BYTE.'.
-
-	characterType := builder
-		                 newClassNamed: #CharacterType
-		                 comment:
-		                 'I represent Fortran Character statement. The character data type, CHARACTER, which has the synonym, CHARACTER*1, holds one character. The character is enclosed in apostrophes ('') or quotes (""). @ Allowing quotes ("") is nonstandard; if you compile with the -xl option, quotes mean something else, and you must use apostrophes to enclose a string. The data of type CHARACTER is always unsigned. A CHARACTER item occupies 1 byte (8 bits) of storage and is aligned on 1-byte boundaries.'.
-
-	complexType := builder
-		               newClassNamed: #ComplexType
-		               comment:
-		               'I represent Fortran Complex statement. A complex datum is an approximation of a complex number. The complex data type, COMPLEX, which defaults to a synonym for COMPLEX*8, is a pair of REAL*4 values that represent a complex number. The first element represents the real part and the second represents the imaginary part.The default size for a COMPLEX item (no size specified) is 8 bytes. The default alignment is on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options'.
-
-	doubleComplexType := builder
-		                     newClassNamed: #DoubleComplexType
-		                     comment:
-		                     'I represent Fortran Double Complex statement. The complex data type, DOUBLE COMPLEX, which usually has the synonym, COMPLEX*16, is a pair of DOUBLE PRECISION (REAL*8)values that represents a complex number. The first element represents the real part; the second represents the imaginary part.The default size for DOUBLE COMPLEX with no size specified is 16.'.
-
-	doublePrecisionType := builder
-		                       newClassNamed: #DoublePrecisionType
-		                       comment:
-		                       'I represent Fortran Double Precision statement. A double-precision datum is an approximation of a real number. The double-precision data type, DOUBLE PRECISION, which has the synonym, REAL*8, holds one double-precision datum.The default size for DOUBLE PRECISION with no size specified is 8 bytes.A DOUBLE PRECISION element has a sign bit, an 11-bit exponent, and a 52-bit fraction. These DOUBLE PRECISION elements in f77 conform to the IEEE standard for double-precision floating-point data.'.
-
-	integerType := builder
-		               newClassNamed: #IntegerType
-		               comment:
-			               'I represent Fortran Integer statement. The integer data type, INTEGER, holds a signed integer.
-The default size for INTEGER with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be
-changed by compiling with certain special options.'.
-
-	logicalType := builder
-		               newClassNamed: #LogicalType
-		               comment:
-		               'I represent Fortran Logical statement. The logical data type, LOGICAL, holds a logical value .TRUE. or .FALSE. The value 0 represents .FALSE.; any other value represents .TRUE.The usual default size for an LOGICAL item with no size specified is 4, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.'.
-
-	realType := builder
-		            newClassNamed: #RealType
-		            comment:
-		            'I represent Fortran Real statement. A real datum is an approximation of a real number. The real data type, REAL, which usually has the synonym, REAL*4, holds one real datum.The usual default size for a REAL item with no size specified is 4 bytes, and is aligned on 4-byte boundaries. However, these defaults can be changed by compiling with certain special options.A REAL element has a sign bit, an 8-bit exponent, and a 23-bit fraction. These REAL elements in f77 conform to the IEEE standard.'
 ]
 
 { #category : #definition }
@@ -383,106 +399,163 @@ FASTFortranGenerator >> defineFamixClasses [
 FASTFortranGenerator >> defineHierarchy [
 
 	super defineHierarchy.
+	
+	tEntity --|> #TEntity.  "FASTFortranTEntity --|> FASTTEntity"
 
 	programUnit --|> tEntity.
-	programUnit --|> tNamedBehaviouralEntity.
+	programUnit --|> tBehaviouralEntity.
+	programUnit --|> tNamedEntity.
 	subprogram --|> programUnit.
 	mainprogram --|> programUnit.
 	procedure --|> subprogram.
+	procedure --|> tWithParameters.
 	blockData --|> subprogram.
 	function --|> procedure.
 	subroutine --|> procedure.
 
+	programFile --|> tWithComments.
+	programUnit --|> tWithComments.
+
 	"other entities"
 	comment --|> tEntity.
 	comment --|> tComment. 
-	tFortranLabelledStatement --|> tStatement.
-	declarationStatement --|> tFortranLabelledStatement.
-	statementBlock --|> tStatementBlock. 
-	statementBlock --|> tWithComments. 
 
 	"FORTRAN STATEMENTS"
-	assignmentStatement --|> tFortranLabelledStatement.
-	automaticStatement --|> tFortranLabelledStatement.
-	backspaceStatement --|> tFortranLabelledStatement.
-	callStatement --|> tFortranLabelledStatement.
-	closeStatement --|> tFortranLabelledStatement.
-	commonStatement --|> tFortranLabelledStatement.
-	continueStatement --|> tFortranLabelledStatement.
-	dataStatement --|> tFortranLabelledStatement.
-	decodeStatement --|> tFortranLabelledStatement.
-	encodeStatement --|> tFortranLabelledStatement.
-	dimensionStatement --|> tFortranLabelledStatement.
-	doStatement --|> tFortranLabelledStatement.
-	doWhileStatement --|> tFortranLabelledStatement.
-	elseStatement --|> tFortranLabelledStatement.
-	endFileStatement --|> tFortranLabelledStatement.
-	entryStatement --|> tFortranLabelledStatement.
-	equivalenceStatement --|> tFortranLabelledStatement.
-	externalStatement --|> tFortranLabelledStatement.
-	formatStatement --|> tFortranLabelledStatement.
-	functionStatement --|> tFortranLabelledStatement.
-	goToStatement --|> tFortranLabelledStatement.
-	goToAssignedStatement --|> tFortranLabelledStatement.
-	goToComputed --|> tFortranLabelledStatement.
-	goToUnconditional --|> tFortranLabelledStatement.
-	ifArithmeticStatement --|> tFortranLabelledStatement.
-	ifBlockStatement --|> tFortranLabelledStatement.
-	ifLogicalStatement --|> tFortranLabelledStatement.
-	implicitStatement --|> tFortranLabelledStatement.
-	includeStatement --|> tFortranLabelledStatement.
-	inquireStatement --|> tFortranLabelledStatement.
-	intrinsicStatement --|> tFortranLabelledStatement.
-	mapStatement --|> tFortranLabelledStatement.
-	nameListStatement --|> tFortranLabelledStatement.
-	openStatement --|> tFortranLabelledStatement.
-	optionsStatement --|> tFortranLabelledStatement.
-	parameterStatement --|> tFortranLabelledStatement.
-	pauseStatement --|> tFortranLabelledStatement.
-	pragmaStatement --|> tFortranLabelledStatement.
-	printStatement --|> tFortranLabelledStatement.
-	readStatement --|> tFortranLabelledStatement.
-	returnStatement --|> tFortranLabelledStatement.
-	rewindStatement --|> tFortranLabelledStatement.
-	saveStatement --|> tFortranLabelledStatement.
-	staticStatement --|> tFortranLabelledStatement.
-	stopStatement --|> tFortranLabelledStatement.
-	unionStatement --|> tFortranLabelledStatement.
-	virtualStatement --|> tFortranLabelledStatement.
-	volatileStatement --|> tFortranLabelledStatement.
-	writeStatement --|> tFortranLabelledStatement.
-	"STATEMENT OUT OF STANDARD"
-	exitStatement --|> tFortranLabelledStatement.
+	abstractStatement --|> tStatement.
+	acceptStatement  --|> tStatement.
+	assignmentStatement --|> abstractStatement.
+	assignmentStatement --|> tAssignment.
+	automaticStatement --|> abstractStatement.
+	backspaceStatement --|> abstractStatement.
+	callStatement --|> abstractStatement.
+	callStatement --|> tWithArguments.
+	closeStatement --|> abstractStatement.
+	commonStatement --|> abstractStatement.
+	continueStatement --|> abstractStatement.
+	dataStatement --|> abstractStatement.
+	dataStatement --|> tWithVariableGroup.
+	decodeStatement --|> abstractStatement.
+	dimensionStatement --|> abstractStatement.
+	dimensionStatement --|> tWithDeclarators.
+	doStatement --|> abstractStatement.
+	doStatement --|> tWithLabelReferences.
+	doStatement --|> tWithLoopControl.
+	doWhileStatement --|> abstractStatement.
+	elseStatement --|> abstractStatement.
+	encodeStatement --|> abstractStatement.
+	endFileStatement --|> abstractStatement.
+	entryStatement --|> abstractStatement.
+	entryStatement --|> tNamedEntity.
+	equivalenceStatement --|> abstractStatement.
+	equivalenceStatement --|> tWithVariableGroup.
+	exitStatement --|> abstractStatement.
+	externalStatement --|> abstractStatement.
+	externalStatement --|> tNamedEntity.
+	formatStatement --|> abstractStatement.
+	formatStatement --|> tWithFormat.
+	functionStatement --|> abstractStatement.
+	functionStatement --|> tWithArguments.
+	functionStatement --|> tNamedEntity.
+	goToStatement --|> abstractStatement.
+	goToStatement --|> tWithLabelReferences.
+	goToAssignedStatement --|> abstractStatement.
+	goToAssignedStatement --|> tWithLabelReferences.
+	goToComputed --|> abstractStatement.
+	goToComputed --|> tWithLabelReferences.
+	ifArithmeticStatement --|> abstractStatement.
+	ifArithmeticStatement --|> tConditionalStatement.
+	ifBlockStatement --|> abstractStatement.
+	ifBlockStatement --|> tConditionalStatement.
+	ifLogicalStatement --|> abstractStatement.
+	ifLogicalStatement --|> tConditionalStatement.
+	implicitStatement --|> abstractStatement.
+	includeStatement --|> abstractStatement.
+	inquireStatement --|> abstractStatement.
+	inquireStatement --|> tWithIOParameters.
+	intrinsicStatement --|> abstractStatement.
+	intrinsicStatement --|> tVariableGroup.
+	mapStatement --|> abstractStatement.
+	nameListStatement --|> abstractStatement.
+	openStatement --|> abstractStatement.
+	openStatement --|> tWithIOParameters.
+	optionsStatement --|> abstractStatement.
+	parameterStatement --|> abstractStatement.
+	parameterStatement --|> tWithDeclarators.
+	pauseStatement --|> abstractStatement.
+	pragmaStatement --|> abstractStatement.
+	printStatement --|> abstractStatement.
+	printStatement --|> tWithFormat.
+	printStatement --|> tWithArguments.
+	readStatement --|> abstractStatement.
+	readStatement --|> tWithIOParameters.
+	readStatement --|> tWithArguments.
+	returnStatement --|> abstractStatement.
+	returnStatement --|> tReturnStatement.
+	rewindStatement --|> abstractStatement.
+	rewindStatement --|> tWithIOParameters.
+	saveStatement --|> abstractStatement.
+	statementBlock --|> tStatementBlock. 
+	statementBlock --|> tWithComments. 
+	staticStatement --|> abstractStatement.
+	stopStatement --|> abstractStatement.
+	unionStatement --|> abstractStatement.
+	variableDeclarationStatement --|> abstractStatement.
+	variableDeclarationStatement --|> tWithDeclarators.
+	virtualStatement --|> abstractStatement.
+	volatileStatement --|> abstractStatement.
+	writeStatement --|> abstractStatement.
+	writeStatement --|> tWithIOParameters.
+	writeStatement --|> tWithArguments.
 
 
-	"DATA"
-	functionCall --|> tExpression.
-	variable --|> tExpression.
-	variable --|> tVariableEntity.
-	variableScalar --|> variable.
-	variableArray --|> variable.
-	binaryExpression --|> tExpression.
-	unaryExpression --|> tExpression.
-	loopControlExpression --|> tExpression.
-
-	substring --|> tExpression.
-	pointer --|> tExpression.
-	record --|> tExpression.
-	structure --|> tExpression.
-	
-	binaryExpression --|> tFortranBinaryExpression.
-	unaryExpression --|> tFortranUnaryExpression.
-
-	complexConstant --|> tNumericalLiteral.
-	doubleComplexConstant --|> tNumericalLiteral.
-	doublePrecisionConstant --|> tNumericalLiteral.
-	integerConstant --|> tNumericalLiteral.
-	realConstant --|> tNumericalLiteral.
-	asterisk --|> tNumericalLiteral.
+	"Expressions"
+	abstractExpression --|> tExpression.
+	abstractLiteral --|> abstractExpression.
+	ampersand --|> abstractLiteral.
 	ampersand --|> tCharacterLiteral.
-	characterConstant --|> tCharacterLiteral.
+	arrayRange --|> tExpression.
+	arrayVariable --|> variable.
+	assignmentExpression --|> abstractExpression.
+	assignmentExpression --|> tAssignment.
+	assignmentExpression --|> tIOParameter.
+	binaryExpression --|> abstractExpression.
+	binaryExpression --|> tBinaryExpression.
+	booleanConstant --|> abstractLiteral.
 	booleanConstant --|> tBooleanLiteral.
+	characterConstant --|> abstractLiteral.
+	characterConstant --|> tCharacterLiteral.
+	characterConstant --|> tFormat.
+	commonGroup  --|> tWithDeclarators.
+	commonGroup  --|> tNamedEntity.
+	complexConstant --|> abstractLiteral.
+	complexConstant --|> tNumericalLiteral.
+	dataGroup --|> tVariableGroup.
+	doubleComplexConstant --|> abstractLiteral.
+	doubleComplexConstant --|> tNumericalLiteral.
+	doublePrecisionConstant --|> abstractLiteral.
+	doublePrecisionConstant --|> tNumericalLiteral.
+	equivalenceGroup --|> tVariableGroup.
+	functionCall --|> abstractExpression.
+	functionCall --|> tWithArguments.
+	impliedDoExpression --|> tWithLoopControl.
+	impliedDoExpression --|> tExpression.
+	impliedDoExpression --|> tVariableGroup.
+	integerConstant --|> abstractLiteral.
+	integerConstant --|> tNumericalLiteral.
+	integerConstant --|> tFormat.
+	realConstant --|> abstractLiteral.
+	realConstant --|> tNumericalLiteral.
+	scalarVariable --|> variable.
+	substring --|> abstractExpression.
+	unaryExpression --|> abstractExpression.
+	unaryExpression --|> tUnaryExpression.
+	variable --|> abstractExpression.
+	variable --|> tVariableEntity.
+	variable --|> tEntryArgument.
+	variable --|> tFormat.
+	variableDeclarator --|> tVariableDeclarator.
 
+	"types"
 	byteType --|> type.
 	characterType --|> type.
 	complexType --|> type.
@@ -492,33 +565,11 @@ FASTFortranGenerator >> defineHierarchy [
 	logicalType --|> type.
 	realType --|> type.
 
-	"TRAITS"
-	"TODO: check if a function and a subroutine has the same set of parameters and join the definiton to procedure --|> tWithParameters in this case."
-	function --|> tWithParameters.
-	subroutine --|> tWithParameters.
+	asterisk --|> tNumericalLiteral.
+	asterisk --|> tEntryArgument.
+	asterisk --|> tFormat.
 
-	functionCall --|> tWithArguments.
-	functionStatement --|> tWithArguments.
-	callStatement --|> tWithArguments.
-	printStatement --|> tWithArguments.
-	writeStatement --|> tWithArguments.
-
-	"TODO: also as an argument may serve 
-		- an intrinsic function permitted to be passed as an argument
-		- an external function name
-		- an alternate return specifier, * or &,followed by a statement number."
-
-	printStatement --|> tWithFormatIdentifier.
-	writeStatement --|> tWithFormatIdentifier.
-
-	formatStatement --|> tFormatIdentifier.
-	asterisk --|> tFormatIdentifier.
-
-	programFile --|> tWithComments.
-	programUnit --|> tWithComments.
-
-	assignmentStatement --|> tAssignment.
-	returnStatement --|> tReturnStatement.
+	tFormat --|> tIOParameter
 ]
 
 { #category : #definition }
@@ -526,63 +577,45 @@ FASTFortranGenerator >> defineProperties [
 
 	super defineProperties.
 
-	"expressions"
-
-	(variable property: #name type: #String) comment:
-		'Determines the variable name'.
-
-	(arrayDimensionDeclarator property: #lb type: #Number) comment:
-		'Lower bound'.
-
-	(arrayDimensionDeclarator property: #ub type: #Number) comment:
-		'Upper bound'.
-
-	(loopControlExpression property: #init type: #String) comment:
-		'Loop control initial value'.
-
-	(loopControlExpression property: #increment type: #String) comment:
-		'Loop control increment value'.
-
-	(loopControlExpression property: #limit type: #String) comment:
-		'Loop control limit value'.
-		
-	(binaryExpression property: #operator type: #String) comment:
-		'Binary expression operator'.
-
-	(unaryExpression property: #operator type: #String) comment:
-		'Unary expression operator'.
-	
-	"statements"
-
-	(tStatement property: #label type: #String) comment:
-		'Determines the statement label which consists of 1 to 5 digits, with at least one nonzero'.
-
-	(externalStatement property: #name type: #String) comment:
-		'Name of external procedure, dummy procedure, or block data routine'.
-
 	(callStatement property: #name type: #String) comment:
 		'Name of called entity (a subroutine)'.
-		
-	(functionCall property: #name type: #String) comment:
-			 'Name of called function'.
-
-	(functionStatement property: #name type: #String) comment:
-		'Name of a function statement'.
 
 	(comment property: #content type: #String) comment:
 		'Determines a content of a comment'.
 
+	(formatStatement property: #formatDescription type: #String).
+
+	(functionCall property: #name type: #String) comment:
+		'Name of called function'.
+
+	(implicitRange property: #from type: #String) comment:
+		'Start of character range for implicit rule'.
+
+	(implicitRange property: #to type: #String) comment:
+		'End of character range for implicit rule'.
+
+	(labelReference property: #label type: #String) comment: 'The value of the label. The value is an integer literal, stored in a String'.
+
 	(returnStatement property: #alternateReturnLable type: #String)
 		comment: 'Optional. Expression of type INTEGER or REAL'.
+
+	(pauseStatement property: #displayArgument type: #String) comment:
+		'Optional. Displayed when the program pauses. String of no more that 5 digits or a character constant'.
 
 	(stopStatement property: #displayArgument type: #String) comment:
 		'Optional. Displayed when the program stops. String of no more that 5 digits or a character constant'.
 
-	(writeStatement property: #format type: #String) comment:
-		'Format identifier. '.
+	(tBinaryExpression property: #operator type: #String) comment:
+		'Binary expression operator'.
 
-	"TYPES"
-	(type property: #size type: #Number) comment: 'a data size in bytes'
+	(tStatement property: #label type: #String) comment:
+		'Determines the statement label which consists of 1 to 5 digits, with at least one nonzero'.
+
+	(tUnaryExpression property: #operator type: #String) comment:
+		'Unary expression operator'.
+
+	((tVariableDeclarator property: #variable type: #String) comment: 'The name of the variable being declared').
+
 ]
 
 { #category : #definition }
@@ -590,95 +623,166 @@ FASTFortranGenerator >> defineRelations [
 
 	super defineRelations.
 
-	((programFile property: #programUnit) comment:
-		 'Program Units in a program file')
-	<>-*
-	((programUnit property: #parentProgramFile) comment:
-		 'Parent program file').
+	((arrayRange property: #upperBound) comment: 'An upper bound of an array dimension')
+	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
+			 'Parent array dimension declarator').
 
-	((binaryExpression property: #left) comment:
-		 'left part of a binary expression')
-	<>- ((tExpression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
+	((arrayRange property: #lowerBound) comment: 'A lower bound of an array dimension')
+	<>- ((tExpression property: #parentArrayDimensionDeclarator) comment:
+			 'Parent array dimension declarator').
 
-	((binaryExpression property: #right) comment:
-		 'left part of the expression')
-	<>- ((tExpression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
+	((variableDeclarator property: #dimensions) comment: 'Possible dimensions in case this is an array declaration')
+	<>-* ((arrayRange property: #parentVariableDeclarator)
+			comment: 'The variable declarator I am part of').
 
-	((unaryExpression property: #expression) comment: 'expression')
-	<>- ((tExpression property: #parentExpression) comment:
-			 'Parent expression (if possible)').
+	((arrayVariable property: #indices) comment: 'Indices used in the array access')
+	-* ((tExpression property: #parentArrayExpression) comment: 'an ArrayVariable expression of which I am an indice').
 
-	((doStatement property: #loopControl) comment: 'loop control')
+	((commonStatement property: #groups) comment:
+		 'List common groups in this common statement')
+	<>-* ((commonGroup property: #parentCommonStatement) comment:
+			 'Parent common statement I belong to').
+
+	(dataGroup property: #dataConstants)
+	-* (tExpression property: #parentDataStatement).
+
+	(impliedDoExpression property: #variables)
+	<>-* (tVariableEntity property: #parentImpliedExpression).
+
+	(tVariableGroup property: #variables)
+	-* (variable property: #parentVariableGroup).
+
+	((tWithIOParameters property: #ioParameters) comment: 'I represent a statement with IO-parameters (read or write)')
+	<>-* (tIOParameter property: #parentIOStatement).
+
+	tWithVariableGroup <>-* tVariableGroup.
+	
+	((tWithDeclarators property: #declarators) comment: 'variables declared')
+	<>-* (tVariableDeclarator property: #parentDeclaration).
+
+	((tVariableDeclarator property: #expression) comment:
+		 'Expression assigned to the variable declared')
+	<>- (tExpression property: #variableDeclaratorOwner) .
+
+	((variableDeclarationStatement property: #type) comment: 'type')
+	<>-
+	((type property: #parentDeclaration) comment: 'Parent declaration').
+
+	((tWithLoopControl property: #loopControl) comment: 'loop control')
 	<>-
 	((loopControlExpression property: #parentLoop) comment: 'Parent loop').
 
 	((doStatement property: #statementBlock) comment:
 		 'Statement block containing statements of the do body ')
 	<>- ((tStatementBlock property: #parentDoStatement) comment:
-			 'Parent do statement').			
+			 'Parent do statement').
 
-	((ifBlockStatement property: #thenStatementBlock) comment:
-		 'Statement block containing statements of then branch ')
-	<>-
-	((tStatementBlock property: #parentIfBlock) comment: 'Parent if block').
+	(entryStatement property: #entryArguments)
+	<>-* (tEntryArgument property: #entryStatement).
 
-	((ifBlockStatement property: #elseStatementBlock) comment:
-		 'Statement block containing statements of else branch ')
-	<>-
-	((tStatementBlock property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifBlockStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block').
-
-	"((ifLogicalStatement property: #statement) comment:
-		 'Statement of the logical if')
-	<>- ((tStatement property: #parentIfBlock) comment: 'Parent if block').
-
-	((ifLogicalStatement property: #condition) comment: 'Condition')
-	<>-
-	((tExpression property: #parentIfBlock) comment: 'Parent if block')."
-
-	((declarationStatement property: #declarators) comment: 'declarators')
-	<>-*
-	((variable property: #parentDeclaration) comment:
-		 'Parent declaration').
-
-	((declarationStatement property: #type) comment: 'type')
-	<>-
-	((type property: #parentDeclaration) comment:
-		 'Parent declaration').
-		
-	
-	((variableArray property: #arrayDimensionDeclarator) comment: 'An array dimension declarator specifies  lower and upper dimension bounds of an array')
-	<>-
-	((arrayDimensionDeclarator property: #parentArray) comment:
-		 'Parent array declaration').		
-				
-
-	"TRAITS"
-	((tWithFormatIdentifier property: #format) comment:
-		 'format identifier')
-	<>- ((tFormatIdentifier property: #formatParentStatement) comment:
-			 'The owner of the format identifier').
-
-	((assignmentStatement property: #expression) comment:
-		 'Expression thats being assigned upon declaration to the var')
-	<>- ((tExpression property: #assignementExpressionOwner) comment:
-			 'The AssignementExpression owner (if possible)').
+	(function property: #returnType)
+	<>- (type property: #typedFunctions).
 
 	((functionStatement property: #expression) comment:
 		 'Expression thats being assigned upon declaration to the var')
 	<>- ((tExpression property: #assignementExpressionOwner) comment:
 			 'The AssignementExpression owner (if possible)').
 
+	((goToComputed property: #selectorExpression) comment: 'The expression which value selects the label to go to')
+	- (tExpression property: #parentGotoComputedStatement).
+
+	((goToAssignedStatement property: #selectorExpression) comment: 'The expression which value selects the label to go to')
+	- (tExpression property: #parentGotoAssignedStatement).
+
+	((tConditionalStatement property: #condition) comment: 'Condition')
+	<>-
+	((tExpression property: #parentConditionalStatement) comment: 'Parent conditional statement (if-block, if-logical, ...)').
+
+	((ifLogicalStatement property: #statement) comment:
+		 'Statement of the logical if')
+	<>- ((tStatement property: #parentIfStatement) comment: 'Parent if statement').
+
+	((ifBlockStatement property: #thenStatementBlock) comment:
+		 'Statement block containing statements of then branch ')
+	<>-
+	((tStatementBlock property: #parentIfBlock) comment:
+		 'Parent if block').
+
+	((ifBlockStatement property: #elseStatementBlock) comment:
+		 'Statement block containing statements of else branch ')
+	<>-
+	((tStatementBlock property: #parentIfBlock) comment:
+		 'Parent if block').
+
+	(ifArithmeticStatement property: #lessLabel)
+	<>- (labelReference property: #parentIfArithmeticLessBranch).
+
+	(ifArithmeticStatement property: #equalLabel)
+	<>- (labelReference property: #parentIfArithmeticEqualBranch).
+
+	(ifArithmeticStatement property: #greaterLabel)
+	<>- (labelReference property: #parentIfArithmeticMoreBranch).
+
+	(implicitStatement property: #typingRules)
+	<>-* (implicitTypingRule property: #parentImplicitStatement).
+
+	implicitTypingRule
+	<>- (type property: #parentImplicitRule).
+
+	(implicitTypingRule property: #ranges)
+	<>-* (implicitRange property: #parentImplicitRule).
+
+	((loopControlExpression property: #init) comment:
+		 'initial assignment')
+	<>- (assignmentExpression property: #parentLoopControlInitialization).
+
+	((loopControlExpression property: #increment) comment:
+		'Loop control increment value')
+	<>- (tExpression property: #parentLoopControlIncrement).
+
+	((loopControlExpression property: #limit) comment:
+		'Loop control limit value')
+	<>- (tExpression property: #parentLoopControlLimit).
+
+	((programFile property: #programUnit) comment:
+		 'Program Units in a program file')
+	<>-* ((programUnit property: #parentProgramFile) comment:
+			 'Parent program file').
+
+	((tBinaryExpression property: #left) comment:
+		 'left part of a binary expression')
+	<>- ((tExpression property: #parentExpressionLeft) comment:
+			 'Parent (binary) expression of which I am left side').
+
+	((tBinaryExpression property: #right) comment:
+		 'left part of the expression')
+	<>- ((tExpression property: #parentExpressionRight) comment:
+			 'Parent (binary) expression of which I am right side').
+
+	((tUnaryExpression property: #expression) comment: 'expression')
+	<>- ((tExpression property: #parentExpression) comment:
+			 'Parent expression (if possible)').
+
+	((type property: #size) comment: 'a data size in bytes')
+	<>- (tNumericalLiteral property: #parentTypeSize).
+
+	((tWithFormat property: #format) comment: 'The description of the format')
+	<>- ((tFormat property: #parentFormatedStatement) comment: 'A format description in a Format/Print/Read/Write statement').
+
+	((tWithLabelReferences property: #labelReferences) comment:
+		 'the label(s) referenced')
+	<>-* ((labelReference property: #referencer) comment:
+			 'A statement (like goto) referencing this label').
+
 ]
 
 { #category : #definition }
 FASTFortranGenerator >> defineStatements [
 	"A statement consists of zero or more key words, symbolic names, literal constants, statement labels, operators, and special characters."
+
+	abstractStatement := builder
+		                   newClassNamed: #AbstractStatement
+		                   comment: 'I am the super class of all Fortran statements'.
 
 	acceptStatement := builder
 		                   newClassNamed: #AcceptStatement
@@ -712,7 +816,11 @@ FASTFortranGenerator >> defineStatements [
 		                     'I represent Fortran Continue statement'.
 	dataStatement := builder
 		                 newClassNamed: #DataStatement
-		                 comment: 'I represent FortranData statement'.
+		                 comment: 'I represent a Fortran Data statement'.
+
+	dataGroup := builder
+		                 newClassNamed: #DataGroup
+		                 comment: 'I represent a Fortran Data group in a Data statement'.
 	decodeStatement := builder
 		                   newClassNamed: #DecodeStatement
 		                   comment: 'I represent Fortran Decode statement'.
@@ -741,10 +849,14 @@ FASTFortranGenerator >> defineStatements [
 	entryStatement := builder
 		                  newClassNamed: #EntryStatement
 		                  comment: 'I represent Fortran Entry statement'.
+	equivalenceGroup := builder
+		                        newClassNamed: #EquivalenceGroup
+		                        comment:
+		                        'I represent a group of variables in an Equivalence statement'.
 	equivalenceStatement := builder
 		                        newClassNamed: #EquivalenceStatement
 		                        comment:
-		                        'I represent Fortran Equivalence statement'.
+		                        'I represent a Fortran Equivalence statement'.
 	externalStatement := builder
 		                     newClassNamed: #ExternalStatement
 		                     comment:
@@ -760,7 +872,7 @@ FASTFortranGenerator >> defineStatements [
 
 	goToStatement := builder
 		                 newClassNamed: #GoToStatement
-		                 comment: 'I represent Fortran Go To statement'.
+		                 comment: 'I represent Fortran Go To (unconditional) statement'.
 
 	goToAssignedStatement := builder
 		                         newClassNamed: #GoToAssignedStatement
@@ -770,10 +882,7 @@ FASTFortranGenerator >> defineStatements [
 		                newClassNamed: #GoToComputedStatement
 		                comment:
 		                'I represent Fortran Go To (Computed) statement'.
-	goToUnconditional := builder
-		                     newClassNamed: #GoToUnconditionalStatement
-		                     comment:
-		                     'I represent Fortran Go To (Unconditional) statement'.
+
 	ifArithmeticStatement := builder
 		                         newClassNamed: #IfArithmeticStatement
 		                         comment:
@@ -790,6 +899,17 @@ FASTFortranGenerator >> defineStatements [
 		                     newClassNamed: #ImplicitStatement
 		                     comment:
 		                     'I represent Fortran Implicit statement'.
+
+	implicitTypingRule := builder
+		                     newClassNamed: #ImplicitTypingRule
+		                     comment:
+		                     'I represent a rule (ie. Type+letter range) in an Implicit statement'.
+
+	implicitRange := builder
+		                     newClassNamed: #ImplicitRange
+		                     comment:
+		                     'I represent a range of characters in an Implicit statement'.
+
 	includeStatement := builder
 		                    newClassNamed: #IncludeStatement
 		                    comment: 'I represent Fortran Include statement'.
@@ -851,13 +971,18 @@ FASTFortranGenerator >> defineStatements [
 	unionStatement := builder
 		                  newClassNamed: #UnionStatement
 		                  comment: 'I represent Fortran Union statement'.
+
+	variableDeclarationStatement := builder
+		                   newClassNamed: #VariableDeclarationStatement
+		                   comment:
+		                   'I represent a type declaration for one or many scalar variables or arrays'.	
+
 	virtualStatement := builder
 		                    newClassNamed: #VirtualStatement
 		                    comment: 'I represent Fortran Virtual statement'.
 	volatileStatement := builder
 		                     newClassNamed: #VolatileStatement
-		                     comment:
-		                     'I represent Fortran Volatile statement'.
+		                     comment: 'I represent Fortran Volatile statement'.
 	writeStatement := builder
 		                  newClassNamed: #WriteStatement
 		                  comment: 'I represent Fortran Write statement'.
@@ -872,14 +997,29 @@ FASTFortranGenerator >> defineStatements [
 FASTFortranGenerator >> defineTraits [
 
 	super defineTraits.
-	
-	tWithFormatIdentifier := builder newTraitNamed: #TWithFormatIdentifier comment: 'I represent a statement with format identifier (print, write, ...)'.
-	tFormatIdentifier := builder newTraitNamed: #TFormatIdentifier comment: 'I represent a format identifier'.
 
-	tFortranLabelledStatement := builder newTraitNamed: #TLabelledStatement comment: 'I represent a fortran statement with a label'.
-	
-	tFortranBinaryExpression := builder newTraitNamed: #TBinaryExpression comment: 'I represent a fortran binary expression'.
-	
-	tFortranUnaryExpression := builder newTraitNamed: #TUnaryExpression comment: 'I represent a fortran unary expression'.
-	
+	tConditionalStatement := builder newTraitNamed: #TConditionalStatement comment: 'I represent a fortran statement with a condition: if-block, if-logical'.
+
+	tEntryArgument := builder newTraitNamed: #TEntryStatement comment: 'I represent an argument in an entry statement: it can be a variable name, array name, formal procedure name, or an asterisk'.
+
+	tFormat := builder newTraitNamed: #TFormat comment: 'I represent a format description (eg. in Format or Print statement)'.
+
+	tIOParameter := builder newTraitNamed: #TIOParameter comment: 'I represent a parameter to an IO-statement (read or write)'.
+
+	tVariableDeclarator := builder newTraitNamed: #TVariableDeclarator comment: 'I represent a variable declarator: variable declared + optional initial value'.
+
+	tVariableGroup := builder newTraitNamed: #TVariableGroup comment: 'I represent an entity with several variables like in a DataStatement or an EquivalenceStatement'.
+
+	tWithIOParameters := builder newTraitNamed: #TWithIOParameters.
+
+	tWithLoopControl := builder newTraitNamed: #TWithLoopControl comment: 'I represent a loop control: initialization/limit/increment'.
+ 
+	tWithVariableGroup := builder newTraitNamed: #TWithVariableGroups comment: 'I represent a statement with variable groups like a DataStatement or an EquivalenceStatement'.
+ 
+	tWithDeclarators := builder newTraitNamed: #TWithDeclarators comment: 'I represent a declaration with several variable declarators'.
+
+	tWithFormat := builder newTraitNamed: #TWithFormat comment: 'I represent a statement with a format (format, print)'.
+
+	tWithLabelReferences := builder newTraitNamed: #TWithLabelReferences comment: 'I represent a statement (various kind of goto) that can have label references'.
+
 ]

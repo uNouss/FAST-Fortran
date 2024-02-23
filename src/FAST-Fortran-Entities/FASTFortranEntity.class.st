@@ -1,5 +1,16 @@
 "
 any entity
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+
 "
 Class {
 	#name : #FASTFortranEntity,
@@ -31,6 +42,13 @@ FASTFortranEntity class >> metamodel [
 
 	<generated>
 	^ FASTFortranModel metamodel
+]
+
+{ #category : #testing }
+FASTFortranEntity >> isQueryable [
+
+	<generated>
+	^ false
 ]
 
 { #category : #testing }

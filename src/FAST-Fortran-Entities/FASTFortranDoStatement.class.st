@@ -1,13 +1,25 @@
 "
 I represent Fortran Do statement
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `labelReferences` | `FASTFortranTWithLabelReferences` | `referencer` | `FASTFortranLabelReference` | the label(s) referenced|
+| `loopControl` | `FASTFortranTWithLoopControl` | `parentLoop` | `FASTFortranLoopControlExpression` | loop control|
+| `statementBlock` | `FASTFortranDoStatement` | `parentDoStatement` | `FASTFortranTStatementBlock` | Statement block containing statements of the do body |
+
+
+
 "
 Class {
 	#name : #FASTFortranDoStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithLabelReferences + FASTFortranTWithLoopControl',
+	#classTraits : 'FASTFortranTWithLabelReferences classTrait + FASTFortranTWithLoopControl classTrait',
 	#instVars : [
-		'#loopControl => FMOne type: #FASTFortranLoopControlExpression opposite: #parentLoop',
 		'#statementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentDoStatement'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
@@ -16,33 +28,10 @@ Class {
 { #category : #meta }
 FASTFortranDoStatement class >> annotation [
 
-	<FMClass: #DoStatement super: #FASTFortranEntity>
+	<FMClass: #DoStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranDoStatement >> loopControl [
-	"Relation named: #loopControl type: #FASTFortranLoopControlExpression opposite: #parentLoop"
-
-	<generated>
-	<FMComment: 'loop control'>
-	^ loopControl
-]
-
-{ #category : #accessing }
-FASTFortranDoStatement >> loopControl: anObject [
-
-	<generated>
-	loopControl := anObject
-]
-
-{ #category : #navigation }
-FASTFortranDoStatement >> loopControlGroup [
-	<generated>
-	<navigation: 'LoopControl'>
-	^ MooseSpecializedGroup with: self loopControl
 ]
 
 { #category : #accessing }

@@ -1,5 +1,16 @@
 "
 I have parameters
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+
+
+
 "
 Trait {
 	#name : #FASTFortranTWithParameters,

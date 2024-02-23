@@ -1,14 +1,25 @@
 "
 any entity
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+
 "
 Trait {
 	#name : #FASTFortranTEntity,
 	#instVars : [
-		'#endPos => FMProperty',
-		'#startPos => FMProperty'
+		'#startPos => FMProperty',
+		'#endPos => FMProperty'
 	],
-	#traits : 'TEntityMetaLevelDependency',
-	#classTraits : 'TEntityMetaLevelDependency classTrait',
+	#traits : 'FASTTEntity + TEntityMetaLevelDependency',
+	#classTraits : 'FASTTEntity classTrait + TEntityMetaLevelDependency classTrait',
 	#category : #'FAST-Fortran-Entities-Traits'
 }
 

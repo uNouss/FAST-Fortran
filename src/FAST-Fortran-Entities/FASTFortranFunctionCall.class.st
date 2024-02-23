@@ -1,11 +1,28 @@
 "
 I represent a call to a function (or function statement)
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `arguments` | `FASTFortranTWithArguments` | `argumentOwner` | `FASTFortranTExpression` | My arguments|
+
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `name` | `String` | nil | Name of called function|
+
 "
 Class {
 	#name : #FASTFortranFunctionCall,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression + FASTFortranTWithArguments',
-	#classTraits : 'FASTFortranTExpression classTrait + FASTFortranTWithArguments classTrait',
+	#superclass : #FASTFortranAbstractExpression,
+	#traits : 'FASTFortranTWithArguments',
+	#classTraits : 'FASTFortranTWithArguments classTrait',
 	#instVars : [
 		'#name => FMProperty'
 	],
@@ -15,7 +32,7 @@ Class {
 { #category : #meta }
 FASTFortranFunctionCall class >> annotation [
 
-	<FMClass: #FunctionCall super: #FASTFortranEntity>
+	<FMClass: #FunctionCall super: #FASTFortranAbstractExpression>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

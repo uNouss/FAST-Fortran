@@ -1,18 +1,34 @@
 "
 I represent Fortran Intrinsic statement
+
+## Relations
+======================
+
+### Parents
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `withVariableGroups` | `FASTFortranTVariableGroup` | `variableGroups` | `FASTFortranTWithVariableGroups` | |
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `variables` | `FASTFortranTVariableGroup` | `parentVariableGroup` | `FASTFortranVariable` | |
+
+
+
 "
 Class {
 	#name : #FASTFortranIntrinsicStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTVariableGroup',
+	#classTraits : 'FASTFortranTVariableGroup classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranIntrinsicStatement class >> annotation [
 
-	<FMClass: #IntrinsicStatement super: #FASTFortranEntity>
+	<FMClass: #IntrinsicStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

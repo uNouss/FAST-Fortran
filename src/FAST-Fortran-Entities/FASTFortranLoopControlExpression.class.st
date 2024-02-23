@@ -1,16 +1,32 @@
 "
 a Fortran Loop Control Expression
+
+## Relations
+======================
+
+### Parents
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `parentLoop` | `FASTFortranLoopControlExpression` | `loopControl` | `FASTFortranTWithLoopControl` | Parent loop|
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `increment` | `FASTFortranLoopControlExpression` | `parentLoopControlIncrement` | `FASTFortranTExpression` | Loop control increment value|
+| `init` | `FASTFortranLoopControlExpression` | `parentLoopControlInitialization` | `FASTFortranAssignmentExpression` | initial assignment|
+| `limit` | `FASTFortranLoopControlExpression` | `parentLoopControlLimit` | `FASTFortranTExpression` | Loop control limit value|
+
+
+
 "
 Class {
 	#name : #FASTFortranLoopControlExpression,
 	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTExpression',
-	#classTraits : 'FASTFortranTExpression classTrait',
 	#instVars : [
-		'#init => FMProperty',
-		'#increment => FMProperty',
-		'#limit => FMProperty',
-		'#parentLoop => FMOne type: #FASTFortranDoStatement opposite: #loopControl'
+		'#parentLoop => FMOne type: #FASTFortranTWithLoopControl opposite: #loopControl',
+		'#init => FMOne type: #FASTFortranAssignmentExpression opposite: #parentLoopControlInitialization',
+		'#increment => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlIncrement',
+		'#limit => FMOne type: #FASTFortranTExpression opposite: #parentLoopControlLimit'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -26,8 +42,8 @@ FASTFortranLoopControlExpression class >> annotation [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> increment [
+	"Relation named: #increment type: #FASTFortranTExpression opposite: #parentLoopControlIncrement"
 
-	<FMProperty: #increment type: #String>
 	<generated>
 	<FMComment: 'Loop control increment value'>
 	^ increment
@@ -35,29 +51,45 @@ FASTFortranLoopControlExpression >> increment [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> increment: anObject [
+
 	<generated>
 	increment := anObject
 ]
 
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> incrementGroup [
+	<generated>
+	<navigation: 'Increment'>
+	^ MooseSpecializedGroup with: self increment
+]
+
 { #category : #accessing }
 FASTFortranLoopControlExpression >> init [
+	"Relation named: #init type: #FASTFortranAssignmentExpression opposite: #parentLoopControlInitialization"
 
-	<FMProperty: #init type: #String>
 	<generated>
-	<FMComment: 'Loop control initial value'>
+	<FMComment: 'initial assignment'>
 	^ init
 ]
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> init: anObject [
+
 	<generated>
 	init := anObject
 ]
 
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> initGroup [
+	<generated>
+	<navigation: 'Init'>
+	^ MooseSpecializedGroup with: self init
+]
+
 { #category : #accessing }
 FASTFortranLoopControlExpression >> limit [
+	"Relation named: #limit type: #FASTFortranTExpression opposite: #parentLoopControlLimit"
 
-	<FMProperty: #limit type: #String>
 	<generated>
 	<FMComment: 'Loop control limit value'>
 	^ limit
@@ -65,13 +97,21 @@ FASTFortranLoopControlExpression >> limit [
 
 { #category : #accessing }
 FASTFortranLoopControlExpression >> limit: anObject [
+
 	<generated>
 	limit := anObject
 ]
 
+{ #category : #navigation }
+FASTFortranLoopControlExpression >> limitGroup [
+	<generated>
+	<navigation: 'Limit'>
+	^ MooseSpecializedGroup with: self limit
+]
+
 { #category : #accessing }
 FASTFortranLoopControlExpression >> parentLoop [
-	"Relation named: #parentLoop type: #FASTFortranDoStatement opposite: #loopControl"
+	"Relation named: #parentLoop type: #FASTFortranTWithLoopControl opposite: #loopControl"
 
 	<generated>
 	<FMComment: 'Parent loop'>

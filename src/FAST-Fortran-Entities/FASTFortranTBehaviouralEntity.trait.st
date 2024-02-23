@@ -6,6 +6,27 @@ Subclassed for NamedBehavioural as methods/functions
 
 Has parameters , and a body (StatementBlock).
 Local variables are intended to be stored in the local entities of the body
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `parameters` | `FASTFortranTWithParameters` | `parameterOwner` | `FASTFortranTVariableEntity` | My parameters|
+| `statementBlock` | `FASTFortranTBehaviouralEntity` | `fastBehaviouralParent` | `FASTFortranTStatementBlock` | Statements block of the behavioural entity|
+
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+
 "
 Trait {
 	#name : #FASTFortranTBehaviouralEntity,

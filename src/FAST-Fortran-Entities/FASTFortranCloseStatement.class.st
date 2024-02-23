@@ -1,18 +1,18 @@
 "
 I represent Fortran Close statement
+
+
 "
 Class {
 	#name : #FASTFortranCloseStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranCloseStatement class >> annotation [
 
-	<FMClass: #CloseStatement super: #FASTFortranEntity>
+	<FMClass: #CloseStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

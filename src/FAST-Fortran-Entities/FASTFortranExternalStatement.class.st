@@ -1,37 +1,40 @@
 "
 I represent Fortran External statement
+
+## Relations
+======================
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `invokedIn` | `FASTFortranTNamedEntity` | `invoked` | `FASTFortranTInvocation` | Optional invocation where this name is used|
+
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `name` | `String` | nil | |
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+
 "
 Class {
 	#name : #FASTFortranExternalStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
-	#instVars : [
-		'#name => FMProperty'
-	],
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTNamedEntity',
+	#classTraits : 'FASTFortranTNamedEntity classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranExternalStatement class >> annotation [
 
-	<FMClass: #ExternalStatement super: #FASTFortranEntity>
+	<FMClass: #ExternalStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranExternalStatement >> name [
-
-	<FMProperty: #name type: #String>
-	<generated>
-	<FMComment: 'Name of external procedure, dummy procedure, or block data routine'>
-	^ name
-]
-
-{ #category : #accessing }
-FASTFortranExternalStatement >> name: anObject [
-	<generated>
-	name := anObject
 ]

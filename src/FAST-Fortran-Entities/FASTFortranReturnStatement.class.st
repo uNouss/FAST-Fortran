@@ -1,11 +1,39 @@
 "
 a Fortran Return Statement
+
+## Relations
+======================
+
+### Parents
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `parentIfStatement` | `FASTFortranTStatement` | `statement` | `FASTFortranIfLogicalStatement` | Parent if statement|
+| `statementContainer` | `FASTFortranTStatement` | `statements` | `FASTFortranTStatementBlock` | Block containing this statement.|
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `expression` | `FASTFortranTReturnStatement` | `returnOwner` | `FASTFortranTExpression` | The expression returned|
+
+
+## Properties
+======================
+
+| Name | Type | Default value | Comment |
+|---|
+| `alternateReturnLable` | `String` | nil | Optional. Expression of type INTEGER or REAL|
+| `endPos` | `Number` | nil | |
+| `endPos` | `Number` | nil | |
+| `label` | `String` | nil | Determines the statement label which consists of 1 to 5 digits, with at least one nonzero|
+| `startPos` | `Number` | nil | |
+| `startPos` | `Number` | nil | |
+
 "
 Class {
 	#name : #FASTFortranReturnStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTReturnStatement + FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTReturnStatement classTrait + FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTReturnStatement',
+	#classTraits : 'FASTFortranTReturnStatement classTrait',
 	#instVars : [
 		'#alternateReturnLable => FMProperty'
 	],
@@ -15,7 +43,7 @@ Class {
 { #category : #meta }
 FASTFortranReturnStatement class >> annotation [
 
-	<FMClass: #ReturnStatement super: #FASTFortranEntity>
+	<FMClass: #ReturnStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

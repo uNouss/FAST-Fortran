@@ -1,18 +1,29 @@
 "
-I represent FortranData statement
+I represent a Fortran Data statement
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `variableGroups` | `FASTFortranTWithVariableGroups` | `withVariableGroups` | `FASTFortranTVariableGroup` | |
+
+
+
 "
 Class {
 	#name : #FASTFortranDataStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTWithVariableGroups',
+	#classTraits : 'FASTFortranTWithVariableGroups classTrait',
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranDataStatement class >> annotation [
 
-	<FMClass: #DataStatement super: #FASTFortranEntity>
+	<FMClass: #DataStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

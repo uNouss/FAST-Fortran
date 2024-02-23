@@ -1,15 +1,27 @@
 "
 I represent Fortran If (BLock) statement
+
+## Relations
+======================
+
+### Children
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `condition` | `FASTFortranTConditionalStatement` | `parentConditionalStatement` | `FASTFortranTExpression` | Condition|
+| `elseStatementBlock` | `FASTFortranIfBlockStatement` | `parentIfBlock` | `FASTFortranTStatementBlock` | Statement block containing statements of else branch |
+| `thenStatementBlock` | `FASTFortranIfBlockStatement` | `parentIfBlock` | `FASTFortranTStatementBlock` | Statement block containing statements of then branch |
+
+
+
 "
 Class {
 	#name : #FASTFortranIfBlockStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
+	#traits : 'FASTFortranTConditionalStatement',
+	#classTraits : 'FASTFortranTConditionalStatement classTrait',
 	#instVars : [
 		'#thenStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock',
-		'#condition => FMOne type: #FASTFortranTExpression opposite: #parentIfBlock'
+		'#elseStatementBlock => FMOne type: #FASTFortranTStatementBlock opposite: #parentIfBlock'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -17,33 +29,10 @@ Class {
 { #category : #meta }
 FASTFortranIfBlockStatement class >> annotation [
 
-	<FMClass: #IfBlockStatement super: #FASTFortranEntity>
+	<FMClass: #IfBlockStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self
-]
-
-{ #category : #accessing }
-FASTFortranIfBlockStatement >> condition [
-	"Relation named: #condition type: #FASTFortranTExpression opposite: #parentIfBlock"
-
-	<generated>
-	<FMComment: 'Condition'>
-	^ condition
-]
-
-{ #category : #accessing }
-FASTFortranIfBlockStatement >> condition: anObject [
-
-	<generated>
-	condition := anObject
-]
-
-{ #category : #navigation }
-FASTFortranIfBlockStatement >> conditionGroup [
-	<generated>
-	<navigation: 'Condition'>
-	^ MooseSpecializedGroup with: self condition
 ]
 
 { #category : #accessing }

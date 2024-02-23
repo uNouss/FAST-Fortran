@@ -1,18 +1,18 @@
 "
 I represent Fortran Include statement
+
+
 "
 Class {
 	#name : #FASTFortranIncludeStatement,
-	#superclass : #FASTFortranEntity,
-	#traits : 'FASTFortranTLabelledStatement',
-	#classTraits : 'FASTFortranTLabelledStatement classTrait',
+	#superclass : #FASTFortranAbstractStatement,
 	#category : #'FAST-Fortran-Entities-Entities'
 }
 
 { #category : #meta }
 FASTFortranIncludeStatement class >> annotation [
 
-	<FMClass: #IncludeStatement super: #FASTFortranEntity>
+	<FMClass: #IncludeStatement super: #FASTFortranAbstractStatement>
 	<package: #'FAST-Fortran-Entities'>
 	<generated>
 	^ self

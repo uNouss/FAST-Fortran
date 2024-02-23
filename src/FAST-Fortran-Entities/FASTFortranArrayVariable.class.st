@@ -1,11 +1,22 @@
 "
-an array Fortran Variable, used in declarations
+An array Fortran Variable, accessed in the code
+
+## Relations
+======================
+
+### Other
+| Relation | Origin | Opposite | Type | Comment |
+|---|
+| `indices` | `FASTFortranArrayVariable` | `parentArrayExpression` | `FASTFortranTExpression` | Indices used in the array access|
+
+
+
 "
 Class {
 	#name : #FASTFortranArrayVariable,
 	#superclass : #FASTFortranVariable,
 	#instVars : [
-		'#arrayDimensionDeclarator => FMOne type: #FASTFortranArrayDimensionDeclarator opposite: #parentArray'
+		'#indices => FMMany type: #FASTFortranTExpression opposite: #parentArrayExpression'
 	],
 	#category : #'FAST-Fortran-Entities-Entities'
 }
@@ -19,25 +30,25 @@ FASTFortranArrayVariable class >> annotation [
 	^ self
 ]
 
-{ #category : #accessing }
-FASTFortranArrayVariable >> arrayDimensionDeclarator [
-	"Relation named: #arrayDimensionDeclarator type: #FASTFortranArrayDimensionDeclarator opposite: #parentArray"
-
+{ #category : #adding }
+FASTFortranArrayVariable >> addIndice: anObject [
 	<generated>
-	<FMComment: 'An array dimension declarator specifies  lower and upper dimension bounds of an array'>
-	^ arrayDimensionDeclarator
+	^ self indices add: anObject
 ]
 
 { #category : #accessing }
-FASTFortranArrayVariable >> arrayDimensionDeclarator: anObject [
+FASTFortranArrayVariable >> indices [
+	"Relation named: #indices type: #FASTFortranTExpression opposite: #parentArrayExpression"
 
 	<generated>
-	arrayDimensionDeclarator := anObject
+	<FMComment: 'Indices used in the array access'>
+	<derived>
+	^ indices
 ]
 
-{ #category : #navigation }
-FASTFortranArrayVariable >> arrayDimensionDeclaratorGroup [
+{ #category : #accessing }
+FASTFortranArrayVariable >> indices: anObject [
+
 	<generated>
-	<navigation: 'ArrayDimensionDeclarator'>
-	^ MooseSpecializedGroup with: self arrayDimensionDeclarator
+	indices value: anObject
 ]
