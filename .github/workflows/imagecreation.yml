@@ -44,6 +44,6 @@ jobs:
         with:
           mode: update
           replace_assets: true
-          tag_name: 'm11p11'
+          tag_name: 'latest'
           assets: ${{ env.PROJECT_NAME }}-${{ matrix.smalltalk }}.zip
           github_token: ${{ secrets.GITHUB_TOKEN }}
